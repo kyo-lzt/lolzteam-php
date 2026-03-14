@@ -38,7 +38,7 @@ final class ForumClient
     ) {
         $config = new ClientConfig(
             token: $token,
-            baseUrl: 'https://api.lolz.live',
+            baseUrl: 'https://prod-api.lolz.live',
             proxy: $proxy,
             retry: $retry ?? new RetryConfig(),
             requestsPerMinute: 300,

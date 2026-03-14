@@ -12,7 +12,8 @@ final class ProxyApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array{

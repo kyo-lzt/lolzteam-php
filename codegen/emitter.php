@@ -193,7 +193,8 @@ function emitGroupFile(array $group, string $namespace): string
     $lines[] = '{';
     $lines[] = '    public function __construct(';
     $lines[] = '        private readonly HttpClient $http,';
-    $lines[] = '    ) {}';
+    $lines[] = '    ) {';
+    $lines[] = '    }';
 
     foreach ($group['methods'] as $method) {
         $lines[] = '';

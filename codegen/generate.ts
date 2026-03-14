@@ -1063,7 +1063,8 @@ function emitGroupFile(group: GroupDef, namespace: string): string {
 	lines.push("{");
 	lines.push("    public function __construct(");
 	lines.push("        private readonly HttpClient $http,");
-	lines.push("    ) {}");
+	lines.push("    ) {");
+	lines.push("    }");
 
 	for (const method of group.methods) {
 		lines.push("");

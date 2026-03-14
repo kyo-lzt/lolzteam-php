@@ -12,7 +12,8 @@ final class SearchApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int} $body

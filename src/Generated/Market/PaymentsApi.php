@@ -12,7 +12,8 @@ final class PaymentsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{invoice_id?: int, payment_id?: string} $params

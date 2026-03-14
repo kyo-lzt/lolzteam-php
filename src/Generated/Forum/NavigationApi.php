@@ -12,7 +12,8 @@ final class NavigationApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{parent?: int} $params

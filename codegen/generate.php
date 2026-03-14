@@ -24,7 +24,7 @@ $apis = [
         'outputDir' => $ROOT . '/src/Generated/Forum',
         'clientName' => 'ForumClient',
         'namespace' => 'Lolzteam\\Generated\\Forum',
-        'defaultBaseUrl' => 'https://api.lolz.live',
+        'defaultBaseUrl' => 'https://prod-api.lolz.live',
         'defaultRateLimit' => 300,
     ],
     [
@@ -32,7 +32,7 @@ $apis = [
         'outputDir' => $ROOT . '/src/Generated/Market',
         'clientName' => 'MarketClient',
         'namespace' => 'Lolzteam\\Generated\\Market',
-        'defaultBaseUrl' => 'https://api.lzt.market',
+        'defaultBaseUrl' => 'https://prod-api.lzt.market',
         'defaultRateLimit' => 120,
     ],
 ];

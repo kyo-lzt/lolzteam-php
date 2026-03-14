@@ -12,7 +12,8 @@ final class PagesApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{parent_page_id?: int, order?: 'natural'|'list'} $params

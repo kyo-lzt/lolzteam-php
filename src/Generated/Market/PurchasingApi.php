@@ -12,7 +12,8 @@ final class PurchasingApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param int $item_id

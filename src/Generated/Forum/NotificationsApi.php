@@ -12,7 +12,8 @@ final class NotificationsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{type?: 'market'|'nomarket', page?: int, limit?: int} $params

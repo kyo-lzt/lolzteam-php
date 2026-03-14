@@ -12,7 +12,8 @@ final class CartApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{category_id?: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, page?: int, pmin?: int, pmax?: int, title?: string, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', tag_id[]?: list<int>, not_tag_id[]?: list<int>, public_tag_id[]?: list<int>, not_public_tag_id[]?: list<int>, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, user_id?: int, nsb?: bool, sb?: bool, nsb_by_me?: bool, sb_by_me?: bool, currency?: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try'|'jpy'|'brl', email_login_data?: bool, email_provider[]?: list<'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru'>, not_email_provider[]?: 'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru', parse_same_item_ids?: bool} $params

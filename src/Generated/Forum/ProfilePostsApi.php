@@ -12,7 +12,8 @@ final class ProfilePostsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param string|int $user_id

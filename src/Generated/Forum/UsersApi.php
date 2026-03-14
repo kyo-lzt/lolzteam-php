@@ -12,7 +12,8 @@ final class UsersApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{page?: int, limit?: int, fields_include?: list<'*'|'alerts'>} $params

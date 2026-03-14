@@ -12,7 +12,8 @@ final class ListApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{user_id?: int, category_id?: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, page?: int, show?: 'active'|'paid'|'deleted'|'awaiting'|'closed'|'discount_request'|'stickied'|'pre_active', delete_reason?: string, title?: string, pmin?: int, pmax?: int, login?: string, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', sb?: bool, sb_by_me?: bool, nsb?: bool, nsb_by_me?: bool, username?: string, published_startDate?: string, published_endDate?: string, filter_by_published_date?: bool, paid_startDate?: string, paid_endDate?: string, filter_by_buyer_operation_date?: bool, delete_startDate?: string, delete_endDate?: string, filter_by_delete_date?: bool} $params

@@ -12,7 +12,8 @@ final class PublishingApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{title?: string, title_en?: string, price: float, category_id: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, currency: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try'|'jpy'|'brl', item_origin: 'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'dummy'|'self_registration', extended_guarantee?: -1|0|1, allow_ask_discount?: bool, proxy_id?: int, random_proxy?: bool, description?: string, information?: string, login?: string, password?: string, login_password?: string, has_email_login_data?: bool, email_login_data?: string, email_type?: 'native'|'autoreg', extra?: array{

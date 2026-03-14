@@ -91,8 +91,10 @@ function extractBodyProperties(array $operation, array $spec): array
 
     // Handle oneOf — merge all properties from all variants
     if (isset($schema['oneOf']) && is_array($schema['oneOf'])) {
+        /** @var array<string, list<array<string, mixed>>> $allProps property name -> list of schemas */
         $allProps = [];
-        $allRequired = [];
+        /** @var list<array<string, bool>> $variantRequiredSets */
+        $variantRequiredSets = [];
 
         foreach ($schema['oneOf'] as $variant) {
             if (!is_array($variant)) {
@@ -101,24 +103,77 @@ function extractBodyProperties(array $operation, array $spec): array
             $variantProps = $variant['properties'] ?? [];
             $variantRequired = $variant['required'] ?? [];
 
-            if (is_array($variantProps)) {
-                foreach ($variantProps as $name => $propSchema) {
-                    $allProps[$name] = $propSchema;
-                }
-            }
+            $requiredSet = [];
             if (is_array($variantRequired)) {
                 foreach ($variantRequired as $r) {
-                    $allRequired[$r] = true;
+                    $requiredSet[$r] = true;
+                }
+            }
+            $variantRequiredSets[] = $requiredSet;
+
+            if (is_array($variantProps)) {
+                foreach ($variantProps as $name => $propSchema) {
+                    if (!isset($allProps[$name])) {
+                        $allProps[$name] = [];
+                    }
+                    $allProps[$name][] = is_array($propSchema) ? $propSchema : [];
                 }
             }
         }
 
-        foreach ($allProps as $name => $propSchema) {
+        foreach ($allProps as $name => $propSchemas) {
+            // Bug 1 fix: required only if required in ALL variants (intersection)
+            $isRequired = true;
+            foreach ($variantRequiredSets as $requiredSet) {
+                if (!isset($requiredSet[$name])) {
+                    $isRequired = false;
+                    break;
+                }
+            }
+
+            // Bug 2 fix: merge schemas into union type instead of last-writer-wins
+            if (count($propSchemas) === 1) {
+                $mergedSchema = $propSchemas[0];
+            } else {
+                // Check if all schemas have enums — merge enum values
+                $allEnums = [];
+                $allAreEnums = true;
+                foreach ($propSchemas as $ps) {
+                    if (isset($ps['enum']) && is_array($ps['enum'])) {
+                        foreach ($ps['enum'] as $v) {
+                            $allEnums[] = $v;
+                        }
+                    } else {
+                        $allAreEnums = false;
+                        break;
+                    }
+                }
+
+                if ($allAreEnums && count($allEnums) > 0) {
+                    $mergedSchema = ['enum' => array_values(array_unique($allEnums, SORT_REGULAR))];
+                } else {
+                    // Different types — wrap in oneOf for union type resolution
+                    $unique = [];
+                    foreach ($propSchemas as $ps) {
+                        $key = json_encode($ps);
+                        if ($key !== false) {
+                            $unique[$key] = $ps;
+                        }
+                    }
+                    $uniqueSchemas = array_values($unique);
+                    if (count($uniqueSchemas) === 1) {
+                        $mergedSchema = $uniqueSchemas[0];
+                    } else {
+                        $mergedSchema = ['oneOf' => $uniqueSchemas];
+                    }
+                }
+            }
+
             $bodyProperties[] = [
                 'name' => (string) $name,
-                'type' => is_array($propSchema) ? schemaToPhpType($propSchema, $spec) : 'mixed',
-                'phpType' => is_array($propSchema) ? schemaToPhpHint($propSchema, $spec) : 'mixed',
-                'required' => isset($allRequired[$name]),
+                'type' => schemaToPhpType($mergedSchema, $spec),
+                'phpType' => schemaToPhpHint($mergedSchema, $spec),
+                'required' => $isRequired,
             ];
         }
     } elseif (isset($schema['properties']) && is_array($schema['properties'])) {

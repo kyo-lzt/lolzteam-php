@@ -33,7 +33,7 @@ final class MarketClient
     ) {
         $config = new ClientConfig(
             token: $token,
-            baseUrl: 'https://api.lzt.market',
+            baseUrl: 'https://prod-api.lzt.market',
             proxy: $proxy,
             retry: $retry ?? new RetryConfig(),
             requestsPerMinute: 120,

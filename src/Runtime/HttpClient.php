@@ -35,6 +35,10 @@ final class HttpClient
             $guzzleConfig['proxy'] = $config->proxy;
         }
 
+        if ($config->handler !== null) {
+            $guzzleConfig['handler'] = $config->handler;
+        }
+
         $this->guzzle = new Client($guzzleConfig);
     }
 

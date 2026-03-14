@@ -12,7 +12,8 @@ final class ChatboxApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{room_id?: 1|2|3|4|13} $params

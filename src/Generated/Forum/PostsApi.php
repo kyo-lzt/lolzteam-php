@@ -12,7 +12,8 @@ final class PostsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{thread_id?: int, page_of_post_id?: int, page?: int, limit?: int, order?: 'natural'|'natural_reverse'|'post_likes'|'post_likes_reverse'} $params

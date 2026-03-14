@@ -12,7 +12,8 @@ final class AssetsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{css?: list<string>} $params

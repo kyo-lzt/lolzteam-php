@@ -12,7 +12,8 @@ final class ImapApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{domain: string, imap_server: string, port: int, secure: bool} $body

@@ -12,7 +12,8 @@ final class ThreadsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{forum_id?: int, tab?: string, state?: 'active'|'closed', period?: 'day'|'week'|'month'|'year', title?: string, title_only?: bool, creator_user_id?: int, sticky?: bool, prefix_ids[]?: list<int>, prefix_ids_not[]?: list<int>, thread_tag_id?: int, page?: int, limit?: int, order?: 'post_date'|'last_post_date'|'reply_count'|'reply_count_asc'|'first_post_likes'|'vote_count', direction?: 'asc'|'desc', thread_create_date?: int, thread_update_date?: int, fields_include?: list<'*'|'latest_posts'>} $params

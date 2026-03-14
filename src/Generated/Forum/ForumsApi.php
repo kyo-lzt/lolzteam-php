@@ -12,7 +12,8 @@ final class ForumsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{parent_category_id?: int, parent_forum_id?: int, order?: 'natural'|'list'} $params

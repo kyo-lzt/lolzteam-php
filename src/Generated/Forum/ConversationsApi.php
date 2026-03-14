@@ -12,7 +12,8 @@ final class ConversationsApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{folder?: 'all'|'unread'|'groups'|'market'|'market_replacements'|'staff'|'giveaways'|'p2p', page?: int, limit?: int} $params

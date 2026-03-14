@@ -272,6 +272,39 @@ final class ClientTest extends TestCase
         new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', requestsPerMinute: -5);
     }
 
+    public function testClientConfigRejectsProxyWithUnsupportedScheme(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('unsupported proxy scheme');
+        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'ftp://proxy:8080');
+    }
+
+    public function testClientConfigRejectsProxyWithNoScheme(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('unsupported proxy scheme');
+        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'just-a-host:8080');
+    }
+
+    public function testClientConfigRejectsProxyWithNoHost(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('invalid proxy URL');
+        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'http://');
+    }
+
+    public function testClientConfigAcceptsValidHttpProxy(): void
+    {
+        $config = new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'http://proxy:8080');
+        $this->assertSame('http://proxy:8080', $config->proxy);
+    }
+
+    public function testClientConfigAcceptsValidSocks5Proxy(): void
+    {
+        $config = new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'socks5://proxy:1080');
+        $this->assertSame('socks5://proxy:1080', $config->proxy);
+    }
+
     // ── Exception hierarchy ─────────────────────────────────────────
 
     public function testLolzteamExceptionExtendsRuntimeException(): void

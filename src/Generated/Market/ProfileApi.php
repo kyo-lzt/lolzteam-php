@@ -12,7 +12,8 @@ final class ProfileApi
 {
     public function __construct(
         private readonly HttpClient $http,
-    ) {}
+    ) {
+    }
 
     /**
      * @param array{type?: 'market'|'nomarket', claim_state?: 'active'|'solved'|'rejected'|'settled'} $params
