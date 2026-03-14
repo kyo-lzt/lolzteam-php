@@ -1,0 +1,279 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * OpenAPI spec parsing: parameter, body, and response extraction.
+ */
+
+require_once __DIR__ . '/deref.php';
+require_once __DIR__ . '/naming.php';
+require_once __DIR__ . '/types.php';
+
+// ─── Parameter Extraction ────────────────────────────────────────────────────
+
+/**
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ * @return array{pathParams: list<array{name: string, type: string, phpType: string, required: bool}>, queryParams: list<array{name: string, type: string, phpType: string, required: bool}>}
+ */
+function extractParameters(array $operation, array $spec): array
+{
+    $pathParams = [];
+    $queryParams = [];
+
+    $rawParams = $operation['parameters'] ?? [];
+    if (!is_array($rawParams)) {
+        return ['pathParams' => [], 'queryParams' => []];
+    }
+
+    foreach ($rawParams as $rawParam) {
+        $param = derefShallow($rawParam, $spec);
+        if (!is_array($param)) {
+            continue;
+        }
+
+        $in = $param['in'] ?? '';
+        if ($in === 'header' || $in === 'cookie') {
+            continue;
+        }
+
+        $paramSchema = is_array($param['schema'] ?? null) ? $param['schema'] : null;
+        $parsed = [
+            'name' => (string) ($param['name'] ?? ''),
+            'type' => schemaToPhpType($paramSchema, $spec),
+            'phpType' => schemaToPhpHint($paramSchema, $spec),
+            'required' => (bool) ($param['required'] ?? false),
+        ];
+
+        if ($in === 'path') {
+            $parsed['required'] = true;
+            $pathParams[] = $parsed;
+        } elseif ($in === 'query') {
+            $queryParams[] = $parsed;
+        }
+    }
+
+    return ['pathParams' => $pathParams, 'queryParams' => $queryParams];
+}
+
+// ─── Body Extraction ─────────────────────────────────────────────────────────
+
+/**
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ * @return list<array{name: string, type: string, phpType: string, required: bool}>
+ */
+function extractBodyProperties(array $operation, array $spec): array
+{
+    $bodyProperties = [];
+
+    if (!isset($operation['requestBody'])) {
+        return $bodyProperties;
+    }
+
+    $requestBody = derefShallow($operation['requestBody'], $spec);
+    if (!is_array($requestBody)) {
+        return $bodyProperties;
+    }
+
+    $content = $requestBody['content'] ?? null;
+    if (!is_array($content)) {
+        return $bodyProperties;
+    }
+
+    $mediaType = $content['application/json'] ?? $content['multipart/form-data'] ?? null;
+    if (!is_array($mediaType) || !isset($mediaType['schema']) || !is_array($mediaType['schema'])) {
+        return $bodyProperties;
+    }
+
+    $schema = $mediaType['schema'];
+
+    // Handle oneOf — merge all properties from all variants
+    if (isset($schema['oneOf']) && is_array($schema['oneOf'])) {
+        $allProps = [];
+        $allRequired = [];
+
+        foreach ($schema['oneOf'] as $variant) {
+            if (!is_array($variant)) {
+                continue;
+            }
+            $variantProps = $variant['properties'] ?? [];
+            $variantRequired = $variant['required'] ?? [];
+
+            if (is_array($variantProps)) {
+                foreach ($variantProps as $name => $propSchema) {
+                    $allProps[$name] = $propSchema;
+                }
+            }
+            if (is_array($variantRequired)) {
+                foreach ($variantRequired as $r) {
+                    $allRequired[$r] = true;
+                }
+            }
+        }
+
+        foreach ($allProps as $name => $propSchema) {
+            $bodyProperties[] = [
+                'name' => (string) $name,
+                'type' => is_array($propSchema) ? schemaToPhpType($propSchema, $spec) : 'mixed',
+                'phpType' => is_array($propSchema) ? schemaToPhpHint($propSchema, $spec) : 'mixed',
+                'required' => isset($allRequired[$name]),
+            ];
+        }
+    } elseif (isset($schema['properties']) && is_array($schema['properties'])) {
+        $requiredSet = [];
+        if (isset($schema['required']) && is_array($schema['required'])) {
+            $requiredSet = array_flip($schema['required']);
+        }
+
+        foreach ($schema['properties'] as $name => $propSchema) {
+            $bodyProperties[] = [
+                'name' => (string) $name,
+                'type' => is_array($propSchema) ? schemaToPhpType($propSchema, $spec) : 'mixed',
+                'phpType' => is_array($propSchema) ? schemaToPhpHint($propSchema, $spec) : 'mixed',
+                'required' => isset($requiredSet[$name]),
+            ];
+        }
+    }
+
+    return $bodyProperties;
+}
+
+// ─── Response Extraction ─────────────────────────────────────────────────────
+
+/**
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ */
+function extractResponseType(array $operation, array $spec): string
+{
+    $responses = $operation['responses'] ?? null;
+    if (!is_array($responses)) {
+        return 'mixed';
+    }
+
+    $rawSuccess = $responses['200'] ?? $responses['201'] ?? null;
+    if ($rawSuccess === null) {
+        return 'mixed';
+    }
+
+    $success = derefShallow($rawSuccess, $spec);
+    if (!is_array($success)) {
+        return 'mixed';
+    }
+
+    $content = $success['content'] ?? null;
+    if (!is_array($content)) {
+        return 'mixed';
+    }
+
+    $jsonContent = $content['application/json'] ?? null;
+    if (!is_array($jsonContent)) {
+        return 'mixed';
+    }
+
+    $rawSchema = $jsonContent['schema'] ?? null;
+    if (!is_array($rawSchema)) {
+        return 'mixed';
+    }
+
+    $schema = derefShallow($rawSchema, $spec);
+    if (!is_array($schema)) {
+        return 'mixed';
+    }
+
+    return schemaToPhpType($schema, $spec);
+}
+
+// ─── Spec Parsing ────────────────────────────────────────────────────────────
+
+const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
+
+/**
+ * @param array<string, mixed> $rawSpec
+ * @return array{groups: list<array{groupName: string, methods: list<array<string, mixed>>}>, baseUrl: string}
+ */
+function parseSpec(array $rawSpec): array
+{
+    // Resolve all $refs first
+    $spec = deref($rawSpec, $rawSpec);
+    if (!is_array($spec)) {
+        throw new RuntimeException('Failed to resolve spec');
+    }
+
+    /** @var array<string, list<array<string, mixed>>> $groupMap */
+    $groupMap = [];
+
+    $paths = $spec['paths'] ?? [];
+    if (!is_array($paths)) {
+        $paths = [];
+    }
+
+    foreach ($paths as $path => $pathItem) {
+        if (!is_array($pathItem)) {
+            continue;
+        }
+
+        foreach (HTTP_METHODS as $httpMethod) {
+            $operation = $pathItem[$httpMethod] ?? null;
+            if (!is_array($operation)) {
+                continue;
+            }
+
+            $operationId = $operation['operationId'] ?? null;
+            if (!is_string($operationId)) {
+                continue;
+            }
+
+            $group = operationIdToGroup($operationId);
+            // Normalize known typos in group names
+            if ($group === 'manging') {
+                $group = 'managing';
+            }
+            $methodName = operationIdToMethod($operationId);
+
+            $params = extractParameters($operation, $spec);
+            $bodyProperties = extractBodyProperties($operation, $spec);
+            $responseType = extractResponseType($operation, $spec);
+
+            $hasBody = isset($operation['requestBody']);
+            $bodyRequired = false;
+            if ($hasBody) {
+                $rb = derefShallow($operation['requestBody'], $spec);
+                $bodyRequired = is_array($rb) && !empty($rb['required']);
+            }
+
+            $methodDef = [
+                'operationId' => $operationId,
+                'methodName' => $methodName,
+                'httpMethod' => strtoupper($httpMethod),
+                'path' => (string) $path,
+                'pathParams' => $params['pathParams'],
+                'queryParams' => $params['queryParams'],
+                'bodyProperties' => $bodyProperties,
+                'hasBody' => $hasBody,
+                'bodyRequired' => $bodyRequired,
+                'responseType' => $responseType,
+            ];
+
+            $groupMap[$group][] = $methodDef;
+        }
+    }
+
+    $groups = [];
+    foreach ($groupMap as $groupName => $methods) {
+        $groups[] = ['groupName' => $groupName, 'methods' => $methods];
+    }
+
+    $servers = $spec['servers'] ?? [];
+    $baseUrl = 'https://localhost';
+    if (is_array($servers) && count($servers) > 0) {
+        $first = $servers[0] ?? null;
+        if (is_array($first) && isset($first['url'])) {
+            $baseUrl = (string) $first['url'];
+        }
+    }
+
+    return ['groups' => $groups, 'baseUrl' => $baseUrl];
+}
