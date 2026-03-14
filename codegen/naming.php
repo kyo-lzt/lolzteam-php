@@ -79,6 +79,35 @@ function groupToFileName(string $group): string
 }
 
 /**
+ * Sanitize method names that clash with PHP reserved keywords.
+ */
+function sanitizeMethodName(string $name): string
+{
+    return match ($name) {
+        'list' => 'getList',
+        'match' => 'getMatch',
+        'clone' => 'doClone',
+        'empty' => 'isEmpty',
+        default => in_array($name, PHP_RESERVED_KEYWORDS, true)
+            ? 'do' . ucfirst($name)
+            : $name,
+    };
+}
+
+const PHP_RESERVED_KEYWORDS = [
+    'abstract', 'and', 'array', 'as', 'break', 'callable', 'case', 'catch',
+    'class', 'clone', 'const', 'continue', 'declare', 'default', 'die', 'do',
+    'echo', 'else', 'elseif', 'empty', 'enddeclare', 'endfor', 'endforeach',
+    'endif', 'endswitch', 'endwhile', 'eval', 'exit', 'extends', 'final',
+    'finally', 'fn', 'for', 'foreach', 'function', 'global', 'goto', 'if',
+    'implements', 'include', 'include_once', 'instanceof', 'insteadof',
+    'interface', 'isset', 'list', 'match', 'namespace', 'new', 'or', 'print',
+    'private', 'protected', 'public', 'readonly', 'require', 'require_once',
+    'return', 'static', 'switch', 'throw', 'trait', 'try', 'unset', 'use',
+    'var', 'while', 'xor', 'yield',
+];
+
+/**
  * Build a type name prefix from group + method.
  * E.g. group "threads", method "list" -> "ThreadsList"
  */

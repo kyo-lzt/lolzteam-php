@@ -40,6 +40,23 @@ $apis = [
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 /**
+ * Remove all .php files from directory (keeps .gitkeep).
+ */
+function cleanOutputDir(string $dir): void
+{
+    if (!is_dir($dir)) {
+        return;
+    }
+    $files = glob($dir . '/*.php');
+    if ($files === false) {
+        return;
+    }
+    foreach ($files as $file) {
+        unlink($file);
+    }
+}
+
+/**
  * @param array{schemaPath: string, outputDir: string, clientName: string, namespace: string, defaultBaseUrl: string, defaultRateLimit: int} $config
  */
 function generateApi(array $config): void
@@ -59,25 +76,19 @@ function generateApi(array $config): void
         mkdir($config['outputDir'], 0755, true);
     }
 
-    // Write group API files
-    foreach ($result['groups'] as $group) {
-        $fileName = groupToFileName($group['groupName']);
-        $content = emitGroupFile($group, $config['namespace']);
-        $filePath = $config['outputDir'] . '/' . $fileName . '.php';
-        file_put_contents($filePath, $content);
-        echo "  {$fileName}.php\n";
-    }
+    // Clean old per-tag files
+    cleanOutputDir($config['outputDir']);
 
-    // Write client file
-    $clientContent = emitClientFile(
+    // Write single combined file
+    $content = emitCombinedFile(
         $result['groups'],
         $config['clientName'],
         $config['namespace'],
         $config['defaultBaseUrl'],
         $config['defaultRateLimit'],
     );
-    $clientPath = $config['outputDir'] . '/' . $config['clientName'] . '.php';
-    file_put_contents($clientPath, $clientContent);
+    $filePath = $config['outputDir'] . '/' . $config['clientName'] . '.php';
+    file_put_contents($filePath, $content);
     echo "  {$config['clientName']}.php\n";
 
     $methodCount = 0;

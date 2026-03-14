@@ -81,6 +81,14 @@ function emitMethod(array $method): string
     $hasBody = $method['hasBody'];
     /** @var bool $bodyRequired */
     $bodyRequired = $method['bodyRequired'];
+    /** @var bool $isMultipart */
+    $isMultipart = $method['isMultipart'] ?? false;
+    /** @var bool $isRawBody */
+    $isRawBody = $method['isRawBody'] ?? false;
+    /** @var string $rawBodyType */
+    $rawBodyType = $method['rawBodyType'] ?? 'mixed';
+    /** @var bool $returnsNonJson */
+    $returnsNonJson = $method['returnsNonJson'] ?? false;
     /** @var string $responseType */
     $responseType = $method['responseType'];
     /** @var string $methodName */
@@ -92,6 +100,8 @@ function emitMethod(array $method): string
 
     $hasQueryParams = count($queryParams) > 0;
     $hasBodyProps = $hasBody && count($bodyProperties) > 0;
+    // Body exists but has no named properties (e.g. array body like Batch)
+    $hasRawBody = $hasBody && $isRawBody && !$hasBodyProps;
 
     // Build PHPDoc
     $docLines = [];
@@ -103,6 +113,8 @@ function emitMethod(array $method): string
         if ($bodyDoc !== '') {
             $docLines[] = "     * {$bodyDoc}";
         }
+    } elseif ($hasRawBody) {
+        $docLines[] = "     * @param {$rawBodyType} \$body";
     }
     if ($hasQueryParams) {
         $paramsDoc = buildQueryParamsDoc($queryParams);
@@ -124,6 +136,16 @@ function emitMethod(array $method): string
         $args[] = "{$param['phpType']} \${$param['name']}";
     }
     if ($hasBodyProps) {
+        $hasRequiredBodyProps = false;
+        foreach ($bodyProperties as $bp) {
+            if ($bp['required']) {
+                $hasRequiredBodyProps = true;
+                break;
+            }
+        }
+        $bodyOpt = ($bodyRequired || $hasRequiredBodyProps) ? '' : ' = []';
+        $args[] = "array \$body{$bodyOpt}";
+    } elseif ($hasRawBody) {
         $bodyOpt = $bodyRequired ? '' : ' = []';
         $args[] = "array \$body{$bodyOpt}";
     }
@@ -134,7 +156,9 @@ function emitMethod(array $method): string
     $argStr = implode(', ', $args);
     $pathExpr = buildPathExpression($path);
 
-    $lines[] = "    public function {$methodName}({$argStr}): array";
+    // Return type: string|array for non-JSON responses, array otherwise
+    $returnType = $returnsNonJson ? 'string|array' : 'array';
+    $lines[] = "    public function {$methodName}({$argStr}): {$returnType}";
     $lines[] = '    {';
 
     // Build request call
@@ -146,10 +170,14 @@ function emitMethod(array $method): string
         $requestArgs[] = '[]';
     }
 
-    if ($hasBodyProps) {
+    if ($hasBodyProps || $hasRawBody) {
         $requestArgs[] = '$body';
     } else {
         $requestArgs[] = 'null';
+    }
+
+    if ($isMultipart) {
+        $requestArgs[] = 'true';
     }
 
     // Trim trailing default arguments
@@ -207,14 +235,41 @@ function emitGroupFile(array $group, string $namespace): string
     return implode("\n", $lines);
 }
 
-// ─── Code Emission: Client Class ─────────────────────────────────────────────
+// ─── Code Emission: Combined File ────────────────────────────────────────────
 
 /**
- * Emit the main client class file.
+ * Emit a single group API class body (without file header).
+ *
+ * @param array{groupName: string, methods: list<array<string, mixed>>} $group
+ */
+function emitGroupClass(array $group): string
+{
+    $className = groupToClassName($group['groupName']);
+    $lines = [];
+
+    $lines[] = "final class {$className}";
+    $lines[] = '{';
+    $lines[] = '    public function __construct(';
+    $lines[] = '        private readonly HttpClient $http,';
+    $lines[] = '    ) {';
+    $lines[] = '    }';
+
+    foreach ($group['methods'] as $method) {
+        $lines[] = '';
+        $lines[] = emitMethod($method);
+    }
+
+    $lines[] = '}';
+
+    return implode("\n", $lines);
+}
+
+/**
+ * Emit a combined file with all group API classes and the client class.
  *
  * @param list<array{groupName: string, methods: list<array<string, mixed>>}> $groups
  */
-function emitClientFile(
+function emitCombinedFile(
     array $groups,
     string $clientName,
     string $namespace,
@@ -234,11 +289,18 @@ function emitClientFile(
     $lines[] = 'use Lolzteam\\Runtime\\ClientConfig;';
     $lines[] = 'use Lolzteam\\Runtime\\HttpClient;';
     $lines[] = 'use Lolzteam\\Runtime\\RetryConfig;';
+
+    // Emit all group API classes
+    foreach ($groups as $group) {
+        $lines[] = '';
+        $lines[] = emitGroupClass($group);
+    }
+
+    // Emit client class
     $lines[] = '';
     $lines[] = "final class {$clientName}";
     $lines[] = '{';
 
-    // Properties
     foreach ($groups as $group) {
         $className = groupToClassName($group['groupName']);
         $propName = groupToPropertyName($group['groupName']);

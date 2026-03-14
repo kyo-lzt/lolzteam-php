@@ -195,6 +195,107 @@ function extractBodyProperties(array $operation, array $spec): array
     return $bodyProperties;
 }
 
+// ─── Multipart Detection ─────────────────────────────────────────────────────
+
+/**
+ * Check if the operation uses multipart/form-data content type.
+ *
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ */
+function isMultipart(array $operation, array $spec): bool
+{
+    if (!isset($operation['requestBody'])) {
+        return false;
+    }
+
+    $requestBody = derefShallow($operation['requestBody'], $spec);
+    if (!is_array($requestBody)) {
+        return false;
+    }
+
+    $content = $requestBody['content'] ?? null;
+    if (!is_array($content)) {
+        return false;
+    }
+
+    return isset($content['multipart/form-data']);
+}
+
+// ─── Raw Body Detection ──────────────────────────────────────────────────────
+
+/**
+ * Detect if the request body is a raw array/primitive (not object with named properties).
+ *
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ * @return array{isRawBody: bool, rawBodyType: string}
+ */
+function extractRawBodyInfo(array $operation, array $spec): array
+{
+    if (!isset($operation['requestBody'])) {
+        return ['isRawBody' => false, 'rawBodyType' => 'mixed'];
+    }
+
+    $requestBody = derefShallow($operation['requestBody'], $spec);
+    if (!is_array($requestBody)) {
+        return ['isRawBody' => false, 'rawBodyType' => 'mixed'];
+    }
+
+    $content = $requestBody['content'] ?? null;
+    if (!is_array($content)) {
+        return ['isRawBody' => false, 'rawBodyType' => 'mixed'];
+    }
+
+    $mediaType = $content['application/json'] ?? $content['multipart/form-data'] ?? null;
+    if (!is_array($mediaType) || !isset($mediaType['schema']) || !is_array($mediaType['schema'])) {
+        return ['isRawBody' => false, 'rawBodyType' => 'mixed'];
+    }
+
+    $schema = $mediaType['schema'];
+    $schemaType = $schema['type'] ?? null;
+    $hasProperties = isset($schema['properties']) && is_array($schema['properties']);
+
+    if ($schemaType === 'array' || (!$hasProperties && !isset($schema['oneOf']))) {
+        return ['isRawBody' => true, 'rawBodyType' => schemaToPhpType($schema, $spec)];
+    }
+
+    return ['isRawBody' => false, 'rawBodyType' => 'mixed'];
+}
+
+// ─── Non-JSON Response Detection ─────────────────────────────────────────────
+
+/**
+ * Check if the operation returns non-JSON content (e.g. text/html).
+ *
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ */
+function hasNonJsonResponse(array $operation, array $spec): bool
+{
+    $responses = $operation['responses'] ?? null;
+    if (!is_array($responses)) {
+        return false;
+    }
+
+    $rawSuccess = $responses['200'] ?? $responses['201'] ?? null;
+    if ($rawSuccess === null) {
+        return false;
+    }
+
+    $success = derefShallow($rawSuccess, $spec);
+    if (!is_array($success)) {
+        return false;
+    }
+
+    $content = $success['content'] ?? null;
+    if (!is_array($content)) {
+        return false;
+    }
+
+    return !isset($content['application/json']) && count($content) > 0;
+}
+
 // ─── Response Extraction ─────────────────────────────────────────────────────
 
 /**
@@ -286,7 +387,7 @@ function parseSpec(array $rawSpec): array
             if ($group === 'manging') {
                 $group = 'managing';
             }
-            $methodName = operationIdToMethod($operationId);
+            $methodName = sanitizeMethodName(operationIdToMethod($operationId));
 
             $params = extractParameters($operation, $spec);
             $bodyProperties = extractBodyProperties($operation, $spec);
@@ -299,17 +400,42 @@ function parseSpec(array $rawSpec): array
                 $bodyRequired = is_array($rb) && !empty($rb['required']);
             }
 
+            $isMultipart = isMultipart($operation, $spec);
+            $rawBodyInfo = extractRawBodyInfo($operation, $spec);
+            $returnsNonJson = hasNonJsonResponse($operation, $spec);
+
+            // PHP-2: GET requests with requestBody — send body properties as query params
+            $upperMethod = strtoupper($httpMethod);
+            if ($upperMethod === 'GET' && count($bodyProperties) > 0) {
+                // Merge body properties into query params (all optional for GET)
+                foreach ($bodyProperties as $bodyProp) {
+                    $params['queryParams'][] = [
+                        'name' => $bodyProp['name'],
+                        'type' => $bodyProp['type'],
+                        'phpType' => $bodyProp['phpType'],
+                        'required' => false,
+                    ];
+                }
+                $bodyProperties = [];
+                $hasBody = false;
+                $bodyRequired = false;
+            }
+
             $methodDef = [
                 'operationId' => $operationId,
                 'methodName' => $methodName,
-                'httpMethod' => strtoupper($httpMethod),
+                'httpMethod' => $upperMethod,
                 'path' => (string) $path,
                 'pathParams' => $params['pathParams'],
                 'queryParams' => $params['queryParams'],
                 'bodyProperties' => $bodyProperties,
                 'hasBody' => $hasBody,
                 'bodyRequired' => $bodyRequired,
+                'isMultipart' => $isMultipart,
+                'isRawBody' => $rawBodyInfo['isRawBody'],
+                'rawBodyType' => $rawBodyInfo['rawBodyType'],
                 'responseType' => $responseType,
+                'returnsNonJson' => $returnsNonJson,
             ];
 
             $groupMap[$group][] = $methodDef;

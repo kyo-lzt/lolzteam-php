@@ -186,7 +186,12 @@ function schemaToPhpHint(?array $schema, array $spec): string
     }
 
     if (isset($schema['type']) && is_array($schema['type'])) {
-        return 'mixed';
+        $types = $schema['type'];
+        $hasNull = in_array('null', $types, true);
+        $nonNull = array_filter($types, fn(mixed $t) => is_string($t) && $t !== 'null');
+        $mapped = array_map(fn(string $t) => primitivePhpType($t), array_values($nonNull));
+        $result = implode('|', $mapped);
+        return $hasNull ? $result . '|null' : $result;
     }
 
     $type = $schema['type'] ?? null;
