@@ -1,0 +1,545 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Response model generation: extracts response schemas and emits PHP model classes.
+ */
+
+require_once __DIR__ . '/deref.php';
+require_once __DIR__ . '/naming.php';
+require_once __DIR__ . '/types.php';
+
+// ─── Response Schema Extraction ─────────────────────────────────────────────
+
+/**
+ * Extract the full response schema (resolved) for an operation.
+ *
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ * @return array<string, mixed>|null
+ */
+function extractResponseSchema(array $operation, array $spec): ?array
+{
+    $responses = $operation['responses'] ?? null;
+    if (!is_array($responses)) {
+        return null;
+    }
+
+    $rawSuccess = $responses['200'] ?? $responses['201'] ?? null;
+    if ($rawSuccess === null) {
+        return null;
+    }
+
+    $success = derefShallow($rawSuccess, $spec);
+    if (!is_array($success)) {
+        return null;
+    }
+
+    $content = $success['content'] ?? null;
+    if (!is_array($content)) {
+        return null;
+    }
+
+    $jsonContent = $content['application/json'] ?? null;
+    if (!is_array($jsonContent)) {
+        return null;
+    }
+
+    $rawSchema = $jsonContent['schema'] ?? null;
+    if (!is_array($rawSchema)) {
+        return null;
+    }
+
+    return $rawSchema;
+}
+
+// ─── Model Class Collection ─────────────────────────────────────────────────
+
+/**
+ * Collect all model classes needed for a response schema.
+ * Returns a flat list of model definitions, depth-first.
+ *
+ * @param array<string, mixed> $schema  Resolved schema
+ * @param array<string, mixed> $spec    Full spec (for ref resolution)
+ * @param string $className             Class name for this schema
+ * @return list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}>
+ */
+function collectModels(array $schema, array $spec, string $className): array
+{
+    $models = [];
+    $properties = [];
+
+    // Resolve the schema
+    $resolved = resolveSchemaFully($schema, $spec);
+    if ($resolved === null) {
+        return [];
+    }
+
+    $props = $resolved['properties'] ?? null;
+    if (!is_array($props) || count($props) === 0) {
+        return [];
+    }
+
+    $required = [];
+    if (isset($resolved['required']) && is_array($resolved['required'])) {
+        $required = array_flip($resolved['required']);
+    }
+
+    foreach ($props as $propName => $propSchema) {
+        if (!is_array($propSchema)) {
+            $properties[] = buildPropertyDef((string) $propName, null, isset($required[$propName]), $spec, $className, $models);
+            continue;
+        }
+
+        $propResolved = resolveSchemaFully($propSchema, $spec);
+        $isRequired = isset($required[$propName]);
+
+        $properties[] = buildPropertyDef((string) $propName, $propResolved, $isRequired, $spec, $className, $models);
+    }
+
+    // Add current model at the beginning (parent first)
+    array_unshift($models, [
+        'className' => $className,
+        'properties' => $properties,
+    ]);
+
+    return $models;
+}
+
+/**
+ * Resolve a schema fully, handling $ref, allOf, etc.
+ *
+ * @param array<string, mixed> $schema
+ * @param array<string, mixed> $spec
+ * @return array<string, mixed>|null
+ */
+function resolveSchemaFully(array $schema, array $spec): ?array
+{
+    // Handle $ref
+    if (isset($schema['$ref'])) {
+        $resolved = derefShallow($schema, $spec);
+        if (!is_array($resolved)) {
+            return null;
+        }
+        return resolveSchemaFully($resolved, $spec);
+    }
+
+    // Handle allOf — merge all properties
+    if (isset($schema['allOf']) && is_array($schema['allOf'])) {
+        $merged = ['type' => 'object', 'properties' => [], 'required' => []];
+        foreach ($schema['allOf'] as $sub) {
+            if (!is_array($sub)) {
+                continue;
+            }
+            $resolved = resolveSchemaFully($sub, $spec);
+            if (!is_array($resolved)) {
+                continue;
+            }
+            if (isset($resolved['properties']) && is_array($resolved['properties'])) {
+                $merged['properties'] = array_merge($merged['properties'], $resolved['properties']);
+            }
+            if (isset($resolved['required']) && is_array($resolved['required'])) {
+                $merged['required'] = array_merge($merged['required'], $resolved['required']);
+            }
+        }
+        return $merged;
+    }
+
+    return $schema;
+}
+
+/**
+ * Build a property definition, creating nested models as needed.
+ *
+ * @param array<string, mixed>|null $schema
+ * @param array<string, mixed> $spec
+ * @param list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}> &$models
+ * @return array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}
+ */
+function buildPropertyDef(
+    string $propName,
+    ?array $schema,
+    bool $isRequired,
+    array $spec,
+    string $parentClassName,
+    array &$models,
+): array {
+    $isNullable = !$isRequired;
+
+    if ($schema === null || $schema === []) {
+        return [
+            'name' => $propName,
+            'phpType' => 'mixed',
+            'docType' => 'mixed',
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    // Handle oneOf/anyOf — use mixed
+    if (isset($schema['oneOf']) || isset($schema['anyOf'])) {
+        return [
+            'name' => $propName,
+            'phpType' => 'mixed',
+            'docType' => schemaToPhpType($schema, $spec),
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    // Handle multi-type
+    if (isset($schema['type']) && is_array($schema['type'])) {
+        $types = $schema['type'];
+        $hasNull = in_array('null', $types, true);
+        $nonNull = array_filter($types, fn(mixed $t) => is_string($t) && $t !== 'null');
+        $mapped = array_map(fn(string $t) => primitivePhpType($t), array_values($nonNull));
+        $phpType = implode('|', $mapped);
+        if ($hasNull) {
+            $isNullable = true;
+        }
+        return [
+            'name' => $propName,
+            'phpType' => $phpType,
+            'docType' => $phpType . ($isNullable ? '|null' : ''),
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    $type = $schema['type'] ?? null;
+
+    // Enum — use string
+    if (isset($schema['enum']) && is_array($schema['enum'])) {
+        return [
+            'name' => $propName,
+            'phpType' => 'string|int',
+            'docType' => schemaToPhpType($schema, $spec),
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    // Array type
+    if ($type === 'array') {
+        $items = $schema['items'] ?? null;
+        if (is_array($items)) {
+            $itemResolved = resolveSchemaFully($items, $spec);
+            // If items are objects, create nested model
+            if ($itemResolved !== null && hasObjectProperties($itemResolved)) {
+                $nestedName = $parentClassName . propertyToClassName($propName);
+                $nestedModels = collectModels($itemResolved, $spec, $nestedName);
+                foreach ($nestedModels as $nm) {
+                    $models[] = $nm;
+                }
+                return [
+                    'name' => $propName,
+                    'phpType' => 'array',
+                    'docType' => "list<{$nestedName}>",
+                    'isArray' => true,
+                    'isNullable' => $isNullable,
+                    'nestedModel' => $nestedName,
+                ];
+            }
+            // Primitive array
+            $itemType = schemaToPhpType($items, $spec);
+            return [
+                'name' => $propName,
+                'phpType' => 'array',
+                'docType' => "list<{$itemType}>",
+                'isArray' => true,
+                'isNullable' => $isNullable,
+                'nestedModel' => null,
+            ];
+        }
+        return [
+            'name' => $propName,
+            'phpType' => 'array',
+            'docType' => 'list<mixed>',
+            'isArray' => true,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    // Object with properties -> nested model
+    if ($type === 'object' || hasObjectProperties($schema)) {
+        if (hasObjectProperties($schema)) {
+            $nestedName = $parentClassName . propertyToClassName($propName);
+            $nestedModels = collectModels($schema, $spec, $nestedName);
+            foreach ($nestedModels as $nm) {
+                $models[] = $nm;
+            }
+            return [
+                'name' => $propName,
+                'phpType' => $nestedName,
+                'docType' => $nestedName,
+                'isArray' => false,
+                'isNullable' => $isNullable,
+                'nestedModel' => $nestedName,
+            ];
+        }
+
+        // Object without properties (additionalProperties or generic)
+        $additionalProps = $schema['additionalProperties'] ?? null;
+        if (is_array($additionalProps)) {
+            $valType = schemaToPhpType($additionalProps, $spec);
+            return [
+                'name' => $propName,
+                'phpType' => 'array',
+                'docType' => "array<string, {$valType}>",
+                'isArray' => false,
+                'isNullable' => $isNullable,
+                'nestedModel' => null,
+            ];
+        }
+        return [
+            'name' => $propName,
+            'phpType' => 'array',
+            'docType' => 'array<string, mixed>',
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => null,
+        ];
+    }
+
+    // Primitive types
+    $phpType = primitivePhpType(is_string($type) ? $type : 'mixed');
+    return [
+        'name' => $propName,
+        'phpType' => $phpType,
+        'docType' => $phpType,
+        'isArray' => false,
+        'isNullable' => $isNullable,
+        'nestedModel' => null,
+    ];
+}
+
+/**
+ * Check if a schema has object properties.
+ *
+ * @param array<string, mixed> $schema
+ */
+function hasObjectProperties(array $schema): bool
+{
+    return isset($schema['properties']) && is_array($schema['properties']) && count($schema['properties']) > 0;
+}
+
+/**
+ * Convert a property name to a class name segment.
+ * E.g. "system_info" -> "SystemInfo", "threads" -> "Threads"
+ */
+function propertyToClassName(string $prop): string
+{
+    // Handle hyphenated names like "sub-categories"
+    $prop = str_replace('-', '_', $prop);
+    $parts = explode('_', $prop);
+    return implode('', array_map(fn(string $p) => ucfirst($p), $parts));
+}
+
+/**
+ * Convert a property name to a PHP property name (camelCase).
+ * Handles names with hyphens or invalid characters.
+ * E.g. "sub-categories" -> "subCategories", "thread_id" -> "threadId"
+ */
+function propertyToPhpName(string $prop): string
+{
+    // Keep snake_case as-is (matches API response keys)
+    // But handle hyphens which are invalid in PHP
+    if (!str_contains($prop, '-')) {
+        return $prop;
+    }
+
+    // Convert hyphenated to camelCase
+    $parts = explode('-', $prop);
+    $result = $parts[0];
+    for ($i = 1; $i < count($parts); $i++) {
+        $result .= ucfirst($parts[$i]);
+    }
+    return $result;
+}
+
+// ─── Model Emission ─────────────────────────────────────────────────────────
+
+/**
+ * Build the response model class name from operationId.
+ * E.g. "Threads.List" -> "ThreadsListResponse"
+ */
+function responseModelClassName(string $operationId): string
+{
+    $parts = explode('.', $operationId);
+    $name = implode('', array_map(fn(string $p) => ucfirst($p), $parts));
+    return $name . 'Response';
+}
+
+/**
+ * Emit all model classes for a single response.
+ *
+ * @param list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}> $models
+ */
+function emitModelClasses(array $models, string $namespace): string
+{
+    $output = '';
+
+    foreach ($models as $model) {
+        $output .= emitSingleModelClass($model, $namespace);
+        $output .= "\n";
+    }
+
+    return $output;
+}
+
+/**
+ * Emit a single model class.
+ *
+ * @param array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>} $model
+ */
+function emitSingleModelClass(array $model, string $namespace): string
+{
+    $lines = [];
+    $className = $model['className'];
+    $properties = $model['properties'];
+
+    $lines[] = "final class {$className}";
+    $lines[] = '{';
+
+    // Constructor with readonly properties
+    $lines[] = '    public function __construct(';
+    $ctorParams = [];
+    foreach ($properties as $prop) {
+        $phpName = propertyToPhpName($prop['name']);
+        $typeHint = resolveConstructorType($prop);
+        $docType = $prop['docType'];
+        $nullable = $prop['isNullable'] ? '?' : '';
+
+        // For nested models and typed arrays, add PHPDoc
+        if ($prop['nestedModel'] !== null || ($prop['isArray'] && $prop['docType'] !== 'list<mixed>')) {
+            $ctorParams[] = "        /** @var {$docType}" . ($prop['isNullable'] ? '|null' : '') . " */\n        public readonly {$nullable}{$typeHint} \${$phpName},";
+        } else {
+            $ctorParams[] = "        public readonly {$nullable}{$typeHint} \${$phpName},";
+        }
+    }
+    $lines[] = implode("\n", $ctorParams);
+    $lines[] = '    ) {';
+    $lines[] = '    }';
+
+    // fromArray factory method
+    $lines[] = '';
+    $lines[] = '    /**';
+    $lines[] = '     * @param array<string, mixed> $data';
+    $lines[] = '     */';
+    $lines[] = "    public static function fromArray(array \$data): self";
+    $lines[] = '    {';
+    $lines[] = '        return new self(';
+
+    foreach ($properties as $prop) {
+        $phpName = propertyToPhpName($prop['name']);
+        $key = $prop['name'];
+        $lines[] = '            ' . emitFromArrayArg($prop, $key, $namespace) . ',';
+    }
+
+    $lines[] = '        );';
+    $lines[] = '    }';
+    $lines[] = '}';
+
+    return implode("\n", $lines) . "\n";
+}
+
+/**
+ * Resolve the constructor type hint for a property.
+ *
+ * @param array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null} $prop
+ */
+function resolveConstructorType(array $prop): string
+{
+    // For nested models that are not arrays, use the model class name
+    if ($prop['nestedModel'] !== null && !$prop['isArray']) {
+        return $prop['nestedModel'];
+    }
+
+    // For arrays (both typed and untyped)
+    if ($prop['isArray'] || $prop['phpType'] === 'array') {
+        return 'array';
+    }
+
+    // For union types with pipes, check if valid PHP union
+    if (str_contains($prop['phpType'], '|')) {
+        // Filter to valid PHP type hints
+        $parts = explode('|', $prop['phpType']);
+        $validTypes = ['string', 'int', 'float', 'bool', 'array', 'null', 'mixed'];
+        $filtered = array_filter($parts, fn(string $t) => in_array($t, $validTypes, true));
+        if (count($filtered) === count($parts)) {
+            return $prop['phpType'];
+        }
+        return 'mixed';
+    }
+
+    return $prop['phpType'];
+}
+
+/**
+ * Emit a fromArray argument expression for a property.
+ *
+ * @param array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null} $prop
+ */
+function emitFromArrayArg(array $prop, string $key, string $namespace): string
+{
+    $access = "\$data['{$key}']";
+    $nullAccess = "\$data['{$key}'] ?? null";
+
+    // Nested model (not array)
+    if ($prop['nestedModel'] !== null && !$prop['isArray']) {
+        if ($prop['isNullable']) {
+            return "isset({$access}) && is_array({$access}) ? {$prop['nestedModel']}::fromArray({$access}) : null";
+        }
+        return "{$prop['nestedModel']}::fromArray({$access})";
+    }
+
+    // Array of nested models
+    if ($prop['isArray'] && $prop['nestedModel'] !== null) {
+        if ($prop['isNullable']) {
+            return "isset({$access}) && is_array({$access}) ? array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access}) : null";
+        }
+        return "array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access})";
+    }
+
+    // Simple nullable
+    if ($prop['isNullable']) {
+        return $nullAccess;
+    }
+
+    return $access;
+}
+
+// ─── Full Models File Emission ──────────────────────────────────────────────
+
+/**
+ * Emit a complete models file with all response model classes.
+ *
+ * @param list<array{operationId: string, models: list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}>}> $allModels
+ */
+function emitModelsFile(array $allModels, string $namespace): string
+{
+    $lines = [];
+
+    $lines[] = '<?php';
+    $lines[] = '';
+    $lines[] = '// Auto-generated. Do not edit manually.';
+    $lines[] = '';
+    $lines[] = 'declare(strict_types=1);';
+    $lines[] = '';
+    $lines[] = "namespace {$namespace};";
+    $lines[] = '';
+
+    foreach ($allModels as $entry) {
+        foreach ($entry['models'] as $model) {
+            $lines[] = emitSingleModelClass($model, $namespace);
+        }
+    }
+
+    return implode("\n", $lines) . "\n";
+}

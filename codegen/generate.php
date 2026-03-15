@@ -34,13 +34,14 @@ $apis = [
         'namespace' => 'Lolzteam\\Generated\\Market',
         'defaultBaseUrl' => 'https://prod-api.lzt.market',
         'defaultRateLimit' => 120,
+        'defaultSearchRateLimit' => 20,
     ],
 ];
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 /**
- * Remove all .php files from directory (keeps .gitkeep).
+ * Remove all .php files from directory and subdirectories (keeps .gitkeep).
  */
 function cleanOutputDir(string $dir): void
 {
@@ -53,6 +54,16 @@ function cleanOutputDir(string $dir): void
     }
     foreach ($files as $file) {
         unlink($file);
+    }
+    // Also clean Models subdirectory
+    $modelsDir = $dir . '/Models';
+    if (is_dir($modelsDir)) {
+        $modelFiles = glob($modelsDir . '/*.php');
+        if ($modelFiles !== false) {
+            foreach ($modelFiles as $file) {
+                unlink($file);
+            }
+        }
     }
 }
 
@@ -86,10 +97,40 @@ function generateApi(array $config): void
         $config['namespace'],
         $config['defaultBaseUrl'],
         $config['defaultRateLimit'],
+        $config['defaultSearchRateLimit'] ?? null,
     );
     $filePath = $config['outputDir'] . '/' . $config['clientName'] . '.php';
     file_put_contents($filePath, $content);
     echo "  {$config['clientName']}.php\n";
+
+    // Write response models file
+    $modelsNamespace = $config['namespace'] . '\\Models';
+    $modelsDir = $config['outputDir'] . '/Models';
+    if (!is_dir($modelsDir)) {
+        mkdir($modelsDir, 0755, true);
+    }
+
+    // Collect all response models from all groups
+    $allModels = [];
+    $modelCount = 0;
+    foreach ($result['groups'] as $group) {
+        foreach ($group['methods'] as $method) {
+            if (!empty($method['responseModels'])) {
+                $allModels[] = [
+                    'operationId' => $method['operationId'],
+                    'models' => $method['responseModels'],
+                ];
+                $modelCount += count($method['responseModels']);
+            }
+        }
+    }
+
+    if (count($allModels) > 0) {
+        $modelsContent = emitModelsFile($allModels, $modelsNamespace);
+        $modelsFilePath = $modelsDir . '/Models.php';
+        file_put_contents($modelsFilePath, $modelsContent);
+        echo "  Models.php ({$modelCount} classes)\n";
+    }
 
     $methodCount = 0;
     foreach ($result['groups'] as $group) {

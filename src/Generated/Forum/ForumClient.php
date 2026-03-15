@@ -19,17 +19,14 @@ final class OAuthApi
 
     /**
      * @param array{grant_type: 'client_credentials'|'authorization_code'|'refresh_token'|'password', client_id: string, client_secret: string, scope?: list<'basic'|'read'|'post'|'conversate'|'market'|'payment'|'invoice'>, code?: string, redirect_uri?: string, refresh_token?: string, username?: string, password?: string} $body
-     * @return array{
-    access_token: string,
-    token_type: string,
-    expires_in: int,
-    refresh_token?: string,
-    scope?: string,
-}
+     * @return Models\OAuthTokenResponse
      */
-    public function token(array $body): array
+    public function token(array $body): Models\OAuthTokenResponse
     {
-        return $this->http->request('POST', '/oauth/token', [], $body, true);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/oauth/token', [], $body, 'multipart');
+
+        return Models\OAuthTokenResponse::fromArray($data);
     }
 }
 
@@ -42,17 +39,14 @@ final class AssetsApi
 
     /**
      * @param array{css?: list<string>} $params
-     * @return array{
-    contents: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\AssetsCssResponse
      */
-    public function css(array $params = []): array
+    public function css(array $params = []): Models\AssetsCssResponse
     {
-        return $this->http->request('GET', '/css', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/css', $params);
+
+        return Models\AssetsCssResponse::fromArray($data);
     }
 }
 
@@ -65,63 +59,26 @@ final class CategoriesApi
 
     /**
      * @param array{parent_category_id?: int, parent_forum_id?: int, order?: 'natural'|'list'} $params
-     * @return array{
-    categories: list<array{
-        category_id: int,
-        category_title: string,
-        category_description: string,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-    }>,
-    categories_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\CategoriesListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\CategoriesListResponse
     {
-        return $this->http->request('GET', '/categories', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/categories', $params);
+
+        return Models\CategoriesListResponse::fromArray($data);
     }
 
     /**
      * @param int $category_id
-     * @return array{
-    category: array{
-        category_id: int,
-        category_title: string,
-        category_description: string,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\CategoriesGetResponse
      */
-    public function get(int $category_id): array
+    public function get(int $category_id): Models\CategoriesGetResponse
     {
-        return $this->http->request('GET', "/categories/{$category_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/categories/{$category_id}");
+
+        return Models\CategoriesGetResponse::fromArray($data);
     }
 }
 
@@ -134,317 +91,109 @@ final class ForumsApi
 
     /**
      * @param array{parent_category_id?: int, parent_forum_id?: int, order?: 'natural'|'list'} $params
-     * @return array{
-    forums: list<array{
-        forum_id: int,
-        forum_title: string,
-        forum_description: string,
-        forum_thread_count: int,
-        forum_post_count: int,
-        forum_prefixes: list<array{
-            group_title: string,
-            group_prefixes: list<array{
-                prefix_id: int,
-                prefix_title: string,
-            }>,
-        }>,
-        thread_default_prefix_id: int,
-        thread_prefix_is_required: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            threads: string,
-            followers: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            create_thread: bool,
-            tag_thread: bool,
-            follow: bool,
-        },
-        forum_is_followed: bool,
-    }>,
-    forums_total: int,
-    tabs: list<array{
-        link_title: string,
-        isDefault: bool,
-        title: string,
-        isHidden: bool,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\ForumsListResponse
     {
-        return $this->http->request('GET', '/forums', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/forums', $params);
+
+        return Models\ForumsListResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    data: array{
-        0: array{
-            0: array{
-                forum_id: int,
-                forum_title: string,
-                forum_description: string,
-                forum_thread_count: int,
-                forum_post_count: int,
-                parent_node_id: int,
-                links: array{
-                    permalink: string,
-                    detail: string,
-                    sub-categories: string,
-                    sub-forums: string,
-                    threads: string,
-                    followers: string,
-                },
-                permissions: array{
-                    view: bool,
-                    edit: bool,
-                    delete: bool,
-                    create_thread: bool,
-                    tag_thread: bool,
-                    follow: bool,
-                },
-                forum_is_followed: bool,
-            },
-        },
-    },
-    tabs: list<array{
-        link_title: string,
-        isDefault: bool,
-        title: string,
-        isHidden: bool,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsGroupedResponse
      */
-    public function grouped(): array
+    public function grouped(): Models\ForumsGroupedResponse
     {
-        return $this->http->request('GET', '/forums/grouped');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/forums/grouped');
+
+        return Models\ForumsGroupedResponse::fromArray($data);
     }
 
     /**
      * @param int $forum_id
-     * @return array{
-    forum: array{
-        forum_id: int,
-        forum_title: string,
-        forum_description: string,
-        forum_thread_count: int,
-        forum_post_count: int,
-        forum_prefixes: list<array{
-            group_title: string,
-            group_prefixes: list<array{
-                prefix_id: int,
-                prefix_title: string,
-            }>,
-        }>,
-        thread_default_prefix_id: int,
-        thread_prefix_is_required: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            threads: string,
-            followers: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            create_thread: bool,
-            upload_attachment: bool,
-            tag_thread: bool,
-            follow: bool,
-        },
-        forum_is_followed: bool,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsGetResponse
      */
-    public function get(int $forum_id): array
+    public function get(int $forum_id): Models\ForumsGetResponse
     {
-        return $this->http->request('GET', "/forums/{$forum_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/forums/{$forum_id}");
+
+        return Models\ForumsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $forum_id
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-        follow: array{
-            post: bool,
-            alert: bool,
-            email: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsFollowersResponse
      */
-    public function followers(int $forum_id): array
+    public function followers(int $forum_id): Models\ForumsFollowersResponse
     {
-        return $this->http->request('GET', "/forums/{$forum_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/forums/{$forum_id}/followers");
+
+        return Models\ForumsFollowersResponse::fromArray($data);
     }
 
     /**
      * @param int $forum_id
      * @param array{post?: bool, alert?: bool, email?: bool, prefix_ids?: list<int>, minimal_contest_amount?: int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsFollowResponse
      */
-    public function follow(int $forum_id, array $body = []): array
+    public function follow(int $forum_id, array $body = []): Models\ForumsFollowResponse
     {
-        return $this->http->request('POST', "/forums/{$forum_id}/followers", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/forums/{$forum_id}/followers", [], $body, 'json');
+
+        return Models\ForumsFollowResponse::fromArray($data);
     }
 
     /**
      * @param int $forum_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsUnfollowResponse
      */
-    public function unfollow(int $forum_id): array
+    public function unfollow(int $forum_id): Models\ForumsUnfollowResponse
     {
-        return $this->http->request('DELETE', "/forums/{$forum_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/forums/{$forum_id}/followers");
+
+        return Models\ForumsUnfollowResponse::fromArray($data);
     }
 
     /**
      * @param array{total?: bool} $params
-     * @return array{
-    forums: list<array{
-        forum_id: int,
-        forum_title: string,
-        forum_description: string,
-        forum_thread_count: int,
-        forum_post_count: int,
-        forum_prefixes: list<array{
-            group_title: string,
-            group_prefixes: list<array{
-                prefix_id: int,
-                prefix_title: string,
-            }>,
-        }>,
-        thread_default_prefix_id: int,
-        thread_prefix_is_required: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            threads: string,
-            followers: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            create_thread: bool,
-            upload_attachment: bool,
-            tag_thread: bool,
-            follow: bool,
-        },
-        forum_is_followed: bool,
-        follow: array{
-            post: bool,
-            alert: bool,
-            email: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsFollowedResponse
      */
-    public function followed(array $params = []): array
+    public function followed(array $params = []): Models\ForumsFollowedResponse
     {
-        return $this->http->request('GET', '/forums/followed', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/forums/followed', $params);
+
+        return Models\ForumsFollowedResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    forums: list<array{
-        forum_id: int,
-        forum_title: string,
-        forum_description: string,
-        parent_node_id: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            threads: string,
-            followers: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            create_thread: bool,
-            tag_thread: bool,
-            follow: bool,
-        },
-        forum_is_followed: bool,
-        has_children: bool,
-    }>,
-    excluded_forums_ids: list<int>,
-    default_excluded_forums_ids: list<int>,
-    keywords: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsGetFeedOptionsResponse
      */
-    public function getFeedOptions(): array
+    public function getFeedOptions(): Models\ForumsGetFeedOptionsResponse
     {
-        return $this->http->request('GET', '/forums/feed/options');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/forums/feed/options');
+
+        return Models\ForumsGetFeedOptionsResponse::fromArray($data);
     }
 
     /**
      * @param array{node_ids?: list<int>, keywords?: list<string>} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ForumsEditFeedOptionsResponse
      */
-    public function editFeedOptions(array $body = []): array
+    public function editFeedOptions(array $body = []): Models\ForumsEditFeedOptionsResponse
     {
-        return $this->http->request('PUT', '/forums/feed/options', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', '/forums/feed/options', [], $body, 'json');
+
+        return Models\ForumsEditFeedOptionsResponse::fromArray($data);
     }
 }
 
@@ -456,55 +205,26 @@ final class LinksApi
     }
 
     /**
-     * @return array{
-    link-forums: list<array{
-        link_id: int,
-        link_title: string,
-        link_description: string,
-        links: array{
-            target: string,
-            detail: string,
-        },
-        permissions: array{
-            view: bool,
-        },
-    }>,
-    link-forums_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\LinksListResponse
      */
-    public function getList(): array
+    public function getList(): Models\LinksListResponse
     {
-        return $this->http->request('GET', '/link-forums');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/link-forums');
+
+        return Models\LinksListResponse::fromArray($data);
     }
 
     /**
      * @param int $link_id
-     * @return array{
-    link-forum: array{
-        link_id: int,
-        link_title: string,
-        link_description: string,
-        links: array{
-            target: string,
-            detail: string,
-        },
-        permissions: array{
-            view: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\LinksGetResponse
      */
-    public function get(int $link_id): array
+    public function get(int $link_id): Models\LinksGetResponse
     {
-        return $this->http->request('GET', "/link-forums/{$link_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/link-forums/{$link_id}");
+
+        return Models\LinksGetResponse::fromArray($data);
     }
 }
 
@@ -517,63 +237,26 @@ final class PagesApi
 
     /**
      * @param array{parent_page_id?: int, order?: 'natural'|'list'} $params
-     * @return array{
-    pages: list<array{
-        page_id: int,
-        page_title: string,
-        page_description: string,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-pages: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-    }>,
-    pages_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PagesListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\PagesListResponse
     {
-        return $this->http->request('GET', '/pages', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/pages', $params);
+
+        return Models\PagesListResponse::fromArray($data);
     }
 
     /**
      * @param int $page_id
-     * @return array{
-    page: array{
-        page_id: int,
-        page_title: string,
-        page_description: string,
-        page_view_count: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-pages: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-        page_html: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PagesGetResponse
      */
-    public function get(int $page_id): array
+    public function get(int $page_id): Models\PagesGetResponse
     {
-        return $this->http->request('GET', "/pages/{$page_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/pages/{$page_id}");
+
+        return Models\PagesGetResponse::fromArray($data);
     }
 }
 
@@ -586,38 +269,14 @@ final class NavigationApi
 
     /**
      * @param array{parent?: int} $params
-     * @return array{
-    elements: list<array{
-        category_id: int,
-        category_title: string,
-        category_description: string,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            sub-elements: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-        navigation_type: string,
-        navigation_id: int,
-        navigation_parent_id: int,
-        has_sub_elements: bool,
-    }>,
-    elements_count: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\NavigationListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\NavigationListResponse
     {
-        return $this->http->request('GET', '/navigation', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/navigation', $params);
+
+        return Models\NavigationListResponse::fromArray($data);
     }
 }
 
@@ -630,2028 +289,272 @@ final class ThreadsApi
 
     /**
      * @param array{forum_id?: int, tab?: string, state?: 'active'|'closed', period?: 'day'|'week'|'month'|'year', title?: string, title_only?: bool, creator_user_id?: int, sticky?: bool, prefix_ids[]?: list<int>, prefix_ids_not[]?: list<int>, thread_tag_id?: int, page?: int, limit?: int, order?: 'post_date'|'last_post_date'|'reply_count'|'reply_count_asc'|'first_post_likes'|'vote_count', direction?: 'asc'|'desc', thread_create_date?: int, thread_update_date?: int, fields_include?: list<'*'|'latest_posts'>} $params
-     * @return array{
-    threads: list<array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    }>,
-    forum: array{
-        forum_id: int,
-        forum_title: string,
-        forum_description: string,
-        forum_thread_count: int,
-        forum_post_count: int,
-        forum_prefixes: list<mixed>,
-        thread_default_prefix_id: int,
-        thread_prefix_is_required: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            threads: string,
-            followers: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            create_thread: bool,
-            upload_attachment: bool,
-            tag_thread: bool,
-            follow: bool,
-        },
-        forum_is_followed: bool,
-    },
-    threads_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\ThreadsListResponse
     {
-        return $this->http->request('GET', '/threads', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/threads', $params);
+
+        return Models\ThreadsListResponse::fromArray($data);
     }
 
     /**
      * @param array{post_body: string, forum_id: int, title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
-     * @return array{
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsCreateResponse
      */
-    public function create(array $body): array
+    public function create(array $body): Models\ThreadsCreateResponse
     {
-        return $this->http->request('POST', '/threads', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/threads', [], $body, 'json');
+
+        return Models\ThreadsCreateResponse::fromArray($data);
     }
 
     /**
      * @param array{post_body: string, title?: string, title_en?: string, contest_type: 'by_finish_date', length_value?: int, length_option?: 'minutes'|'hours'|'days', prize_type: 'money'|'upgrades', count_winners?: int, prize_data_money?: float, is_money_places?: bool, prize_data_places?: list<float>, prize_data_upgrade?: 1|6|12|14|17|19|20|21|22, require_like_count: int, require_total_like_count: int, secret_answer?: string, tags?: list<string>, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
-     * @return array{
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsCreateContestResponse
      */
-    public function createContest(array $body): array
+    public function createContest(array $body): Models\ThreadsCreateContestResponse
     {
-        return $this->http->request('POST', '/contests', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/contests', [], $body, 'json');
+
+        return Models\ThreadsCreateContestResponse::fromArray($data);
     }
 
     /**
      * @param array{as_responder: string, as_is_market_deal: bool, as_market_item_id?: int, as_data?: string, as_amount: float, currency?: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try', transfer_type: 'guarantor'|'safe'|'notsafe', pay_claim?: 'now'|'later', as_funds_receipt?: string, as_tg_login_screenshot?: string, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool, post_body: string} $body
-     * @return array{
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsClaimResponse
      */
-    public function claim(array $body): array
+    public function claim(array $body): Models\ThreadsClaimResponse
     {
-        return $this->http->request('POST', '/claims', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/claims', [], $body, 'json');
+
+        return Models\ThreadsClaimResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{fields_include?: list<'*'|'latest_posts'>} $params
-     * @return array{
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsGetResponse
      */
-    public function get(int $thread_id, array $params = []): array
+    public function get(int $thread_id, array $params = []): Models\ThreadsGetResponse
     {
-        return $this->http->request('GET', "/threads/{$thread_id}", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/threads/{$thread_id}", $params);
+
+        return Models\ThreadsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, discussion_open?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool} $body
-     * @return array{
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsEditResponse
      */
-    public function edit(int $thread_id, array $body = []): array
+    public function edit(int $thread_id, array $body = []): Models\ThreadsEditResponse
     {
-        return $this->http->request('PUT', "/threads/{$thread_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/threads/{$thread_id}", [], $body, 'json');
+
+        return Models\ThreadsEditResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{reason?: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsDeleteResponse
      */
-    public function delete(int $thread_id, array $body = []): array
+    public function delete(int $thread_id, array $body = []): Models\ThreadsDeleteResponse
     {
-        return $this->http->request('DELETE', "/threads/{$thread_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/threads/{$thread_id}", [], $body, 'json');
+
+        return Models\ThreadsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{node_id: string, title?: string, title_en?: string, prefix_id?: list<int>, apply_thread_prefix?: bool, send_alert?: bool} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsMoveResponse
      */
-    public function move(int $thread_id, array $body): array
+    public function move(int $thread_id, array $body): Models\ThreadsMoveResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/move", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/move", [], $body, 'json');
+
+        return Models\ThreadsMoveResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsBumpResponse
      */
-    public function bump(int $thread_id): array
+    public function bump(int $thread_id): Models\ThreadsBumpResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/bump");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/bump");
+
+        return Models\ThreadsBumpResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsHideResponse
      */
-    public function hide(int $thread_id): array
+    public function hide(int $thread_id): Models\ThreadsHideResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/hide");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/hide");
+
+        return Models\ThreadsHideResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsStarResponse
      */
-    public function star(int $thread_id): array
+    public function star(int $thread_id): Models\ThreadsStarResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/star");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/star");
+
+        return Models\ThreadsStarResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsUnstarResponse
      */
-    public function unstar(int $thread_id): array
+    public function unstar(int $thread_id): Models\ThreadsUnstarResponse
     {
-        return $this->http->request('DELETE', "/threads/{$thread_id}/star");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/threads/{$thread_id}/star");
+
+        return Models\ThreadsUnstarResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-        follow: array{
-            alert: bool,
-            email: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsFollowersResponse
      */
-    public function followers(int $thread_id): array
+    public function followers(int $thread_id): Models\ThreadsFollowersResponse
     {
-        return $this->http->request('GET', "/threads/{$thread_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/threads/{$thread_id}/followers");
+
+        return Models\ThreadsFollowersResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{email?: bool} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsFollowResponse
      */
-    public function follow(int $thread_id, array $body = []): array
+    public function follow(int $thread_id, array $body = []): Models\ThreadsFollowResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/followers", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/followers", [], $body, 'json');
+
+        return Models\ThreadsFollowResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsUnfollowResponse
      */
-    public function unfollow(int $thread_id): array
+    public function unfollow(int $thread_id): Models\ThreadsUnfollowResponse
     {
-        return $this->http->request('DELETE', "/threads/{$thread_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/threads/{$thread_id}/followers");
+
+        return Models\ThreadsUnfollowResponse::fromArray($data);
     }
 
     /**
      * @param array{total?: bool, fields_include?: list<'*'|'latest_posts'>} $params
-     * @return array{
-    threads: list<array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            like_users: list<array{
-                user_id: int,
-                username: string,
-                display_style_group_id: int,
-                is_banned: int,
-                uniq_username_css: string,
-            }>,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            1403: string,
-            8176: string,
-            38: string,
-            1953: string,
-            523: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-        follow: array{
-            alert: bool,
-            email: bool,
-        },
-    }>,
-    threads_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsFollowedResponse
      */
-    public function followed(array $params = []): array
+    public function followed(array $params = []): Models\ThreadsFollowedResponse
     {
-        return $this->http->request('GET', '/threads/followed', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/threads/followed', $params);
+
+        return Models\ThreadsFollowedResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    elements: list<array{
-        category_id: int,
-        category_title: string,
-        category_description: string,
-        links: array{
-            permalink: string,
-            detail: string,
-            sub-categories: string,
-            sub-forums: string,
-            sub-elements: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-        },
-        navigation_type: string,
-        navigation_id: int,
-        navigation_depth: int,
-        navigation_parent_id: int,
-        has_sub_elements: bool,
-    }>,
-    elements_count: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsNavigationResponse
      */
-    public function navigation(int $thread_id): array
+    public function navigation(int $thread_id): Models\ThreadsNavigationResponse
     {
-        return $this->http->request('GET', "/threads/{$thread_id}/navigation");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/threads/{$thread_id}/navigation");
+
+        return Models\ThreadsNavigationResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    poll: array{
-        poll_id: int,
-        poll_question: string,
-        poll_vote_count: int,
-        poll_max_votes: int,
-        poll_is_open: bool,
-        poll_is_voted: bool,
-        responses: list<array{
-            response_id: int,
-            response_answer: string,
-            response_vote_count: int,
-        }>,
-        permissions: array{
-            vote: bool,
-            result: bool,
-        },
-        links: array{
-            vote: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsPollGetResponse
      */
-    public function pollGet(int $thread_id): array
+    public function pollGet(int $thread_id): Models\ThreadsPollGetResponse
     {
-        return $this->http->request('GET', "/threads/{$thread_id}/poll");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/threads/{$thread_id}/poll");
+
+        return Models\ThreadsPollGetResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
      * @param array{response_id?: int, response_ids?: list<int>} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsPollVoteResponse
      */
-    public function pollVote(int $thread_id, array $body = []): array
+    public function pollVote(int $thread_id, array $body = []): Models\ThreadsPollVoteResponse
     {
-        return $this->http->request('POST', "/threads/{$thread_id}/poll/votes", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/threads/{$thread_id}/poll/votes", [], $body, 'json');
+
+        return Models\ThreadsPollVoteResponse::fromArray($data);
     }
 
     /**
      * @param array{limit?: int, forum_id?: int, data_limit?: int} $params
-     * @return array{
-    threads: list<array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    }>,
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            like_users: list<array{
-                user_id: int,
-                username: string,
-                display_style_group_id: int,
-                is_banned: int,
-                uniq_username_css: string,
-            }>,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_poster: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsUnreadResponse
      */
-    public function unread(array $params = []): array
+    public function unread(array $params = []): Models\ThreadsUnreadResponse
     {
-        return $this->http->request('GET', '/threads/new', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/threads/new', $params);
+
+        return Models\ThreadsUnreadResponse::fromArray($data);
     }
 
     /**
      * @param array{days?: int, limit?: int, forum_id?: int, data_limit?: int} $params
-     * @return array{
-    threads: list<array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    }>,
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_poster: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsRecentResponse
      */
-    public function recent(array $params = []): array
+    public function recent(array $params = []): Models\ThreadsRecentResponse
     {
-        return $this->http->request('GET', '/threads/recent', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/threads/recent', $params);
+
+        return Models\ThreadsRecentResponse::fromArray($data);
     }
 
     /**
      * @param int $thread_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ThreadsFinishResponse
      */
-    public function finish(int $thread_id): array
+    public function finish(int $thread_id): Models\ThreadsFinishResponse
     {
-        return $this->http->request('POST', "/contests/{$thread_id}/finish");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/contests/{$thread_id}/finish");
+
+        return Models\ThreadsFinishResponse::fromArray($data);
     }
 }
 
@@ -2664,765 +567,186 @@ final class PostsApi
 
     /**
      * @param array{thread_id?: int, page_of_post_id?: int, page?: int, limit?: int, order?: 'natural'|'natural_reverse'|'post_likes'|'post_likes_reverse'} $params
-     * @return array{
-    posts: list<array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    }>,
-    thread: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            97491: string,
-            193431: string,
-            206: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        restrictions: array{
-            reply_delay: int,
-            max_reply_count: int,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        contest: array{
-            type: string,
-            finish_date: int,
-            now_count_members: int,
-            needed_members: int,
-            is_finished: int,
-            count_winners: int,
-            require_like_count: int,
-            require_total_like_count: int,
-            prize_type: string,
-            prize_type_phrase: string,
-            prize_data: int,
-            is_money_places: int,
-            chance_to_win: float,
-            winners: list<int>,
-            already_participate: bool,
-            permissions: array{
-                can_finish: bool,
-                can_participate: bool,
-                can_participate_error: string,
-                can_view_user_list: bool,
-            },
-        },
-    },
-    posts_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\PostsListResponse
     {
-        return $this->http->request('GET', '/posts', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/posts', $params);
+
+        return Models\PostsListResponse::fromArray($data);
     }
 
     /**
      * @param array{post_body: string, thread_id?: int, quote_post_id?: int} $body
-     * @return array{
-    post: array{
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        signature: string,
-        signature_html: string,
-        signature_plain_text: string,
-        post_like_count: int,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_update_date: int,
-        post_is_first_post: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-        thread_is_deleted: bool,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCreateResponse
      */
-    public function create(array $body): array
+    public function create(array $body): Models\PostsCreateResponse
     {
-        return $this->http->request('POST', '/posts', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/posts', [], $body, 'json');
+
+        return Models\PostsCreateResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
-     * @return array{
-    post: array{
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        signature: string,
-        signature_html: string,
-        signature_plain_text: string,
-        post_like_count: int,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_update_date: int,
-        post_is_first_post: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-        thread_is_deleted: bool,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsGetResponse
      */
-    public function get(int $post_id): array
+    public function get(int $post_id): Models\PostsGetResponse
     {
-        return $this->http->request('GET', "/posts/{$post_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/posts/{$post_id}");
+
+        return Models\PostsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
      * @param array{post_body?: string} $body
-     * @return array{
-    post: array{
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        signature: string,
-        signature_html: string,
-        signature_plain_text: string,
-        post_like_count: int,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_update_date: int,
-        post_is_first_post: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-        thread_is_deleted: bool,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsEditResponse
      */
-    public function edit(int $post_id, array $body = []): array
+    public function edit(int $post_id, array $body = []): Models\PostsEditResponse
     {
-        return $this->http->request('PUT', "/posts/{$post_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/posts/{$post_id}", [], $body, 'json');
+
+        return Models\PostsEditResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
      * @param array{reason?: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsDeleteResponse
      */
-    public function delete(int $post_id, array $body = []): array
+    public function delete(int $post_id, array $body = []): Models\PostsDeleteResponse
     {
-        return $this->http->request('DELETE', "/posts/{$post_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/posts/{$post_id}", [], $body, 'json');
+
+        return Models\PostsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
      * @param array{page?: int, limit?: int} $params
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsLikesResponse
      */
-    public function likes(int $post_id, array $params = []): array
+    public function likes(int $post_id, array $params = []): Models\PostsLikesResponse
     {
-        return $this->http->request('GET', "/posts/{$post_id}/likes", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/posts/{$post_id}/likes", $params);
+
+        return Models\PostsLikesResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsLikeResponse
      */
-    public function like(int $post_id): array
+    public function like(int $post_id): Models\PostsLikeResponse
     {
-        return $this->http->request('POST', "/posts/{$post_id}/likes");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/posts/{$post_id}/likes");
+
+        return Models\PostsLikeResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsUnlikeResponse
      */
-    public function unlike(int $post_id): array
+    public function unlike(int $post_id): Models\PostsUnlikeResponse
     {
-        return $this->http->request('DELETE', "/posts/{$post_id}/likes");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/posts/{$post_id}/likes");
+
+        return Models\PostsUnlikeResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
-     * @return array{
-    reasons: list<string>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsReportReasonsResponse
      */
-    public function reportReasons(int $post_id): array
+    public function reportReasons(int $post_id): Models\PostsReportReasonsResponse
     {
-        return $this->http->request('GET', "/posts/{$post_id}/report");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/posts/{$post_id}/report");
+
+        return Models\PostsReportReasonsResponse::fromArray($data);
     }
 
     /**
      * @param int $post_id
      * @param array{message: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsReportResponse
      */
-    public function report(int $post_id, array $body): array
+    public function report(int $post_id, array $body): Models\PostsReportResponse
     {
-        return $this->http->request('POST', "/posts/{$post_id}/report", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/posts/{$post_id}/report", [], $body, 'json');
+
+        return Models\PostsReportResponse::fromArray($data);
     }
 
     /**
      * @param array{post_id: int, before?: int, before_comment?: int} $params
-     * @return array{
-    comments: list<array{
-        post_comment_id: int,
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_comment_create_date: int,
-        post_comment_body: string,
-        post_comment_body_html: string,
-        post_comment_body_plain_text: string,
-        post_comment_like_count: int,
-        user_is_ignored: bool,
-        post_comment_is_published: bool,
-        post_comment_is_deleted: bool,
-        post_comment_update_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            post: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCommentsGetResponse
      */
-    public function commentsGet(array $params = []): array
+    public function commentsGet(array $params = []): Models\PostsCommentsGetResponse
     {
-        return $this->http->request('GET', '/posts/comments', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/posts/comments', $params);
+
+        return Models\PostsCommentsGetResponse::fromArray($data);
     }
 
     /**
      * @param array{post_id: int, comment_body: string} $body
-     * @return array{
-    comment: array{
-        post_comment_id: int,
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_comment_body: string,
-        post_comment_body_html: string,
-        post_comment_body_plain_text: string,
-        post_comment_like_count: int,
-        user_is_ignored: bool,
-        post_comment_is_published: bool,
-        post_comment_is_deleted: bool,
-        post_comment_update_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            post: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCommentsCreateResponse
      */
-    public function commentsCreate(array $body): array
+    public function commentsCreate(array $body): Models\PostsCommentsCreateResponse
     {
-        return $this->http->request('POST', '/posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/posts/comments', [], $body, 'json');
+
+        return Models\PostsCommentsCreateResponse::fromArray($data);
     }
 
     /**
      * @param array{post_comment_id: int, comment_body: string} $body
-     * @return array{
-    comment: array{
-        post_comment_id: int,
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_comment_body: string,
-        post_comment_body_html: string,
-        post_comment_body_plain_text: string,
-        post_comment_like_count: int,
-        user_is_ignored: bool,
-        post_comment_is_published: bool,
-        post_comment_is_deleted: bool,
-        post_comment_update_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            post: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCommentsEditResponse
      */
-    public function commentsEdit(array $body): array
+    public function commentsEdit(array $body): Models\PostsCommentsEditResponse
     {
-        return $this->http->request('PUT', '/posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', '/posts/comments', [], $body, 'json');
+
+        return Models\PostsCommentsEditResponse::fromArray($data);
     }
 
     /**
      * @param array{post_comment_id: int, reason?: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCommentsDeleteResponse
      */
-    public function commentsDelete(array $body): array
+    public function commentsDelete(array $body): Models\PostsCommentsDeleteResponse
     {
-        return $this->http->request('DELETE', '/posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/posts/comments', [], $body, 'json');
+
+        return Models\PostsCommentsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param array{post_comment_id: int, message: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\PostsCommentsReportResponse
      */
-    public function commentsReport(array $body): array
+    public function commentsReport(array $body): Models\PostsCommentsReportResponse
     {
-        return $this->http->request('POST', '/posts/comments/report', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/posts/comments/report', [], $body, 'json');
+
+        return Models\PostsCommentsReportResponse::fromArray($data);
     }
 }
 
@@ -3435,467 +759,50 @@ final class UsersApi
 
     /**
      * @param array{page?: int, limit?: int, fields_include?: list<'*'|'alerts'>} $params
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    }>,
-    users_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\UsersListResponse
     {
-        return $this->http->request('GET', '/users', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/users', $params);
+
+        return Models\UsersListResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    fields: list<array{
-        id: string,
-        title: string,
-        description: string,
-        position: string,
-        is_required: bool,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersFieldsResponse
      */
-    public function fields(): array
+    public function fields(): Models\UsersFieldsResponse
     {
-        return $this->http->request('GET', '/users/fields');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/users/fields');
+
+        return Models\UsersFieldsResponse::fromArray($data);
     }
 
     /**
      * @param array{username?: string, custom_fields?: array<string, string>, fields_include?: list<'*'|'alerts'>} $params
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersFindResponse
      */
-    public function find(array $params = []): array
+    public function find(array $params = []): Models\UsersFindResponse
     {
-        return $this->http->request('GET', '/users/find', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/users/find', $params);
+
+        return Models\UsersFindResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{fields_include?: list<'*'|'alerts'>} $params
-     * @return array{
-    user: array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersGetResponse
      */
-    public function get(string|int $user_id, array $params = []): array
+    public function get(string|int $user_id, array $params = []): Models\UsersGetResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}", $params);
+
+        return Models\UsersGetResponse::fromArray($data);
     }
 
     /**
@@ -3916,1203 +823,273 @@ final class UsersApi
     github?: string,
     matrix?: string,
 }} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersEditResponse
      */
-    public function edit(string|int $user_id, array $body = []): array
+    public function edit(string|int $user_id, array $body = []): Models\UsersEditResponse
     {
-        return $this->http->request('PUT', "/users/{$user_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/users/{$user_id}", [], $body, 'json');
+
+        return Models\UsersEditResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{type?: 'market'|'nomarket', claim_state?: 'active'|'solved'|'rejected'|'settled'} $params
-     * @return array{
-    claims: list<array{
-        thread_id: int,
-        claim_date: int,
-        claim_state: string,
-        message_body: string,
-        message_body_html: string,
-        message_body_plain_text: string,
-        amount: int,
-        amount_formatted: string,
-        author: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            user_message_count: int,
-            user_register_date: int,
-            user_like_count: int,
-            user_like2_count: int,
-            contest_count: int,
-            trophy_count: int,
-            short_link: string,
-            custom_title: string,
-            is_banned: int,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            balance: string,
-            hold: string,
-            currency: string,
-            user_email: string,
-            user_unread_notification_count: int,
-            user_unread_conversation_count: int,
-            conv_welcome_message: string,
-            user_title: string,
-            user_deposit: int,
-            user_is_valid: bool,
-            user_is_verified: bool,
-            user_is_followed: bool,
-            user_last_seen_date: int,
-            links: array{
-                permalink: string,
-                detail: string,
-                avatar: string,
-                avatar_big: string,
-                avatar_small: string,
-                followers: string,
-                followings: string,
-                ignore: string,
-                background_l: string,
-                background_m: string,
-                status: string,
-                timeline: string,
-            },
-            permissions: array{
-                edit: bool,
-                follow: bool,
-                ignore: bool,
-                profile_post: bool,
-            },
-            user_is_ignored: bool,
-            user_is_visitor: bool,
-            user_group_id: int,
-            curator_titles: list<string>,
-            user_groups: list<array{
-                user_group_id: int,
-                user_group_title: string,
-                user_group_title_en: string,
-                user_group_banner_css_class: string,
-                user_group_banner_text: string,
-                user_group_banner_text_en: string,
-                display_group_selectable: bool,
-                display_banner_selectable: bool,
-                display_icon_selectable: bool,
-                is_primary_group: bool,
-                user_group_icon_class: string,
-            }>,
-            fields: list<array{
-                id: string,
-                title: string,
-                description: string,
-                position: string,
-                is_required: bool,
-                value?: string,
-                is_multi_choice: bool,
-                choices: list<array{
-                    key: string,
-                    value: string,
-                }>,
-                values: list<mixed>,
-            }>,
-            user_timezone_offset: int,
-            user_external_authentications: list<array{
-                provider: string,
-                provider_key: string,
-            }>,
-            self_permissions: array{
-                create_conversation: bool,
-            },
-            edit_permissions: array{
-                password: bool,
-                user_email: bool,
-                username: bool,
-                user_title: bool,
-                short_link: bool,
-                hide_username_logs: bool,
-                primary_group_id: bool,
-                secondary_group_ids: bool,
-                user_dob_day: bool,
-                user_dob_month: bool,
-                user_dob_year: bool,
-                fields: bool,
-            },
-            birthday: array{
-                age: int,
-                timeStamp: array{
-                    date: string,
-                    timezone_type: int,
-                    timezone: string,
-                },
-                format: string,
-            },
-            secret_answer_rendered: string,
-            secret_answer_first_letter: string,
-            user_following: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            user_followers: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            banner: string,
-        },
-    }>,
-    stats: array{
-        market: array{
-            total: int,
-            solved: int,
-            settled: int,
-            rejected: int,
-        },
-        noMarket: array{
-            total: int,
-            solved: int,
-            settled: int,
-            rejected: int,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersClaimsResponse
      */
-    public function claims(string|int $user_id, array $params = []): array
+    public function claims(string|int $user_id, array $params = []): Models\UsersClaimsResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/claims", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/claims", $params);
+
+        return Models\UsersClaimsResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{avatar: string, x?: int, y?: int, crop?: int} $body
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersAvatarUploadResponse
      */
-    public function avatarUpload(string|int $user_id, array $body): array
+    public function avatarUpload(string|int $user_id, array $body): Models\UsersAvatarUploadResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/avatar", [], $body, true);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/avatar", [], $body, 'multipart');
+
+        return Models\UsersAvatarUploadResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersAvatarDeleteResponse
      */
-    public function avatarDelete(string|int $user_id): array
+    public function avatarDelete(string|int $user_id): Models\UsersAvatarDeleteResponse
     {
-        return $this->http->request('DELETE', "/users/{$user_id}/avatar");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/users/{$user_id}/avatar");
+
+        return Models\UsersAvatarDeleteResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{x?: int, y?: int, crop?: int} $body
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersAvatarCropResponse
      */
-    public function avatarCrop(string|int $user_id, array $body = []): array
+    public function avatarCrop(string|int $user_id, array $body = []): Models\UsersAvatarCropResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/avatar/crop", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/avatar/crop", [], $body, 'json');
+
+        return Models\UsersAvatarCropResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{background: string, x?: int, y?: int, crop?: int} $body
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersBackgroundUploadResponse
      */
-    public function backgroundUpload(string|int $user_id, array $body): array
+    public function backgroundUpload(string|int $user_id, array $body): Models\UsersBackgroundUploadResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/background", [], $body, true);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/background", [], $body, 'multipart');
+
+        return Models\UsersBackgroundUploadResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersBackgroundDeleteResponse
      */
-    public function backgroundDelete(string|int $user_id): array
+    public function backgroundDelete(string|int $user_id): Models\UsersBackgroundDeleteResponse
     {
-        return $this->http->request('DELETE', "/users/{$user_id}/background");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/users/{$user_id}/background");
+
+        return Models\UsersBackgroundDeleteResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{x?: int, y?: int, crop?: int} $body
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersBackgroundCropResponse
      */
-    public function backgroundCrop(string|int $user_id, array $body): array
+    public function backgroundCrop(string|int $user_id, array $body): Models\UsersBackgroundCropResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/background/crop", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/background/crop", [], $body, 'json');
+
+        return Models\UsersBackgroundCropResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{order?: 'natural'|'follow_date'|'follow_date_reverse', page?: int, limit?: int} $params
-     * @return array{
-    users: list<array{
-        content_type: string,
-        content_id: int,
-        follow_date: int,
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        custom_title: string,
-        is_banned: int,
-        user_title: string,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        user_following_count: int,
-        user_followers_count: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        custom_fields: array{
-            _4: string,
-            lztInnovation20Link: string,
-            lztInnovation30Link: string,
-            lztInnovationLink: string,
-        },
-    }>,
-    users_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersFollowersResponse
      */
-    public function followers(string|int $user_id, array $params = []): array
+    public function followers(string|int $user_id, array $params = []): Models\UsersFollowersResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/followers", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/followers", $params);
+
+        return Models\UsersFollowersResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersFollowResponse
      */
-    public function follow(string|int $user_id): array
+    public function follow(string|int $user_id): Models\UsersFollowResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/followers");
+
+        return Models\UsersFollowResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersUnfollowResponse
      */
-    public function unfollow(string|int $user_id): array
+    public function unfollow(string|int $user_id): Models\UsersUnfollowResponse
     {
-        return $this->http->request('DELETE', "/users/{$user_id}/followers");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/users/{$user_id}/followers");
+
+        return Models\UsersUnfollowResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{order?: 'natural'|'follow_date'|'follow_date_reverse', page?: int, limit?: int} $params
-     * @return array{
-    users: list<array{
-        content_type: string,
-        content_id: int,
-        follow_date: int,
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        user_title: string,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        user_following_count: int,
-        user_followers_count: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        custom_fields: array{
-            _4: string,
-            allowSelfUnban: list<mixed>,
-            discord: string,
-            github: string,
-            jabber: string,
-            lztAwardUserTrophy: string,
-            lztCuratorNodeTitle: string,
-            lztCuratorNodeTitleEn: string,
-            lztDeposit: string,
-            lztInnovation20Link: string,
-            lztInnovation30Link: string,
-            lztInnovationLink: string,
-            lztLikesIncreasing: string,
-            lztLikesZeroing: string,
-            lztSympathyIncreasing: string,
-            lztSympathyZeroing: string,
-            maecenasValue: string,
-            scamURL: string,
-            steam: string,
-            telegram: string,
-            vk: string,
-        },
-    }>,
-    users_total: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersFollowingsResponse
      */
-    public function followings(string|int $user_id, array $params = []): array
+    public function followings(string|int $user_id, array $params = []): Models\UsersFollowingsResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/followings", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/followings", $params);
+
+        return Models\UsersFollowingsResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{node_id?: int, like_type?: 'like'|'like2', type?: 'gotten'|'given', page?: int, content_type?: 'post'|'post_comment'|'profile_post'|'profile_post_comment', search_user_id?: int, stats?: bool} $params
-     * @return array{
-    page: int,
-    perPage: int,
-    contentType: string,
-    totalLikes: int,
-    likes: array{
-        1234567890: array{
-            like_id: int,
-            content_type: string,
-            content_id: int,
-            like_user_id: int,
-            like_date: int,
-            content_user_id: int,
-            content_state: string,
-            user: array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                user_message_count: int,
-                user_register_date: int,
-                user_like_count: int,
-                user_like2_count: int,
-                contest_count: int,
-                trophy_count: int,
-                short_link: string,
-                custom_title: string,
-                is_banned: int,
-                display_banner_id: int,
-                display_icon_group_id: int,
-                balance: string,
-                hold: string,
-                currency: string,
-                user_email: string,
-                user_unread_notification_count: int,
-                user_unread_conversation_count: int,
-                conv_welcome_message: string,
-                user_title: string,
-                user_deposit: int,
-                user_is_valid: bool,
-                user_is_verified: bool,
-                user_is_followed: bool,
-                user_last_seen_date: int,
-                links: array{
-                    permalink: string,
-                    detail: string,
-                    avatar: string,
-                    avatar_big: string,
-                    avatar_small: string,
-                    followers: string,
-                    followings: string,
-                    ignore: string,
-                    background_l: string,
-                    background_m: string,
-                    status: string,
-                    timeline: string,
-                },
-                permissions: array{
-                    edit: bool,
-                    follow: bool,
-                    ignore: bool,
-                    profile_post: bool,
-                },
-                user_is_ignored: bool,
-                user_is_visitor: bool,
-                user_group_id: int,
-                curator_titles: list<string>,
-                user_groups: list<array{
-                    user_group_id: int,
-                    user_group_title: string,
-                    user_group_title_en: string,
-                    user_group_banner_css_class: string,
-                    user_group_banner_text: string,
-                    user_group_banner_text_en: string,
-                    display_group_selectable: bool,
-                    display_banner_selectable: bool,
-                    display_icon_selectable: bool,
-                    is_primary_group: bool,
-                    user_group_icon_class: string,
-                }>,
-                fields: list<array{
-                    id: string,
-                    title: string,
-                    description: string,
-                    position: string,
-                    is_required: bool,
-                    value?: string,
-                    is_multi_choice: bool,
-                    choices: list<array{
-                        key: string,
-                        value: string,
-                    }>,
-                    values: list<mixed>,
-                }>,
-                user_timezone_offset: int,
-                user_external_authentications: list<array{
-                    provider: string,
-                    provider_key: string,
-                }>,
-                self_permissions: array{
-                    create_conversation: bool,
-                },
-                edit_permissions: array{
-                    password: bool,
-                    user_email: bool,
-                    username: bool,
-                    user_title: bool,
-                    short_link: bool,
-                    hide_username_logs: bool,
-                    primary_group_id: bool,
-                    secondary_group_ids: bool,
-                    user_dob_day: bool,
-                    user_dob_month: bool,
-                    user_dob_year: bool,
-                    fields: bool,
-                },
-                birthday: array{
-                    age: int,
-                    timeStamp: array{
-                        date: string,
-                        timezone_type: int,
-                        timezone: string,
-                    },
-                    format: string,
-                },
-                secret_answer_rendered: string,
-                secret_answer_first_letter: string,
-                user_following: array{
-                    users: list<array{
-                        user_id: int,
-                        username: string,
-                        username_html: string,
-                        avatar: string,
-                    }>,
-                    count: int,
-                },
-                user_followers: array{
-                    users: list<array{
-                        user_id: int,
-                        username: string,
-                        username_html: string,
-                        avatar: string,
-                    }>,
-                    count: int,
-                },
-                banner: string,
-            },
-            actionUser: array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                user_message_count: int,
-                user_register_date: int,
-                user_like_count: int,
-                user_like2_count: int,
-                contest_count: int,
-                trophy_count: int,
-                short_link: string,
-                custom_title: string,
-                is_banned: int,
-                display_banner_id: int,
-                display_icon_group_id: int,
-                balance: string,
-                hold: string,
-                currency: string,
-                user_email: string,
-                user_unread_notification_count: int,
-                user_unread_conversation_count: int,
-                conv_welcome_message: string,
-                user_title: string,
-                user_deposit: int,
-                user_is_valid: bool,
-                user_is_verified: bool,
-                user_is_followed: bool,
-                user_last_seen_date: int,
-                links: array{
-                    permalink: string,
-                    detail: string,
-                    avatar: string,
-                    avatar_big: string,
-                    avatar_small: string,
-                    followers: string,
-                    followings: string,
-                    ignore: string,
-                    background_l: string,
-                    background_m: string,
-                    status: string,
-                    timeline: string,
-                },
-                permissions: array{
-                    edit: bool,
-                    follow: bool,
-                    ignore: bool,
-                    profile_post: bool,
-                },
-                user_is_ignored: bool,
-                user_is_visitor: bool,
-                user_group_id: int,
-                curator_titles: list<string>,
-                user_groups: list<array{
-                    user_group_id: int,
-                    user_group_title: string,
-                    user_group_title_en: string,
-                    user_group_banner_css_class: string,
-                    user_group_banner_text: string,
-                    user_group_banner_text_en: string,
-                    display_group_selectable: bool,
-                    display_banner_selectable: bool,
-                    display_icon_selectable: bool,
-                    is_primary_group: bool,
-                    user_group_icon_class: string,
-                }>,
-                fields: list<array{
-                    id: string,
-                    title: string,
-                    description: string,
-                    position: string,
-                    is_required: bool,
-                    value?: string,
-                    is_multi_choice: bool,
-                    choices: list<array{
-                        key: string,
-                        value: string,
-                    }>,
-                    values: list<mixed>,
-                }>,
-                user_timezone_offset: int,
-                user_external_authentications: list<array{
-                    provider: string,
-                    provider_key: string,
-                }>,
-                self_permissions: array{
-                    create_conversation: bool,
-                },
-                edit_permissions: array{
-                    password: bool,
-                    user_email: bool,
-                    username: bool,
-                    user_title: bool,
-                    short_link: bool,
-                    hide_username_logs: bool,
-                    primary_group_id: bool,
-                    secondary_group_ids: bool,
-                    user_dob_day: bool,
-                    user_dob_month: bool,
-                    user_dob_year: bool,
-                    fields: bool,
-                },
-                birthday: array{
-                    age: int,
-                    timeStamp: array{
-                        date: string,
-                        timezone_type: int,
-                        timezone: string,
-                    },
-                    format: string,
-                },
-                secret_answer_rendered: string,
-                secret_answer_first_letter: string,
-                user_following: array{
-                    users: list<array{
-                        user_id: int,
-                        username: string,
-                        username_html: string,
-                        avatar: string,
-                    }>,
-                    count: int,
-                },
-                user_followers: array{
-                    users: list<array{
-                        user_id: int,
-                        username: string,
-                        username_html: string,
-                        avatar: string,
-                    }>,
-                    count: int,
-                },
-                banner: string,
-            },
-            messageHtml: string,
-            post_date: int,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersLikesResponse
      */
-    public function likes(string|int $user_id, array $params = []): array
+    public function likes(string|int $user_id, array $params = []): Models\UsersLikesResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/likes", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/likes", $params);
+
+        return Models\UsersLikesResponse::fromArray($data);
     }
 
     /**
      * @param array{total?: bool} $params
-     * @return array{
-    users: list<array{
-        can_edit: bool,
-        can_follow: bool,
-        can_ignore: bool,
-        can_post_profile: bool,
-        can_view_profile: bool,
-        can_view_profile_posts: bool,
-        can_warn: bool,
-        contest_count: int,
-        conv_welcome_message: string,
-        convertedDeposit: int,
-        custom_fields: array{
-            _4: string,
-            scamURL: mixed,
-            lztLikesZeroing: mixed,
-            lztLikesIncreasing: mixed,
-            lztSympathyZeroing: mixed,
-            lztSympathyIncreasing: mixed,
-            telegram: mixed,
-            vk: string,
-            discord: string,
-            steam: string,
-            matrix: mixed,
-            jabber: string,
-            github: string,
-        },
-        deposit: int,
-        homepage: string,
-        ignored_info: array{
-            ignore_content: int,
-            ignore_conversations: int,
-            restrict_view_profile: int,
-        },
-        is_admin: bool,
-        is_banned: bool,
-        is_followed: bool,
-        is_ignored: bool,
-        is_moderator: bool,
-        is_staff: bool,
-        last_activity: int,
-        like2_count: int,
-        like_count: int,
-        location: string,
-        message_count: int,
-        register_date: int,
-        rendered: array{
-            username: string,
-            avatars: array{
-                l: string,
-                m: string,
-                s: string,
-            },
-            backgrounds: list<mixed>,
-            link: string,
-        },
-        short_link: string,
-        trophy_points: int,
-        user_id: int,
-        user_title: string,
-        username: string,
-        view_url: string,
-        warning_points: int,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersIgnoredResponse
      */
-    public function ignored(array $params = []): array
+    public function ignored(array $params = []): Models\UsersIgnoredResponse
     {
-        return $this->http->request('GET', '/users/ignored', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/users/ignored', $params);
+
+        return Models\UsersIgnoredResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersIgnoreResponse
      */
-    public function ignore(string|int $user_id): array
+    public function ignore(string|int $user_id): Models\UsersIgnoreResponse
     {
-        return $this->http->request('POST', "/users/{$user_id}/ignore");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/users/{$user_id}/ignore");
+
+        return Models\UsersIgnoreResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{ignore_conversations?: bool, ignore_content?: bool, restrict_view_profile?: bool} $params
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersIgnoreEditResponse
      */
-    public function ignoreEdit(string|int $user_id, array $params = []): array
+    public function ignoreEdit(string|int $user_id, array $params = []): Models\UsersIgnoreEditResponse
     {
-        return $this->http->request('PUT', "/users/{$user_id}/ignore", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/users/{$user_id}/ignore", $params);
+
+        return Models\UsersIgnoreEditResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersUnignoreResponse
      */
-    public function unignore(string|int $user_id): array
+    public function unignore(string|int $user_id): Models\UsersUnignoreResponse
     {
-        return $this->http->request('DELETE', "/users/{$user_id}/ignore");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/users/{$user_id}/ignore");
+
+        return Models\UsersUnignoreResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
      * @param array{page?: int, limit?: int} $params
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        post_id: int,
-        thread_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        signature: string,
-        signature_html: string,
-        signature_plain_text: string,
-        post_like_count: int,
-        post_attachment_count: int,
-        like_users: list<array{
-            user_id: int,
-            username: string,
-            display_style_group_id: int,
-            is_banned: int,
-            uniq_username_css: string,
-        }>,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_update_date: int,
-        post_is_first_post: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            thread: string,
-            poster: string,
-            likes: string,
-            report: string,
-            attachments: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            reply: bool,
-            like: bool,
-            report: bool,
-            upload_attachment: bool,
-        },
-        thread: array{
-            thread_id: int,
-            forum_id: int,
-            thread_title: string,
-            thread_view_count: int,
-            creator_user_id: int,
-            creator_username: string,
-            creator_username_html: string,
-            thread_create_date: int,
-            thread_update_date: int,
-            user_is_ignored: bool,
-            thread_post_count: int,
-            thread_is_published: bool,
-            thread_is_deleted: bool,
-            thread_is_sticky: bool,
-            thread_is_followed: bool,
-            thread_prefixes: list<mixed>,
-            thread_tags: list<mixed>,
-            links: array{
-                permalink: string,
-                detail: string,
-                followers: string,
-                forum: string,
-                posts: string,
-                first_poster: string,
-                first_poster_avatar: string,
-                first_post: string,
-                last_poster: string,
-                last_post: string,
-            },
-            permissions: array{
-                view: bool,
-                delete: bool,
-                follow: bool,
-                post: bool,
-                upload_attachment: bool,
-            },
-        },
-    }>,
-    data_total: int,
-    user: array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    },
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersContentsResponse
      */
-    public function contents(string|int $user_id, array $params = []): array
+    public function contents(string|int $user_id, array $params = []): Models\UsersContentsResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/timeline", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/timeline", $params);
+
+        return Models\UsersContentsResponse::fromArray($data);
     }
 
     /**
      * @param string|int $user_id
-     * @return array{
-    trophies: list<array{
-        trophy_id: int,
-        title: string,
-        description: string,
-        trophy_url: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersTrophiesResponse
      */
-    public function trophies(string|int $user_id): array
+    public function trophies(string|int $user_id): Models\UsersTrophiesResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/trophies");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/trophies");
+
+        return Models\UsersTrophiesResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    data: list<array{
-        sa_id: int,
-        renderedPhrase: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersSecretAnswerTypesResponse
      */
-    public function secretAnswerTypes(): array
+    public function secretAnswerTypes(): Models\UsersSecretAnswerTypesResponse
     {
-        return $this->http->request('GET', '/users/secret-answer/types');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/users/secret-answer/types');
+
+        return Models\UsersSecretAnswerTypesResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    success: bool,
-    waiting_time: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersSAResetResponse
      */
-    public function sAReset(): array
+    public function sAReset(): Models\UsersSAResetResponse
     {
-        return $this->http->request('POST', '/account/secret-answer/reset');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/account/secret-answer/reset');
+
+        return Models\UsersSAResetResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\UsersSACancelResetResponse
      */
-    public function sACancelReset(): array
+    public function sACancelReset(): Models\UsersSACancelResetResponse
     {
-        return $this->http->request('DELETE', '/account/secret-answer/reset');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/account/secret-answer/reset');
+
+        return Models\UsersSACancelResetResponse::fromArray($data);
     }
 }
 
@@ -5126,962 +1103,223 @@ final class ProfilePostsApi
     /**
      * @param string|int $user_id
      * @param array{posts_user_id?: int, page?: int, limit?: int, fields_include?: list<'*'|'latest_comments'>} $params
-     * @return array{
-    profile_posts: list<array{
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        post_like_count: int,
-        post_comment_count: int,
-        post_comments_is_disabled: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_is_liked: bool,
-        post_is_sticked: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-            stick: bool,
-        },
-        timeline_user: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            user_message_count: int,
-            user_register_date: int,
-            user_like_count: int,
-            user_like2_count: int,
-            contest_count: int,
-            trophy_count: int,
-            short_link: string,
-            custom_title: string,
-            is_banned: int,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            balance: string,
-            hold: string,
-            currency: string,
-            user_email: string,
-            user_unread_notification_count: int,
-            user_unread_conversation_count: int,
-            conv_welcome_message: string,
-            user_title: string,
-            user_deposit: int,
-            user_is_valid: bool,
-            user_is_verified: bool,
-            user_is_followed: bool,
-            user_last_seen_date: int,
-            links: array{
-                permalink: string,
-                detail: string,
-                avatar: string,
-                avatar_big: string,
-                avatar_small: string,
-                followers: string,
-                followings: string,
-                ignore: string,
-                background_l: string,
-                background_m: string,
-                status: string,
-                timeline: string,
-            },
-            permissions: array{
-                edit: bool,
-                follow: bool,
-                ignore: bool,
-                profile_post: bool,
-            },
-            user_is_ignored: bool,
-            user_is_visitor: bool,
-            user_group_id: int,
-            curator_titles: list<string>,
-            user_groups: list<array{
-                user_group_id: int,
-                user_group_title: string,
-                user_group_title_en: string,
-                user_group_banner_css_class: string,
-                user_group_banner_text: string,
-                user_group_banner_text_en: string,
-                display_group_selectable: bool,
-                display_banner_selectable: bool,
-                display_icon_selectable: bool,
-                is_primary_group: bool,
-                user_group_icon_class: string,
-            }>,
-            fields: list<array{
-                id: string,
-                title: string,
-                description: string,
-                position: string,
-                is_required: bool,
-                value?: string,
-                is_multi_choice: bool,
-                choices: list<array{
-                    key: string,
-                    value: string,
-                }>,
-                values: list<mixed>,
-            }>,
-            user_timezone_offset: int,
-            user_external_authentications: list<array{
-                provider: string,
-                provider_key: string,
-            }>,
-            self_permissions: array{
-                create_conversation: bool,
-            },
-            edit_permissions: array{
-                password: bool,
-                user_email: bool,
-                username: bool,
-                user_title: bool,
-                short_link: bool,
-                hide_username_logs: bool,
-                primary_group_id: bool,
-                secondary_group_ids: bool,
-                user_dob_day: bool,
-                user_dob_month: bool,
-                user_dob_year: bool,
-                fields: bool,
-            },
-            birthday: array{
-                age: int,
-                timeStamp: array{
-                    date: string,
-                    timezone_type: int,
-                    timezone: string,
-                },
-                format: string,
-            },
-            secret_answer_rendered: string,
-            secret_answer_first_letter: string,
-            user_following: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            user_followers: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            banner: string,
-        },
-    }>,
-    totalProfilePosts: int,
-    canPostOnProfile: bool,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsListResponse
      */
-    public function getList(string|int $user_id, array $params = []): array
+    public function getList(string|int $user_id, array $params = []): Models\ProfilePostsListResponse
     {
-        return $this->http->request('GET', "/users/{$user_id}/profile-posts", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/users/{$user_id}/profile-posts", $params);
+
+        return Models\ProfilePostsListResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    profile_post: array{
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_body_html: string,
-        post_body_plain_text: string,
-        post_like_count: int,
-        post_comment_count: int,
-        post_comments_is_disabled: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        post_is_liked: bool,
-        post_is_sticked: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-            stick: bool,
-        },
-        timeline_user: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            user_message_count: int,
-            user_register_date: int,
-            user_like_count: int,
-            user_like2_count: int,
-            contest_count: int,
-            trophy_count: int,
-            short_link: string,
-            custom_title: string,
-            is_banned: int,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            balance: string,
-            hold: string,
-            currency: string,
-            user_email: string,
-            user_unread_notification_count: int,
-            user_unread_conversation_count: int,
-            conv_welcome_message: string,
-            user_title: string,
-            user_deposit: int,
-            user_is_valid: bool,
-            user_is_verified: bool,
-            user_is_followed: bool,
-            user_last_seen_date: int,
-            links: array{
-                permalink: string,
-                detail: string,
-                avatar: string,
-                avatar_big: string,
-                avatar_small: string,
-                followers: string,
-                followings: string,
-                ignore: string,
-                background_l: string,
-                background_m: string,
-                status: string,
-                timeline: string,
-            },
-            permissions: array{
-                edit: bool,
-                follow: bool,
-                ignore: bool,
-                profile_post: bool,
-            },
-            user_is_ignored: bool,
-            user_is_visitor: bool,
-            user_group_id: int,
-            curator_titles: list<string>,
-            user_groups: list<array{
-                user_group_id: int,
-                user_group_title: string,
-                user_group_title_en: string,
-                user_group_banner_css_class: string,
-                user_group_banner_text: string,
-                user_group_banner_text_en: string,
-                display_group_selectable: bool,
-                display_banner_selectable: bool,
-                display_icon_selectable: bool,
-                is_primary_group: bool,
-                user_group_icon_class: string,
-            }>,
-            fields: list<array{
-                id: string,
-                title: string,
-                description: string,
-                position: string,
-                is_required: bool,
-                value?: string,
-                is_multi_choice: bool,
-                choices: list<array{
-                    key: string,
-                    value: string,
-                }>,
-                values: list<mixed>,
-            }>,
-            user_timezone_offset: int,
-            user_external_authentications: list<array{
-                provider: string,
-                provider_key: string,
-            }>,
-            self_permissions: array{
-                create_conversation: bool,
-            },
-            edit_permissions: array{
-                password: bool,
-                user_email: bool,
-                username: bool,
-                user_title: bool,
-                short_link: bool,
-                hide_username_logs: bool,
-                primary_group_id: bool,
-                secondary_group_ids: bool,
-                user_dob_day: bool,
-                user_dob_month: bool,
-                user_dob_year: bool,
-                fields: bool,
-            },
-            birthday: array{
-                age: int,
-                timeStamp: array{
-                    date: string,
-                    timezone_type: int,
-                    timezone: string,
-                },
-                format: string,
-            },
-            secret_answer_rendered: string,
-            secret_answer_first_letter: string,
-            user_following: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            user_followers: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            banner: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsGetResponse
      */
-    public function get(int $profile_post_id): array
+    public function get(int $profile_post_id): Models\ProfilePostsGetResponse
     {
-        return $this->http->request('GET', "/profile-posts/{$profile_post_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/profile-posts/{$profile_post_id}");
+
+        return Models\ProfilePostsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
      * @param array{post_body?: string, disable_comments?: bool} $body
-     * @return array{
-    profile_post: array{
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_like_count: int,
-        post_comment_count: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsEditResponse
      */
-    public function edit(int $profile_post_id, array $body = []): array
+    public function edit(int $profile_post_id, array $body = []): Models\ProfilePostsEditResponse
     {
-        return $this->http->request('PUT', "/profile-posts/{$profile_post_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/profile-posts/{$profile_post_id}", [], $body, 'json');
+
+        return Models\ProfilePostsEditResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
      * @param array{reason?: string} $params
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsDeleteResponse
      */
-    public function delete(int $profile_post_id, array $params = []): array
+    public function delete(int $profile_post_id, array $params = []): Models\ProfilePostsDeleteResponse
     {
-        return $this->http->request('DELETE', "/profile-posts/{$profile_post_id}", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/profile-posts/{$profile_post_id}", $params);
+
+        return Models\ProfilePostsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    reasons: list<string>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsReportReasonsResponse
      */
-    public function reportReasons(int $profile_post_id): array
+    public function reportReasons(int $profile_post_id): Models\ProfilePostsReportReasonsResponse
     {
-        return $this->http->request('GET', "/profile-posts/{$profile_post_id}/report");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/profile-posts/{$profile_post_id}/report");
+
+        return Models\ProfilePostsReportReasonsResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
      * @param array{message: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsReportResponse
      */
-    public function report(int $profile_post_id, array $body): array
+    public function report(int $profile_post_id, array $body): Models\ProfilePostsReportResponse
     {
-        return $this->http->request('POST', "/profile-posts/{$profile_post_id}/report", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/profile-posts/{$profile_post_id}/report", [], $body, 'json');
+
+        return Models\ProfilePostsReportResponse::fromArray($data);
     }
 
     /**
      * @param array{user_id: string|int, post_body: string} $body
-     * @return array{
-    profile_post: array{
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_like_count: int,
-        post_comment_count: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCreateResponse
      */
-    public function create(array $body): array
+    public function create(array $body): Models\ProfilePostsCreateResponse
     {
-        return $this->http->request('POST', '/profile-posts', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/profile-posts', [], $body, 'json');
+
+        return Models\ProfilePostsCreateResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsStickResponse
      */
-    public function stick(int $profile_post_id): array
+    public function stick(int $profile_post_id): Models\ProfilePostsStickResponse
     {
-        return $this->http->request('POST', "/profile-posts/{$profile_post_id}/stick");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/profile-posts/{$profile_post_id}/stick");
+
+        return Models\ProfilePostsStickResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsUnstickResponse
      */
-    public function unstick(int $profile_post_id): array
+    public function unstick(int $profile_post_id): Models\ProfilePostsUnstickResponse
     {
-        return $this->http->request('DELETE', "/profile-posts/{$profile_post_id}/stick");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/profile-posts/{$profile_post_id}/stick");
+
+        return Models\ProfilePostsUnstickResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsLikesResponse
      */
-    public function likes(int $profile_post_id): array
+    public function likes(int $profile_post_id): Models\ProfilePostsLikesResponse
     {
-        return $this->http->request('GET', "/profile-posts/{$profile_post_id}/likes");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/profile-posts/{$profile_post_id}/likes");
+
+        return Models\ProfilePostsLikesResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsLikeResponse
      */
-    public function like(int $profile_post_id): array
+    public function like(int $profile_post_id): Models\ProfilePostsLikeResponse
     {
-        return $this->http->request('POST', "/profile-posts/{$profile_post_id}/likes");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/profile-posts/{$profile_post_id}/likes");
+
+        return Models\ProfilePostsLikeResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsUnlikeResponse
      */
-    public function unlike(int $profile_post_id): array
+    public function unlike(int $profile_post_id): Models\ProfilePostsUnlikeResponse
     {
-        return $this->http->request('DELETE', "/profile-posts/{$profile_post_id}/likes");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/profile-posts/{$profile_post_id}/likes");
+
+        return Models\ProfilePostsUnlikeResponse::fromArray($data);
     }
 
     /**
      * @param array{profile_post_id: int, before?: int, limit?: int} $params
-     * @return array{
-    comments: list<array{
-        comment_id: int,
-        profile_post_id: int,
-        comment_user_id: int,
-        comment_username: string,
-        comment_username_html: string,
-        comment_create_date: int,
-        comment_body: string,
-        comment_body_html: string,
-        comment_body_plain_text: string,
-        user_is_ignored: bool,
-        timeline_user_id: int,
-        links: array{
-            detail: string,
-            profile_post: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-        },
-    }>,
-    comments_total: int,
-    profile_post: array{
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_like_count: int,
-        post_comment_count: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-        },
-    },
-    timeline_user: array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsListResponse
      */
-    public function commentsList(array $params = []): array
+    public function commentsList(array $params = []): Models\ProfilePostsCommentsListResponse
     {
-        return $this->http->request('GET', '/profile-posts/comments', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/profile-posts/comments', $params);
+
+        return Models\ProfilePostsCommentsListResponse::fromArray($data);
     }
 
     /**
      * @param array{profile_post_id: int, comment_body: string} $body
-     * @return array{
-    comment: array{
-        comment_id: int,
-        profile_post_id: int,
-        comment_user_id: int,
-        comment_username: string,
-        comment_username_html: string,
-        comment_create_date: int,
-        comment_body: string,
-        user_is_ignored: bool,
-        timeline_user_id: int,
-        links: array{
-            detail: string,
-            profile_post: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsCreateResponse
      */
-    public function commentsCreate(array $body): array
+    public function commentsCreate(array $body): Models\ProfilePostsCommentsCreateResponse
     {
-        return $this->http->request('POST', '/profile-posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/profile-posts/comments', [], $body, 'json');
+
+        return Models\ProfilePostsCommentsCreateResponse::fromArray($data);
     }
 
     /**
      * @param array{comment_id: int, comment_body: string} $body
-     * @return array{
-    comment: array{
-        comment_id: int,
-        profile_post_id: int,
-        comment_user_id: int,
-        comment_username: string,
-        comment_username_html: string,
-        comment_create_date: int,
-        comment_body: string,
-        user_is_ignored: bool,
-        timeline_user_id: int,
-        links: array{
-            detail: string,
-            profile_post: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsEditResponse
      */
-    public function commentsEdit(array $body): array
+    public function commentsEdit(array $body): Models\ProfilePostsCommentsEditResponse
     {
-        return $this->http->request('PUT', '/profile-posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', '/profile-posts/comments', [], $body, 'json');
+
+        return Models\ProfilePostsCommentsEditResponse::fromArray($data);
     }
 
     /**
      * @param array{comment_id: int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsDeleteResponse
      */
-    public function commentsDelete(array $body): array
+    public function commentsDelete(array $body): Models\ProfilePostsCommentsDeleteResponse
     {
-        return $this->http->request('DELETE', '/profile-posts/comments', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/profile-posts/comments', [], $body, 'json');
+
+        return Models\ProfilePostsCommentsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param int $profile_post_id
      * @param int $comment_id
-     * @return array{
-    comment: array{
-        comment_id: int,
-        profile_post_id: int,
-        comment_user_id: int,
-        comment_username: string,
-        comment_username_html: string,
-        comment_create_date: int,
-        comment_body: string,
-        comment_body_html: string,
-        comment_body_plain_text: string,
-        user_is_ignored: bool,
-        timeline_user_id: int,
-        links: array{
-            detail: string,
-            profile_post: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsGetResponse
      */
-    public function commentsGet(int $profile_post_id, int $comment_id): array
+    public function commentsGet(int $profile_post_id, int $comment_id): Models\ProfilePostsCommentsGetResponse
     {
-        return $this->http->request('GET', "/profile-posts/{$profile_post_id}/comments/{$comment_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/profile-posts/{$profile_post_id}/comments/{$comment_id}");
+
+        return Models\ProfilePostsCommentsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $comment_id
      * @param array{message: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ProfilePostsCommentsReportResponse
      */
-    public function commentsReport(int $comment_id, array $body): array
+    public function commentsReport(int $comment_id, array $body): Models\ProfilePostsCommentsReportResponse
     {
-        return $this->http->request('POST', "/profile-posts/comments/{$comment_id}/report", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/profile-posts/comments/{$comment_id}/report", [], $body, 'json');
+
+        return Models\ProfilePostsCommentsReportResponse::fromArray($data);
     }
 }
 
@@ -6094,864 +1332,286 @@ final class ConversationsApi
 
     /**
      * @param array{folder?: 'all'|'unread'|'groups'|'market'|'market_replacements'|'staff'|'giveaways'|'p2p', page?: int, limit?: int} $params
-     * @return array{
-    conversations: list<array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    }>,
-    can_start: bool,
-    folders: list<array{
-        id: string,
-        title: string,
-        name: string,
-    }>,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\ConversationsListResponse
     {
-        return $this->http->request('GET', '/conversations', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/conversations', $params);
+
+        return Models\ConversationsListResponse::fromArray($data);
     }
 
     /**
      * @param array{recipient_id?: int, recipients?: list<string>, is_group?: bool, title?: string, open_invite?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool, message_body?: string} $body
-     * @return array{
-    conversation: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsCreateResponse
      */
-    public function create(array $body = []): array
+    public function create(array $body = []): Models\ConversationsCreateResponse
     {
-        return $this->http->request('POST', '/conversations', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/conversations', [], $body, 'json');
+
+        return Models\ConversationsCreateResponse::fromArray($data);
     }
 
     /**
      * @param array{conversation_id: int, title?: string, open_invite?: bool, history_open?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool} $body
-     * @return array{
-    conversation: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsUpdateResponse
      */
-    public function update(array $body): array
+    public function update(array $body): Models\ConversationsUpdateResponse
     {
-        return $this->http->request('PUT', '/conversations', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', '/conversations', [], $body, 'json');
+
+        return Models\ConversationsUpdateResponse::fromArray($data);
     }
 
     /**
      * @param array{conversation_id: int, delete_type: 'delete'|'delete_ignore'} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsDeleteResponse
      */
-    public function delete(array $body): array
+    public function delete(array $body): Models\ConversationsDeleteResponse
     {
-        return $this->http->request('DELETE', '/conversations', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/conversations', [], $body, 'json');
+
+        return Models\ConversationsDeleteResponse::fromArray($data);
     }
 
     /**
      * @param array{user_id: string|int} $body
-     * @return array{
-    conversation: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsStartResponse
      */
-    public function start(array $body): array
+    public function start(array $body): Models\ConversationsStartResponse
     {
-        return $this->http->request('POST', '/conversations/start', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/conversations/start', [], $body, 'json');
+
+        return Models\ConversationsStartResponse::fromArray($data);
     }
 
     /**
      * @param array{link: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsSaveResponse
      */
-    public function save(array $body): array
+    public function save(array $body): Models\ConversationsSaveResponse
     {
-        return $this->http->request('POST', '/conversations/save', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/conversations/save', [], $body, 'json');
+
+        return Models\ConversationsSaveResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    conversation: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsGetResponse
      */
-    public function get(int $conversation_id): array
+    public function get(int $conversation_id): Models\ConversationsGetResponse
     {
-        return $this->http->request('GET', "/conversations/{$conversation_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/conversations/{$conversation_id}");
+
+        return Models\ConversationsGetResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param array{page?: int, limit?: int, order?: 'natural'|'natural_reverse', before?: int, after?: int} $params
-     * @return array{
-    messages: list<array{
-        message_id: int,
-        conversation_id: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        message_create_date: int,
-        message_is_unread: int,
-        message_need_translate: bool,
-        message_is_system: bool,
-        message_edit_date: int,
-        message_body: string,
-        message_body_html: string,
-        message_body_plain_text: string,
-        user_is_ignored: bool,
-        links: array{
-            detail: string,
-            conversation: string,
-            creator: string,
-            creator_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            stick-unstick: bool,
-        },
-    }>,
-    messages_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesListResponse
      */
-    public function messagesList(int $conversation_id, array $params = []): array
+    public function messagesList(int $conversation_id, array $params = []): Models\ConversationsMessagesListResponse
     {
-        return $this->http->request('GET', "/conversations/{$conversation_id}/messages", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/conversations/{$conversation_id}/messages", $params);
+
+        return Models\ConversationsMessagesListResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param array{reply_message_id?: int, message_body: string} $body
-     * @return array{
-    message: array{
-        message_id: int,
-        conversation_id: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        message_create_date: int,
-        message_is_unread: int,
-        message_need_translate: bool,
-        message_is_system: bool,
-        message_edit_date: int,
-        message_body: string,
-        message_body_html: string,
-        message_body_plain_text: string,
-        user_is_ignored: bool,
-        links: array{
-            detail: string,
-            conversation: string,
-            creator: string,
-            creator_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            stick-unstick: bool,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesCreateResponse
      */
-    public function messagesCreate(int $conversation_id, array $body): array
+    public function messagesCreate(int $conversation_id, array $body): Models\ConversationsMessagesCreateResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/messages", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/messages", [], $body, 'json');
+
+        return Models\ConversationsMessagesCreateResponse::fromArray($data);
     }
 
     /**
      * @param array{q?: string, conversation_id?: int, search_recipients?: bool} $body
-     * @return array{
-    conversations: list<array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    }>,
-    recipients: bool,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsSearchResponse
      */
-    public function search(array $body = []): array
+    public function search(array $body = []): Models\ConversationsSearchResponse
     {
-        return $this->http->request('POST', '/conversations/search', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/conversations/search', [], $body, 'json');
+
+        return Models\ConversationsSearchResponse::fromArray($data);
     }
 
     /**
      * @param int $message_id
-     * @return array{
-    message: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesGetResponse
      */
-    public function messagesGet(int $message_id): array
+    public function messagesGet(int $message_id): Models\ConversationsMessagesGetResponse
     {
-        return $this->http->request('GET', "/conversations/messages/{$message_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/conversations/messages/{$message_id}");
+
+        return Models\ConversationsMessagesGetResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param int $message_id
      * @param array{message_body: string} $body
-     * @return array{
-    message: array{
-        conversation_id: int,
-        conversation_title: string,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        conversation_create_date: int,
-        conversation_update_date: int,
-        conversation_last_read_date: int,
-        conversation_online_count: int,
-        is_starred: int,
-        is_group: int,
-        is_unread: int,
-        alerts: int,
-        permissions: array{
-            view: bool,
-            reply: bool,
-            invite: bool,
-            manage_invite_links: bool,
-            kick: bool,
-            upload_avatar: bool,
-            editOwnPost: bool,
-            stickyMessages: bool,
-        },
-        conversation_message_count: int,
-        conversation_is_new: bool,
-        creator_is_ignored: bool,
-        conversation_is_open: bool,
-        conversation_is_deleted: bool,
-        recipient: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        },
-        recipients: list<array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            last_activity: int,
-            is_online: bool,
-            contacts_changed: bool,
-            avatar: string,
-        }>,
-        links: array{
-            permalink: string,
-            detail: string,
-            messages: string,
-            avatar: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesEditResponse
      */
-    public function messagesEdit(int $conversation_id, int $message_id, array $body): array
+    public function messagesEdit(int $conversation_id, int $message_id, array $body): Models\ConversationsMessagesEditResponse
     {
-        return $this->http->request('PUT', "/conversations/{$conversation_id}/messages/{$message_id}", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', "/conversations/{$conversation_id}/messages/{$message_id}", [], $body, 'json');
+
+        return Models\ConversationsMessagesEditResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param int $message_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesDeleteResponse
      */
-    public function messagesDelete(int $conversation_id, int $message_id): array
+    public function messagesDelete(int $conversation_id, int $message_id): Models\ConversationsMessagesDeleteResponse
     {
-        return $this->http->request('DELETE', "/conversations/{$conversation_id}/messages/{$message_id}");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/conversations/{$conversation_id}/messages/{$message_id}");
+
+        return Models\ConversationsMessagesDeleteResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param array{recipients: list<string>} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsInviteResponse
      */
-    public function invite(int $conversation_id, array $body): array
+    public function invite(int $conversation_id, array $body): Models\ConversationsInviteResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/invite", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/invite", [], $body, 'json');
+
+        return Models\ConversationsInviteResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param array{user_id: int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsKickResponse
      */
-    public function kick(int $conversation_id, array $body): array
+    public function kick(int $conversation_id, array $body): Models\ConversationsKickResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/kick", [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/kick", [], $body, 'json');
+
+        return Models\ConversationsKickResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsReadResponse
      */
-    public function read(int $conversation_id): array
+    public function read(int $conversation_id): Models\ConversationsReadResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/read");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/read");
+
+        return Models\ConversationsReadResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsReadAllResponse
      */
-    public function readAll(): array
+    public function readAll(): Models\ConversationsReadAllResponse
     {
-        return $this->http->request('POST', '/conversations/read-all');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/conversations/read-all');
+
+        return Models\ConversationsReadAllResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param int $message_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesStickResponse
      */
-    public function messagesStick(int $conversation_id, int $message_id): array
+    public function messagesStick(int $conversation_id, int $message_id): Models\ConversationsMessagesStickResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/messages/{$message_id}/stick");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/messages/{$message_id}/stick");
+
+        return Models\ConversationsMessagesStickResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
      * @param int $message_id
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsMessagesUnstickResponse
      */
-    public function messagesUnstick(int $conversation_id, int $message_id): array
+    public function messagesUnstick(int $conversation_id, int $message_id): Models\ConversationsMessagesUnstickResponse
     {
-        return $this->http->request('DELETE', "/conversations/{$conversation_id}/messages/{$message_id}/stick");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/conversations/{$conversation_id}/messages/{$message_id}/stick");
+
+        return Models\ConversationsMessagesUnstickResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsStarResponse
      */
-    public function star(int $conversation_id): array
+    public function star(int $conversation_id): Models\ConversationsStarResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/star");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/star");
+
+        return Models\ConversationsStarResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsUnstarResponse
      */
-    public function unstar(int $conversation_id): array
+    public function unstar(int $conversation_id): Models\ConversationsUnstarResponse
     {
-        return $this->http->request('DELETE', "/conversations/{$conversation_id}/star");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/conversations/{$conversation_id}/star");
+
+        return Models\ConversationsUnstarResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsAlertsEnableResponse
      */
-    public function alertsEnable(int $conversation_id): array
+    public function alertsEnable(int $conversation_id): Models\ConversationsAlertsEnableResponse
     {
-        return $this->http->request('POST', "/conversations/{$conversation_id}/alerts");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', "/conversations/{$conversation_id}/alerts");
+
+        return Models\ConversationsAlertsEnableResponse::fromArray($data);
     }
 
     /**
      * @param int $conversation_id
-     * @return array{
-    status: string,
-    message: string,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ConversationsAlertsDisableResponse
      */
-    public function alertsDisable(int $conversation_id): array
+    public function alertsDisable(int $conversation_id): Models\ConversationsAlertsDisableResponse
     {
-        return $this->http->request('DELETE', "/conversations/{$conversation_id}/alerts");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', "/conversations/{$conversation_id}/alerts");
+
+        return Models\ConversationsAlertsDisableResponse::fromArray($data);
     }
 }
 
@@ -6964,88 +1624,38 @@ final class NotificationsApi
 
     /**
      * @param array{type?: 'market'|'nomarket', page?: int, limit?: int} $params
-     * @return array{
-    notifications: list<array{
-        notification_id: int,
-        notification_create_date: int,
-        content_type: string,
-        content_id: int,
-        content_action: string,
-        notification_is_unread: bool,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        notification_type: string,
-        links: array{
-            content: string,
-            creator_avatar: string,
-        },
-        notification_html: string,
-    }>,
-    notifications_total: int,
-    links: array{
-        read: string,
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\NotificationsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\NotificationsListResponse
     {
-        return $this->http->request('GET', '/notifications', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/notifications', $params);
+
+        return Models\NotificationsListResponse::fromArray($data);
     }
 
     /**
      * @param int $notification_id
-     * @return array{
-    notification_id: int,
-    notification: array{
-        notification_id: int,
-        notification_create_date: int,
-        content_type: string,
-        content_id: int,
-        content_action: string,
-        notification_is_unread: bool,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        notification_type: string,
-        links: array{
-            content: string,
-            creator_avatar: string,
-        },
-        notification_html: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\NotificationsGetResponse
      */
-    public function get(int $notification_id): array
+    public function get(int $notification_id): Models\NotificationsGetResponse
     {
-        return $this->http->request('GET', "/notifications/{$notification_id}/content");
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/notifications/{$notification_id}/content");
+
+        return Models\NotificationsGetResponse::fromArray($data);
     }
 
     /**
      * @param array{notification_id?: int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\NotificationsReadResponse
      */
-    public function read(array $body = []): array
+    public function read(array $body = []): Models\NotificationsReadResponse
     {
-        return $this->http->request('POST', '/notifications/read', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/notifications/read', [], $body, 'json');
+
+        return Models\NotificationsReadResponse::fromArray($data);
     }
 }
 
@@ -7057,227 +1667,51 @@ final class TagsApi
     }
 
     /**
-     * @return array{
-    tags: array{
-        000: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\TagsPopularResponse
      */
-    public function popular(): array
+    public function popular(): Models\TagsPopularResponse
     {
-        return $this->http->request('GET', '/tags');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/tags');
+
+        return Models\TagsPopularResponse::fromArray($data);
     }
 
     /**
      * @param array{page?: int, limit?: int} $params
-     * @return array{
-    tags: array{
-        1: string,
-        2: string,
-        3: string,
-        4: string,
-        5: string,
-        6: string,
-        7: string,
-        8: string,
-        9: string,
-        10: string,
-        11: string,
-        12: string,
-        14: string,
-        15: string,
-        16: string,
-        17: string,
-        18: string,
-        19: string,
-        20: string,
-    },
-    tags_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\TagsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\TagsListResponse
     {
-        return $this->http->request('GET', '/tags/list', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/tags/list', $params);
+
+        return Models\TagsListResponse::fromArray($data);
     }
 
     /**
      * @param int $tag_id
      * @param array{page?: int, limit?: int} $params
-     * @return array{
-    tag: array{
-        tag_id: int,
-        tag_text: string,
-        tag_use_count: int,
-        links: array{
-            permalink: string,
-            detail: string,
-        },
-    },
-    tagged: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<array{
-            prefix_id: int,
-            prefix_title: string,
-        }>,
-        thread_tags: array{
-            1: string,
-            654: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_poster: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<array{
-                group_title: string,
-                group_prefixes: list<array{
-                    prefix_id: int,
-                    prefix_title: string,
-                }>,
-            }>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    tagged_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\TagsGetResponse
      */
-    public function get(int $tag_id, array $params = []): array
+    public function get(int $tag_id, array $params = []): Models\TagsGetResponse
     {
-        return $this->http->request('GET', "/tags/{$tag_id}", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/tags/{$tag_id}", $params);
+
+        return Models\TagsGetResponse::fromArray($data);
     }
 
     /**
      * @param array{tag: string} $params
-     * @return array{
-    tags: list<string>,
-    ids: list<int>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\TagsFindResponse
      */
-    public function find(array $params = []): array
+    public function find(array $params = []): Models\TagsFindResponse
     {
-        return $this->http->request('GET', '/tags/find', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/tags/find', $params);
+
+        return Models\TagsFindResponse::fromArray($data);
     }
 }
 
@@ -7290,1172 +1724,87 @@ final class SearchApi
 
     /**
      * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int} $body
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: string,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_is_starred: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_poster: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            edit: bool,
-            bump: array{
-                can: bool,
-                available_count: int,
-                error: mixed,
-                next_available_time: mixed,
-            },
-        },
-        node_title: string,
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            parent_node_id: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-        last_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            post_is_liked: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-            },
-            thread_is_deleted: bool,
-        },
-    }>,
-    data_total: int,
-    users: list<array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    }>,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchAllResponse
      */
-    public function all(array $body = []): array
+    public function all(array $body = []): Models\SearchAllResponse
     {
-        return $this->http->request('POST', '/search', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search', [], $body, 'json');
+
+        return Models\SearchAllResponse::fromArray($data);
     }
 
     /**
      * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int} $body
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    data_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchThreadsResponse
      */
-    public function threads(array $body = []): array
+    public function threads(array $body = []): Models\SearchThreadsResponse
     {
-        return $this->http->request('POST', '/search/threads', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search/threads', [], $body, 'json');
+
+        return Models\SearchThreadsResponse::fromArray($data);
     }
 
     /**
      * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int} $body
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<mixed>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    data_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchPostsResponse
      */
-    public function posts(array $body = []): array
+    public function posts(array $body = []): Models\SearchPostsResponse
     {
-        return $this->http->request('POST', '/search/posts', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search/posts', [], $body, 'json');
+
+        return Models\SearchPostsResponse::fromArray($data);
     }
 
     /**
      * @param array{q?: string} $body
-     * @return array{
-    users: list<array{
-        user_id: int,
-        username: string,
-        username_html: string,
-        user_message_count: int,
-        user_register_date: int,
-        user_like_count: int,
-        user_like2_count: int,
-        contest_count: int,
-        trophy_count: int,
-        short_link: string,
-        custom_title: string,
-        is_banned: int,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        balance: string,
-        hold: string,
-        currency: string,
-        user_email: string,
-        user_unread_notification_count: int,
-        user_unread_conversation_count: int,
-        conv_welcome_message: string,
-        user_title: string,
-        user_deposit: int,
-        user_is_valid: bool,
-        user_is_verified: bool,
-        user_is_followed: bool,
-        user_last_seen_date: int,
-        links: array{
-            permalink: string,
-            detail: string,
-            avatar: string,
-            avatar_big: string,
-            avatar_small: string,
-            followers: string,
-            followings: string,
-            ignore: string,
-            background_l: string,
-            background_m: string,
-            status: string,
-            timeline: string,
-        },
-        permissions: array{
-            edit: bool,
-            follow: bool,
-            ignore: bool,
-            profile_post: bool,
-        },
-        user_is_ignored: bool,
-        user_is_visitor: bool,
-        user_group_id: int,
-        curator_titles: list<string>,
-        user_groups: list<array{
-            user_group_id: int,
-            user_group_title: string,
-            user_group_title_en: string,
-            user_group_banner_css_class: string,
-            user_group_banner_text: string,
-            user_group_banner_text_en: string,
-            display_group_selectable: bool,
-            display_banner_selectable: bool,
-            display_icon_selectable: bool,
-            is_primary_group: bool,
-            user_group_icon_class: string,
-        }>,
-        fields: list<array{
-            id: string,
-            title: string,
-            description: string,
-            position: string,
-            is_required: bool,
-            value?: string,
-            is_multi_choice: bool,
-            choices: list<array{
-                key: string,
-                value: string,
-            }>,
-            values: list<mixed>,
-        }>,
-        user_timezone_offset: int,
-        user_external_authentications: list<array{
-            provider: string,
-            provider_key: string,
-        }>,
-        self_permissions: array{
-            create_conversation: bool,
-        },
-        edit_permissions: array{
-            password: bool,
-            user_email: bool,
-            username: bool,
-            user_title: bool,
-            short_link: bool,
-            hide_username_logs: bool,
-            primary_group_id: bool,
-            secondary_group_ids: bool,
-            user_dob_day: bool,
-            user_dob_month: bool,
-            user_dob_year: bool,
-            fields: bool,
-        },
-        birthday: array{
-            age: int,
-            timeStamp: array{
-                date: string,
-                timezone_type: int,
-                timezone: string,
-            },
-            format: string,
-        },
-        secret_answer_rendered: string,
-        secret_answer_first_letter: string,
-        user_following: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        user_followers: array{
-            users: list<array{
-                user_id: int,
-                username: string,
-                username_html: string,
-                avatar: string,
-            }>,
-            count: int,
-        },
-        banner: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchUsersResponse
      */
-    public function users(array $body = []): array
+    public function users(array $body = []): Models\SearchUsersResponse
     {
-        return $this->http->request('POST', '/search/users', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search/users', [], $body, 'json');
+
+        return Models\SearchUsersResponse::fromArray($data);
     }
 
     /**
      * @param array{q?: string, user_id?: int, page?: int, limit?: int} $body
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        profile_post_id: int,
-        timeline_user_id: int,
-        poster_user_id: int,
-        poster_username: string,
-        poster_username_html: string,
-        post_create_date: int,
-        post_body: string,
-        post_like_count: int,
-        post_comment_count: int,
-        timeline_username: string,
-        user_is_ignored: bool,
-        post_is_published: bool,
-        post_is_deleted: bool,
-        links: array{
-            permalink: string,
-            detail: string,
-            timeline: string,
-            timeline_user: string,
-            poster: string,
-            likes: string,
-            comments: string,
-            report: string,
-            poster_avatar: string,
-        },
-        permissions: array{
-            view: bool,
-            edit: bool,
-            delete: bool,
-            like: bool,
-            comment: bool,
-            report: bool,
-        },
-        timeline_user: array{
-            user_id: int,
-            username: string,
-            username_html: string,
-            user_message_count: int,
-            user_register_date: int,
-            user_like_count: int,
-            user_like2_count: int,
-            contest_count: int,
-            trophy_count: int,
-            short_link: string,
-            custom_title: string,
-            is_banned: int,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            balance: string,
-            hold: string,
-            currency: string,
-            user_email: string,
-            user_unread_notification_count: int,
-            user_unread_conversation_count: int,
-            conv_welcome_message: string,
-            user_title: string,
-            user_deposit: int,
-            user_is_valid: bool,
-            user_is_verified: bool,
-            user_is_followed: bool,
-            user_last_seen_date: int,
-            links: array{
-                permalink: string,
-                detail: string,
-                avatar: string,
-                avatar_big: string,
-                avatar_small: string,
-                followers: string,
-                followings: string,
-                ignore: string,
-                background_l: string,
-                background_m: string,
-                status: string,
-                timeline: string,
-            },
-            permissions: array{
-                edit: bool,
-                follow: bool,
-                ignore: bool,
-                profile_post: bool,
-            },
-            user_is_ignored: bool,
-            user_is_visitor: bool,
-            user_group_id: int,
-            curator_titles: list<string>,
-            user_groups: list<array{
-                user_group_id: int,
-                user_group_title: string,
-                user_group_title_en: string,
-                user_group_banner_css_class: string,
-                user_group_banner_text: string,
-                user_group_banner_text_en: string,
-                display_group_selectable: bool,
-                display_banner_selectable: bool,
-                display_icon_selectable: bool,
-                is_primary_group: bool,
-                user_group_icon_class: string,
-            }>,
-            fields: list<array{
-                id: string,
-                title: string,
-                description: string,
-                position: string,
-                is_required: bool,
-                value?: string,
-                is_multi_choice: bool,
-                choices: list<array{
-                    key: string,
-                    value: string,
-                }>,
-                values: list<mixed>,
-            }>,
-            user_timezone_offset: int,
-            user_external_authentications: list<array{
-                provider: string,
-                provider_key: string,
-            }>,
-            self_permissions: array{
-                create_conversation: bool,
-            },
-            edit_permissions: array{
-                password: bool,
-                user_email: bool,
-                username: bool,
-                user_title: bool,
-                short_link: bool,
-                hide_username_logs: bool,
-                primary_group_id: bool,
-                secondary_group_ids: bool,
-                user_dob_day: bool,
-                user_dob_month: bool,
-                user_dob_year: bool,
-                fields: bool,
-            },
-            birthday: array{
-                age: int,
-                timeStamp: array{
-                    date: string,
-                    timezone_type: int,
-                    timezone: string,
-                },
-                format: string,
-            },
-            secret_answer_rendered: string,
-            secret_answer_first_letter: string,
-            user_following: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            user_followers: array{
-                users: list<array{
-                    user_id: int,
-                    username: string,
-                    username_html: string,
-                    avatar: string,
-                }>,
-                count: int,
-            },
-            banner: string,
-        },
-    }>,
-    data_total: int,
-    links: array{
-        pages: int,
-        page: int,
-        next: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchProfilePostsResponse
      */
-    public function profilePosts(array $body = []): array
+    public function profilePosts(array $body = []): Models\SearchProfilePostsResponse
     {
-        return $this->http->request('POST', '/search/profile-posts', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search/profile-posts', [], $body, 'json');
+
+        return Models\SearchProfilePostsResponse::fromArray($data);
     }
 
     /**
      * @param array{tag?: string, tags?: list<string>, page?: int, limit?: int} $body
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            160179: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<array{
-                group_title: string,
-                group_prefixes: list<array{
-                    prefix_id: int,
-                    prefix_title: string,
-                }>,
-            }>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    data_total: int,
-    search_tags: array{
-        160179: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchTaggedResponse
      */
-    public function tagged(array $body = []): array
+    public function tagged(array $body = []): Models\SearchTaggedResponse
     {
-        return $this->http->request('POST', '/search/tagged', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/search/tagged', [], $body, 'json');
+
+        return Models\SearchTaggedResponse::fromArray($data);
     }
 
     /**
      * @param string|int $search_id
      * @param array{page?: int, limit?: int} $params
-     * @return array{
-    data: list<array{
-        content_type: string,
-        content_id: int,
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_followed: bool,
-        first_post: array{
-            post_id: int,
-            thread_id: int,
-            poster_user_id: int,
-            poster_username: string,
-            poster_username_html: string,
-            post_create_date: int,
-            post_body: string,
-            post_body_html: string,
-            post_body_plain_text: string,
-            signature: string,
-            signature_html: string,
-            signature_plain_text: string,
-            post_like_count: int,
-            post_attachment_count: int,
-            user_is_ignored: bool,
-            post_is_published: bool,
-            post_is_deleted: bool,
-            post_update_date: int,
-            post_is_first_post: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                thread: string,
-                poster: string,
-                likes: string,
-                report: string,
-                attachments: string,
-                poster_avatar: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                reply: bool,
-                like: bool,
-                report: bool,
-                upload_attachment: bool,
-            },
-        },
-        thread_prefixes: list<mixed>,
-        thread_tags: array{
-            160179: string,
-        },
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-            last_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-            upload_attachment: bool,
-            edit: bool,
-            edit_title: bool,
-            edit_tags: bool,
-        },
-        forum: array{
-            forum_id: int,
-            forum_title: string,
-            forum_description: string,
-            forum_thread_count: int,
-            forum_post_count: int,
-            forum_prefixes: list<array{
-                group_title: string,
-                group_prefixes: list<array{
-                    prefix_id: int,
-                    prefix_title: string,
-                }>,
-            }>,
-            thread_default_prefix_id: int,
-            thread_prefix_is_required: bool,
-            links: array{
-                permalink: string,
-                detail: string,
-                sub-categories: string,
-                sub-forums: string,
-                threads: string,
-                followers: string,
-            },
-            permissions: array{
-                view: bool,
-                edit: bool,
-                delete: bool,
-                create_thread: bool,
-                upload_attachment: bool,
-                tag_thread: bool,
-                follow: bool,
-            },
-            forum_is_followed: bool,
-        },
-    }>,
-    data_total: int,
-    search_tags: array{
-        160179: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\SearchResultsResponse
      */
-    public function results(string|int $search_id, array $params = []): array
+    public function results(string|int $search_id, array $params = []): Models\SearchResultsResponse
     {
-        return $this->http->request('GET', "/search/{$search_id}/results", $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', "/search/{$search_id}/results", $params);
+
+        return Models\SearchResultsResponse::fromArray($data);
     }
 }
 
@@ -8473,15 +1822,14 @@ final class BatchApi
     method?: 'GET'|'POST'|'PUT'|'DELETE',
     params?: array<string, string>,
 }> $body
-     * @return array{
-    jobs: array{
-        job_id: array<string, mixed>,
-    },
-}
+     * @return Models\BatchExecuteResponse
      */
-    public function execute(array $body = []): array
+    public function execute(array $body = []): Models\BatchExecuteResponse
     {
-        return $this->http->request('POST', '/batch', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/batch', [], $body, 'json');
+
+        return Models\BatchExecuteResponse::fromArray($data);
     }
 }
 
@@ -8494,496 +1842,145 @@ final class ChatboxApi
 
     /**
      * @param array{room_id?: 1|2|3|4|13} $params
-     * @return array{
-    rooms: list<array{
-        can_report: bool,
-        eng: bool,
-        market: bool,
-        room_id: int,
-        title: string,
-    }>,
-    ban: mixed,
-    ignore: list<array{
-        avatar_date: int,
-        background_date: int,
-        contest_count: int,
-        custom_title: string,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        display_style_group_id: int,
-        is_admin: bool,
-        is_banned: bool,
-        is_moderator: bool,
-        is_staff: bool,
-        last_activity: int,
-        like2_count: int,
-        like_count: int,
-        message_count: int,
-        register_date: int,
-        rendered: array{
-            username: string,
-            avatars: array{
-                l: string,
-                m: string,
-                s: string,
-            },
-            link: string,
-        },
-        short_link: mixed,
-        trophy_points: int,
-        uniq_banner: mixed,
-        uniq_username_css: string,
-        user_id: int,
-        username: string,
-    }>,
-    permissions: array{
-        deleteAnyMessage: bool,
-        editAnyMessage: bool,
-        viewAnyMessage: bool,
-        viewMessages: bool,
-        postMessage: bool,
-        ban: bool,
-    },
-    commands: list<string>,
-    roomsOnline: array{
-        chat:0: int,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxIndexResponse
      */
-    public function index(array $params = []): array
+    public function index(array $params = []): Models\ChatboxIndexResponse
     {
-        return $this->http->request('GET', '/chatbox', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox', $params);
+
+        return Models\ChatboxIndexResponse::fromArray($data);
     }
 
     /**
      * @param array{room_id: 1|2|3|4|13, before_message_id?: int} $params
-     * @return array{
-    messages: list<array{
-        can_report: bool,
-        date: int,
-        is_deleted: bool,
-        message: string,
-        message_id: int,
-        messageJson: string,
-        messageRaw: string,
-        room: array{
-            can_report: bool,
-            eng: bool,
-            market: bool,
-            room_id: int,
-            title: string,
-        },
-        user: array{
-            avatar_date: int,
-            background_date: int,
-            contest_count: int,
-            custom_title: string,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            display_style_group_id: int,
-            is_admin: bool,
-            is_banned: bool,
-            is_moderator: bool,
-            is_staff: bool,
-            last_activity: int,
-            like2_count: int,
-            like_count: int,
-            message_count: int,
-            register_date: int,
-            rendered: array{
-                username: string,
-                avatars: array{
-                    l: string,
-                    m: string,
-                    s: string,
-                },
-                link: string,
-            },
-            short_link: string,
-            trophy_points: int,
-            uniq_banner: array{
-                banner_css: string,
-                banner_text: string,
-                banner_icon: string,
-                username_icon: string,
-            },
-            uniq_username_css: string,
-            user_id: int,
-            username: string,
-        },
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxGetMessagesResponse
      */
-    public function getMessages(array $params = []): array
+    public function getMessages(array $params = []): Models\ChatboxGetMessagesResponse
     {
-        return $this->http->request('GET', '/chatbox/messages', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox/messages', $params);
+
+        return Models\ChatboxGetMessagesResponse::fromArray($data);
     }
 
     /**
      * @param array{room_id: 1|2|3|4|13, reply_message_id?: int, message: string} $body
-     * @return array{
-    message: array{
-        can_report: bool,
-        date: int,
-        is_deleted: bool,
-        message: string,
-        message_id: int,
-        messageJson: string,
-        messageRaw: string,
-        room: array{
-            can_report: bool,
-            eng: bool,
-            market: bool,
-            room_id: int,
-            title: string,
-        },
-        user: array{
-            avatar_date: int,
-            background_date: int,
-            contest_count: int,
-            custom_title: string,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            display_style_group_id: int,
-            is_admin: bool,
-            is_banned: bool,
-            is_moderator: bool,
-            is_staff: bool,
-            last_activity: int,
-            like2_count: int,
-            like_count: int,
-            message_count: int,
-            register_date: int,
-            rendered: array{
-                username: string,
-                avatars: array{
-                    l: string,
-                    m: string,
-                    s: string,
-                },
-                link: string,
-            },
-            short_link: string,
-            trophy_points: int,
-            uniq_banner: array{
-                banner_css: string,
-                banner_text: string,
-                banner_icon: string,
-                username_icon: string,
-            },
-            uniq_username_css: string,
-            user_id: int,
-            username: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxPostMessageResponse
      */
-    public function postMessage(array $body): array
+    public function postMessage(array $body): Models\ChatboxPostMessageResponse
     {
-        return $this->http->request('POST', '/chatbox/messages', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/chatbox/messages', [], $body, 'json');
+
+        return Models\ChatboxPostMessageResponse::fromArray($data);
     }
 
     /**
      * @param array{message_id: int, message: string} $body
-     * @return array{
-    message: array{
-        can_report: bool,
-        date: int,
-        is_deleted: bool,
-        message: string,
-        message_id: int,
-        messageJson: string,
-        messageRaw: string,
-        room: array{
-            can_report: bool,
-            eng: bool,
-            market: bool,
-            room_id: int,
-            title: string,
-        },
-        user: array{
-            avatar_date: int,
-            background_date: int,
-            contest_count: int,
-            custom_title: string,
-            display_banner_id: int,
-            display_icon_group_id: int,
-            display_style_group_id: int,
-            is_admin: bool,
-            is_banned: bool,
-            is_moderator: bool,
-            is_staff: bool,
-            last_activity: int,
-            like2_count: int,
-            like_count: int,
-            message_count: int,
-            register_date: int,
-            rendered: array{
-                username: string,
-                avatars: array{
-                    l: string,
-                    m: string,
-                    s: string,
-                },
-                link: string,
-            },
-            short_link: string,
-            trophy_points: int,
-            uniq_banner: array{
-                banner_css: string,
-                banner_text: string,
-                banner_icon: string,
-                username_icon: string,
-            },
-            uniq_username_css: string,
-            user_id: int,
-            username: string,
-        },
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxEditMessageResponse
      */
-    public function editMessage(array $body): array
+    public function editMessage(array $body): Models\ChatboxEditMessageResponse
     {
-        return $this->http->request('PUT', '/chatbox/messages', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('PUT', '/chatbox/messages', [], $body, 'json');
+
+        return Models\ChatboxEditMessageResponse::fromArray($data);
     }
 
     /**
      * @param array{message_id: int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxDeleteMessageResponse
      */
-    public function deleteMessage(array $body): array
+    public function deleteMessage(array $body): Models\ChatboxDeleteMessageResponse
     {
-        return $this->http->request('DELETE', '/chatbox/messages', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/chatbox/messages', [], $body, 'json');
+
+        return Models\ChatboxDeleteMessageResponse::fromArray($data);
     }
 
     /**
      * @param array{room_id: 1|2|3|4|13} $params
-     * @return array{
-    users: list<array{
-        avatar_date: int,
-        background_date: int,
-        contest_count: int,
-        custom_title: string,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        display_style_group_id: int,
-        is_admin: bool,
-        is_banned: bool,
-        is_moderator: bool,
-        is_staff: bool,
-        last_activity: int,
-        like2_count: int,
-        like_count: int,
-        message_count: int,
-        register_date: int,
-        rendered: array{
-            username: string,
-            avatars: array{
-                l: string,
-                m: string,
-                s: string,
-            },
-            link: string,
-        },
-        short_link: string,
-        trophy_points: int,
-        uniq_banner: array{
-            banner_css: string,
-            banner_text: string,
-            banner_icon: string,
-            username_icon: string,
-        },
-        uniq_username_css: string,
-        user_id: int,
-        username: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxOnlineResponse
      */
-    public function online(array $params = []): array
+    public function online(array $params = []): Models\ChatboxOnlineResponse
     {
-        return $this->http->request('GET', '/chatbox/messages/online', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox/messages/online', $params);
+
+        return Models\ChatboxOnlineResponse::fromArray($data);
     }
 
     /**
      * @param array{message_id: int} $params
-     * @return array{
-    reasons: list<string>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxReportReasonsResponse
      */
-    public function reportReasons(array $params = []): array
+    public function reportReasons(array $params = []): Models\ChatboxReportReasonsResponse
     {
-        return $this->http->request('GET', '/chatbox/messages/report', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox/messages/report', $params);
+
+        return Models\ChatboxReportReasonsResponse::fromArray($data);
     }
 
     /**
      * @param array{message_id: int, reason: string} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxReportResponse
      */
-    public function report(array $body): array
+    public function report(array $body): Models\ChatboxReportResponse
     {
-        return $this->http->request('POST', '/chatbox/messages/report', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/chatbox/messages/report', [], $body, 'json');
+
+        return Models\ChatboxReportResponse::fromArray($data);
     }
 
     /**
      * @param array{duration?: 'day'|'week'|'month'} $params
-     * @return array{
-    leaderboard: list<array{
-        count: int,
-        user_id: int,
-        avatar_date: int,
-        background_date: int,
-        contest_count: int,
-        custom_title: string,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        display_style_group_id: int,
-        is_banned: bool,
-        last_activity: int,
-        like2_count: int,
-        like_count: int,
-        message_count: int,
-        register_date: int,
-        rendered: array{
-            username: string,
-            avatars: array{
-                l: string,
-                m: string,
-                s: string,
-            },
-            link: string,
-        },
-        short_link: mixed,
-        trophy_points: int,
-        uniq_banner: array{
-            banner_css: string,
-            banner_text: string,
-            banner_icon: string,
-        },
-        uniq_username_css: string,
-        username: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxGetLeaderboardResponse
      */
-    public function getLeaderboard(array $params = []): array
+    public function getLeaderboard(array $params = []): Models\ChatboxGetLeaderboardResponse
     {
-        return $this->http->request('GET', '/chatbox/messages/leaderboard', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox/messages/leaderboard', $params);
+
+        return Models\ChatboxGetLeaderboardResponse::fromArray($data);
     }
 
     /**
-     * @return array{
-    ignored: list<array{
-        avatar_date: int,
-        background_date: int,
-        contest_count: int,
-        custom_title: string,
-        display_banner_id: int,
-        display_icon_group_id: int,
-        display_style_group_id: int,
-        is_banned: bool,
-        last_activity: int,
-        like2_count: int,
-        like_count: int,
-        message_count: int,
-        register_date: int,
-        rendered: array{
-            username: string,
-            avatars: array{
-                l: string,
-                m: string,
-                s: string,
-            },
-            link: string,
-        },
-        short_link: mixed,
-        trophy_points: int,
-        uniq_banner: mixed,
-        uniq_username_css: string,
-        user_id: int,
-        username: string,
-    }>,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxGetIgnoreResponse
      */
-    public function getIgnore(): array
+    public function getIgnore(): Models\ChatboxGetIgnoreResponse
     {
-        return $this->http->request('GET', '/chatbox/ignore');
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/chatbox/ignore');
+
+        return Models\ChatboxGetIgnoreResponse::fromArray($data);
     }
 
     /**
      * @param array{user_id: string|int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxPostIgnoreResponse
      */
-    public function postIgnore(array $body): array
+    public function postIgnore(array $body): Models\ChatboxPostIgnoreResponse
     {
-        return $this->http->request('POST', '/chatbox/ignore', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/chatbox/ignore', [], $body, 'json');
+
+        return Models\ChatboxPostIgnoreResponse::fromArray($data);
     }
 
     /**
      * @param array{user_id: string|int} $body
-     * @return array{
-    status?: string,
-    message?: string,
-    system_info?: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\ChatboxDeleteIgnoreResponse
      */
-    public function deleteIgnore(array $body): array
+    public function deleteIgnore(array $body): Models\ChatboxDeleteIgnoreResponse
     {
-        return $this->http->request('DELETE', '/chatbox/ignore', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('DELETE', '/chatbox/ignore', [], $body, 'json');
+
+        return Models\ChatboxDeleteIgnoreResponse::fromArray($data);
     }
 }
 
@@ -8996,35 +1993,14 @@ final class FormsApi
 
     /**
      * @param array{page?: int} $params
-     * @return array{
-    forms: list<array{
-        form_id: int,
-        title: string,
-        description: string,
-        fields: list<array{
-            field_id: int,
-            title: string,
-            fieldChoices: array{
-                buy: string,
-                sell: string,
-            },
-            required: int,
-            max_length: int,
-            default_value: string,
-        }>,
-    }>,
-    formsPerPage: int,
-    page: int,
-    totalForms: int,
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\FormsListResponse
      */
-    public function getList(array $params = []): array
+    public function getList(array $params = []): Models\FormsListResponse
     {
-        return $this->http->request('GET', '/forms', $params);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('GET', '/forms', $params);
+
+        return Models\FormsListResponse::fromArray($data);
     }
 
     /**
@@ -9045,54 +2021,14 @@ final class FormsApi
     29?: string,
     30?: string,
 }} $body
-     * @return array{
-    message: string,
-    content: array{
-        thread_id: int,
-        forum_id: int,
-        thread_title: string,
-        thread_view_count: int,
-        creator_user_id: int,
-        creator_username: string,
-        creator_username_html: string,
-        thread_create_date: int,
-        thread_update_date: int,
-        user_is_ignored: bool,
-        thread_post_count: int,
-        thread_is_published: bool,
-        thread_is_deleted: bool,
-        thread_is_sticky: bool,
-        thread_is_closed: bool,
-        thread_is_followed: bool,
-        thread_prefixes: list<mixed>,
-        thread_tags: list<mixed>,
-        links: array{
-            permalink: string,
-            detail: string,
-            followers: string,
-            forum: string,
-            posts: string,
-            first_poster: string,
-            first_poster_avatar: string,
-            first_post: string,
-        },
-        permissions: array{
-            view: bool,
-            delete: bool,
-            follow: bool,
-            post: bool,
-        },
-        node_title: string,
-    },
-    system_info: array{
-        visitor_id: int,
-        time: int,
-    },
-}
+     * @return Models\FormsCreateResponse
      */
-    public function create(array $body): array
+    public function create(array $body): Models\FormsCreateResponse
     {
-        return $this->http->request('POST', '/forms/save', [], $body);
+        /** @var array<string, mixed> $data */
+        $data = $this->http->request('POST', '/forms/save', [], $body, 'json');
+
+        return Models\FormsCreateResponse::fromArray($data);
     }
 }
 

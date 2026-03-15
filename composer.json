@@ -14,7 +14,11 @@
     "autoload": {
         "psr-4": {
             "Lolzteam\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/Generated/Forum/Models/",
+            "src/Generated/Market/Models/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

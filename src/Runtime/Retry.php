@@ -28,7 +28,7 @@ final class Retry
                 }
                 self::sleep($e, $attempt, $config);
             } catch (ServerException $e) {
-                if (!in_array($e->statusCode, [502, 503, 504], true)) {
+                if (!in_array($e->statusCode, [502, 503], true)) {
                     throw $e;
                 }
                 $lastException = $e;
@@ -51,8 +51,9 @@ final class Retry
         if ($rateLimitException?->retryAfter !== null) {
             $delayMs = $rateLimitException->retryAfter * 1000;
         } else {
-            $jitter = random_int(0, 100);
-            $delayMs = (int) ($config->baseDelayMs * (2 ** $attempt)) + $jitter;
+            $delayMs = (int) ($config->baseDelayMs * (2 ** $attempt));
+            $jitter = random_int(0, max(1, (int) ($delayMs * 0.25)));
+            $delayMs += $jitter;
         }
 
         $delayMs = min($delayMs, $config->maxDelayMs);

@@ -14,12 +14,16 @@ final class HttpClient
 {
     private Client $guzzle;
     private RateLimiter $rateLimiter;
+    private ?RateLimiter $searchRateLimiter;
     private RetryConfig $retryConfig;
 
     public function __construct(ClientConfig $config)
     {
         $this->retryConfig = $config->retry;
         $this->rateLimiter = new RateLimiter($config->requestsPerMinute);
+        $this->searchRateLimiter = $config->searchRequestsPerMinute !== null
+            ? new RateLimiter($config->searchRequestsPerMinute)
+            : null;
 
         /** @var array<string, mixed> $guzzleConfig */
         $guzzleConfig = [
@@ -46,6 +50,7 @@ final class HttpClient
      * @param 'GET'|'POST'|'PUT'|'PATCH'|'DELETE' $method
      * @param array<string, scalar> $query
      * @param array<string, mixed>|null $body
+     * @param 'form'|'json'|'multipart' $bodyEncoding
      * @return array<string, mixed>|string
      */
     public function request(
@@ -53,17 +58,19 @@ final class HttpClient
         string $path,
         array $query = [],
         ?array $body = null,
-        bool $multipart = false,
+        string $bodyEncoding = 'form',
+        bool $isSearch = false,
     ): array|string {
         /** @var array<string, mixed> */
-        return Retry::withRetry(function () use ($method, $path, $query, $body, $multipart): array {
-            return $this->doRequest($method, $path, $query, $body, $multipart);
+        return Retry::withRetry(function () use ($method, $path, $query, $body, $bodyEncoding, $isSearch): array {
+            return $this->doRequest($method, $path, $query, $body, $bodyEncoding, $isSearch);
         }, $this->retryConfig);
     }
 
     /**
      * @param array<string, scalar> $query
      * @param array<string, mixed>|null $body
+     * @param 'form'|'json'|'multipart' $bodyEncoding
      * @return array<string, mixed>|string
      */
     private function doRequest(
@@ -71,9 +78,14 @@ final class HttpClient
         string $path,
         array $query,
         ?array $body,
-        bool $multipart,
+        string $bodyEncoding,
+        bool $isSearch = false,
     ): array|string {
         $this->rateLimiter->acquire();
+
+        if ($isSearch && $this->searchRateLimiter !== null) {
+            $this->searchRateLimiter->acquire();
+        }
 
         $options = [];
 
@@ -82,16 +94,22 @@ final class HttpClient
         }
 
         if ($body !== null) {
-            if ($multipart) {
-                $options[RequestOptions::MULTIPART] = [];
-                foreach ($body as $name => $value) {
-                    $options[RequestOptions::MULTIPART][] = [
-                        'name' => (string) $name,
-                        'contents' => $value,
-                    ];
-                }
-            } else {
-                $options[RequestOptions::FORM_PARAMS] = $body;
+            switch ($bodyEncoding) {
+                case 'json':
+                    $options[RequestOptions::JSON] = $body;
+                    break;
+                case 'multipart':
+                    $options[RequestOptions::MULTIPART] = [];
+                    foreach ($body as $name => $value) {
+                        $options[RequestOptions::MULTIPART][] = [
+                            'name' => (string) $name,
+                            'contents' => $value,
+                        ];
+                    }
+                    break;
+                default:
+                    $options[RequestOptions::FORM_PARAMS] = $body;
+                    break;
             }
         }
 

@@ -9,6 +9,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/deref.php';
 require_once __DIR__ . '/naming.php';
 require_once __DIR__ . '/types.php';
+require_once __DIR__ . '/models.php';
 
 // ─── Parameter Extraction ────────────────────────────────────────────────────
 
@@ -195,31 +196,49 @@ function extractBodyProperties(array $operation, array $spec): array
     return $bodyProperties;
 }
 
-// ─── Multipart Detection ─────────────────────────────────────────────────────
+// ─── Body Encoding Detection ─────────────────────────────────────────────────
 
 /**
- * Check if the operation uses multipart/form-data content type.
+ * Detect body encoding: 'form', 'json', or 'multipart'.
+ *
+ * Priority:
+ *   - If has multipart/form-data AND NOT form-urlencoded → multipart
+ *   - If has application/json AND NOT form-urlencoded → json
+ *   - Otherwise → form (default)
  *
  * @param array<string, mixed> $operation
  * @param array<string, mixed> $spec
+ * @return 'form'|'json'|'multipart'
  */
-function isMultipart(array $operation, array $spec): bool
+function detectBodyEncoding(array $operation, array $spec): string
 {
     if (!isset($operation['requestBody'])) {
-        return false;
+        return 'form';
     }
 
     $requestBody = derefShallow($operation['requestBody'], $spec);
     if (!is_array($requestBody)) {
-        return false;
+        return 'form';
     }
 
     $content = $requestBody['content'] ?? null;
     if (!is_array($content)) {
-        return false;
+        return 'form';
     }
 
-    return isset($content['multipart/form-data']);
+    $hasForm = isset($content['application/x-www-form-urlencoded']);
+    $hasMultipart = isset($content['multipart/form-data']);
+    $hasJson = isset($content['application/json']);
+
+    if ($hasMultipart && !$hasForm) {
+        return 'multipart';
+    }
+
+    if ($hasJson && !$hasForm) {
+        return 'json';
+    }
+
+    return 'form';
 }
 
 // ─── Raw Body Detection ──────────────────────────────────────────────────────
@@ -400,7 +419,7 @@ function parseSpec(array $rawSpec): array
                 $bodyRequired = is_array($rb) && !empty($rb['required']);
             }
 
-            $isMultipart = isMultipart($operation, $spec);
+            $bodyEncoding = detectBodyEncoding($operation, $spec);
             $rawBodyInfo = extractRawBodyInfo($operation, $spec);
             $returnsNonJson = hasNonJsonResponse($operation, $spec);
 
@@ -419,6 +438,19 @@ function parseSpec(array $rawSpec): array
                 $bodyProperties = [];
                 $hasBody = false;
                 $bodyRequired = false;
+                $bodyEncoding = 'form';
+            }
+
+            // Extract response model
+            $responseSchema = extractResponseSchema($operation, $spec);
+            $responseModelClass = null;
+            $responseModels = [];
+            if ($responseSchema !== null && !$returnsNonJson) {
+                $resolvedResponseSchema = resolveSchemaFully($responseSchema, $spec);
+                if ($resolvedResponseSchema !== null && hasObjectProperties($resolvedResponseSchema)) {
+                    $responseModelClass = responseModelClassName($operationId);
+                    $responseModels = collectModels($resolvedResponseSchema, $spec, $responseModelClass);
+                }
             }
 
             $methodDef = [
@@ -431,11 +463,13 @@ function parseSpec(array $rawSpec): array
                 'bodyProperties' => $bodyProperties,
                 'hasBody' => $hasBody,
                 'bodyRequired' => $bodyRequired,
-                'isMultipart' => $isMultipart,
+                'bodyEncoding' => $bodyEncoding,
                 'isRawBody' => $rawBodyInfo['isRawBody'],
                 'rawBodyType' => $rawBodyInfo['rawBodyType'],
                 'responseType' => $responseType,
                 'returnsNonJson' => $returnsNonJson,
+                'responseModelClass' => $responseModelClass,
+                'responseModels' => $responseModels,
             ];
 
             $groupMap[$group][] = $methodDef;

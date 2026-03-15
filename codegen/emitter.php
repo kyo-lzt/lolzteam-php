@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/naming.php';
 require_once __DIR__ . '/types.php';
+require_once __DIR__ . '/models.php';
 
 /**
  * Build a PHP path expression with parameter interpolation.
@@ -67,7 +68,7 @@ function buildBodyDoc(array $bodyProperties): string
  *
  * @param array<string, mixed> $method
  */
-function emitMethod(array $method): string
+function emitMethod(array $method, bool $isSearch = false): string
 {
     $lines = [];
 
@@ -81,8 +82,8 @@ function emitMethod(array $method): string
     $hasBody = $method['hasBody'];
     /** @var bool $bodyRequired */
     $bodyRequired = $method['bodyRequired'];
-    /** @var bool $isMultipart */
-    $isMultipart = $method['isMultipart'] ?? false;
+    /** @var string $bodyEncoding */
+    $bodyEncoding = $method['bodyEncoding'] ?? 'form';
     /** @var bool $isRawBody */
     $isRawBody = $method['isRawBody'] ?? false;
     /** @var string $rawBodyType */
@@ -91,6 +92,10 @@ function emitMethod(array $method): string
     $returnsNonJson = $method['returnsNonJson'] ?? false;
     /** @var string $responseType */
     $responseType = $method['responseType'];
+    /** @var string|null $responseModelClass */
+    $rawResponseModelClass = $method['responseModelClass'] ?? null;
+    // Prefix with Models\ since models are in a sub-namespace
+    $responseModelClass = $rawResponseModelClass !== null ? "Models\\{$rawResponseModelClass}" : null;
     /** @var string $methodName */
     $methodName = $method['methodName'];
     /** @var string $httpMethod */
@@ -122,7 +127,11 @@ function emitMethod(array $method): string
             $docLines[] = "     * {$paramsDoc}";
         }
     }
-    $docLines[] = "     * @return {$responseType}";
+    if ($responseModelClass !== null) {
+        $docLines[] = "     * @return {$responseModelClass}";
+    } else {
+        $docLines[] = "     * @return {$responseType}";
+    }
 
     $lines[] = '    /**';
     foreach ($docLines as $dl) {
@@ -156,8 +165,14 @@ function emitMethod(array $method): string
     $argStr = implode(', ', $args);
     $pathExpr = buildPathExpression($path);
 
-    // Return type: string|array for non-JSON responses, array otherwise
-    $returnType = $returnsNonJson ? 'string|array' : 'array';
+    // Return type: model class, string|array for non-JSON, or array
+    if ($responseModelClass !== null) {
+        $returnType = $responseModelClass;
+    } elseif ($returnsNonJson) {
+        $returnType = 'string|array';
+    } else {
+        $returnType = 'array';
+    }
     $lines[] = "    public function {$methodName}({$argStr}): {$returnType}";
     $lines[] = '    {';
 
@@ -176,14 +191,22 @@ function emitMethod(array $method): string
         $requestArgs[] = 'null';
     }
 
-    if ($isMultipart) {
+    if ($bodyEncoding !== 'form') {
+        $requestArgs[] = "'{$bodyEncoding}'";
+    }
+
+    if ($isSearch) {
+        // Ensure bodyEncoding slot is filled before adding isSearch
+        if ($bodyEncoding === 'form' && count($requestArgs) < 5) {
+            $requestArgs[] = "'form'";
+        }
         $requestArgs[] = 'true';
     }
 
     // Trim trailing default arguments
     while (count($requestArgs) > 2) {
         $last = $requestArgs[count($requestArgs) - 1];
-        if ($last === 'null' || $last === '[]') {
+        if ($last === 'null' || $last === '[]' || $last === "'form'") {
             array_pop($requestArgs);
         } else {
             break;
@@ -191,7 +214,14 @@ function emitMethod(array $method): string
     }
 
     $requestArgStr = implode(', ', $requestArgs);
-    $lines[] = "        return \$this->http->request({$requestArgStr});";
+    if ($responseModelClass !== null) {
+        $lines[] = "        /** @var array<string, mixed> \$data */";
+        $lines[] = "        \$data = \$this->http->request({$requestArgStr});";
+        $lines[] = '';
+        $lines[] = "        return {$responseModelClass}::fromArray(\$data);";
+    } else {
+        $lines[] = "        return \$this->http->request({$requestArgStr});";
+    }
     $lines[] = '    }';
 
     return implode("\n", $lines);
@@ -245,6 +275,7 @@ function emitGroupFile(array $group, string $namespace): string
 function emitGroupClass(array $group): string
 {
     $className = groupToClassName($group['groupName']);
+    $isSearch = strtolower($group['groupName']) === 'category';
     $lines = [];
 
     $lines[] = "final class {$className}";
@@ -256,7 +287,7 @@ function emitGroupClass(array $group): string
 
     foreach ($group['methods'] as $method) {
         $lines[] = '';
-        $lines[] = emitMethod($method);
+        $lines[] = emitMethod($method, $isSearch);
     }
 
     $lines[] = '}';
@@ -275,6 +306,7 @@ function emitCombinedFile(
     string $namespace,
     string $defaultBaseUrl,
     int $defaultRateLimit,
+    ?int $defaultSearchRateLimit = null,
 ): string {
     $lines = [];
 
@@ -319,6 +351,9 @@ function emitCombinedFile(
     $lines[] = '            proxy: $proxy,';
     $lines[] = '            retry: $retry ?? new RetryConfig(),';
     $lines[] = "            requestsPerMinute: {$defaultRateLimit},";
+    if ($defaultSearchRateLimit !== null) {
+        $lines[] = "            searchRequestsPerMinute: {$defaultSearchRateLimit},";
+    }
     $lines[] = '        );';
     $lines[] = '        $http = new HttpClient($config);';
 

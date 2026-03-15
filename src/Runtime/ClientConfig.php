@@ -11,6 +11,7 @@ final readonly class ClientConfig
     public ?string $proxy;
     public RetryConfig $retry;
     public int $requestsPerMinute;
+    public ?int $searchRequestsPerMinute;
 
     /** @var callable|null Guzzle handler (for testing) */
     public mixed $handler;
@@ -21,6 +22,7 @@ final readonly class ClientConfig
         ?string $proxy = null,
         RetryConfig $retry = new RetryConfig(),
         int $requestsPerMinute = 300,
+        ?int $searchRequestsPerMinute = null,
         ?callable $handler = null,
     ) {
         if ($token === '') {
@@ -28,6 +30,9 @@ final readonly class ClientConfig
         }
         if ($requestsPerMinute < 1) {
             throw new \InvalidArgumentException('requestsPerMinute must be >= 1');
+        }
+        if ($searchRequestsPerMinute !== null && $searchRequestsPerMinute < 1) {
+            throw new \InvalidArgumentException('searchRequestsPerMinute must be >= 1');
         }
         if ($proxy !== null) {
             $parsed = parse_url($proxy);
@@ -47,6 +52,7 @@ final readonly class ClientConfig
         $this->proxy = $proxy;
         $this->retry = $retry;
         $this->requestsPerMinute = $requestsPerMinute;
+        $this->searchRequestsPerMinute = $searchRequestsPerMinute;
         $this->handler = $handler;
     }
 }
