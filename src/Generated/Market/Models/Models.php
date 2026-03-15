@@ -30,14 +30,14 @@ final class CategoryAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryAllResponseItems => CategoryAllResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryAllResponseItems => CategoryAllResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): CategoryAllResponseStickyItems => CategoryAllResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): CategoryAllResponseStickyItems => CategoryAllResponseStickyItems::fromArray($item), $data['stickyItems']),
             CategoryAllResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -426,7 +426,7 @@ final class CategorySteamResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -722,14 +722,14 @@ final class CategorySteamResponseItems
             $data['steamCs2Medals'],
             $data['cs2RankExpired'],
             $data['steamDota2WinRate'],
-            array_map(static fn(array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), $data['steamTransactions']),
+            array_map(static fn (array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), $data['steamTransactions']),
             $data['hasPossibleBanInDota2'],
             $data['chineseAccount'],
             $data['cs2MapsRanks'],
             $data['cs2PremierElo'],
             $data['steamLifetimeTradeBan'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -772,8 +772,8 @@ final class CategorySteamResponseItemsSteamFullGames
 final class CategorySteamResponseItemsSteamFullGamesList
 {
     public function __construct(
-        /** @var CategorySteamResponseItemsSteamFullGamesList730 */
-        public readonly CategorySteamResponseItemsSteamFullGamesList730 $730,
+        /** @var CategorySteamResponseItemsSteamFullGamesListData730 */
+        public readonly CategorySteamResponseItemsSteamFullGamesListData730 $_730,
     ) {
     }
 
@@ -783,12 +783,12 @@ final class CategorySteamResponseItemsSteamFullGamesList
     public static function fromArray(array $data): self
     {
         return new self(
-            CategorySteamResponseItemsSteamFullGamesList730::fromArray($data['730']),
+            CategorySteamResponseItemsSteamFullGamesListData730::fromArray($data['730']),
         );
     }
 }
 
-final class CategorySteamResponseItemsSteamFullGamesList730
+final class CategorySteamResponseItemsSteamFullGamesListData730
 {
     public function __construct(
         public readonly int $appid,
@@ -1021,7 +1021,7 @@ final class CategoryFortniteResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -1217,17 +1217,17 @@ final class CategoryFortniteResponseItems
             $data['price_currency'],
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), $data['fortniteSkins']),
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), $data['fortnitePickaxe']),
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), $data['fortniteDance']),
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), $data['fortniteGliders']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), $data['fortniteSkins']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), $data['fortnitePickaxe']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), $data['fortniteDance']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), $data['fortniteGliders']),
             $data['fortnite_pickaxe_count'],
             $data['fortnite_dance_count'],
             $data['fortnite_glider_count'],
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), $data['fortnitePastSeasons']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), $data['fortnitePastSeasons']),
             $data['isSmallExf'],
             $data['account_last_activity'],
-            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), $data['fortniteTransactions']),
+            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), $data['fortniteTransactions']),
             $data['domain'],
             CategoryFortniteResponseItemsShopCounts::fromArray($data['shopCounts']),
             $data['canViewAccountLink'],
@@ -1546,7 +1546,7 @@ final class CategoryMihoyoResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -1761,11 +1761,11 @@ final class CategoryMihoyoResponseItems
             $data['mihoyoRegionPhrase'],
             CategoryMihoyoResponseItemsMihoyoLinkedAccounts::fromArray($data['mihoyoLinkedAccounts']),
             $data['mihoyoLinkedAccountsString'],
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), $data['honkaiCharacters']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), $data['genshinCharacters']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), $data['zenlessCharacters']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), $data['honkaiCharacters']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), $data['genshinCharacters']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), $data['zenlessCharacters']),
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -1867,8 +1867,8 @@ final class CategoryMihoyoResponseItemsHonkaiCharacters
             $data['rank'],
             $data['image'],
             CategoryMihoyoResponseItemsHonkaiCharactersEquip::fromArray($data['equip']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), $data['relics']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), $data['ornaments']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), $data['relics']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), $data['ornaments']),
             $data['base_type'],
             $data['figure_path'],
             $data['elementImage'],
@@ -1937,7 +1937,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersRelics
             $data['icon'],
             $data['rarity'],
             CategoryMihoyoResponseItemsHonkaiCharactersRelicsMainProperty::fromArray($data['main_property']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), $data['properties']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), $data['properties']),
         );
     }
 }
@@ -2017,7 +2017,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersOrnaments
             $data['icon'],
             $data['rarity'],
             CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsMainProperty::fromArray($data['main_property']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), $data['properties']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), $data['properties']),
         );
     }
 }
@@ -2103,7 +2103,7 @@ final class CategoryMihoyoResponseItemsGenshinCharacters
             $data['level'],
             $data['rarity'],
             CategoryMihoyoResponseItemsGenshinCharactersWeapon::fromArray($data['weapon']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), $data['reliquaries']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), $data['reliquaries']),
             $data['actived_constellation_num'],
             $data['costumes'],
             $data['external'],
@@ -2256,8 +2256,8 @@ final class CategoryMihoyoResponseItemsZenlessCharactersWeapon
             $data['star'],
             $data['icon'],
             $data['rarity'],
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), $data['properties']),
-            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), $data['main_properties']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), $data['properties']),
+            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), $data['main_properties']),
             $data['talent_title'],
             $data['talent_content'],
             $data['profession'],
@@ -2416,7 +2416,7 @@ final class CategoryRiotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -2639,7 +2639,7 @@ final class CategoryRiotResponseItems
             CategoryRiotResponseItemsValorantInventory::fromArray($data['valorantInventory']),
             CategoryRiotResponseItemsLolInventory::fromArray($data['lolInventory']),
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -2834,7 +2834,7 @@ final class CategoryTelegramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3147,7 +3147,7 @@ final class CategorySupercellResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3344,7 +3344,7 @@ final class CategorySupercellResponseItems
             $data['isSmallExf'],
             $data['supercellBrawlers'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -3490,7 +3490,7 @@ final class CategoryEAResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3660,7 +3660,7 @@ final class CategoryEAResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -3683,7 +3683,7 @@ final class CategoryEAResponseItemsEaGames
 {
     public function __construct(
         /** @var CategoryEAResponseItemsEaGamesApexLegends */
-        public readonly CategoryEAResponseItemsEaGamesApexLegends $apexLegends,
+        public readonly CategoryEAResponseItemsEaGamesApexLegends $apex_legends,
     ) {
     }
 
@@ -3853,7 +3853,7 @@ final class CategoryWotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -4091,8 +4091,8 @@ final class CategoryWotResponseItemsBumpSettings
 final class CategoryWotResponseItemsWotTopPremiumTanks
 {
     public function __construct(
-        /** @var CategoryWotResponseItemsWotTopPremiumTanks00000 */
-        public readonly CategoryWotResponseItemsWotTopPremiumTanks00000 $00000,
+        /** @var CategoryWotResponseItemsWotTopPremiumTanksData00000 */
+        public readonly CategoryWotResponseItemsWotTopPremiumTanksData00000 $_00000,
     ) {
     }
 
@@ -4102,12 +4102,12 @@ final class CategoryWotResponseItemsWotTopPremiumTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotResponseItemsWotTopPremiumTanks00000::fromArray($data['00000']),
+            CategoryWotResponseItemsWotTopPremiumTanksData00000::fromArray($data['00000']),
         );
     }
 }
 
-final class CategoryWotResponseItemsWotTopPremiumTanks00000
+final class CategoryWotResponseItemsWotTopPremiumTanksData00000
 {
     public function __construct(
         public readonly ?int $tank_id,
@@ -4138,8 +4138,8 @@ final class CategoryWotResponseItemsWotTopPremiumTanks00000
 final class CategoryWotResponseItemsWotTanks
 {
     public function __construct(
-        /** @var CategoryWotResponseItemsWotTanks00000 */
-        public readonly CategoryWotResponseItemsWotTanks00000 $00000,
+        /** @var CategoryWotResponseItemsWotTanksData00000 */
+        public readonly CategoryWotResponseItemsWotTanksData00000 $_00000,
     ) {
     }
 
@@ -4149,12 +4149,12 @@ final class CategoryWotResponseItemsWotTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotResponseItemsWotTanks00000::fromArray($data['00000']),
+            CategoryWotResponseItemsWotTanksData00000::fromArray($data['00000']),
         );
     }
 }
 
-final class CategoryWotResponseItemsWotTanks00000
+final class CategoryWotResponseItemsWotTanksData00000
 {
     public function __construct(
         public readonly ?int $tank_id,
@@ -4185,30 +4185,30 @@ final class CategoryWotResponseItemsWotTanks00000
 final class CategoryWotResponseItemsWotPremiumTanks
 {
     public function __construct(
-        /** @var CategoryWotResponseItemsWotPremiumTanks30465 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks30465 $30465,
-        /** @var CategoryWotResponseItemsWotPremiumTanks60945 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks60945 $60945,
-        /** @var CategoryWotResponseItemsWotPremiumTanks51233 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks51233 $51233,
-        /** @var CategoryWotResponseItemsWotPremiumTanks57377 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks57377 $57377,
-        /** @var CategoryWotResponseItemsWotPremiumTanks62497 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks62497 $62497,
-        /** @var CategoryWotResponseItemsWotPremiumTanks55569 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks55569 $55569,
-        /** @var CategoryWotResponseItemsWotPremiumTanks7937025 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks7937025 $7937025,
-        /** @var CategoryWotResponseItemsWotPremiumTanks50977 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks50977 $50977,
-        /** @var CategoryWotResponseItemsWotPremiumTanks51585 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks51585 $51585,
-        /** @var CategoryWotResponseItemsWotPremiumTanks46097 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks46097 $46097,
-        /** @var CategoryWotResponseItemsWotPremiumTanks47873 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks47873 $47873,
-        /** @var CategoryWotResponseItemsWotPremiumTanks43841 */
-        public readonly CategoryWotResponseItemsWotPremiumTanks43841 $43841,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData30465 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData30465 $_30465,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData60945 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData60945 $_60945,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData51233 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData51233 $_51233,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData57377 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData57377 $_57377,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData62497 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData62497 $_62497,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData55569 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData55569 $_55569,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData7937025 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData7937025 $_7937025,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData50977 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData50977 $_50977,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData51585 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData51585 $_51585,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData46097 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData46097 $_46097,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData47873 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData47873 $_47873,
+        /** @var CategoryWotResponseItemsWotPremiumTanksData43841 */
+        public readonly CategoryWotResponseItemsWotPremiumTanksData43841 $_43841,
     ) {
     }
 
@@ -4218,23 +4218,23 @@ final class CategoryWotResponseItemsWotPremiumTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotResponseItemsWotPremiumTanks30465::fromArray($data['30465']),
-            CategoryWotResponseItemsWotPremiumTanks60945::fromArray($data['60945']),
-            CategoryWotResponseItemsWotPremiumTanks51233::fromArray($data['51233']),
-            CategoryWotResponseItemsWotPremiumTanks57377::fromArray($data['57377']),
-            CategoryWotResponseItemsWotPremiumTanks62497::fromArray($data['62497']),
-            CategoryWotResponseItemsWotPremiumTanks55569::fromArray($data['55569']),
-            CategoryWotResponseItemsWotPremiumTanks7937025::fromArray($data['7937025']),
-            CategoryWotResponseItemsWotPremiumTanks50977::fromArray($data['50977']),
-            CategoryWotResponseItemsWotPremiumTanks51585::fromArray($data['51585']),
-            CategoryWotResponseItemsWotPremiumTanks46097::fromArray($data['46097']),
-            CategoryWotResponseItemsWotPremiumTanks47873::fromArray($data['47873']),
-            CategoryWotResponseItemsWotPremiumTanks43841::fromArray($data['43841']),
+            CategoryWotResponseItemsWotPremiumTanksData30465::fromArray($data['30465']),
+            CategoryWotResponseItemsWotPremiumTanksData60945::fromArray($data['60945']),
+            CategoryWotResponseItemsWotPremiumTanksData51233::fromArray($data['51233']),
+            CategoryWotResponseItemsWotPremiumTanksData57377::fromArray($data['57377']),
+            CategoryWotResponseItemsWotPremiumTanksData62497::fromArray($data['62497']),
+            CategoryWotResponseItemsWotPremiumTanksData55569::fromArray($data['55569']),
+            CategoryWotResponseItemsWotPremiumTanksData7937025::fromArray($data['7937025']),
+            CategoryWotResponseItemsWotPremiumTanksData50977::fromArray($data['50977']),
+            CategoryWotResponseItemsWotPremiumTanksData51585::fromArray($data['51585']),
+            CategoryWotResponseItemsWotPremiumTanksData46097::fromArray($data['46097']),
+            CategoryWotResponseItemsWotPremiumTanksData47873::fromArray($data['47873']),
+            CategoryWotResponseItemsWotPremiumTanksData43841::fromArray($data['43841']),
         );
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks30465
+final class CategoryWotResponseItemsWotPremiumTanksData30465
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4262,7 +4262,7 @@ final class CategoryWotResponseItemsWotPremiumTanks30465
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks60945
+final class CategoryWotResponseItemsWotPremiumTanksData60945
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4290,7 +4290,7 @@ final class CategoryWotResponseItemsWotPremiumTanks60945
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks51233
+final class CategoryWotResponseItemsWotPremiumTanksData51233
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4318,7 +4318,7 @@ final class CategoryWotResponseItemsWotPremiumTanks51233
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks57377
+final class CategoryWotResponseItemsWotPremiumTanksData57377
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4346,7 +4346,7 @@ final class CategoryWotResponseItemsWotPremiumTanks57377
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks62497
+final class CategoryWotResponseItemsWotPremiumTanksData62497
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4374,7 +4374,7 @@ final class CategoryWotResponseItemsWotPremiumTanks62497
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks55569
+final class CategoryWotResponseItemsWotPremiumTanksData55569
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4402,7 +4402,7 @@ final class CategoryWotResponseItemsWotPremiumTanks55569
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks7937025
+final class CategoryWotResponseItemsWotPremiumTanksData7937025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4430,7 +4430,7 @@ final class CategoryWotResponseItemsWotPremiumTanks7937025
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks50977
+final class CategoryWotResponseItemsWotPremiumTanksData50977
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4458,7 +4458,7 @@ final class CategoryWotResponseItemsWotPremiumTanks50977
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks51585
+final class CategoryWotResponseItemsWotPremiumTanksData51585
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4486,7 +4486,7 @@ final class CategoryWotResponseItemsWotPremiumTanks51585
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks46097
+final class CategoryWotResponseItemsWotPremiumTanksData46097
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4514,7 +4514,7 @@ final class CategoryWotResponseItemsWotPremiumTanks46097
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks47873
+final class CategoryWotResponseItemsWotPremiumTanksData47873
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4542,7 +4542,7 @@ final class CategoryWotResponseItemsWotPremiumTanks47873
     }
 }
 
-final class CategoryWotResponseItemsWotPremiumTanks43841
+final class CategoryWotResponseItemsWotPremiumTanksData43841
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4573,8 +4573,8 @@ final class CategoryWotResponseItemsWotPremiumTanks43841
 final class CategoryWotResponseItemsWotTopTanks
 {
     public function __construct(
-        /** @var CategoryWotResponseItemsWotTopTanks00000 */
-        public readonly CategoryWotResponseItemsWotTopTanks00000 $00000,
+        /** @var CategoryWotResponseItemsWotTopTanksData00000 */
+        public readonly CategoryWotResponseItemsWotTopTanksData00000 $_00000,
     ) {
     }
 
@@ -4584,12 +4584,12 @@ final class CategoryWotResponseItemsWotTopTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotResponseItemsWotTopTanks00000::fromArray($data['00000']),
+            CategoryWotResponseItemsWotTopTanksData00000::fromArray($data['00000']),
         );
     }
 }
 
-final class CategoryWotResponseItemsWotTopTanks00000
+final class CategoryWotResponseItemsWotTopTanksData00000
 {
     public function __construct(
         public readonly ?int $tank_id,
@@ -4700,7 +4700,7 @@ final class CategoryWotBlitzResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -4938,12 +4938,12 @@ final class CategoryWotBlitzResponseItemsBumpSettings
 final class CategoryWotBlitzResponseItemsWotTopPremiumTanks
 {
     public function __construct(
-        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanks15697 */
-        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanks15697 $15697,
-        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanks5681 */
-        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanks5681 $5681,
-        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanks23313 */
-        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanks23313 $23313,
+        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanksData15697 */
+        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanksData15697 $_15697,
+        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanksData5681 */
+        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanksData5681 $_5681,
+        /** @var CategoryWotBlitzResponseItemsWotTopPremiumTanksData23313 */
+        public readonly CategoryWotBlitzResponseItemsWotTopPremiumTanksData23313 $_23313,
     ) {
     }
 
@@ -4953,14 +4953,14 @@ final class CategoryWotBlitzResponseItemsWotTopPremiumTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotBlitzResponseItemsWotTopPremiumTanks15697::fromArray($data['15697']),
-            CategoryWotBlitzResponseItemsWotTopPremiumTanks5681::fromArray($data['5681']),
-            CategoryWotBlitzResponseItemsWotTopPremiumTanks23313::fromArray($data['23313']),
+            CategoryWotBlitzResponseItemsWotTopPremiumTanksData15697::fromArray($data['15697']),
+            CategoryWotBlitzResponseItemsWotTopPremiumTanksData5681::fromArray($data['5681']),
+            CategoryWotBlitzResponseItemsWotTopPremiumTanksData23313::fromArray($data['23313']),
         );
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopPremiumTanks15697
+final class CategoryWotBlitzResponseItemsWotTopPremiumTanksData15697
 {
     public function __construct(
         public readonly int $tank_id,
@@ -4990,7 +4990,7 @@ final class CategoryWotBlitzResponseItemsWotTopPremiumTanks15697
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopPremiumTanks5681
+final class CategoryWotBlitzResponseItemsWotTopPremiumTanksData5681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5020,7 +5020,7 @@ final class CategoryWotBlitzResponseItemsWotTopPremiumTanks5681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopPremiumTanks23313
+final class CategoryWotBlitzResponseItemsWotTopPremiumTanksData23313
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5053,365 +5053,365 @@ final class CategoryWotBlitzResponseItemsWotTopPremiumTanks23313
 final class CategoryWotBlitzResponseItemsWotTanks
 {
     public function __construct(
-        /** @var CategoryWotBlitzResponseItemsWotTanks12305 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks12305 $12305,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6753 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6753 $6753,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18001 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18001 $18001,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6449 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6449 $6449,
-        /** @var CategoryWotBlitzResponseItemsWotTanks15697 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks15697 $15697,
-        /** @var CategoryWotBlitzResponseItemsWotTanks4481 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks4481 $4481,
-        /** @var CategoryWotBlitzResponseItemsWotTanks13185 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks13185 $13185,
-        /** @var CategoryWotBlitzResponseItemsWotTanks14337 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks14337 $14337,
-        /** @var CategoryWotBlitzResponseItemsWotTanks3681 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks3681 $3681,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6145 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6145 $6145,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5425 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5425 $5425,
-        /** @var CategoryWotBlitzResponseItemsWotTanks3649 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks3649 $3649,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7169 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7169 $7169,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7249 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7249 $7249,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7297 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7297 $7297,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19537 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19537 $19537,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5681 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5681 $5681,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6209 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6209 $6209,
-        /** @var CategoryWotBlitzResponseItemsWotTanks58641 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks58641 $58641,
-        /** @var CategoryWotBlitzResponseItemsWotTanks16897 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks16897 $16897,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10369 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10369 $10369,
-        /** @var CategoryWotBlitzResponseItemsWotTanks22817 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks22817 $22817,
-        /** @var CategoryWotBlitzResponseItemsWotTanks9489 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks9489 $9489,
-        /** @var CategoryWotBlitzResponseItemsWotTanks385 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks385 $385,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19217 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19217 $19217,
-        /** @var CategoryWotBlitzResponseItemsWotTanks9297 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks9297 $9297,
-        /** @var CategoryWotBlitzResponseItemsWotTanks13825 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks13825 $13825,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5505 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5505 $5505,
-        /** @var CategoryWotBlitzResponseItemsWotTanks13089 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks13089 $13089,
-        /** @var CategoryWotBlitzResponseItemsWotTanks12049 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks12049 $12049,
-        /** @var CategoryWotBlitzResponseItemsWotTanks13569 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks13569 $13569,
-        /** @var CategoryWotBlitzResponseItemsWotTanks4145 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks4145 $4145,
-        /** @var CategoryWotBlitzResponseItemsWotTanks24321 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks24321 $24321,
-        /** @var CategoryWotBlitzResponseItemsWotTanks23313 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks23313 $23313,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20257 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20257 $20257,
-        /** @var CategoryWotBlitzResponseItemsWotTanks14609 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks14609 $14609,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10289 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10289 $10289,
-        /** @var CategoryWotBlitzResponseItemsWotTanks14881 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks14881 $14881,
-        /** @var CategoryWotBlitzResponseItemsWotTanks3937 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks3937 $3937,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10785 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10785 $10785,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6929 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6929 $6929,
-        /** @var CategoryWotBlitzResponseItemsWotTanks16401 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks16401 $16401,
-        /** @var CategoryWotBlitzResponseItemsWotTanks641 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks641 $641,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20001 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20001 $20001,
-        /** @var CategoryWotBlitzResponseItemsWotTanks12545 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks12545 $12545,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7953 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7953 $7953,
-        /** @var CategoryWotBlitzResponseItemsWotTanks25361 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks25361 $25361,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20481 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20481 $20481,
-        /** @var CategoryWotBlitzResponseItemsWotTanks62737 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks62737 $62737,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5137 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5137 $5137,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18753 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18753 $18753,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19025 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19025 $19025,
-        /** @var CategoryWotBlitzResponseItemsWotTanks13345 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks13345 $13345,
-        /** @var CategoryWotBlitzResponseItemsWotTanks2945 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks2945 $2945,
-        /** @var CategoryWotBlitzResponseItemsWotTanks16193 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks16193 $16193,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18209 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18209 $18209,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19985 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19985 $19985,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19489 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19489 $19489,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20305 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20305 $20305,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20737 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20737 $20737,
-        /** @var CategoryWotBlitzResponseItemsWotTanks21329 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks21329 $21329,
-        /** @var CategoryWotBlitzResponseItemsWotTanks53025 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks53025 $53025,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18241 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18241 $18241,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10881 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10881 $10881,
-        /** @var CategoryWotBlitzResponseItemsWotTanks21265 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks21265 $21265,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20513 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20513 $20513,
-        /** @var CategoryWotBlitzResponseItemsWotTanks12673 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks12673 $12673,
-        /** @var CategoryWotBlitzResponseItemsWotTanks16705 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks16705 $16705,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6785 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6785 $6785,
-        /** @var CategoryWotBlitzResponseItemsWotTanks58881 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks58881 $58881,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18513 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18513 $18513,
-        /** @var CategoryWotBlitzResponseItemsWotTanks2849 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks2849 $2849,
-        /** @var CategoryWotBlitzResponseItemsWotTanks9073 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks9073 $9073,
-        /** @var CategoryWotBlitzResponseItemsWotTanks18769 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks18769 $18769,
-        /** @var CategoryWotBlitzResponseItemsWotTanks15953 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks15953 $15953,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6257 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6257 $6257,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6001 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6001 $6001,
-        /** @var CategoryWotBlitzResponseItemsWotTanks55297 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks55297 $55297,
-        /** @var CategoryWotBlitzResponseItemsWotTanks23841 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks23841 $23841,
-        /** @var CategoryWotBlitzResponseItemsWotTanks64529 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks64529 $64529,
-        /** @var CategoryWotBlitzResponseItemsWotTanks21025 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks21025 $21025,
-        /** @var CategoryWotBlitzResponseItemsWotTanks23057 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks23057 $23057,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7281 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7281 $7281,
-        /** @var CategoryWotBlitzResponseItemsWotTanks23825 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks23825 $23825,
-        /** @var CategoryWotBlitzResponseItemsWotTanks8753 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks8753 $8753,
-        /** @var CategoryWotBlitzResponseItemsWotTanks59137 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks59137 $59137,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10241 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10241 $10241,
-        /** @var CategoryWotBlitzResponseItemsWotTanks7793 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks7793 $7793,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5745 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5745 $5745,
-        /** @var CategoryWotBlitzResponseItemsWotTanks11553 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks11553 $11553,
-        /** @var CategoryWotBlitzResponseItemsWotTanks625 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks625 $625,
-        /** @var CategoryWotBlitzResponseItemsWotTanks20817 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks20817 $20817,
-        /** @var CategoryWotBlitzResponseItemsWotTanks23297 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks23297 $23297,
-        /** @var CategoryWotBlitzResponseItemsWotTanks2625 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks2625 $2625,
-        /** @var CategoryWotBlitzResponseItemsWotTanks19713 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks19713 $19713,
-        /** @var CategoryWotBlitzResponseItemsWotTanks24849 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks24849 $24849,
-        /** @var CategoryWotBlitzResponseItemsWotTanks56097 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks56097 $56097,
-        /** @var CategoryWotBlitzResponseItemsWotTanks57105 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks57105 $57105,
-        /** @var CategoryWotBlitzResponseItemsWotTanks54785 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks54785 $54785,
-        /** @var CategoryWotBlitzResponseItemsWotTanks2609 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks2609 $2609,
-        /** @var CategoryWotBlitzResponseItemsWotTanks57361 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks57361 $57361,
-        /** @var CategoryWotBlitzResponseItemsWotTanks1409 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks1409 $1409,
-        /** @var CategoryWotBlitzResponseItemsWotTanks55889 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks55889 $55889,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5393 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5393 $5393,
-        /** @var CategoryWotBlitzResponseItemsWotTanks5489 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks5489 $5489,
-        /** @var CategoryWotBlitzResponseItemsWotTanks53761 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks53761 $53761,
-        /** @var CategoryWotBlitzResponseItemsWotTanks65377 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks65377 $65377,
-        /** @var CategoryWotBlitzResponseItemsWotTanks54545 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks54545 $54545,
-        /** @var CategoryWotBlitzResponseItemsWotTanks51473 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks51473 $51473,
-        /** @var CategoryWotBlitzResponseItemsWotTanks10273 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks10273 $10273,
-        /** @var CategoryWotBlitzResponseItemsWotTanks3121 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks3121 $3121,
-        /** @var CategoryWotBlitzResponseItemsWotTanks4881 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks4881 $4881,
-        /** @var CategoryWotBlitzResponseItemsWotTanks51729 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks51729 $51729,
-        /** @var CategoryWotBlitzResponseItemsWotTanks4369 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks4369 $4369,
-        /** @var CategoryWotBlitzResponseItemsWotTanks6993 */
-        public readonly CategoryWotBlitzResponseItemsWotTanks6993 $6993,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            CategoryWotBlitzResponseItemsWotTanks12305::fromArray($data['12305']),
-            CategoryWotBlitzResponseItemsWotTanks6753::fromArray($data['6753']),
-            CategoryWotBlitzResponseItemsWotTanks18001::fromArray($data['18001']),
-            CategoryWotBlitzResponseItemsWotTanks6449::fromArray($data['6449']),
-            CategoryWotBlitzResponseItemsWotTanks15697::fromArray($data['15697']),
-            CategoryWotBlitzResponseItemsWotTanks4481::fromArray($data['4481']),
-            CategoryWotBlitzResponseItemsWotTanks13185::fromArray($data['13185']),
-            CategoryWotBlitzResponseItemsWotTanks14337::fromArray($data['14337']),
-            CategoryWotBlitzResponseItemsWotTanks3681::fromArray($data['3681']),
-            CategoryWotBlitzResponseItemsWotTanks6145::fromArray($data['6145']),
-            CategoryWotBlitzResponseItemsWotTanks5425::fromArray($data['5425']),
-            CategoryWotBlitzResponseItemsWotTanks3649::fromArray($data['3649']),
-            CategoryWotBlitzResponseItemsWotTanks7169::fromArray($data['7169']),
-            CategoryWotBlitzResponseItemsWotTanks7249::fromArray($data['7249']),
-            CategoryWotBlitzResponseItemsWotTanks7297::fromArray($data['7297']),
-            CategoryWotBlitzResponseItemsWotTanks19537::fromArray($data['19537']),
-            CategoryWotBlitzResponseItemsWotTanks5681::fromArray($data['5681']),
-            CategoryWotBlitzResponseItemsWotTanks6209::fromArray($data['6209']),
-            CategoryWotBlitzResponseItemsWotTanks58641::fromArray($data['58641']),
-            CategoryWotBlitzResponseItemsWotTanks16897::fromArray($data['16897']),
-            CategoryWotBlitzResponseItemsWotTanks10369::fromArray($data['10369']),
-            CategoryWotBlitzResponseItemsWotTanks22817::fromArray($data['22817']),
-            CategoryWotBlitzResponseItemsWotTanks9489::fromArray($data['9489']),
-            CategoryWotBlitzResponseItemsWotTanks385::fromArray($data['385']),
-            CategoryWotBlitzResponseItemsWotTanks19217::fromArray($data['19217']),
-            CategoryWotBlitzResponseItemsWotTanks9297::fromArray($data['9297']),
-            CategoryWotBlitzResponseItemsWotTanks13825::fromArray($data['13825']),
-            CategoryWotBlitzResponseItemsWotTanks5505::fromArray($data['5505']),
-            CategoryWotBlitzResponseItemsWotTanks13089::fromArray($data['13089']),
-            CategoryWotBlitzResponseItemsWotTanks12049::fromArray($data['12049']),
-            CategoryWotBlitzResponseItemsWotTanks13569::fromArray($data['13569']),
-            CategoryWotBlitzResponseItemsWotTanks4145::fromArray($data['4145']),
-            CategoryWotBlitzResponseItemsWotTanks24321::fromArray($data['24321']),
-            CategoryWotBlitzResponseItemsWotTanks23313::fromArray($data['23313']),
-            CategoryWotBlitzResponseItemsWotTanks20257::fromArray($data['20257']),
-            CategoryWotBlitzResponseItemsWotTanks14609::fromArray($data['14609']),
-            CategoryWotBlitzResponseItemsWotTanks10289::fromArray($data['10289']),
-            CategoryWotBlitzResponseItemsWotTanks14881::fromArray($data['14881']),
-            CategoryWotBlitzResponseItemsWotTanks3937::fromArray($data['3937']),
-            CategoryWotBlitzResponseItemsWotTanks10785::fromArray($data['10785']),
-            CategoryWotBlitzResponseItemsWotTanks6929::fromArray($data['6929']),
-            CategoryWotBlitzResponseItemsWotTanks16401::fromArray($data['16401']),
-            CategoryWotBlitzResponseItemsWotTanks641::fromArray($data['641']),
-            CategoryWotBlitzResponseItemsWotTanks20001::fromArray($data['20001']),
-            CategoryWotBlitzResponseItemsWotTanks12545::fromArray($data['12545']),
-            CategoryWotBlitzResponseItemsWotTanks7953::fromArray($data['7953']),
-            CategoryWotBlitzResponseItemsWotTanks25361::fromArray($data['25361']),
-            CategoryWotBlitzResponseItemsWotTanks20481::fromArray($data['20481']),
-            CategoryWotBlitzResponseItemsWotTanks62737::fromArray($data['62737']),
-            CategoryWotBlitzResponseItemsWotTanks5137::fromArray($data['5137']),
-            CategoryWotBlitzResponseItemsWotTanks18753::fromArray($data['18753']),
-            CategoryWotBlitzResponseItemsWotTanks19025::fromArray($data['19025']),
-            CategoryWotBlitzResponseItemsWotTanks13345::fromArray($data['13345']),
-            CategoryWotBlitzResponseItemsWotTanks2945::fromArray($data['2945']),
-            CategoryWotBlitzResponseItemsWotTanks16193::fromArray($data['16193']),
-            CategoryWotBlitzResponseItemsWotTanks18209::fromArray($data['18209']),
-            CategoryWotBlitzResponseItemsWotTanks19985::fromArray($data['19985']),
-            CategoryWotBlitzResponseItemsWotTanks19489::fromArray($data['19489']),
-            CategoryWotBlitzResponseItemsWotTanks20305::fromArray($data['20305']),
-            CategoryWotBlitzResponseItemsWotTanks20737::fromArray($data['20737']),
-            CategoryWotBlitzResponseItemsWotTanks21329::fromArray($data['21329']),
-            CategoryWotBlitzResponseItemsWotTanks53025::fromArray($data['53025']),
-            CategoryWotBlitzResponseItemsWotTanks18241::fromArray($data['18241']),
-            CategoryWotBlitzResponseItemsWotTanks10881::fromArray($data['10881']),
-            CategoryWotBlitzResponseItemsWotTanks21265::fromArray($data['21265']),
-            CategoryWotBlitzResponseItemsWotTanks20513::fromArray($data['20513']),
-            CategoryWotBlitzResponseItemsWotTanks12673::fromArray($data['12673']),
-            CategoryWotBlitzResponseItemsWotTanks16705::fromArray($data['16705']),
-            CategoryWotBlitzResponseItemsWotTanks6785::fromArray($data['6785']),
-            CategoryWotBlitzResponseItemsWotTanks58881::fromArray($data['58881']),
-            CategoryWotBlitzResponseItemsWotTanks18513::fromArray($data['18513']),
-            CategoryWotBlitzResponseItemsWotTanks2849::fromArray($data['2849']),
-            CategoryWotBlitzResponseItemsWotTanks9073::fromArray($data['9073']),
-            CategoryWotBlitzResponseItemsWotTanks18769::fromArray($data['18769']),
-            CategoryWotBlitzResponseItemsWotTanks15953::fromArray($data['15953']),
-            CategoryWotBlitzResponseItemsWotTanks6257::fromArray($data['6257']),
-            CategoryWotBlitzResponseItemsWotTanks6001::fromArray($data['6001']),
-            CategoryWotBlitzResponseItemsWotTanks55297::fromArray($data['55297']),
-            CategoryWotBlitzResponseItemsWotTanks23841::fromArray($data['23841']),
-            CategoryWotBlitzResponseItemsWotTanks64529::fromArray($data['64529']),
-            CategoryWotBlitzResponseItemsWotTanks21025::fromArray($data['21025']),
-            CategoryWotBlitzResponseItemsWotTanks23057::fromArray($data['23057']),
-            CategoryWotBlitzResponseItemsWotTanks7281::fromArray($data['7281']),
-            CategoryWotBlitzResponseItemsWotTanks23825::fromArray($data['23825']),
-            CategoryWotBlitzResponseItemsWotTanks8753::fromArray($data['8753']),
-            CategoryWotBlitzResponseItemsWotTanks59137::fromArray($data['59137']),
-            CategoryWotBlitzResponseItemsWotTanks10241::fromArray($data['10241']),
-            CategoryWotBlitzResponseItemsWotTanks7793::fromArray($data['7793']),
-            CategoryWotBlitzResponseItemsWotTanks5745::fromArray($data['5745']),
-            CategoryWotBlitzResponseItemsWotTanks11553::fromArray($data['11553']),
-            CategoryWotBlitzResponseItemsWotTanks625::fromArray($data['625']),
-            CategoryWotBlitzResponseItemsWotTanks20817::fromArray($data['20817']),
-            CategoryWotBlitzResponseItemsWotTanks23297::fromArray($data['23297']),
-            CategoryWotBlitzResponseItemsWotTanks2625::fromArray($data['2625']),
-            CategoryWotBlitzResponseItemsWotTanks19713::fromArray($data['19713']),
-            CategoryWotBlitzResponseItemsWotTanks24849::fromArray($data['24849']),
-            CategoryWotBlitzResponseItemsWotTanks56097::fromArray($data['56097']),
-            CategoryWotBlitzResponseItemsWotTanks57105::fromArray($data['57105']),
-            CategoryWotBlitzResponseItemsWotTanks54785::fromArray($data['54785']),
-            CategoryWotBlitzResponseItemsWotTanks2609::fromArray($data['2609']),
-            CategoryWotBlitzResponseItemsWotTanks57361::fromArray($data['57361']),
-            CategoryWotBlitzResponseItemsWotTanks1409::fromArray($data['1409']),
-            CategoryWotBlitzResponseItemsWotTanks55889::fromArray($data['55889']),
-            CategoryWotBlitzResponseItemsWotTanks5393::fromArray($data['5393']),
-            CategoryWotBlitzResponseItemsWotTanks5489::fromArray($data['5489']),
-            CategoryWotBlitzResponseItemsWotTanks53761::fromArray($data['53761']),
-            CategoryWotBlitzResponseItemsWotTanks65377::fromArray($data['65377']),
-            CategoryWotBlitzResponseItemsWotTanks54545::fromArray($data['54545']),
-            CategoryWotBlitzResponseItemsWotTanks51473::fromArray($data['51473']),
-            CategoryWotBlitzResponseItemsWotTanks10273::fromArray($data['10273']),
-            CategoryWotBlitzResponseItemsWotTanks3121::fromArray($data['3121']),
-            CategoryWotBlitzResponseItemsWotTanks4881::fromArray($data['4881']),
-            CategoryWotBlitzResponseItemsWotTanks51729::fromArray($data['51729']),
-            CategoryWotBlitzResponseItemsWotTanks4369::fromArray($data['4369']),
-            CategoryWotBlitzResponseItemsWotTanks6993::fromArray($data['6993']),
+        /** @var CategoryWotBlitzResponseItemsWotTanksData12305 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData12305 $_12305,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6753 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6753 $_6753,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18001 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18001 $_18001,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6449 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6449 $_6449,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData15697 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData15697 $_15697,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData4481 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData4481 $_4481,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData13185 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData13185 $_13185,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData14337 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData14337 $_14337,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData3681 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData3681 $_3681,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6145 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6145 $_6145,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5425 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5425 $_5425,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData3649 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData3649 $_3649,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7169 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7169 $_7169,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7249 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7249 $_7249,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7297 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7297 $_7297,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19537 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19537 $_19537,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5681 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5681 $_5681,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6209 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6209 $_6209,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData58641 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData58641 $_58641,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData16897 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData16897 $_16897,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10369 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10369 $_10369,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData22817 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData22817 $_22817,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData9489 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData9489 $_9489,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData385 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData385 $_385,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19217 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19217 $_19217,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData9297 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData9297 $_9297,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData13825 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData13825 $_13825,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5505 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5505 $_5505,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData13089 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData13089 $_13089,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData12049 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData12049 $_12049,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData13569 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData13569 $_13569,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData4145 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData4145 $_4145,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData24321 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData24321 $_24321,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData23313 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData23313 $_23313,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20257 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20257 $_20257,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData14609 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData14609 $_14609,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10289 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10289 $_10289,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData14881 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData14881 $_14881,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData3937 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData3937 $_3937,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10785 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10785 $_10785,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6929 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6929 $_6929,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData16401 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData16401 $_16401,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData641 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData641 $_641,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20001 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20001 $_20001,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData12545 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData12545 $_12545,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7953 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7953 $_7953,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData25361 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData25361 $_25361,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20481 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20481 $_20481,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData62737 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData62737 $_62737,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5137 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5137 $_5137,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18753 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18753 $_18753,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19025 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19025 $_19025,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData13345 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData13345 $_13345,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData2945 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData2945 $_2945,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData16193 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData16193 $_16193,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18209 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18209 $_18209,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19985 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19985 $_19985,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19489 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19489 $_19489,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20305 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20305 $_20305,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20737 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20737 $_20737,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData21329 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData21329 $_21329,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData53025 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData53025 $_53025,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18241 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18241 $_18241,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10881 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10881 $_10881,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData21265 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData21265 $_21265,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20513 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20513 $_20513,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData12673 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData12673 $_12673,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData16705 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData16705 $_16705,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6785 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6785 $_6785,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData58881 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData58881 $_58881,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18513 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18513 $_18513,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData2849 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData2849 $_2849,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData9073 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData9073 $_9073,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData18769 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData18769 $_18769,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData15953 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData15953 $_15953,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6257 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6257 $_6257,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6001 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6001 $_6001,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData55297 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData55297 $_55297,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData23841 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData23841 $_23841,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData64529 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData64529 $_64529,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData21025 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData21025 $_21025,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData23057 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData23057 $_23057,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7281 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7281 $_7281,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData23825 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData23825 $_23825,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData8753 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData8753 $_8753,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData59137 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData59137 $_59137,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10241 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10241 $_10241,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData7793 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData7793 $_7793,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5745 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5745 $_5745,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData11553 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData11553 $_11553,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData625 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData625 $_625,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData20817 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData20817 $_20817,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData23297 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData23297 $_23297,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData2625 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData2625 $_2625,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData19713 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData19713 $_19713,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData24849 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData24849 $_24849,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData56097 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData56097 $_56097,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData57105 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData57105 $_57105,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData54785 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData54785 $_54785,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData2609 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData2609 $_2609,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData57361 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData57361 $_57361,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData1409 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData1409 $_1409,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData55889 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData55889 $_55889,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5393 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5393 $_5393,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData5489 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData5489 $_5489,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData53761 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData53761 $_53761,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData65377 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData65377 $_65377,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData54545 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData54545 $_54545,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData51473 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData51473 $_51473,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData10273 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData10273 $_10273,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData3121 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData3121 $_3121,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData4881 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData4881 $_4881,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData51729 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData51729 $_51729,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData4369 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData4369 $_4369,
+        /** @var CategoryWotBlitzResponseItemsWotTanksData6993 */
+        public readonly CategoryWotBlitzResponseItemsWotTanksData6993 $_6993,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            CategoryWotBlitzResponseItemsWotTanksData12305::fromArray($data['12305']),
+            CategoryWotBlitzResponseItemsWotTanksData6753::fromArray($data['6753']),
+            CategoryWotBlitzResponseItemsWotTanksData18001::fromArray($data['18001']),
+            CategoryWotBlitzResponseItemsWotTanksData6449::fromArray($data['6449']),
+            CategoryWotBlitzResponseItemsWotTanksData15697::fromArray($data['15697']),
+            CategoryWotBlitzResponseItemsWotTanksData4481::fromArray($data['4481']),
+            CategoryWotBlitzResponseItemsWotTanksData13185::fromArray($data['13185']),
+            CategoryWotBlitzResponseItemsWotTanksData14337::fromArray($data['14337']),
+            CategoryWotBlitzResponseItemsWotTanksData3681::fromArray($data['3681']),
+            CategoryWotBlitzResponseItemsWotTanksData6145::fromArray($data['6145']),
+            CategoryWotBlitzResponseItemsWotTanksData5425::fromArray($data['5425']),
+            CategoryWotBlitzResponseItemsWotTanksData3649::fromArray($data['3649']),
+            CategoryWotBlitzResponseItemsWotTanksData7169::fromArray($data['7169']),
+            CategoryWotBlitzResponseItemsWotTanksData7249::fromArray($data['7249']),
+            CategoryWotBlitzResponseItemsWotTanksData7297::fromArray($data['7297']),
+            CategoryWotBlitzResponseItemsWotTanksData19537::fromArray($data['19537']),
+            CategoryWotBlitzResponseItemsWotTanksData5681::fromArray($data['5681']),
+            CategoryWotBlitzResponseItemsWotTanksData6209::fromArray($data['6209']),
+            CategoryWotBlitzResponseItemsWotTanksData58641::fromArray($data['58641']),
+            CategoryWotBlitzResponseItemsWotTanksData16897::fromArray($data['16897']),
+            CategoryWotBlitzResponseItemsWotTanksData10369::fromArray($data['10369']),
+            CategoryWotBlitzResponseItemsWotTanksData22817::fromArray($data['22817']),
+            CategoryWotBlitzResponseItemsWotTanksData9489::fromArray($data['9489']),
+            CategoryWotBlitzResponseItemsWotTanksData385::fromArray($data['385']),
+            CategoryWotBlitzResponseItemsWotTanksData19217::fromArray($data['19217']),
+            CategoryWotBlitzResponseItemsWotTanksData9297::fromArray($data['9297']),
+            CategoryWotBlitzResponseItemsWotTanksData13825::fromArray($data['13825']),
+            CategoryWotBlitzResponseItemsWotTanksData5505::fromArray($data['5505']),
+            CategoryWotBlitzResponseItemsWotTanksData13089::fromArray($data['13089']),
+            CategoryWotBlitzResponseItemsWotTanksData12049::fromArray($data['12049']),
+            CategoryWotBlitzResponseItemsWotTanksData13569::fromArray($data['13569']),
+            CategoryWotBlitzResponseItemsWotTanksData4145::fromArray($data['4145']),
+            CategoryWotBlitzResponseItemsWotTanksData24321::fromArray($data['24321']),
+            CategoryWotBlitzResponseItemsWotTanksData23313::fromArray($data['23313']),
+            CategoryWotBlitzResponseItemsWotTanksData20257::fromArray($data['20257']),
+            CategoryWotBlitzResponseItemsWotTanksData14609::fromArray($data['14609']),
+            CategoryWotBlitzResponseItemsWotTanksData10289::fromArray($data['10289']),
+            CategoryWotBlitzResponseItemsWotTanksData14881::fromArray($data['14881']),
+            CategoryWotBlitzResponseItemsWotTanksData3937::fromArray($data['3937']),
+            CategoryWotBlitzResponseItemsWotTanksData10785::fromArray($data['10785']),
+            CategoryWotBlitzResponseItemsWotTanksData6929::fromArray($data['6929']),
+            CategoryWotBlitzResponseItemsWotTanksData16401::fromArray($data['16401']),
+            CategoryWotBlitzResponseItemsWotTanksData641::fromArray($data['641']),
+            CategoryWotBlitzResponseItemsWotTanksData20001::fromArray($data['20001']),
+            CategoryWotBlitzResponseItemsWotTanksData12545::fromArray($data['12545']),
+            CategoryWotBlitzResponseItemsWotTanksData7953::fromArray($data['7953']),
+            CategoryWotBlitzResponseItemsWotTanksData25361::fromArray($data['25361']),
+            CategoryWotBlitzResponseItemsWotTanksData20481::fromArray($data['20481']),
+            CategoryWotBlitzResponseItemsWotTanksData62737::fromArray($data['62737']),
+            CategoryWotBlitzResponseItemsWotTanksData5137::fromArray($data['5137']),
+            CategoryWotBlitzResponseItemsWotTanksData18753::fromArray($data['18753']),
+            CategoryWotBlitzResponseItemsWotTanksData19025::fromArray($data['19025']),
+            CategoryWotBlitzResponseItemsWotTanksData13345::fromArray($data['13345']),
+            CategoryWotBlitzResponseItemsWotTanksData2945::fromArray($data['2945']),
+            CategoryWotBlitzResponseItemsWotTanksData16193::fromArray($data['16193']),
+            CategoryWotBlitzResponseItemsWotTanksData18209::fromArray($data['18209']),
+            CategoryWotBlitzResponseItemsWotTanksData19985::fromArray($data['19985']),
+            CategoryWotBlitzResponseItemsWotTanksData19489::fromArray($data['19489']),
+            CategoryWotBlitzResponseItemsWotTanksData20305::fromArray($data['20305']),
+            CategoryWotBlitzResponseItemsWotTanksData20737::fromArray($data['20737']),
+            CategoryWotBlitzResponseItemsWotTanksData21329::fromArray($data['21329']),
+            CategoryWotBlitzResponseItemsWotTanksData53025::fromArray($data['53025']),
+            CategoryWotBlitzResponseItemsWotTanksData18241::fromArray($data['18241']),
+            CategoryWotBlitzResponseItemsWotTanksData10881::fromArray($data['10881']),
+            CategoryWotBlitzResponseItemsWotTanksData21265::fromArray($data['21265']),
+            CategoryWotBlitzResponseItemsWotTanksData20513::fromArray($data['20513']),
+            CategoryWotBlitzResponseItemsWotTanksData12673::fromArray($data['12673']),
+            CategoryWotBlitzResponseItemsWotTanksData16705::fromArray($data['16705']),
+            CategoryWotBlitzResponseItemsWotTanksData6785::fromArray($data['6785']),
+            CategoryWotBlitzResponseItemsWotTanksData58881::fromArray($data['58881']),
+            CategoryWotBlitzResponseItemsWotTanksData18513::fromArray($data['18513']),
+            CategoryWotBlitzResponseItemsWotTanksData2849::fromArray($data['2849']),
+            CategoryWotBlitzResponseItemsWotTanksData9073::fromArray($data['9073']),
+            CategoryWotBlitzResponseItemsWotTanksData18769::fromArray($data['18769']),
+            CategoryWotBlitzResponseItemsWotTanksData15953::fromArray($data['15953']),
+            CategoryWotBlitzResponseItemsWotTanksData6257::fromArray($data['6257']),
+            CategoryWotBlitzResponseItemsWotTanksData6001::fromArray($data['6001']),
+            CategoryWotBlitzResponseItemsWotTanksData55297::fromArray($data['55297']),
+            CategoryWotBlitzResponseItemsWotTanksData23841::fromArray($data['23841']),
+            CategoryWotBlitzResponseItemsWotTanksData64529::fromArray($data['64529']),
+            CategoryWotBlitzResponseItemsWotTanksData21025::fromArray($data['21025']),
+            CategoryWotBlitzResponseItemsWotTanksData23057::fromArray($data['23057']),
+            CategoryWotBlitzResponseItemsWotTanksData7281::fromArray($data['7281']),
+            CategoryWotBlitzResponseItemsWotTanksData23825::fromArray($data['23825']),
+            CategoryWotBlitzResponseItemsWotTanksData8753::fromArray($data['8753']),
+            CategoryWotBlitzResponseItemsWotTanksData59137::fromArray($data['59137']),
+            CategoryWotBlitzResponseItemsWotTanksData10241::fromArray($data['10241']),
+            CategoryWotBlitzResponseItemsWotTanksData7793::fromArray($data['7793']),
+            CategoryWotBlitzResponseItemsWotTanksData5745::fromArray($data['5745']),
+            CategoryWotBlitzResponseItemsWotTanksData11553::fromArray($data['11553']),
+            CategoryWotBlitzResponseItemsWotTanksData625::fromArray($data['625']),
+            CategoryWotBlitzResponseItemsWotTanksData20817::fromArray($data['20817']),
+            CategoryWotBlitzResponseItemsWotTanksData23297::fromArray($data['23297']),
+            CategoryWotBlitzResponseItemsWotTanksData2625::fromArray($data['2625']),
+            CategoryWotBlitzResponseItemsWotTanksData19713::fromArray($data['19713']),
+            CategoryWotBlitzResponseItemsWotTanksData24849::fromArray($data['24849']),
+            CategoryWotBlitzResponseItemsWotTanksData56097::fromArray($data['56097']),
+            CategoryWotBlitzResponseItemsWotTanksData57105::fromArray($data['57105']),
+            CategoryWotBlitzResponseItemsWotTanksData54785::fromArray($data['54785']),
+            CategoryWotBlitzResponseItemsWotTanksData2609::fromArray($data['2609']),
+            CategoryWotBlitzResponseItemsWotTanksData57361::fromArray($data['57361']),
+            CategoryWotBlitzResponseItemsWotTanksData1409::fromArray($data['1409']),
+            CategoryWotBlitzResponseItemsWotTanksData55889::fromArray($data['55889']),
+            CategoryWotBlitzResponseItemsWotTanksData5393::fromArray($data['5393']),
+            CategoryWotBlitzResponseItemsWotTanksData5489::fromArray($data['5489']),
+            CategoryWotBlitzResponseItemsWotTanksData53761::fromArray($data['53761']),
+            CategoryWotBlitzResponseItemsWotTanksData65377::fromArray($data['65377']),
+            CategoryWotBlitzResponseItemsWotTanksData54545::fromArray($data['54545']),
+            CategoryWotBlitzResponseItemsWotTanksData51473::fromArray($data['51473']),
+            CategoryWotBlitzResponseItemsWotTanksData10273::fromArray($data['10273']),
+            CategoryWotBlitzResponseItemsWotTanksData3121::fromArray($data['3121']),
+            CategoryWotBlitzResponseItemsWotTanksData4881::fromArray($data['4881']),
+            CategoryWotBlitzResponseItemsWotTanksData51729::fromArray($data['51729']),
+            CategoryWotBlitzResponseItemsWotTanksData4369::fromArray($data['4369']),
+            CategoryWotBlitzResponseItemsWotTanksData6993::fromArray($data['6993']),
         );
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks12305
+final class CategoryWotBlitzResponseItemsWotTanksData12305
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5441,7 +5441,7 @@ final class CategoryWotBlitzResponseItemsWotTanks12305
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6753
+final class CategoryWotBlitzResponseItemsWotTanksData6753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5471,7 +5471,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18001
+final class CategoryWotBlitzResponseItemsWotTanksData18001
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5501,7 +5501,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18001
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6449
+final class CategoryWotBlitzResponseItemsWotTanksData6449
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5531,7 +5531,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6449
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks15697
+final class CategoryWotBlitzResponseItemsWotTanksData15697
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5561,7 +5561,7 @@ final class CategoryWotBlitzResponseItemsWotTanks15697
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks4481
+final class CategoryWotBlitzResponseItemsWotTanksData4481
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5591,7 +5591,7 @@ final class CategoryWotBlitzResponseItemsWotTanks4481
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks13185
+final class CategoryWotBlitzResponseItemsWotTanksData13185
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5621,7 +5621,7 @@ final class CategoryWotBlitzResponseItemsWotTanks13185
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks14337
+final class CategoryWotBlitzResponseItemsWotTanksData14337
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5651,7 +5651,7 @@ final class CategoryWotBlitzResponseItemsWotTanks14337
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks3681
+final class CategoryWotBlitzResponseItemsWotTanksData3681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5681,7 +5681,7 @@ final class CategoryWotBlitzResponseItemsWotTanks3681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6145
+final class CategoryWotBlitzResponseItemsWotTanksData6145
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5711,7 +5711,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6145
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5425
+final class CategoryWotBlitzResponseItemsWotTanksData5425
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5741,7 +5741,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5425
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks3649
+final class CategoryWotBlitzResponseItemsWotTanksData3649
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5771,7 +5771,7 @@ final class CategoryWotBlitzResponseItemsWotTanks3649
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7169
+final class CategoryWotBlitzResponseItemsWotTanksData7169
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5801,7 +5801,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7169
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7249
+final class CategoryWotBlitzResponseItemsWotTanksData7249
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5831,7 +5831,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7249
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7297
+final class CategoryWotBlitzResponseItemsWotTanksData7297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5861,7 +5861,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19537
+final class CategoryWotBlitzResponseItemsWotTanksData19537
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5891,7 +5891,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19537
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5681
+final class CategoryWotBlitzResponseItemsWotTanksData5681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5921,7 +5921,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6209
+final class CategoryWotBlitzResponseItemsWotTanksData6209
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5951,7 +5951,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6209
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks58641
+final class CategoryWotBlitzResponseItemsWotTanksData58641
 {
     public function __construct(
         public readonly int $tank_id,
@@ -5981,7 +5981,7 @@ final class CategoryWotBlitzResponseItemsWotTanks58641
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks16897
+final class CategoryWotBlitzResponseItemsWotTanksData16897
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6011,7 +6011,7 @@ final class CategoryWotBlitzResponseItemsWotTanks16897
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10369
+final class CategoryWotBlitzResponseItemsWotTanksData10369
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6041,7 +6041,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10369
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks22817
+final class CategoryWotBlitzResponseItemsWotTanksData22817
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6071,7 +6071,7 @@ final class CategoryWotBlitzResponseItemsWotTanks22817
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks9489
+final class CategoryWotBlitzResponseItemsWotTanksData9489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6101,7 +6101,7 @@ final class CategoryWotBlitzResponseItemsWotTanks9489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks385
+final class CategoryWotBlitzResponseItemsWotTanksData385
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6131,7 +6131,7 @@ final class CategoryWotBlitzResponseItemsWotTanks385
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19217
+final class CategoryWotBlitzResponseItemsWotTanksData19217
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6161,7 +6161,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19217
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks9297
+final class CategoryWotBlitzResponseItemsWotTanksData9297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6191,7 +6191,7 @@ final class CategoryWotBlitzResponseItemsWotTanks9297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks13825
+final class CategoryWotBlitzResponseItemsWotTanksData13825
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6221,7 +6221,7 @@ final class CategoryWotBlitzResponseItemsWotTanks13825
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5505
+final class CategoryWotBlitzResponseItemsWotTanksData5505
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6251,7 +6251,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5505
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks13089
+final class CategoryWotBlitzResponseItemsWotTanksData13089
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6281,7 +6281,7 @@ final class CategoryWotBlitzResponseItemsWotTanks13089
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks12049
+final class CategoryWotBlitzResponseItemsWotTanksData12049
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6311,7 +6311,7 @@ final class CategoryWotBlitzResponseItemsWotTanks12049
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks13569
+final class CategoryWotBlitzResponseItemsWotTanksData13569
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6341,7 +6341,7 @@ final class CategoryWotBlitzResponseItemsWotTanks13569
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks4145
+final class CategoryWotBlitzResponseItemsWotTanksData4145
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6371,7 +6371,7 @@ final class CategoryWotBlitzResponseItemsWotTanks4145
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks24321
+final class CategoryWotBlitzResponseItemsWotTanksData24321
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6401,7 +6401,7 @@ final class CategoryWotBlitzResponseItemsWotTanks24321
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks23313
+final class CategoryWotBlitzResponseItemsWotTanksData23313
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6431,7 +6431,7 @@ final class CategoryWotBlitzResponseItemsWotTanks23313
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20257
+final class CategoryWotBlitzResponseItemsWotTanksData20257
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6461,7 +6461,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20257
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks14609
+final class CategoryWotBlitzResponseItemsWotTanksData14609
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6491,7 +6491,7 @@ final class CategoryWotBlitzResponseItemsWotTanks14609
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10289
+final class CategoryWotBlitzResponseItemsWotTanksData10289
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6521,7 +6521,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10289
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks14881
+final class CategoryWotBlitzResponseItemsWotTanksData14881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6551,7 +6551,7 @@ final class CategoryWotBlitzResponseItemsWotTanks14881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks3937
+final class CategoryWotBlitzResponseItemsWotTanksData3937
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6581,7 +6581,7 @@ final class CategoryWotBlitzResponseItemsWotTanks3937
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10785
+final class CategoryWotBlitzResponseItemsWotTanksData10785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6611,7 +6611,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6929
+final class CategoryWotBlitzResponseItemsWotTanksData6929
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6641,7 +6641,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6929
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks16401
+final class CategoryWotBlitzResponseItemsWotTanksData16401
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6671,7 +6671,7 @@ final class CategoryWotBlitzResponseItemsWotTanks16401
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks641
+final class CategoryWotBlitzResponseItemsWotTanksData641
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6701,7 +6701,7 @@ final class CategoryWotBlitzResponseItemsWotTanks641
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20001
+final class CategoryWotBlitzResponseItemsWotTanksData20001
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6731,7 +6731,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20001
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks12545
+final class CategoryWotBlitzResponseItemsWotTanksData12545
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6761,7 +6761,7 @@ final class CategoryWotBlitzResponseItemsWotTanks12545
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7953
+final class CategoryWotBlitzResponseItemsWotTanksData7953
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6791,7 +6791,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7953
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks25361
+final class CategoryWotBlitzResponseItemsWotTanksData25361
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6821,7 +6821,7 @@ final class CategoryWotBlitzResponseItemsWotTanks25361
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20481
+final class CategoryWotBlitzResponseItemsWotTanksData20481
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6851,7 +6851,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20481
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks62737
+final class CategoryWotBlitzResponseItemsWotTanksData62737
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6881,7 +6881,7 @@ final class CategoryWotBlitzResponseItemsWotTanks62737
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5137
+final class CategoryWotBlitzResponseItemsWotTanksData5137
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6911,7 +6911,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5137
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18753
+final class CategoryWotBlitzResponseItemsWotTanksData18753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6941,7 +6941,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19025
+final class CategoryWotBlitzResponseItemsWotTanksData19025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -6971,7 +6971,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks13345
+final class CategoryWotBlitzResponseItemsWotTanksData13345
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7001,7 +7001,7 @@ final class CategoryWotBlitzResponseItemsWotTanks13345
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks2945
+final class CategoryWotBlitzResponseItemsWotTanksData2945
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7031,7 +7031,7 @@ final class CategoryWotBlitzResponseItemsWotTanks2945
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks16193
+final class CategoryWotBlitzResponseItemsWotTanksData16193
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7061,7 +7061,7 @@ final class CategoryWotBlitzResponseItemsWotTanks16193
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18209
+final class CategoryWotBlitzResponseItemsWotTanksData18209
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7091,7 +7091,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18209
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19985
+final class CategoryWotBlitzResponseItemsWotTanksData19985
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7121,7 +7121,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19985
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19489
+final class CategoryWotBlitzResponseItemsWotTanksData19489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7151,7 +7151,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20305
+final class CategoryWotBlitzResponseItemsWotTanksData20305
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7181,7 +7181,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20305
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20737
+final class CategoryWotBlitzResponseItemsWotTanksData20737
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7211,7 +7211,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20737
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks21329
+final class CategoryWotBlitzResponseItemsWotTanksData21329
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7241,7 +7241,7 @@ final class CategoryWotBlitzResponseItemsWotTanks21329
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks53025
+final class CategoryWotBlitzResponseItemsWotTanksData53025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7271,7 +7271,7 @@ final class CategoryWotBlitzResponseItemsWotTanks53025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18241
+final class CategoryWotBlitzResponseItemsWotTanksData18241
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7301,7 +7301,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18241
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10881
+final class CategoryWotBlitzResponseItemsWotTanksData10881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7331,7 +7331,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks21265
+final class CategoryWotBlitzResponseItemsWotTanksData21265
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7361,7 +7361,7 @@ final class CategoryWotBlitzResponseItemsWotTanks21265
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20513
+final class CategoryWotBlitzResponseItemsWotTanksData20513
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7391,7 +7391,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20513
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks12673
+final class CategoryWotBlitzResponseItemsWotTanksData12673
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7421,7 +7421,7 @@ final class CategoryWotBlitzResponseItemsWotTanks12673
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks16705
+final class CategoryWotBlitzResponseItemsWotTanksData16705
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7451,7 +7451,7 @@ final class CategoryWotBlitzResponseItemsWotTanks16705
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6785
+final class CategoryWotBlitzResponseItemsWotTanksData6785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7481,7 +7481,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks58881
+final class CategoryWotBlitzResponseItemsWotTanksData58881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7511,7 +7511,7 @@ final class CategoryWotBlitzResponseItemsWotTanks58881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18513
+final class CategoryWotBlitzResponseItemsWotTanksData18513
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7541,7 +7541,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18513
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks2849
+final class CategoryWotBlitzResponseItemsWotTanksData2849
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7571,7 +7571,7 @@ final class CategoryWotBlitzResponseItemsWotTanks2849
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks9073
+final class CategoryWotBlitzResponseItemsWotTanksData9073
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7601,7 +7601,7 @@ final class CategoryWotBlitzResponseItemsWotTanks9073
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks18769
+final class CategoryWotBlitzResponseItemsWotTanksData18769
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7631,7 +7631,7 @@ final class CategoryWotBlitzResponseItemsWotTanks18769
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks15953
+final class CategoryWotBlitzResponseItemsWotTanksData15953
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7661,7 +7661,7 @@ final class CategoryWotBlitzResponseItemsWotTanks15953
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6257
+final class CategoryWotBlitzResponseItemsWotTanksData6257
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7691,7 +7691,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6257
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6001
+final class CategoryWotBlitzResponseItemsWotTanksData6001
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7721,7 +7721,7 @@ final class CategoryWotBlitzResponseItemsWotTanks6001
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks55297
+final class CategoryWotBlitzResponseItemsWotTanksData55297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7751,7 +7751,7 @@ final class CategoryWotBlitzResponseItemsWotTanks55297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks23841
+final class CategoryWotBlitzResponseItemsWotTanksData23841
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7781,7 +7781,7 @@ final class CategoryWotBlitzResponseItemsWotTanks23841
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks64529
+final class CategoryWotBlitzResponseItemsWotTanksData64529
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7811,7 +7811,7 @@ final class CategoryWotBlitzResponseItemsWotTanks64529
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks21025
+final class CategoryWotBlitzResponseItemsWotTanksData21025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7841,7 +7841,7 @@ final class CategoryWotBlitzResponseItemsWotTanks21025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks23057
+final class CategoryWotBlitzResponseItemsWotTanksData23057
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7871,7 +7871,7 @@ final class CategoryWotBlitzResponseItemsWotTanks23057
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7281
+final class CategoryWotBlitzResponseItemsWotTanksData7281
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7901,7 +7901,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7281
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks23825
+final class CategoryWotBlitzResponseItemsWotTanksData23825
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7931,7 +7931,7 @@ final class CategoryWotBlitzResponseItemsWotTanks23825
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks8753
+final class CategoryWotBlitzResponseItemsWotTanksData8753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7961,7 +7961,7 @@ final class CategoryWotBlitzResponseItemsWotTanks8753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks59137
+final class CategoryWotBlitzResponseItemsWotTanksData59137
 {
     public function __construct(
         public readonly int $tank_id,
@@ -7991,7 +7991,7 @@ final class CategoryWotBlitzResponseItemsWotTanks59137
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10241
+final class CategoryWotBlitzResponseItemsWotTanksData10241
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8021,7 +8021,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10241
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks7793
+final class CategoryWotBlitzResponseItemsWotTanksData7793
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8051,7 +8051,7 @@ final class CategoryWotBlitzResponseItemsWotTanks7793
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5745
+final class CategoryWotBlitzResponseItemsWotTanksData5745
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8081,7 +8081,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5745
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks11553
+final class CategoryWotBlitzResponseItemsWotTanksData11553
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8111,7 +8111,7 @@ final class CategoryWotBlitzResponseItemsWotTanks11553
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks625
+final class CategoryWotBlitzResponseItemsWotTanksData625
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8141,7 +8141,7 @@ final class CategoryWotBlitzResponseItemsWotTanks625
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks20817
+final class CategoryWotBlitzResponseItemsWotTanksData20817
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8171,7 +8171,7 @@ final class CategoryWotBlitzResponseItemsWotTanks20817
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks23297
+final class CategoryWotBlitzResponseItemsWotTanksData23297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8201,7 +8201,7 @@ final class CategoryWotBlitzResponseItemsWotTanks23297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks2625
+final class CategoryWotBlitzResponseItemsWotTanksData2625
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8231,7 +8231,7 @@ final class CategoryWotBlitzResponseItemsWotTanks2625
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks19713
+final class CategoryWotBlitzResponseItemsWotTanksData19713
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8261,7 +8261,7 @@ final class CategoryWotBlitzResponseItemsWotTanks19713
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks24849
+final class CategoryWotBlitzResponseItemsWotTanksData24849
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8291,7 +8291,7 @@ final class CategoryWotBlitzResponseItemsWotTanks24849
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks56097
+final class CategoryWotBlitzResponseItemsWotTanksData56097
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8321,7 +8321,7 @@ final class CategoryWotBlitzResponseItemsWotTanks56097
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks57105
+final class CategoryWotBlitzResponseItemsWotTanksData57105
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8351,7 +8351,7 @@ final class CategoryWotBlitzResponseItemsWotTanks57105
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks54785
+final class CategoryWotBlitzResponseItemsWotTanksData54785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8381,7 +8381,7 @@ final class CategoryWotBlitzResponseItemsWotTanks54785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks2609
+final class CategoryWotBlitzResponseItemsWotTanksData2609
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8411,7 +8411,7 @@ final class CategoryWotBlitzResponseItemsWotTanks2609
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks57361
+final class CategoryWotBlitzResponseItemsWotTanksData57361
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8441,7 +8441,7 @@ final class CategoryWotBlitzResponseItemsWotTanks57361
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks1409
+final class CategoryWotBlitzResponseItemsWotTanksData1409
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8471,7 +8471,7 @@ final class CategoryWotBlitzResponseItemsWotTanks1409
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks55889
+final class CategoryWotBlitzResponseItemsWotTanksData55889
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8501,7 +8501,7 @@ final class CategoryWotBlitzResponseItemsWotTanks55889
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5393
+final class CategoryWotBlitzResponseItemsWotTanksData5393
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8531,7 +8531,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5393
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks5489
+final class CategoryWotBlitzResponseItemsWotTanksData5489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8561,7 +8561,7 @@ final class CategoryWotBlitzResponseItemsWotTanks5489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks53761
+final class CategoryWotBlitzResponseItemsWotTanksData53761
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8591,7 +8591,7 @@ final class CategoryWotBlitzResponseItemsWotTanks53761
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks65377
+final class CategoryWotBlitzResponseItemsWotTanksData65377
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8621,7 +8621,7 @@ final class CategoryWotBlitzResponseItemsWotTanks65377
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks54545
+final class CategoryWotBlitzResponseItemsWotTanksData54545
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8651,7 +8651,7 @@ final class CategoryWotBlitzResponseItemsWotTanks54545
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks51473
+final class CategoryWotBlitzResponseItemsWotTanksData51473
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8681,7 +8681,7 @@ final class CategoryWotBlitzResponseItemsWotTanks51473
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks10273
+final class CategoryWotBlitzResponseItemsWotTanksData10273
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8711,7 +8711,7 @@ final class CategoryWotBlitzResponseItemsWotTanks10273
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks3121
+final class CategoryWotBlitzResponseItemsWotTanksData3121
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8741,7 +8741,7 @@ final class CategoryWotBlitzResponseItemsWotTanks3121
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks4881
+final class CategoryWotBlitzResponseItemsWotTanksData4881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8771,7 +8771,7 @@ final class CategoryWotBlitzResponseItemsWotTanks4881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks51729
+final class CategoryWotBlitzResponseItemsWotTanksData51729
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8801,7 +8801,7 @@ final class CategoryWotBlitzResponseItemsWotTanks51729
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks4369
+final class CategoryWotBlitzResponseItemsWotTanksData4369
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8831,7 +8831,7 @@ final class CategoryWotBlitzResponseItemsWotTanks4369
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTanks6993
+final class CategoryWotBlitzResponseItemsWotTanksData6993
 {
     public function __construct(
         public readonly int $tank_id,
@@ -8864,126 +8864,126 @@ final class CategoryWotBlitzResponseItemsWotTanks6993
 final class CategoryWotBlitzResponseItemsWotPremiumTanks
 {
     public function __construct(
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks5681 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks5681 $5681,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks23313 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks23313 $23313,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks15697 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks15697 $15697,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks25361 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks25361 $25361,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks12545 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks12545 $12545,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks62737 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks62737 $62737,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks18769 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks18769 $18769,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks53025 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks53025 $53025,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks20737 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks20737 $20737,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks20481 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks20481 $20481,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks18753 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks18753 $18753,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks58881 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks58881 $58881,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks19025 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks19025 $19025,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks13345 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks13345 $13345,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks2945 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks2945 $2945,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks16193 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks16193 $16193,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks19985 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks19985 $19985,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks19489 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks19489 $19489,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks20305 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks20305 $20305,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks18241 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks18241 $18241,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks21329 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks21329 $21329,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks18513 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks18513 $18513,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks16705 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks16705 $16705,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks9073 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks9073 $9073,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks12673 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks12673 $12673,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks6785 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks6785 $6785,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks21265 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks21265 $21265,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks2849 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks2849 $2849,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks20513 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks20513 $20513,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks23057 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks23057 $23057,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks64529 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks64529 $64529,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks7793 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks7793 $7793,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks23841 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks23841 $23841,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks21025 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks21025 $21025,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks6001 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks6001 $6001,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks55297 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks55297 $55297,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks6257 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks6257 $6257,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks8753 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks8753 $8753,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks23825 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks23825 $23825,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks15953 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks15953 $15953,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks59137 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks59137 $59137,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks7281 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks7281 $7281,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks20817 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks20817 $20817,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks5745 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks5745 $5745,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks625 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks625 $625,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks19713 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks19713 $19713,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks57105 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks57105 $57105,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks23297 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks23297 $23297,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks57361 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks57361 $57361,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks54785 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks54785 $54785,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks2609 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks2609 $2609,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks55889 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks55889 $55889,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks56097 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks56097 $56097,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks51473 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks51473 $51473,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks65377 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks65377 $65377,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks5489 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks5489 $5489,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks53761 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks53761 $53761,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks54545 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks54545 $54545,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks51729 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks51729 $51729,
-        /** @var CategoryWotBlitzResponseItemsWotPremiumTanks4881 */
-        public readonly CategoryWotBlitzResponseItemsWotPremiumTanks4881 $4881,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData5681 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData5681 $_5681,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData23313 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData23313 $_23313,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData15697 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData15697 $_15697,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData25361 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData25361 $_25361,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData12545 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData12545 $_12545,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData62737 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData62737 $_62737,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData18769 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData18769 $_18769,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData53025 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData53025 $_53025,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData20737 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData20737 $_20737,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData20481 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData20481 $_20481,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData18753 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData18753 $_18753,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData58881 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData58881 $_58881,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData19025 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData19025 $_19025,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData13345 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData13345 $_13345,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData2945 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData2945 $_2945,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData16193 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData16193 $_16193,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData19985 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData19985 $_19985,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData19489 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData19489 $_19489,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData20305 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData20305 $_20305,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData18241 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData18241 $_18241,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData21329 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData21329 $_21329,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData18513 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData18513 $_18513,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData16705 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData16705 $_16705,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData9073 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData9073 $_9073,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData12673 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData12673 $_12673,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData6785 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData6785 $_6785,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData21265 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData21265 $_21265,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData2849 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData2849 $_2849,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData20513 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData20513 $_20513,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData23057 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData23057 $_23057,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData64529 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData64529 $_64529,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData7793 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData7793 $_7793,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData23841 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData23841 $_23841,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData21025 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData21025 $_21025,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData6001 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData6001 $_6001,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData55297 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData55297 $_55297,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData6257 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData6257 $_6257,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData8753 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData8753 $_8753,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData23825 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData23825 $_23825,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData15953 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData15953 $_15953,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData59137 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData59137 $_59137,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData7281 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData7281 $_7281,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData20817 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData20817 $_20817,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData5745 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData5745 $_5745,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData625 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData625 $_625,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData19713 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData19713 $_19713,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData57105 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData57105 $_57105,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData23297 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData23297 $_23297,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData57361 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData57361 $_57361,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData54785 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData54785 $_54785,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData2609 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData2609 $_2609,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData55889 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData55889 $_55889,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData56097 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData56097 $_56097,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData51473 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData51473 $_51473,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData65377 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData65377 $_65377,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData5489 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData5489 $_5489,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData53761 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData53761 $_53761,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData54545 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData54545 $_54545,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData51729 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData51729 $_51729,
+        /** @var CategoryWotBlitzResponseItemsWotPremiumTanksData4881 */
+        public readonly CategoryWotBlitzResponseItemsWotPremiumTanksData4881 $_4881,
     ) {
     }
 
@@ -8993,71 +8993,71 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotBlitzResponseItemsWotPremiumTanks5681::fromArray($data['5681']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks23313::fromArray($data['23313']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks15697::fromArray($data['15697']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks25361::fromArray($data['25361']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks12545::fromArray($data['12545']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks62737::fromArray($data['62737']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks18769::fromArray($data['18769']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks53025::fromArray($data['53025']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks20737::fromArray($data['20737']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks20481::fromArray($data['20481']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks18753::fromArray($data['18753']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks58881::fromArray($data['58881']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks19025::fromArray($data['19025']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks13345::fromArray($data['13345']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks2945::fromArray($data['2945']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks16193::fromArray($data['16193']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks19985::fromArray($data['19985']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks19489::fromArray($data['19489']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks20305::fromArray($data['20305']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks18241::fromArray($data['18241']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks21329::fromArray($data['21329']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks18513::fromArray($data['18513']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks16705::fromArray($data['16705']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks9073::fromArray($data['9073']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks12673::fromArray($data['12673']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks6785::fromArray($data['6785']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks21265::fromArray($data['21265']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks2849::fromArray($data['2849']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks20513::fromArray($data['20513']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks23057::fromArray($data['23057']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks64529::fromArray($data['64529']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks7793::fromArray($data['7793']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks23841::fromArray($data['23841']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks21025::fromArray($data['21025']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks6001::fromArray($data['6001']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks55297::fromArray($data['55297']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks6257::fromArray($data['6257']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks8753::fromArray($data['8753']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks23825::fromArray($data['23825']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks15953::fromArray($data['15953']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks59137::fromArray($data['59137']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks7281::fromArray($data['7281']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks20817::fromArray($data['20817']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks5745::fromArray($data['5745']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks625::fromArray($data['625']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks19713::fromArray($data['19713']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks57105::fromArray($data['57105']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks23297::fromArray($data['23297']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks57361::fromArray($data['57361']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks54785::fromArray($data['54785']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks2609::fromArray($data['2609']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks55889::fromArray($data['55889']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks56097::fromArray($data['56097']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks51473::fromArray($data['51473']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks65377::fromArray($data['65377']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks5489::fromArray($data['5489']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks53761::fromArray($data['53761']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks54545::fromArray($data['54545']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks51729::fromArray($data['51729']),
-            CategoryWotBlitzResponseItemsWotPremiumTanks4881::fromArray($data['4881']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData5681::fromArray($data['5681']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData23313::fromArray($data['23313']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData15697::fromArray($data['15697']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData25361::fromArray($data['25361']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData12545::fromArray($data['12545']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData62737::fromArray($data['62737']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData18769::fromArray($data['18769']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData53025::fromArray($data['53025']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData20737::fromArray($data['20737']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData20481::fromArray($data['20481']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData18753::fromArray($data['18753']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData58881::fromArray($data['58881']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData19025::fromArray($data['19025']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData13345::fromArray($data['13345']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData2945::fromArray($data['2945']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData16193::fromArray($data['16193']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData19985::fromArray($data['19985']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData19489::fromArray($data['19489']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData20305::fromArray($data['20305']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData18241::fromArray($data['18241']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData21329::fromArray($data['21329']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData18513::fromArray($data['18513']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData16705::fromArray($data['16705']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData9073::fromArray($data['9073']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData12673::fromArray($data['12673']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData6785::fromArray($data['6785']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData21265::fromArray($data['21265']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData2849::fromArray($data['2849']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData20513::fromArray($data['20513']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData23057::fromArray($data['23057']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData64529::fromArray($data['64529']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData7793::fromArray($data['7793']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData23841::fromArray($data['23841']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData21025::fromArray($data['21025']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData6001::fromArray($data['6001']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData55297::fromArray($data['55297']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData6257::fromArray($data['6257']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData8753::fromArray($data['8753']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData23825::fromArray($data['23825']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData15953::fromArray($data['15953']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData59137::fromArray($data['59137']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData7281::fromArray($data['7281']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData20817::fromArray($data['20817']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData5745::fromArray($data['5745']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData625::fromArray($data['625']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData19713::fromArray($data['19713']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData57105::fromArray($data['57105']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData23297::fromArray($data['23297']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData57361::fromArray($data['57361']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData54785::fromArray($data['54785']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData2609::fromArray($data['2609']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData55889::fromArray($data['55889']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData56097::fromArray($data['56097']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData51473::fromArray($data['51473']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData65377::fromArray($data['65377']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData5489::fromArray($data['5489']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData53761::fromArray($data['53761']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData54545::fromArray($data['54545']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData51729::fromArray($data['51729']),
+            CategoryWotBlitzResponseItemsWotPremiumTanksData4881::fromArray($data['4881']),
         );
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks5681
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData5681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9087,7 +9087,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks5681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks23313
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData23313
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9117,7 +9117,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks23313
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks15697
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData15697
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9147,7 +9147,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks15697
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks25361
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData25361
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9177,7 +9177,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks25361
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks12545
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData12545
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9207,7 +9207,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks12545
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks62737
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData62737
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9237,7 +9237,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks62737
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks18769
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData18769
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9267,7 +9267,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks18769
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks53025
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData53025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9297,7 +9297,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks53025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks20737
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData20737
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9327,7 +9327,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks20737
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks20481
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData20481
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9357,7 +9357,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks20481
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks18753
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData18753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9387,7 +9387,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks18753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks58881
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData58881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9417,7 +9417,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks58881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks19025
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData19025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9447,7 +9447,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks19025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks13345
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData13345
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9477,7 +9477,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks13345
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks2945
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData2945
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9507,7 +9507,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks2945
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks16193
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData16193
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9537,7 +9537,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks16193
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks19985
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData19985
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9567,7 +9567,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks19985
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks19489
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData19489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9597,7 +9597,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks19489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks20305
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData20305
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9627,7 +9627,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks20305
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks18241
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData18241
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9657,7 +9657,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks18241
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks21329
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData21329
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9687,7 +9687,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks21329
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks18513
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData18513
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9717,7 +9717,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks18513
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks16705
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData16705
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9747,7 +9747,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks16705
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks9073
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData9073
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9777,7 +9777,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks9073
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks12673
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData12673
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9807,7 +9807,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks12673
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks6785
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData6785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9837,7 +9837,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks6785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks21265
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData21265
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9867,7 +9867,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks21265
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks2849
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData2849
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9897,7 +9897,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks2849
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks20513
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData20513
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9927,7 +9927,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks20513
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks23057
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData23057
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9957,7 +9957,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks23057
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks64529
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData64529
 {
     public function __construct(
         public readonly int $tank_id,
@@ -9987,7 +9987,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks64529
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks7793
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData7793
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10017,7 +10017,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks7793
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks23841
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData23841
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10047,7 +10047,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks23841
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks21025
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData21025
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10077,7 +10077,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks21025
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks6001
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData6001
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10107,7 +10107,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks6001
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks55297
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData55297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10137,7 +10137,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks55297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks6257
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData6257
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10167,7 +10167,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks6257
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks8753
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData8753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10197,7 +10197,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks8753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks23825
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData23825
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10227,7 +10227,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks23825
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks15953
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData15953
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10257,7 +10257,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks15953
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks59137
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData59137
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10287,7 +10287,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks59137
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks7281
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData7281
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10317,7 +10317,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks7281
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks20817
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData20817
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10347,7 +10347,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks20817
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks5745
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData5745
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10377,7 +10377,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks5745
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks625
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData625
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10407,7 +10407,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks625
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks19713
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData19713
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10437,7 +10437,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks19713
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks57105
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData57105
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10467,7 +10467,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks57105
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks23297
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData23297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10497,7 +10497,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks23297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks57361
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData57361
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10527,7 +10527,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks57361
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks54785
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData54785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10557,7 +10557,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks54785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks2609
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData2609
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10587,7 +10587,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks2609
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks55889
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData55889
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10617,7 +10617,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks55889
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks56097
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData56097
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10647,7 +10647,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks56097
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks51473
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData51473
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10677,7 +10677,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks51473
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks65377
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData65377
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10707,7 +10707,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks65377
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks5489
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData5489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10737,7 +10737,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks5489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks53761
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData53761
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10767,7 +10767,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks53761
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks54545
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData54545
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10797,7 +10797,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks54545
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks51729
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData51729
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10827,7 +10827,7 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks51729
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotPremiumTanks4881
+final class CategoryWotBlitzResponseItemsWotPremiumTanksData4881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -10860,88 +10860,88 @@ final class CategoryWotBlitzResponseItemsWotPremiumTanks4881
 final class CategoryWotBlitzResponseItemsWotTopTanks
 {
     public function __construct(
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks5505 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks5505 $5505,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks13089 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks13089 $13089,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks13569 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks13569 $13569,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks4145 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks4145 $4145,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks10289 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks10289 $10289,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks3937 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks3937 $3937,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks3649 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks3649 $3649,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks18001 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks18001 $18001,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks6449 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks6449 $6449,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks15697 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks15697 $15697,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks12305 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks12305 $12305,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks4481 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks4481 $4481,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks6145 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks6145 $6145,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks7249 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks7249 $7249,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks5681 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks5681 $5681,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks58641 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks58641 $58641,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks16897 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks16897 $16897,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks14337 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks14337 $14337,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks9489 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks9489 $9489,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks385 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks385 $385,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks10785 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks10785 $10785,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks14609 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks14609 $14609,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks23313 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks23313 $23313,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks6929 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks6929 $6929,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks6209 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks6209 $6209,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks19537 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks19537 $19537,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks7297 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks7297 $7297,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks7169 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks7169 $7169,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks5425 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks5425 $5425,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks6753 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks6753 $6753,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks3681 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks3681 $3681,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks13185 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks13185 $13185,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks10369 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks10369 $10369,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks22817 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks22817 $22817,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks14881 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks14881 $14881,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks20257 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks20257 $20257,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks24321 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks24321 $24321,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks12049 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks12049 $12049,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks13825 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks13825 $13825,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks9297 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks9297 $9297,
-        /** @var CategoryWotBlitzResponseItemsWotTopTanks19217 */
-        public readonly CategoryWotBlitzResponseItemsWotTopTanks19217 $19217,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData5505 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData5505 $_5505,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData13089 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData13089 $_13089,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData13569 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData13569 $_13569,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData4145 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData4145 $_4145,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData10289 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData10289 $_10289,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData3937 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData3937 $_3937,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData3649 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData3649 $_3649,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData18001 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData18001 $_18001,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData6449 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData6449 $_6449,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData15697 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData15697 $_15697,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData12305 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData12305 $_12305,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData4481 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData4481 $_4481,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData6145 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData6145 $_6145,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData7249 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData7249 $_7249,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData5681 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData5681 $_5681,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData58641 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData58641 $_58641,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData16897 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData16897 $_16897,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData14337 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData14337 $_14337,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData9489 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData9489 $_9489,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData385 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData385 $_385,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData10785 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData10785 $_10785,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData14609 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData14609 $_14609,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData23313 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData23313 $_23313,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData6929 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData6929 $_6929,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData6209 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData6209 $_6209,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData19537 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData19537 $_19537,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData7297 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData7297 $_7297,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData7169 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData7169 $_7169,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData5425 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData5425 $_5425,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData6753 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData6753 $_6753,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData3681 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData3681 $_3681,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData13185 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData13185 $_13185,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData10369 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData10369 $_10369,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData22817 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData22817 $_22817,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData14881 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData14881 $_14881,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData20257 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData20257 $_20257,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData24321 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData24321 $_24321,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData12049 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData12049 $_12049,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData13825 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData13825 $_13825,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData9297 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData9297 $_9297,
+        /** @var CategoryWotBlitzResponseItemsWotTopTanksData19217 */
+        public readonly CategoryWotBlitzResponseItemsWotTopTanksData19217 $_19217,
     ) {
     }
 
@@ -10951,52 +10951,52 @@ final class CategoryWotBlitzResponseItemsWotTopTanks
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryWotBlitzResponseItemsWotTopTanks5505::fromArray($data['5505']),
-            CategoryWotBlitzResponseItemsWotTopTanks13089::fromArray($data['13089']),
-            CategoryWotBlitzResponseItemsWotTopTanks13569::fromArray($data['13569']),
-            CategoryWotBlitzResponseItemsWotTopTanks4145::fromArray($data['4145']),
-            CategoryWotBlitzResponseItemsWotTopTanks10289::fromArray($data['10289']),
-            CategoryWotBlitzResponseItemsWotTopTanks3937::fromArray($data['3937']),
-            CategoryWotBlitzResponseItemsWotTopTanks3649::fromArray($data['3649']),
-            CategoryWotBlitzResponseItemsWotTopTanks18001::fromArray($data['18001']),
-            CategoryWotBlitzResponseItemsWotTopTanks6449::fromArray($data['6449']),
-            CategoryWotBlitzResponseItemsWotTopTanks15697::fromArray($data['15697']),
-            CategoryWotBlitzResponseItemsWotTopTanks12305::fromArray($data['12305']),
-            CategoryWotBlitzResponseItemsWotTopTanks4481::fromArray($data['4481']),
-            CategoryWotBlitzResponseItemsWotTopTanks6145::fromArray($data['6145']),
-            CategoryWotBlitzResponseItemsWotTopTanks7249::fromArray($data['7249']),
-            CategoryWotBlitzResponseItemsWotTopTanks5681::fromArray($data['5681']),
-            CategoryWotBlitzResponseItemsWotTopTanks58641::fromArray($data['58641']),
-            CategoryWotBlitzResponseItemsWotTopTanks16897::fromArray($data['16897']),
-            CategoryWotBlitzResponseItemsWotTopTanks14337::fromArray($data['14337']),
-            CategoryWotBlitzResponseItemsWotTopTanks9489::fromArray($data['9489']),
-            CategoryWotBlitzResponseItemsWotTopTanks385::fromArray($data['385']),
-            CategoryWotBlitzResponseItemsWotTopTanks10785::fromArray($data['10785']),
-            CategoryWotBlitzResponseItemsWotTopTanks14609::fromArray($data['14609']),
-            CategoryWotBlitzResponseItemsWotTopTanks23313::fromArray($data['23313']),
-            CategoryWotBlitzResponseItemsWotTopTanks6929::fromArray($data['6929']),
-            CategoryWotBlitzResponseItemsWotTopTanks6209::fromArray($data['6209']),
-            CategoryWotBlitzResponseItemsWotTopTanks19537::fromArray($data['19537']),
-            CategoryWotBlitzResponseItemsWotTopTanks7297::fromArray($data['7297']),
-            CategoryWotBlitzResponseItemsWotTopTanks7169::fromArray($data['7169']),
-            CategoryWotBlitzResponseItemsWotTopTanks5425::fromArray($data['5425']),
-            CategoryWotBlitzResponseItemsWotTopTanks6753::fromArray($data['6753']),
-            CategoryWotBlitzResponseItemsWotTopTanks3681::fromArray($data['3681']),
-            CategoryWotBlitzResponseItemsWotTopTanks13185::fromArray($data['13185']),
-            CategoryWotBlitzResponseItemsWotTopTanks10369::fromArray($data['10369']),
-            CategoryWotBlitzResponseItemsWotTopTanks22817::fromArray($data['22817']),
-            CategoryWotBlitzResponseItemsWotTopTanks14881::fromArray($data['14881']),
-            CategoryWotBlitzResponseItemsWotTopTanks20257::fromArray($data['20257']),
-            CategoryWotBlitzResponseItemsWotTopTanks24321::fromArray($data['24321']),
-            CategoryWotBlitzResponseItemsWotTopTanks12049::fromArray($data['12049']),
-            CategoryWotBlitzResponseItemsWotTopTanks13825::fromArray($data['13825']),
-            CategoryWotBlitzResponseItemsWotTopTanks9297::fromArray($data['9297']),
-            CategoryWotBlitzResponseItemsWotTopTanks19217::fromArray($data['19217']),
+            CategoryWotBlitzResponseItemsWotTopTanksData5505::fromArray($data['5505']),
+            CategoryWotBlitzResponseItemsWotTopTanksData13089::fromArray($data['13089']),
+            CategoryWotBlitzResponseItemsWotTopTanksData13569::fromArray($data['13569']),
+            CategoryWotBlitzResponseItemsWotTopTanksData4145::fromArray($data['4145']),
+            CategoryWotBlitzResponseItemsWotTopTanksData10289::fromArray($data['10289']),
+            CategoryWotBlitzResponseItemsWotTopTanksData3937::fromArray($data['3937']),
+            CategoryWotBlitzResponseItemsWotTopTanksData3649::fromArray($data['3649']),
+            CategoryWotBlitzResponseItemsWotTopTanksData18001::fromArray($data['18001']),
+            CategoryWotBlitzResponseItemsWotTopTanksData6449::fromArray($data['6449']),
+            CategoryWotBlitzResponseItemsWotTopTanksData15697::fromArray($data['15697']),
+            CategoryWotBlitzResponseItemsWotTopTanksData12305::fromArray($data['12305']),
+            CategoryWotBlitzResponseItemsWotTopTanksData4481::fromArray($data['4481']),
+            CategoryWotBlitzResponseItemsWotTopTanksData6145::fromArray($data['6145']),
+            CategoryWotBlitzResponseItemsWotTopTanksData7249::fromArray($data['7249']),
+            CategoryWotBlitzResponseItemsWotTopTanksData5681::fromArray($data['5681']),
+            CategoryWotBlitzResponseItemsWotTopTanksData58641::fromArray($data['58641']),
+            CategoryWotBlitzResponseItemsWotTopTanksData16897::fromArray($data['16897']),
+            CategoryWotBlitzResponseItemsWotTopTanksData14337::fromArray($data['14337']),
+            CategoryWotBlitzResponseItemsWotTopTanksData9489::fromArray($data['9489']),
+            CategoryWotBlitzResponseItemsWotTopTanksData385::fromArray($data['385']),
+            CategoryWotBlitzResponseItemsWotTopTanksData10785::fromArray($data['10785']),
+            CategoryWotBlitzResponseItemsWotTopTanksData14609::fromArray($data['14609']),
+            CategoryWotBlitzResponseItemsWotTopTanksData23313::fromArray($data['23313']),
+            CategoryWotBlitzResponseItemsWotTopTanksData6929::fromArray($data['6929']),
+            CategoryWotBlitzResponseItemsWotTopTanksData6209::fromArray($data['6209']),
+            CategoryWotBlitzResponseItemsWotTopTanksData19537::fromArray($data['19537']),
+            CategoryWotBlitzResponseItemsWotTopTanksData7297::fromArray($data['7297']),
+            CategoryWotBlitzResponseItemsWotTopTanksData7169::fromArray($data['7169']),
+            CategoryWotBlitzResponseItemsWotTopTanksData5425::fromArray($data['5425']),
+            CategoryWotBlitzResponseItemsWotTopTanksData6753::fromArray($data['6753']),
+            CategoryWotBlitzResponseItemsWotTopTanksData3681::fromArray($data['3681']),
+            CategoryWotBlitzResponseItemsWotTopTanksData13185::fromArray($data['13185']),
+            CategoryWotBlitzResponseItemsWotTopTanksData10369::fromArray($data['10369']),
+            CategoryWotBlitzResponseItemsWotTopTanksData22817::fromArray($data['22817']),
+            CategoryWotBlitzResponseItemsWotTopTanksData14881::fromArray($data['14881']),
+            CategoryWotBlitzResponseItemsWotTopTanksData20257::fromArray($data['20257']),
+            CategoryWotBlitzResponseItemsWotTopTanksData24321::fromArray($data['24321']),
+            CategoryWotBlitzResponseItemsWotTopTanksData12049::fromArray($data['12049']),
+            CategoryWotBlitzResponseItemsWotTopTanksData13825::fromArray($data['13825']),
+            CategoryWotBlitzResponseItemsWotTopTanksData9297::fromArray($data['9297']),
+            CategoryWotBlitzResponseItemsWotTopTanksData19217::fromArray($data['19217']),
         );
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks5505
+final class CategoryWotBlitzResponseItemsWotTopTanksData5505
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11026,7 +11026,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks5505
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks13089
+final class CategoryWotBlitzResponseItemsWotTopTanksData13089
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11056,7 +11056,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks13089
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks13569
+final class CategoryWotBlitzResponseItemsWotTopTanksData13569
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11086,7 +11086,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks13569
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks4145
+final class CategoryWotBlitzResponseItemsWotTopTanksData4145
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11116,7 +11116,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks4145
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks10289
+final class CategoryWotBlitzResponseItemsWotTopTanksData10289
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11146,7 +11146,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks10289
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks3937
+final class CategoryWotBlitzResponseItemsWotTopTanksData3937
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11176,7 +11176,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks3937
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks3649
+final class CategoryWotBlitzResponseItemsWotTopTanksData3649
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11206,7 +11206,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks3649
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks18001
+final class CategoryWotBlitzResponseItemsWotTopTanksData18001
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11236,7 +11236,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks18001
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks6449
+final class CategoryWotBlitzResponseItemsWotTopTanksData6449
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11266,7 +11266,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks6449
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks15697
+final class CategoryWotBlitzResponseItemsWotTopTanksData15697
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11296,7 +11296,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks15697
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks12305
+final class CategoryWotBlitzResponseItemsWotTopTanksData12305
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11326,7 +11326,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks12305
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks4481
+final class CategoryWotBlitzResponseItemsWotTopTanksData4481
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11356,7 +11356,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks4481
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks6145
+final class CategoryWotBlitzResponseItemsWotTopTanksData6145
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11386,7 +11386,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks6145
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks7249
+final class CategoryWotBlitzResponseItemsWotTopTanksData7249
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11416,7 +11416,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks7249
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks5681
+final class CategoryWotBlitzResponseItemsWotTopTanksData5681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11446,7 +11446,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks5681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks58641
+final class CategoryWotBlitzResponseItemsWotTopTanksData58641
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11476,7 +11476,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks58641
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks16897
+final class CategoryWotBlitzResponseItemsWotTopTanksData16897
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11506,7 +11506,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks16897
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks14337
+final class CategoryWotBlitzResponseItemsWotTopTanksData14337
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11536,7 +11536,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks14337
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks9489
+final class CategoryWotBlitzResponseItemsWotTopTanksData9489
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11566,7 +11566,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks9489
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks385
+final class CategoryWotBlitzResponseItemsWotTopTanksData385
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11596,7 +11596,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks385
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks10785
+final class CategoryWotBlitzResponseItemsWotTopTanksData10785
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11626,7 +11626,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks10785
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks14609
+final class CategoryWotBlitzResponseItemsWotTopTanksData14609
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11656,7 +11656,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks14609
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks23313
+final class CategoryWotBlitzResponseItemsWotTopTanksData23313
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11686,7 +11686,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks23313
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks6929
+final class CategoryWotBlitzResponseItemsWotTopTanksData6929
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11716,7 +11716,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks6929
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks6209
+final class CategoryWotBlitzResponseItemsWotTopTanksData6209
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11746,7 +11746,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks6209
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks19537
+final class CategoryWotBlitzResponseItemsWotTopTanksData19537
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11776,7 +11776,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks19537
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks7297
+final class CategoryWotBlitzResponseItemsWotTopTanksData7297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11806,7 +11806,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks7297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks7169
+final class CategoryWotBlitzResponseItemsWotTopTanksData7169
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11836,7 +11836,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks7169
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks5425
+final class CategoryWotBlitzResponseItemsWotTopTanksData5425
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11866,7 +11866,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks5425
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks6753
+final class CategoryWotBlitzResponseItemsWotTopTanksData6753
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11896,7 +11896,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks6753
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks3681
+final class CategoryWotBlitzResponseItemsWotTopTanksData3681
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11926,7 +11926,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks3681
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks13185
+final class CategoryWotBlitzResponseItemsWotTopTanksData13185
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11956,7 +11956,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks13185
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks10369
+final class CategoryWotBlitzResponseItemsWotTopTanksData10369
 {
     public function __construct(
         public readonly int $tank_id,
@@ -11986,7 +11986,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks10369
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks22817
+final class CategoryWotBlitzResponseItemsWotTopTanksData22817
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12016,7 +12016,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks22817
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks14881
+final class CategoryWotBlitzResponseItemsWotTopTanksData14881
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12046,7 +12046,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks14881
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks20257
+final class CategoryWotBlitzResponseItemsWotTopTanksData20257
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12076,7 +12076,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks20257
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks24321
+final class CategoryWotBlitzResponseItemsWotTopTanksData24321
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12106,7 +12106,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks24321
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks12049
+final class CategoryWotBlitzResponseItemsWotTopTanksData12049
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12136,7 +12136,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks12049
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks13825
+final class CategoryWotBlitzResponseItemsWotTopTanksData13825
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12166,7 +12166,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks13825
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks9297
+final class CategoryWotBlitzResponseItemsWotTopTanksData9297
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12196,7 +12196,7 @@ final class CategoryWotBlitzResponseItemsWotTopTanks9297
     }
 }
 
-final class CategoryWotBlitzResponseItemsWotTopTanks19217
+final class CategoryWotBlitzResponseItemsWotTopTanksData19217
 {
     public function __construct(
         public readonly int $tank_id,
@@ -12309,7 +12309,7 @@ final class CategoryGiftsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -12573,7 +12573,7 @@ final class CategoryEpicGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -12746,7 +12746,7 @@ final class CategoryEpicGamesResponseItems
             $data['canResellItemAfterPurchase'],
             $data['egBalance'],
             $data['egGameCount'],
-            array_map(static fn(array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), $data['egTransactions']),
+            array_map(static fn (array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), $data['egTransactions']),
             $data['canViewAccountLink'],
             $data['accountLinks'],
             $data['emailLoginUrl'],
@@ -12769,8 +12769,8 @@ final class CategoryEpicGamesResponseItems
 final class CategoryEpicGamesResponseItemsEgGames
 {
     public function __construct(
-        /** @var CategoryEpicGamesResponseItemsEgGames0 */
-        public readonly CategoryEpicGamesResponseItemsEgGames0 $0,
+        /** @var CategoryEpicGamesResponseItemsEgGamesData0 */
+        public readonly CategoryEpicGamesResponseItemsEgGamesData0 $_0,
     ) {
     }
 
@@ -12780,12 +12780,12 @@ final class CategoryEpicGamesResponseItemsEgGames
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryEpicGamesResponseItemsEgGames0::fromArray($data['0']),
+            CategoryEpicGamesResponseItemsEgGamesData0::fromArray($data['0']),
         );
     }
 }
 
-final class CategoryEpicGamesResponseItemsEgGames0
+final class CategoryEpicGamesResponseItemsEgGamesData0
 {
     public function __construct(
         public readonly int $internal_game_id,
@@ -12952,7 +12952,7 @@ final class CategoryEscapeFromTarkovResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13260,7 +13260,7 @@ final class CategorySocialClubResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13385,7 +13385,7 @@ final class CategorySocialClubResponseItems
             $data['socialclub_level'],
             $data['socialclub_cash'],
             $data['socialclub_bank_cash'],
-            array_map(static fn(array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), $data['socialclub_games']),
+            array_map(static fn (array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), $data['socialclub_games']),
             $data['socialclub_last_activity'],
             $data['socialclub_has_gtav'],
             $data['socialclub_has_rdr2'],
@@ -13579,7 +13579,7 @@ final class CategoryUplayResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13769,7 +13769,7 @@ final class CategoryUplayResponseItems
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['r6Skins'],
-            array_map(static fn(array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), $data['r6Operators']),
+            array_map(static fn (array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), $data['r6Operators']),
             $data['canViewAccountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -13792,7 +13792,7 @@ final class CategoryUplayResponseItemsUplayGames
 {
     public function __construct(
         /** @var CategoryUplayResponseItemsUplayGamesFfffffffFfffFfffFfffFfffffffffff */
-        public readonly CategoryUplayResponseItemsUplayGamesFfffffffFfffFfffFfffFfffffffffff $ffffffffFfffFfffFfffFfffffffffff,
+        public readonly CategoryUplayResponseItemsUplayGamesFfffffffFfffFfffFfffFfffffffffff $ffffffff_ffff_ffff_ffff_ffffffffffff,
     ) {
     }
 
@@ -13964,7 +13964,7 @@ final class CategoryDiscordResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14252,7 +14252,7 @@ final class CategoryTikTokResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14426,7 +14426,7 @@ final class CategoryTikTokResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['canChangePassword'],
             $data['itemOriginPhrase'],
@@ -14573,7 +14573,7 @@ final class CategoryInstagramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14730,7 +14730,7 @@ final class CategoryInstagramResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -14876,7 +14876,7 @@ final class CategoryBattleNetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15047,7 +15047,7 @@ final class CategoryBattleNetResponseItems
             $data['battlenetBans'],
             CategoryBattleNetResponseItemsBattlenetGames::fromArray($data['battlenetGames']),
             $data['hasOverwatch'],
-            array_map(static fn(array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), $data['battlenetTransactions']),
+            array_map(static fn (array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), $data['battlenetTransactions']),
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
             $data['accountLinks'],
@@ -15125,8 +15125,8 @@ final class CategoryBattleNetResponseItemsBumpSettings
 final class CategoryBattleNetResponseItemsBattlenetGames
 {
     public function __construct(
-        /** @var CategoryBattleNetResponseItemsBattlenetGames17459 */
-        public readonly CategoryBattleNetResponseItemsBattlenetGames17459 $17459,
+        /** @var CategoryBattleNetResponseItemsBattlenetGamesData17459 */
+        public readonly CategoryBattleNetResponseItemsBattlenetGamesData17459 $_17459,
     ) {
     }
 
@@ -15136,12 +15136,12 @@ final class CategoryBattleNetResponseItemsBattlenetGames
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryBattleNetResponseItemsBattlenetGames17459::fromArray($data['17459']),
+            CategoryBattleNetResponseItemsBattlenetGamesData17459::fromArray($data['17459']),
         );
     }
 }
 
-final class CategoryBattleNetResponseItemsBattlenetGames17459
+final class CategoryBattleNetResponseItemsBattlenetGamesData17459
 {
     public function __construct(
         public readonly int $internal_game_id,
@@ -15280,7 +15280,7 @@ final class CategoryChatGPTResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15581,7 +15581,7 @@ final class CategoryVpnResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15847,7 +15847,7 @@ final class CategoryRobloxResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16037,10 +16037,10 @@ final class CategoryRobloxResponseItems
             $data['canResellItemAfterPurchase'],
             $data['robloxLinkedAccounts'],
             $data['creditBalance'],
-            array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), $data['robloxGameDonations']),
-            array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), $data['robloxGameDonationsDetails']),
+            array_map(static fn (array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), $data['robloxGameDonations']),
+            array_map(static fn (array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), $data['robloxGameDonationsDetails']),
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -16232,7 +16232,7 @@ final class CategoryWarfaceResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16395,7 +16395,7 @@ final class CategoryWarfaceResponseItems
             $data['canResellItemAfterPurchase'],
             $data['isSmallExf'],
             $data['account_last_activity'],
-            array_map(static fn(array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), $data['wf_servers']),
+            array_map(static fn (array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), $data['wf_servers']),
             $data['domain'],
             $data['canViewAccountLink'],
             $data['canChangePassword'],
@@ -16543,7 +16543,7 @@ final class CategoryMinecraftResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16730,7 +16730,7 @@ final class CategoryMinecraftResponseItems
             $data['canResellItemAfterPurchase'],
             $data['minecraftHasPaidLicense'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -16876,7 +16876,7 @@ final class CategoryHytaleResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -17212,8 +17212,8 @@ final class CategoryListResponseCategoryLinks
     public function __construct(
         public readonly string $permalink,
         public readonly string $detail,
-        public readonly string $subCategories,
-        public readonly string $subForums,
+        public readonly string $sub_categories,
+        public readonly string $sub_forums,
     ) {
     }
 
@@ -17274,7 +17274,7 @@ final class CategoryParamsResponse
     {
         return new self(
             isset($data['category']) && is_array($data['category']) ? CategoryParamsResponseCategory::fromArray($data['category']) : null,
-            isset($data['params']) && is_array($data['params']) ? array_map(static fn(array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
+            isset($data['params']) && is_array($data['params']) ? array_map(static fn (array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
             isset($data['base_params']) && is_array($data['base_params']) ? CategoryParamsResponseBaseParams::fromArray($data['base_params']) : null,
             isset($data['system_info']) && is_array($data['system_info']) ? CategoryParamsResponseSystemInfo::fromArray($data['system_info']) : null,
         );
@@ -17395,8 +17395,8 @@ final class CategoryParamsResponseParams
 final class CategoryParamsResponseBaseParams
 {
     public function __construct(
-        /** @var CategoryParamsResponseBaseParams0 */
-        public readonly CategoryParamsResponseBaseParams0 $0,
+        /** @var CategoryParamsResponseBaseParamsData0 */
+        public readonly CategoryParamsResponseBaseParamsData0 $_0,
     ) {
     }
 
@@ -17406,12 +17406,12 @@ final class CategoryParamsResponseBaseParams
     public static function fromArray(array $data): self
     {
         return new self(
-            CategoryParamsResponseBaseParams0::fromArray($data['0']),
+            CategoryParamsResponseBaseParamsData0::fromArray($data['0']),
         );
     }
 }
 
-final class CategoryParamsResponseBaseParams0
+final class CategoryParamsResponseBaseParamsData0
 {
     public function __construct(
         public readonly string $name,
@@ -17471,7 +17471,7 @@ final class CategoryGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['games']) && is_array($data['games']) ? array_map(static fn(array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
+            isset($data['games']) && is_array($data['games']) ? array_map(static fn (array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
             isset($data['system_info']) && is_array($data['system_info']) ? CategoryGamesResponseSystemInfo::fromArray($data['system_info']) : null,
         );
     }
@@ -17553,14 +17553,14 @@ final class ListUserResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ListUserResponseItems => ListUserResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): ListUserResponseItems => ListUserResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): ListUserResponseStickyItems => ListUserResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): ListUserResponseStickyItems => ListUserResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListUserResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -17946,14 +17946,14 @@ final class ListOrdersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ListOrdersResponseItems => ListOrdersResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): ListOrdersResponseItems => ListOrdersResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): ListOrdersResponseStickyItems => ListOrdersResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): ListOrdersResponseStickyItems => ListOrdersResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListOrdersResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -18726,14 +18726,14 @@ final class ListFavoritesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ListFavoritesResponseItems => ListFavoritesResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): ListFavoritesResponseItems => ListFavoritesResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): ListFavoritesResponseStickyItems => ListFavoritesResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): ListFavoritesResponseStickyItems => ListFavoritesResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListFavoritesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -19119,14 +19119,14 @@ final class ListViewedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ListViewedResponseItems => ListViewedResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): ListViewedResponseItems => ListViewedResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): ListViewedResponseStickyItems => ListViewedResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): ListViewedResponseStickyItems => ListViewedResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListViewedResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -19739,7 +19739,7 @@ final class ManagingGetResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingGetResponseItemAccountLinks => ManagingGetResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingGetResponseItemAccountLinks => ManagingGetResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -19755,7 +19755,7 @@ final class ManagingGetResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingGetResponseItemExtraPrices => ManagingGetResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingGetResponseItemExtraPrices => ManagingGetResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingGetResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -19925,8 +19925,8 @@ final class ManagingGetResponseItemAccountLinks
 final class ManagingGetResponseItemTags
 {
     public function __construct(
-        /** @var ManagingGetResponseItemTags1234567890 */
-        public readonly ManagingGetResponseItemTags1234567890 $1234567890,
+        /** @var ManagingGetResponseItemTagsData1234567890 */
+        public readonly ManagingGetResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -19936,12 +19936,12 @@ final class ManagingGetResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingGetResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingGetResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingGetResponseItemTags1234567890
+final class ManagingGetResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -20312,7 +20312,7 @@ final class ManagingCreateClaimResponseThreadFirstPost
             $data['signature_plain_text'],
             $data['post_like_count'],
             $data['post_attachment_count'],
-            array_map(static fn(array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), $data['like_users']),
+            array_map(static fn (array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), $data['like_users']),
             $data['user_is_ignored'],
             $data['post_is_published'],
             $data['post_is_deleted'],
@@ -20507,7 +20507,7 @@ final class ManagingCreateClaimResponseThreadForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn (array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             ManagingCreateClaimResponseThreadForumLinks::fromArray($data['links']),
@@ -20533,7 +20533,7 @@ final class ManagingCreateClaimResponseThreadForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn (array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -20563,8 +20563,8 @@ final class ManagingCreateClaimResponseThreadForumLinks
     public function __construct(
         public readonly string $permalink,
         public readonly string $detail,
-        public readonly string $subCategories,
-        public readonly string $subForums,
+        public readonly string $sub_categories,
+        public readonly string $sub_forums,
         public readonly string $threads,
         public readonly string $followers,
     ) {
@@ -20654,7 +20654,7 @@ final class ManagingBulkGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ManagingBulkGetResponseItems => ManagingBulkGetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): ManagingBulkGetResponseItems => ManagingBulkGetResponseItems::fromArray($item), $data['items']),
             $data['left_item_id'],
             ManagingBulkGetResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -20664,8 +20664,8 @@ final class ManagingBulkGetResponse
 final class ManagingBulkGetResponseItems
 {
     public function __construct(
-        /** @var ManagingBulkGetResponseItems0|null */
-        public readonly ?ManagingBulkGetResponseItems0 $0,
+        /** @var ManagingBulkGetResponseItemsData0|null */
+        public readonly ?ManagingBulkGetResponseItemsData0 $_0,
     ) {
     }
 
@@ -20675,12 +20675,12 @@ final class ManagingBulkGetResponseItems
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['0']) && is_array($data['0']) ? ManagingBulkGetResponseItems0::fromArray($data['0']) : null,
+            isset($data['0']) && is_array($data['0']) ? ManagingBulkGetResponseItemsData0::fromArray($data['0']) : null,
         );
     }
 }
 
-final class ManagingBulkGetResponseItems0
+final class ManagingBulkGetResponseItemsData0
 {
     public function __construct(
         public readonly int $item_id,
@@ -20730,21 +20730,21 @@ final class ManagingBulkGetResponseItems0
         public readonly mixed $cart_price,
         public readonly bool $canResellItem,
         public readonly float $priceWithSellerFee,
-        /** @var ManagingBulkGetResponseItems0Guarantee */
-        public readonly ManagingBulkGetResponseItems0Guarantee $guarantee,
+        /** @var ManagingBulkGetResponseItemsData0Guarantee */
+        public readonly ManagingBulkGetResponseItemsData0Guarantee $guarantee,
         public readonly bool $canViewLoginData,
         public readonly bool $canUpdateItemStats,
         public readonly bool $canReportItem,
         public readonly bool $canViewItemViews,
-        /** @var ManagingBulkGetResponseItems0LoginData */
-        public readonly ManagingBulkGetResponseItems0LoginData $loginData,
+        /** @var ManagingBulkGetResponseItemsData0LoginData */
+        public readonly ManagingBulkGetResponseItemsData0LoginData $loginData,
         public readonly bool $canViewEmailLoginData,
-        /** @var ManagingBulkGetResponseItems0CopyFormatData */
-        public readonly ManagingBulkGetResponseItems0CopyFormatData $copyFormatData,
+        /** @var ManagingBulkGetResponseItemsData0CopyFormatData */
+        public readonly ManagingBulkGetResponseItemsData0CopyFormatData $copyFormatData,
         public readonly bool $showGetEmailCodeButton,
         public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingBulkGetResponseItems0Buyer */
-        public readonly ManagingBulkGetResponseItems0Buyer $buyer,
+        /** @var ManagingBulkGetResponseItemsData0Buyer */
+        public readonly ManagingBulkGetResponseItemsData0Buyer $buyer,
         public readonly bool $isPersonalAccount,
         public readonly int $rub_price,
         public readonly string $price_currency,
@@ -20754,7 +20754,7 @@ final class ManagingBulkGetResponseItems0
         public readonly bool $isSmallExf,
         public readonly int $account_last_activity,
         public readonly bool $canViewAccountLink,
-        /** @var list<ManagingBulkGetResponseItems0AccountLinks> */
+        /** @var list<ManagingBulkGetResponseItemsData0AccountLinks> */
         public readonly array $accountLinks,
         public readonly string $accountLink,
         /** @var list<string> */
@@ -20765,20 +20765,20 @@ final class ManagingBulkGetResponseItems0
         public readonly string $itemOriginPhrase,
         public readonly bool $visitorIsAuthor,
         public readonly bool $canAskDiscount,
-        /** @var ManagingBulkGetResponseItems0Tags */
-        public readonly ManagingBulkGetResponseItems0Tags $tags,
-        /** @var ManagingBulkGetResponseItems0CustomFields */
-        public readonly ManagingBulkGetResponseItems0CustomFields $customFields,
+        /** @var ManagingBulkGetResponseItemsData0Tags */
+        public readonly ManagingBulkGetResponseItemsData0Tags $tags,
+        /** @var ManagingBulkGetResponseItemsData0CustomFields */
+        public readonly ManagingBulkGetResponseItemsData0CustomFields $customFields,
         public readonly array $externalAuth,
         public readonly bool $isTrusted,
         public readonly bool $isBirthdayToday,
         public readonly bool $isIgnored,
         public readonly int $deposit,
-        /** @var list<ManagingBulkGetResponseItems0ExtraPrices> */
+        /** @var list<ManagingBulkGetResponseItemsData0ExtraPrices> */
         public readonly array $extraPrices,
         public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingBulkGetResponseItems0BumpSettings */
-        public readonly ManagingBulkGetResponseItems0BumpSettings $bumpSettings,
+        /** @var ManagingBulkGetResponseItemsData0BumpSettings */
+        public readonly ManagingBulkGetResponseItemsData0BumpSettings $bumpSettings,
         public readonly bool $canCheckGuarantee,
         public readonly bool $canShareItem,
         public readonly bool $canCheckAiPrice,
@@ -20792,8 +20792,8 @@ final class ManagingBulkGetResponseItems0
         public readonly string $descriptionEnHtml,
         public readonly string $descriptionPlain,
         public readonly string $descriptionEnPlain,
-        /** @var ManagingBulkGetResponseItems0Seller */
-        public readonly ManagingBulkGetResponseItems0Seller $seller,
+        /** @var ManagingBulkGetResponseItemsData0Seller */
+        public readonly ManagingBulkGetResponseItemsData0Seller $seller,
     ) {
     }
 
@@ -20850,17 +20850,17 @@ final class ManagingBulkGetResponseItems0
             $data['cart_price'],
             $data['canResellItem'],
             $data['priceWithSellerFee'],
-            ManagingBulkGetResponseItems0Guarantee::fromArray($data['guarantee']),
+            ManagingBulkGetResponseItemsData0Guarantee::fromArray($data['guarantee']),
             $data['canViewLoginData'],
             $data['canUpdateItemStats'],
             $data['canReportItem'],
             $data['canViewItemViews'],
-            ManagingBulkGetResponseItems0LoginData::fromArray($data['loginData']),
+            ManagingBulkGetResponseItemsData0LoginData::fromArray($data['loginData']),
             $data['canViewEmailLoginData'],
-            ManagingBulkGetResponseItems0CopyFormatData::fromArray($data['copyFormatData']),
+            ManagingBulkGetResponseItemsData0CopyFormatData::fromArray($data['copyFormatData']),
             $data['showGetEmailCodeButton'],
             $data['getEmailCodeDisplayLogin'],
-            ManagingBulkGetResponseItems0Buyer::fromArray($data['buyer']),
+            ManagingBulkGetResponseItemsData0Buyer::fromArray($data['buyer']),
             $data['isPersonalAccount'],
             $data['rub_price'],
             $data['price_currency'],
@@ -20870,7 +20870,7 @@ final class ManagingBulkGetResponseItems0
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingBulkGetResponseItems0AccountLinks => ManagingBulkGetResponseItems0AccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingBulkGetResponseItemsData0AccountLinks => ManagingBulkGetResponseItemsData0AccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -20879,16 +20879,16 @@ final class ManagingBulkGetResponseItems0
             $data['itemOriginPhrase'],
             $data['visitorIsAuthor'],
             $data['canAskDiscount'],
-            ManagingBulkGetResponseItems0Tags::fromArray($data['tags']),
-            ManagingBulkGetResponseItems0CustomFields::fromArray($data['customFields']),
+            ManagingBulkGetResponseItemsData0Tags::fromArray($data['tags']),
+            ManagingBulkGetResponseItemsData0CustomFields::fromArray($data['customFields']),
             $data['externalAuth'],
             $data['isTrusted'],
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingBulkGetResponseItems0ExtraPrices => ManagingBulkGetResponseItems0ExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingBulkGetResponseItemsData0ExtraPrices => ManagingBulkGetResponseItemsData0ExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
-            ManagingBulkGetResponseItems0BumpSettings::fromArray($data['bumpSettings']),
+            ManagingBulkGetResponseItemsData0BumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
             $data['canShareItem'],
             $data['canCheckAiPrice'],
@@ -20902,12 +20902,12 @@ final class ManagingBulkGetResponseItems0
             $data['descriptionEnHtml'],
             $data['descriptionPlain'],
             $data['descriptionEnPlain'],
-            ManagingBulkGetResponseItems0Seller::fromArray($data['seller']),
+            ManagingBulkGetResponseItemsData0Seller::fromArray($data['seller']),
         );
     }
 }
 
-final class ManagingBulkGetResponseItems0Guarantee
+final class ManagingBulkGetResponseItemsData0Guarantee
 {
     public function __construct(
         public readonly int $duration,
@@ -20943,7 +20943,7 @@ final class ManagingBulkGetResponseItems0Guarantee
     }
 }
 
-final class ManagingBulkGetResponseItems0LoginData
+final class ManagingBulkGetResponseItemsData0LoginData
 {
     public function __construct(
         public readonly string $raw,
@@ -20973,7 +20973,7 @@ final class ManagingBulkGetResponseItems0LoginData
     }
 }
 
-final class ManagingBulkGetResponseItems0CopyFormatData
+final class ManagingBulkGetResponseItemsData0CopyFormatData
 {
     public function __construct(
         public readonly string $title_link,
@@ -20995,7 +20995,7 @@ final class ManagingBulkGetResponseItems0CopyFormatData
     }
 }
 
-final class ManagingBulkGetResponseItems0Buyer
+final class ManagingBulkGetResponseItemsData0Buyer
 {
     public function __construct(
         public readonly int $user_id,
@@ -21031,7 +21031,7 @@ final class ManagingBulkGetResponseItems0Buyer
     }
 }
 
-final class ManagingBulkGetResponseItems0AccountLinks
+final class ManagingBulkGetResponseItemsData0AccountLinks
 {
     public function __construct(
         public readonly string $link,
@@ -21053,11 +21053,11 @@ final class ManagingBulkGetResponseItems0AccountLinks
     }
 }
 
-final class ManagingBulkGetResponseItems0Tags
+final class ManagingBulkGetResponseItemsData0Tags
 {
     public function __construct(
-        /** @var ManagingBulkGetResponseItems0Tags1234567890 */
-        public readonly ManagingBulkGetResponseItems0Tags1234567890 $1234567890,
+        /** @var ManagingBulkGetResponseItemsData0TagsData1234567890 */
+        public readonly ManagingBulkGetResponseItemsData0TagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -21067,12 +21067,12 @@ final class ManagingBulkGetResponseItems0Tags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingBulkGetResponseItems0Tags1234567890::fromArray($data['1234567890']),
+            ManagingBulkGetResponseItemsData0TagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingBulkGetResponseItems0Tags1234567890
+final class ManagingBulkGetResponseItemsData0TagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -21098,7 +21098,7 @@ final class ManagingBulkGetResponseItems0Tags1234567890
     }
 }
 
-final class ManagingBulkGetResponseItems0CustomFields
+final class ManagingBulkGetResponseItemsData0CustomFields
 {
     public function __construct(
         public readonly string $_4,
@@ -21134,7 +21134,7 @@ final class ManagingBulkGetResponseItems0CustomFields
     }
 }
 
-final class ManagingBulkGetResponseItems0ExtraPrices
+final class ManagingBulkGetResponseItemsData0ExtraPrices
 {
     public function __construct(
         public readonly string $currency,
@@ -21156,7 +21156,7 @@ final class ManagingBulkGetResponseItems0ExtraPrices
     }
 }
 
-final class ManagingBulkGetResponseItems0BumpSettings
+final class ManagingBulkGetResponseItemsData0BumpSettings
 {
     public function __construct(
         public readonly bool $canBumpItem,
@@ -21182,7 +21182,7 @@ final class ManagingBulkGetResponseItems0BumpSettings
     }
 }
 
-final class ManagingBulkGetResponseItems0Seller
+final class ManagingBulkGetResponseItemsData0Seller
 {
     public function __construct(
         public readonly int $user_id,
@@ -21197,8 +21197,8 @@ final class ManagingBulkGetResponseItems0Seller
         public readonly int $effective_last_activity,
         public readonly mixed $restore_percents,
         public readonly bool $isOnline,
-        /** @var ManagingBulkGetResponseItems0SellerContacts */
-        public readonly ManagingBulkGetResponseItems0SellerContacts $contacts,
+        /** @var ManagingBulkGetResponseItemsData0SellerContacts */
+        public readonly ManagingBulkGetResponseItemsData0SellerContacts $contacts,
     ) {
     }
 
@@ -21220,12 +21220,12 @@ final class ManagingBulkGetResponseItems0Seller
             $data['effective_last_activity'],
             $data['restore_percents'],
             $data['isOnline'],
-            ManagingBulkGetResponseItems0SellerContacts::fromArray($data['contacts']),
+            ManagingBulkGetResponseItemsData0SellerContacts::fromArray($data['contacts']),
         );
     }
 }
 
-final class ManagingBulkGetResponseItems0SellerContacts
+final class ManagingBulkGetResponseItemsData0SellerContacts
 {
     public function __construct(
         public readonly string $ban_reason,
@@ -21335,8 +21335,8 @@ final class ManagingSteamInventoryValueResponseData
 final class ManagingSteamInventoryValueResponseDataItems
 {
     public function __construct(
-        /** @var ManagingSteamInventoryValueResponseDataItems0|null */
-        public readonly ?ManagingSteamInventoryValueResponseDataItems0 $0,
+        /** @var ManagingSteamInventoryValueResponseDataItemsData0|null */
+        public readonly ?ManagingSteamInventoryValueResponseDataItemsData0 $_0,
     ) {
     }
 
@@ -21346,12 +21346,12 @@ final class ManagingSteamInventoryValueResponseDataItems
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['0']) && is_array($data['0']) ? ManagingSteamInventoryValueResponseDataItems0::fromArray($data['0']) : null,
+            isset($data['0']) && is_array($data['0']) ? ManagingSteamInventoryValueResponseDataItemsData0::fromArray($data['0']) : null,
         );
     }
 }
 
-final class ManagingSteamInventoryValueResponseDataItems0
+final class ManagingSteamInventoryValueResponseDataItemsData0
 {
     public function __construct(
         public readonly string $classid,
@@ -21364,8 +21364,8 @@ final class ManagingSteamInventoryValueResponseDataItems0
         public readonly string $type,
         public readonly string $market_hash_name,
         public readonly mixed $fraudwarnings,
-        /** @var ManagingSteamInventoryValueResponseDataItems0Stickers */
-        public readonly ManagingSteamInventoryValueResponseDataItems0Stickers $stickers,
+        /** @var ManagingSteamInventoryValueResponseDataItemsData0Stickers */
+        public readonly ManagingSteamInventoryValueResponseDataItemsData0Stickers $stickers,
     ) {
     }
 
@@ -21385,12 +21385,12 @@ final class ManagingSteamInventoryValueResponseDataItems0
             $data['type'],
             $data['market_hash_name'],
             $data['fraudwarnings'],
-            ManagingSteamInventoryValueResponseDataItems0Stickers::fromArray($data['stickers']),
+            ManagingSteamInventoryValueResponseDataItemsData0Stickers::fromArray($data['stickers']),
         );
     }
 }
 
-final class ManagingSteamInventoryValueResponseDataItems0Stickers
+final class ManagingSteamInventoryValueResponseDataItemsData0Stickers
 {
     public function __construct(
         public readonly int $stickerCount,
@@ -21505,8 +21505,8 @@ final class ManagingSteamValueResponseData
 final class ManagingSteamValueResponseDataItems
 {
     public function __construct(
-        /** @var ManagingSteamValueResponseDataItems0|null */
-        public readonly ?ManagingSteamValueResponseDataItems0 $0,
+        /** @var ManagingSteamValueResponseDataItemsData0|null */
+        public readonly ?ManagingSteamValueResponseDataItemsData0 $_0,
     ) {
     }
 
@@ -21516,12 +21516,12 @@ final class ManagingSteamValueResponseDataItems
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['0']) && is_array($data['0']) ? ManagingSteamValueResponseDataItems0::fromArray($data['0']) : null,
+            isset($data['0']) && is_array($data['0']) ? ManagingSteamValueResponseDataItemsData0::fromArray($data['0']) : null,
         );
     }
 }
 
-final class ManagingSteamValueResponseDataItems0
+final class ManagingSteamValueResponseDataItemsData0
 {
     public function __construct(
         public readonly string $classid,
@@ -21534,8 +21534,8 @@ final class ManagingSteamValueResponseDataItems0
         public readonly string $type,
         public readonly string $market_hash_name,
         public readonly mixed $fraudwarnings,
-        /** @var ManagingSteamValueResponseDataItems0Stickers */
-        public readonly ManagingSteamValueResponseDataItems0Stickers $stickers,
+        /** @var ManagingSteamValueResponseDataItemsData0Stickers */
+        public readonly ManagingSteamValueResponseDataItemsData0Stickers $stickers,
     ) {
     }
 
@@ -21555,12 +21555,12 @@ final class ManagingSteamValueResponseDataItems0
             $data['type'],
             $data['market_hash_name'],
             $data['fraudwarnings'],
-            ManagingSteamValueResponseDataItems0Stickers::fromArray($data['stickers']),
+            ManagingSteamValueResponseDataItemsData0Stickers::fromArray($data['stickers']),
         );
     }
 }
 
-final class ManagingSteamValueResponseDataItems0Stickers
+final class ManagingSteamValueResponseDataItemsData0Stickers
 {
     public function __construct(
         public readonly int $stickerCount,
@@ -21997,7 +21997,7 @@ final class ManagingSteamUpdateValueResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemAccountLinks => ManagingSteamUpdateValueResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingSteamUpdateValueResponseItemAccountLinks => ManagingSteamUpdateValueResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -22013,7 +22013,7 @@ final class ManagingSteamUpdateValueResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemExtraPrices => ManagingSteamUpdateValueResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingSteamUpdateValueResponseItemExtraPrices => ManagingSteamUpdateValueResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamUpdateValueResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -22183,8 +22183,8 @@ final class ManagingSteamUpdateValueResponseItemAccountLinks
 final class ManagingSteamUpdateValueResponseItemTags
 {
     public function __construct(
-        /** @var ManagingSteamUpdateValueResponseItemTags1234567890 */
-        public readonly ManagingSteamUpdateValueResponseItemTags1234567890 $1234567890,
+        /** @var ManagingSteamUpdateValueResponseItemTagsData1234567890 */
+        public readonly ManagingSteamUpdateValueResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -22194,12 +22194,12 @@ final class ManagingSteamUpdateValueResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingSteamUpdateValueResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingSteamUpdateValueResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingSteamUpdateValueResponseItemTags1234567890
+final class ManagingSteamUpdateValueResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -22874,7 +22874,7 @@ final class ManagingEmailCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingEmailCodeResponseItemAccountLinks => ManagingEmailCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingEmailCodeResponseItemAccountLinks => ManagingEmailCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -22890,7 +22890,7 @@ final class ManagingEmailCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingEmailCodeResponseItemExtraPrices => ManagingEmailCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingEmailCodeResponseItemExtraPrices => ManagingEmailCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingEmailCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -23060,8 +23060,8 @@ final class ManagingEmailCodeResponseItemAccountLinks
 final class ManagingEmailCodeResponseItemTags
 {
     public function __construct(
-        /** @var ManagingEmailCodeResponseItemTags1234567890 */
-        public readonly ManagingEmailCodeResponseItemTags1234567890 $1234567890,
+        /** @var ManagingEmailCodeResponseItemTagsData1234567890 */
+        public readonly ManagingEmailCodeResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -23071,12 +23071,12 @@ final class ManagingEmailCodeResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingEmailCodeResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingEmailCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingEmailCodeResponseItemTags1234567890
+final class ManagingEmailCodeResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -23289,7 +23289,7 @@ final class ManagingGetLetters2Response
     {
         return new self(
             $data['email'],
-            array_map(static fn(array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']),
+            array_map(static fn (array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']),
             ManagingGetLetters2ResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -23666,7 +23666,7 @@ final class ManagingSteamAddMafileResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemAccountLinks => ManagingSteamAddMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingSteamAddMafileResponseItemAccountLinks => ManagingSteamAddMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -23682,7 +23682,7 @@ final class ManagingSteamAddMafileResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemExtraPrices => ManagingSteamAddMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingSteamAddMafileResponseItemExtraPrices => ManagingSteamAddMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamAddMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -23852,8 +23852,8 @@ final class ManagingSteamAddMafileResponseItemAccountLinks
 final class ManagingSteamAddMafileResponseItemTags
 {
     public function __construct(
-        /** @var ManagingSteamAddMafileResponseItemTags1234567890 */
-        public readonly ManagingSteamAddMafileResponseItemTags1234567890 $1234567890,
+        /** @var ManagingSteamAddMafileResponseItemTagsData1234567890 */
+        public readonly ManagingSteamAddMafileResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -23863,12 +23863,12 @@ final class ManagingSteamAddMafileResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingSteamAddMafileResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingSteamAddMafileResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingSteamAddMafileResponseItemTags1234567890
+final class ManagingSteamAddMafileResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -24279,7 +24279,7 @@ final class ManagingSteamRemoveMafileResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemAccountLinks => ManagingSteamRemoveMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingSteamRemoveMafileResponseItemAccountLinks => ManagingSteamRemoveMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -24295,7 +24295,7 @@ final class ManagingSteamRemoveMafileResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemExtraPrices => ManagingSteamRemoveMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingSteamRemoveMafileResponseItemExtraPrices => ManagingSteamRemoveMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamRemoveMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -24465,8 +24465,8 @@ final class ManagingSteamRemoveMafileResponseItemAccountLinks
 final class ManagingSteamRemoveMafileResponseItemTags
 {
     public function __construct(
-        /** @var ManagingSteamRemoveMafileResponseItemTags1234567890 */
-        public readonly ManagingSteamRemoveMafileResponseItemTags1234567890 $1234567890,
+        /** @var ManagingSteamRemoveMafileResponseItemTagsData1234567890 */
+        public readonly ManagingSteamRemoveMafileResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -24476,12 +24476,12 @@ final class ManagingSteamRemoveMafileResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingSteamRemoveMafileResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingSteamRemoveMafileResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingSteamRemoveMafileResponseItemTags1234567890
+final class ManagingSteamRemoveMafileResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -24888,7 +24888,7 @@ final class ManagingSteamMafileCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemAccountLinks => ManagingSteamMafileCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingSteamMafileCodeResponseItemAccountLinks => ManagingSteamMafileCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -24904,7 +24904,7 @@ final class ManagingSteamMafileCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemExtraPrices => ManagingSteamMafileCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingSteamMafileCodeResponseItemExtraPrices => ManagingSteamMafileCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamMafileCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -25074,8 +25074,8 @@ final class ManagingSteamMafileCodeResponseItemAccountLinks
 final class ManagingSteamMafileCodeResponseItemTags
 {
     public function __construct(
-        /** @var ManagingSteamMafileCodeResponseItemTags1234567890 */
-        public readonly ManagingSteamMafileCodeResponseItemTags1234567890 $1234567890,
+        /** @var ManagingSteamMafileCodeResponseItemTagsData1234567890 */
+        public readonly ManagingSteamMafileCodeResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -25085,12 +25085,12 @@ final class ManagingSteamMafileCodeResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingSteamMafileCodeResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingSteamMafileCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingSteamMafileCodeResponseItemTags1234567890
+final class ManagingSteamMafileCodeResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -25542,7 +25542,7 @@ final class ManagingTelegramCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingTelegramCodeResponseItemAccountLinks => ManagingTelegramCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): ManagingTelegramCodeResponseItemAccountLinks => ManagingTelegramCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -25558,7 +25558,7 @@ final class ManagingTelegramCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): ManagingTelegramCodeResponseItemExtraPrices => ManagingTelegramCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): ManagingTelegramCodeResponseItemExtraPrices => ManagingTelegramCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingTelegramCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -25728,8 +25728,8 @@ final class ManagingTelegramCodeResponseItemAccountLinks
 final class ManagingTelegramCodeResponseItemTags
 {
     public function __construct(
-        /** @var ManagingTelegramCodeResponseItemTags1234567890 */
-        public readonly ManagingTelegramCodeResponseItemTags1234567890 $1234567890,
+        /** @var ManagingTelegramCodeResponseItemTagsData1234567890 */
+        public readonly ManagingTelegramCodeResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -25739,12 +25739,12 @@ final class ManagingTelegramCodeResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingTelegramCodeResponseItemTags1234567890::fromArray($data['1234567890']),
+            ManagingTelegramCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class ManagingTelegramCodeResponseItemTags1234567890
+final class ManagingTelegramCodeResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -26725,7 +26725,7 @@ final class ProfileClaimsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']),
+            array_map(static fn (array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']),
             ProfileClaimsResponseStats::fromArray($data['stats']),
             ProfileClaimsResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -26821,7 +26821,7 @@ final class ProfileClaimsResponseClaimsAuthor
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['ban_reason'],
-            array_map(static fn(array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
+            array_map(static fn (array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
         );
     }
 }
@@ -27110,7 +27110,7 @@ final class ProfileGetResponseUser
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn(array $item): ProfileGetResponseUserBalances => ProfileGetResponseUserBalances::fromArray($item), $data['balances']),
+            array_map(static fn (array $item): ProfileGetResponseUserBalances => ProfileGetResponseUserBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -27151,14 +27151,14 @@ final class ProfileGetResponseUser
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn(array $item): ProfileGetResponseUserPublicTags => ProfileGetResponseUserPublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn (array $item): ProfileGetResponseUserPublicTags => ProfileGetResponseUserPublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             ProfileGetResponseUserRendered::fromArray($data['rendered']),
             $data['restore_count'],
             ProfileGetResponseUserRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn(array $item): ProfileGetResponseUserTags => ProfileGetResponseUserTags::fromArray($item), $data['tags']),
+            array_map(static fn (array $item): ProfileGetResponseUserTags => ProfileGetResponseUserTags::fromArray($item), $data['tags']),
             ProfileGetResponseUserTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -27289,8 +27289,8 @@ final class ProfileGetResponseUserDob
 final class ProfileGetResponseUserFeedbackData
 {
     public function __construct(
-        /** @var ProfileGetResponseUserFeedbackData12345 */
-        public readonly ProfileGetResponseUserFeedbackData12345 $12345,
+        /** @var ProfileGetResponseUserFeedbackDataData12345 */
+        public readonly ProfileGetResponseUserFeedbackDataData12345 $_12345,
     ) {
     }
 
@@ -27300,12 +27300,12 @@ final class ProfileGetResponseUserFeedbackData
     public static function fromArray(array $data): self
     {
         return new self(
-            ProfileGetResponseUserFeedbackData12345::fromArray($data['12345']),
+            ProfileGetResponseUserFeedbackDataData12345::fromArray($data['12345']),
         );
     }
 }
 
-final class ProfileGetResponseUserFeedbackData12345
+final class ProfileGetResponseUserFeedbackDataData12345
 {
     public function __construct(
         public readonly int $positive,
@@ -27328,8 +27328,8 @@ final class ProfileGetResponseUserFeedbackData12345
 final class ProfileGetResponseUserImapData
 {
     public function __construct(
-        /** @var ProfileGetResponseUserImapDataDomain.zone */
-        public readonly ProfileGetResponseUserImapDataDomain.zone $domain.zone,
+        /** @var ProfileGetResponseUserImapDataDomainZone */
+        public readonly ProfileGetResponseUserImapDataDomainZone $domain_zone,
     ) {
     }
 
@@ -27339,12 +27339,12 @@ final class ProfileGetResponseUserImapData
     public static function fromArray(array $data): self
     {
         return new self(
-            ProfileGetResponseUserImapDataDomain.zone::fromArray($data['domain.zone']),
+            ProfileGetResponseUserImapDataDomainZone::fromArray($data['domain.zone']),
         );
     }
 }
 
-final class ProfileGetResponseUserImapDataDomain.zone
+final class ProfileGetResponseUserImapDataDomainZone
 {
     public function __construct(
         public readonly string $domain,
@@ -27461,7 +27461,7 @@ final class ProfileGetResponseUserRenderedBackgrounds
 final class ProfileGetResponseUserRestoreData
 {
     public function __construct(
-        public readonly int $12345,
+        public readonly int $_12345,
     ) {
     }
 
@@ -27625,14 +27625,14 @@ final class CartGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CartGetResponseItems => CartGetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn (array $item): CartGetResponseItems => CartGetResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): CartGetResponseStickyItems => CartGetResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn (array $item): CartGetResponseStickyItems => CartGetResponseStickyItems::fromArray($item), $data['stickyItems']),
             CartGetResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -28255,7 +28255,7 @@ final class PurchasingFastBuyResponseItem
             $data['account_last_activity'],
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -28269,7 +28269,7 @@ final class PurchasingFastBuyResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PurchasingFastBuyResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -28432,8 +28432,8 @@ final class PurchasingFastBuyResponseItemAccountLinks
 final class PurchasingFastBuyResponseItemTags
 {
     public function __construct(
-        /** @var PurchasingFastBuyResponseItemTags1 */
-        public readonly PurchasingFastBuyResponseItemTags1 $1,
+        /** @var PurchasingFastBuyResponseItemTagsData1 */
+        public readonly PurchasingFastBuyResponseItemTagsData1 $_1,
     ) {
     }
 
@@ -28443,12 +28443,12 @@ final class PurchasingFastBuyResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            PurchasingFastBuyResponseItemTags1::fromArray($data['1']),
+            PurchasingFastBuyResponseItemTagsData1::fromArray($data['1']),
         );
     }
 }
 
-final class PurchasingFastBuyResponseItemTags1
+final class PurchasingFastBuyResponseItemTagsData1
 {
     public function __construct(
         public readonly int $tag_id,
@@ -28769,7 +28769,7 @@ final class PurchasingCheckResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -28783,7 +28783,7 @@ final class PurchasingCheckResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PurchasingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -29157,7 +29157,7 @@ final class CustomDiscountsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CustomDiscountsGetResponseDiscounts => CustomDiscountsGetResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn (array $item): CustomDiscountsGetResponseDiscounts => CustomDiscountsGetResponseDiscounts::fromArray($item), $data['discounts']),
             $data['total'],
             CustomDiscountsGetResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -29309,7 +29309,7 @@ final class CustomDiscountsEditResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CustomDiscountsEditResponseDiscounts => CustomDiscountsEditResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn (array $item): CustomDiscountsEditResponseDiscounts => CustomDiscountsEditResponseDiscounts::fromArray($item), $data['discounts']),
             $data['total'],
             CustomDiscountsEditResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -29627,7 +29627,7 @@ final class PublishingFastSellResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): PublishingFastSellResponseItemAccountLinks => PublishingFastSellResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): PublishingFastSellResponseItemAccountLinks => PublishingFastSellResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -29643,7 +29643,7 @@ final class PublishingFastSellResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): PublishingFastSellResponseItemExtraPrices => PublishingFastSellResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): PublishingFastSellResponseItemExtraPrices => PublishingFastSellResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingFastSellResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -29813,8 +29813,8 @@ final class PublishingFastSellResponseItemAccountLinks
 final class PublishingFastSellResponseItemTags
 {
     public function __construct(
-        /** @var PublishingFastSellResponseItemTags1234567890 */
-        public readonly PublishingFastSellResponseItemTags1234567890 $1234567890,
+        /** @var PublishingFastSellResponseItemTagsData1234567890 */
+        public readonly PublishingFastSellResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -29824,12 +29824,12 @@ final class PublishingFastSellResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            PublishingFastSellResponseItemTags1234567890::fromArray($data['1234567890']),
+            PublishingFastSellResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class PublishingFastSellResponseItemTags1234567890
+final class PublishingFastSellResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -30238,7 +30238,7 @@ final class PublishingAddResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): PublishingAddResponseItemAccountLinks => PublishingAddResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): PublishingAddResponseItemAccountLinks => PublishingAddResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -30254,7 +30254,7 @@ final class PublishingAddResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): PublishingAddResponseItemExtraPrices => PublishingAddResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): PublishingAddResponseItemExtraPrices => PublishingAddResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingAddResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -30424,8 +30424,8 @@ final class PublishingAddResponseItemAccountLinks
 final class PublishingAddResponseItemTags
 {
     public function __construct(
-        /** @var PublishingAddResponseItemTags1234567890 */
-        public readonly PublishingAddResponseItemTags1234567890 $1234567890,
+        /** @var PublishingAddResponseItemTagsData1234567890 */
+        public readonly PublishingAddResponseItemTagsData1234567890 $_1234567890,
     ) {
     }
 
@@ -30435,12 +30435,12 @@ final class PublishingAddResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            PublishingAddResponseItemTags1234567890::fromArray($data['1234567890']),
+            PublishingAddResponseItemTagsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class PublishingAddResponseItemTags1234567890
+final class PublishingAddResponseItemTagsData1234567890
 {
     public function __construct(
         public readonly int $tag_id,
@@ -30810,7 +30810,7 @@ final class PublishingCheckResponseItem
             $data['account_last_activity'],
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
-            array_map(static fn(array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn (array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -30824,7 +30824,7 @@ final class PublishingCheckResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn(array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn (array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -30987,8 +30987,8 @@ final class PublishingCheckResponseItemAccountLinks
 final class PublishingCheckResponseItemTags
 {
     public function __construct(
-        /** @var PublishingCheckResponseItemTags1 */
-        public readonly PublishingCheckResponseItemTags1 $1,
+        /** @var PublishingCheckResponseItemTagsData1 */
+        public readonly PublishingCheckResponseItemTagsData1 $_1,
     ) {
     }
 
@@ -30998,12 +30998,12 @@ final class PublishingCheckResponseItemTags
     public static function fromArray(array $data): self
     {
         return new self(
-            PublishingCheckResponseItemTags1::fromArray($data['1']),
+            PublishingCheckResponseItemTagsData1::fromArray($data['1']),
         );
     }
 }
 
-final class PublishingCheckResponseItemTags1
+final class PublishingCheckResponseItemTagsData1
 {
     public function __construct(
         public readonly int $tag_id,
@@ -31385,7 +31385,7 @@ final class PaymentsInvoiceListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): PaymentsInvoiceListResponseInvoices => PaymentsInvoiceListResponseInvoices::fromArray($item), $data['invoices']),
+            array_map(static fn (array $item): PaymentsInvoiceListResponseInvoices => PaymentsInvoiceListResponseInvoices::fromArray($item), $data['invoices']),
             $data['count'],
             $data['page'],
             $data['perPage'],
@@ -33180,8 +33180,8 @@ final class PaymentsBalanceListResponseFrom
     public function __construct(
         /** @var PaymentsBalanceListResponseFromBalance */
         public readonly PaymentsBalanceListResponseFromBalance $balance,
-        /** @var PaymentsBalanceListResponseFrom12345 */
-        public readonly PaymentsBalanceListResponseFrom12345 $12345,
+        /** @var PaymentsBalanceListResponseFromData12345 */
+        public readonly PaymentsBalanceListResponseFromData12345 $_12345,
     ) {
     }
 
@@ -33192,7 +33192,7 @@ final class PaymentsBalanceListResponseFrom
     {
         return new self(
             PaymentsBalanceListResponseFromBalance::fromArray($data['balance']),
-            PaymentsBalanceListResponseFrom12345::fromArray($data['12345']),
+            PaymentsBalanceListResponseFromData12345::fromArray($data['12345']),
         );
     }
 }
@@ -33223,7 +33223,7 @@ final class PaymentsBalanceListResponseFromBalance
     }
 }
 
-final class PaymentsBalanceListResponseFrom12345
+final class PaymentsBalanceListResponseFromData12345
 {
     public function __construct(
         public readonly string $balance,
@@ -33362,7 +33362,7 @@ final class PaymentsBalanceListResponseToBalance
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceBalances => PaymentsBalanceListResponseToBalanceBalances::fromArray($item), $data['balances']),
+            array_map(static fn (array $item): PaymentsBalanceListResponseToBalanceBalances => PaymentsBalanceListResponseToBalanceBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -33403,14 +33403,14 @@ final class PaymentsBalanceListResponseToBalance
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalancePublicTags => PaymentsBalanceListResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn (array $item): PaymentsBalanceListResponseToBalancePublicTags => PaymentsBalanceListResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             PaymentsBalanceListResponseToBalanceRendered::fromArray($data['rendered']),
             $data['restore_count'],
             PaymentsBalanceListResponseToBalanceRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceTags => PaymentsBalanceListResponseToBalanceTags::fromArray($item), $data['tags']),
+            array_map(static fn (array $item): PaymentsBalanceListResponseToBalanceTags => PaymentsBalanceListResponseToBalanceTags::fromArray($item), $data['tags']),
             PaymentsBalanceListResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -33541,8 +33541,8 @@ final class PaymentsBalanceListResponseToBalanceDob
 final class PaymentsBalanceListResponseToBalanceFeedbackData
 {
     public function __construct(
-        /** @var PaymentsBalanceListResponseToBalanceFeedbackData12345 */
-        public readonly PaymentsBalanceListResponseToBalanceFeedbackData12345 $12345,
+        /** @var PaymentsBalanceListResponseToBalanceFeedbackDataData12345 */
+        public readonly PaymentsBalanceListResponseToBalanceFeedbackDataData12345 $_12345,
     ) {
     }
 
@@ -33552,12 +33552,12 @@ final class PaymentsBalanceListResponseToBalanceFeedbackData
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceListResponseToBalanceFeedbackData12345::fromArray($data['12345']),
+            PaymentsBalanceListResponseToBalanceFeedbackDataData12345::fromArray($data['12345']),
         );
     }
 }
 
-final class PaymentsBalanceListResponseToBalanceFeedbackData12345
+final class PaymentsBalanceListResponseToBalanceFeedbackDataData12345
 {
     public function __construct(
         public readonly int $positive,
@@ -33580,8 +33580,8 @@ final class PaymentsBalanceListResponseToBalanceFeedbackData12345
 final class PaymentsBalanceListResponseToBalanceImapData
 {
     public function __construct(
-        /** @var PaymentsBalanceListResponseToBalanceImapDataDomain.zone */
-        public readonly PaymentsBalanceListResponseToBalanceImapDataDomain.zone $domain.zone,
+        /** @var PaymentsBalanceListResponseToBalanceImapDataDomainZone */
+        public readonly PaymentsBalanceListResponseToBalanceImapDataDomainZone $domain_zone,
     ) {
     }
 
@@ -33591,12 +33591,12 @@ final class PaymentsBalanceListResponseToBalanceImapData
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceListResponseToBalanceImapDataDomain.zone::fromArray($data['domain.zone']),
+            PaymentsBalanceListResponseToBalanceImapDataDomainZone::fromArray($data['domain.zone']),
         );
     }
 }
 
-final class PaymentsBalanceListResponseToBalanceImapDataDomain.zone
+final class PaymentsBalanceListResponseToBalanceImapDataDomainZone
 {
     public function __construct(
         public readonly string $domain,
@@ -33713,7 +33713,7 @@ final class PaymentsBalanceListResponseToBalanceRenderedBackgrounds
 final class PaymentsBalanceListResponseToBalanceRestoreData
 {
     public function __construct(
-        public readonly int $12345,
+        public readonly int $_12345,
     ) {
     }
 
@@ -33838,8 +33838,8 @@ final class PaymentsBalanceExchangeResponseFrom
     public function __construct(
         /** @var PaymentsBalanceExchangeResponseFromBalance */
         public readonly PaymentsBalanceExchangeResponseFromBalance $balance,
-        /** @var PaymentsBalanceExchangeResponseFrom12345 */
-        public readonly PaymentsBalanceExchangeResponseFrom12345 $12345,
+        /** @var PaymentsBalanceExchangeResponseFromData12345 */
+        public readonly PaymentsBalanceExchangeResponseFromData12345 $_12345,
     ) {
     }
 
@@ -33850,7 +33850,7 @@ final class PaymentsBalanceExchangeResponseFrom
     {
         return new self(
             PaymentsBalanceExchangeResponseFromBalance::fromArray($data['balance']),
-            PaymentsBalanceExchangeResponseFrom12345::fromArray($data['12345']),
+            PaymentsBalanceExchangeResponseFromData12345::fromArray($data['12345']),
         );
     }
 }
@@ -33881,7 +33881,7 @@ final class PaymentsBalanceExchangeResponseFromBalance
     }
 }
 
-final class PaymentsBalanceExchangeResponseFrom12345
+final class PaymentsBalanceExchangeResponseFromData12345
 {
     public function __construct(
         public readonly string $balance,
@@ -34020,7 +34020,7 @@ final class PaymentsBalanceExchangeResponseToBalance
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceBalances => PaymentsBalanceExchangeResponseToBalanceBalances::fromArray($item), $data['balances']),
+            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalanceBalances => PaymentsBalanceExchangeResponseToBalanceBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -34061,14 +34061,14 @@ final class PaymentsBalanceExchangeResponseToBalance
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalancePublicTags => PaymentsBalanceExchangeResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalancePublicTags => PaymentsBalanceExchangeResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             PaymentsBalanceExchangeResponseToBalanceRendered::fromArray($data['rendered']),
             $data['restore_count'],
             PaymentsBalanceExchangeResponseToBalanceRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceTags => PaymentsBalanceExchangeResponseToBalanceTags::fromArray($item), $data['tags']),
+            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalanceTags => PaymentsBalanceExchangeResponseToBalanceTags::fromArray($item), $data['tags']),
             PaymentsBalanceExchangeResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -34199,8 +34199,8 @@ final class PaymentsBalanceExchangeResponseToBalanceDob
 final class PaymentsBalanceExchangeResponseToBalanceFeedbackData
 {
     public function __construct(
-        /** @var PaymentsBalanceExchangeResponseToBalanceFeedbackData12345 */
-        public readonly PaymentsBalanceExchangeResponseToBalanceFeedbackData12345 $12345,
+        /** @var PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345 */
+        public readonly PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345 $_12345,
     ) {
     }
 
@@ -34210,12 +34210,12 @@ final class PaymentsBalanceExchangeResponseToBalanceFeedbackData
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceExchangeResponseToBalanceFeedbackData12345::fromArray($data['12345']),
+            PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345::fromArray($data['12345']),
         );
     }
 }
 
-final class PaymentsBalanceExchangeResponseToBalanceFeedbackData12345
+final class PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345
 {
     public function __construct(
         public readonly int $positive,
@@ -34238,8 +34238,8 @@ final class PaymentsBalanceExchangeResponseToBalanceFeedbackData12345
 final class PaymentsBalanceExchangeResponseToBalanceImapData
 {
     public function __construct(
-        /** @var PaymentsBalanceExchangeResponseToBalanceImapDataDomain.zone */
-        public readonly PaymentsBalanceExchangeResponseToBalanceImapDataDomain.zone $domain.zone,
+        /** @var PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone */
+        public readonly PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone $domain_zone,
     ) {
     }
 
@@ -34249,12 +34249,12 @@ final class PaymentsBalanceExchangeResponseToBalanceImapData
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceExchangeResponseToBalanceImapDataDomain.zone::fromArray($data['domain.zone']),
+            PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone::fromArray($data['domain.zone']),
         );
     }
 }
 
-final class PaymentsBalanceExchangeResponseToBalanceImapDataDomain.zone
+final class PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone
 {
     public function __construct(
         public readonly string $domain,
@@ -34371,7 +34371,7 @@ final class PaymentsBalanceExchangeResponseToBalanceRenderedBackgrounds
 final class PaymentsBalanceExchangeResponseToBalanceRestoreData
 {
     public function __construct(
-        public readonly int $12345,
+        public readonly int $_12345,
     ) {
     }
 
@@ -34677,8 +34677,8 @@ final class PaymentsHistoryResponse
 final class PaymentsHistoryResponsePayments
 {
     public function __construct(
-        /** @var PaymentsHistoryResponsePayments1234567890 */
-        public readonly PaymentsHistoryResponsePayments1234567890 $1234567890,
+        /** @var PaymentsHistoryResponsePaymentsData1234567890 */
+        public readonly PaymentsHistoryResponsePaymentsData1234567890 $_1234567890,
     ) {
     }
 
@@ -34688,12 +34688,12 @@ final class PaymentsHistoryResponsePayments
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsHistoryResponsePayments1234567890::fromArray($data['1234567890']),
+            PaymentsHistoryResponsePaymentsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class PaymentsHistoryResponsePayments1234567890
+final class PaymentsHistoryResponsePaymentsData1234567890
 {
     public function __construct(
         public readonly int $operation_id,
@@ -34706,8 +34706,8 @@ final class PaymentsHistoryResponsePayments1234567890
         public readonly int $is_finished,
         public readonly int $is_hold,
         public readonly string $payment_system,
-        /** @var PaymentsHistoryResponsePayments1234567890Data */
-        public readonly PaymentsHistoryResponsePayments1234567890Data $data,
+        /** @var PaymentsHistoryResponsePaymentsData1234567890Data */
+        public readonly PaymentsHistoryResponsePaymentsData1234567890Data $data,
         public readonly int $hold_end_date,
         public readonly int $operation_end_date,
         public readonly int $api,
@@ -34722,12 +34722,12 @@ final class PaymentsHistoryResponsePayments1234567890
         public readonly bool $canFinishBalanceTransfer,
         public readonly bool $canFinishBalancePayout,
         public readonly bool $canFinishBalanceHold,
-        /** @var PaymentsHistoryResponsePayments1234567890Label */
-        public readonly PaymentsHistoryResponsePayments1234567890Label $label,
-        /** @var PaymentsHistoryResponsePayments1234567890Merchant */
-        public readonly PaymentsHistoryResponsePayments1234567890Merchant $merchant,
-        /** @var PaymentsHistoryResponsePayments1234567890User */
-        public readonly PaymentsHistoryResponsePayments1234567890User $user,
+        /** @var PaymentsHistoryResponsePaymentsData1234567890Label */
+        public readonly PaymentsHistoryResponsePaymentsData1234567890Label $label,
+        /** @var PaymentsHistoryResponsePaymentsData1234567890Merchant */
+        public readonly PaymentsHistoryResponsePaymentsData1234567890Merchant $merchant,
+        /** @var PaymentsHistoryResponsePaymentsData1234567890User */
+        public readonly PaymentsHistoryResponsePaymentsData1234567890User $user,
     ) {
     }
 
@@ -34747,7 +34747,7 @@ final class PaymentsHistoryResponsePayments1234567890
             $data['is_finished'],
             $data['is_hold'],
             $data['payment_system'],
-            PaymentsHistoryResponsePayments1234567890Data::fromArray($data['data']),
+            PaymentsHistoryResponsePaymentsData1234567890Data::fromArray($data['data']),
             $data['hold_end_date'],
             $data['operation_end_date'],
             $data['api'],
@@ -34762,14 +34762,14 @@ final class PaymentsHistoryResponsePayments1234567890
             $data['canFinishBalanceTransfer'],
             $data['canFinishBalancePayout'],
             $data['canFinishBalanceHold'],
-            PaymentsHistoryResponsePayments1234567890Label::fromArray($data['label']),
-            PaymentsHistoryResponsePayments1234567890Merchant::fromArray($data['merchant']),
-            PaymentsHistoryResponsePayments1234567890User::fromArray($data['user']),
+            PaymentsHistoryResponsePaymentsData1234567890Label::fromArray($data['label']),
+            PaymentsHistoryResponsePaymentsData1234567890Merchant::fromArray($data['merchant']),
+            PaymentsHistoryResponsePaymentsData1234567890User::fromArray($data['user']),
         );
     }
 }
 
-final class PaymentsHistoryResponsePayments1234567890Data
+final class PaymentsHistoryResponsePaymentsData1234567890Data
 {
     public function __construct(
         public readonly int $user_id,
@@ -34817,7 +34817,7 @@ final class PaymentsHistoryResponsePayments1234567890Data
     }
 }
 
-final class PaymentsHistoryResponsePayments1234567890Label
+final class PaymentsHistoryResponsePaymentsData1234567890Label
 {
     public function __construct(
         public readonly string $title,
@@ -34835,7 +34835,7 @@ final class PaymentsHistoryResponsePayments1234567890Label
     }
 }
 
-final class PaymentsHistoryResponsePayments1234567890Merchant
+final class PaymentsHistoryResponsePaymentsData1234567890Merchant
 {
     public function __construct(
         public readonly int $merchant_id,
@@ -34865,7 +34865,7 @@ final class PaymentsHistoryResponsePayments1234567890Merchant
     }
 }
 
-final class PaymentsHistoryResponsePayments1234567890User
+final class PaymentsHistoryResponsePaymentsData1234567890User
 {
     public function __construct(
         public readonly int $user_id,
@@ -34997,7 +34997,7 @@ final class PaymentsPayoutServicesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']),
+            array_map(static fn (array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']),
             PaymentsPayoutServicesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -35470,8 +35470,8 @@ final class AutoPaymentsListResponse
 final class AutoPaymentsListResponsePayments
 {
     public function __construct(
-        /** @var AutoPaymentsListResponsePayments1234567890 */
-        public readonly AutoPaymentsListResponsePayments1234567890 $1234567890,
+        /** @var AutoPaymentsListResponsePaymentsData1234567890 */
+        public readonly AutoPaymentsListResponsePaymentsData1234567890 $_1234567890,
     ) {
     }
 
@@ -35481,12 +35481,12 @@ final class AutoPaymentsListResponsePayments
     public static function fromArray(array $data): self
     {
         return new self(
-            AutoPaymentsListResponsePayments1234567890::fromArray($data['1234567890']),
+            AutoPaymentsListResponsePaymentsData1234567890::fromArray($data['1234567890']),
         );
     }
 }
 
-final class AutoPaymentsListResponsePayments1234567890
+final class AutoPaymentsListResponsePaymentsData1234567890
 {
     public function __construct(
         public readonly int $user_id,
@@ -35497,8 +35497,8 @@ final class AutoPaymentsListResponsePayments1234567890
         public readonly int $next_alert_date,
         public readonly int $auto_payment_id,
         public readonly string $day,
-        /** @var AutoPaymentsListResponsePayments1234567890Receiver */
-        public readonly AutoPaymentsListResponsePayments1234567890Receiver $receiver,
+        /** @var AutoPaymentsListResponsePaymentsData1234567890Receiver */
+        public readonly AutoPaymentsListResponsePaymentsData1234567890Receiver $receiver,
     ) {
     }
 
@@ -35516,12 +35516,12 @@ final class AutoPaymentsListResponsePayments1234567890
             $data['next_alert_date'],
             $data['auto_payment_id'],
             $data['day'],
-            AutoPaymentsListResponsePayments1234567890Receiver::fromArray($data['receiver']),
+            AutoPaymentsListResponsePaymentsData1234567890Receiver::fromArray($data['receiver']),
         );
     }
 }
 
-final class AutoPaymentsListResponsePayments1234567890Receiver
+final class AutoPaymentsListResponsePaymentsData1234567890Receiver
 {
     public function __construct(
         public readonly int $user_id,
@@ -35542,14 +35542,14 @@ final class AutoPaymentsListResponsePayments1234567890Receiver
         public readonly int $user_last_seen_date,
         public readonly int $user_following_count,
         public readonly int $user_followers_count,
-        /** @var AutoPaymentsListResponsePayments1234567890ReceiverLinks */
-        public readonly AutoPaymentsListResponsePayments1234567890ReceiverLinks $links,
-        /** @var AutoPaymentsListResponsePayments1234567890ReceiverPermissions */
-        public readonly AutoPaymentsListResponsePayments1234567890ReceiverPermissions $permissions,
+        /** @var AutoPaymentsListResponsePaymentsData1234567890ReceiverLinks */
+        public readonly AutoPaymentsListResponsePaymentsData1234567890ReceiverLinks $links,
+        /** @var AutoPaymentsListResponsePaymentsData1234567890ReceiverPermissions */
+        public readonly AutoPaymentsListResponsePaymentsData1234567890ReceiverPermissions $permissions,
         public readonly bool $user_is_ignored,
         public readonly bool $user_is_visitor,
         public readonly int $user_group_id,
-        /** @var list<AutoPaymentsListResponsePayments1234567890ReceiverFields> */
+        /** @var list<AutoPaymentsListResponsePaymentsData1234567890ReceiverFields> */
         public readonly array $fields,
     ) {
     }
@@ -35578,17 +35578,17 @@ final class AutoPaymentsListResponsePayments1234567890Receiver
             $data['user_last_seen_date'],
             $data['user_following_count'],
             $data['user_followers_count'],
-            AutoPaymentsListResponsePayments1234567890ReceiverLinks::fromArray($data['links']),
-            AutoPaymentsListResponsePayments1234567890ReceiverPermissions::fromArray($data['permissions']),
+            AutoPaymentsListResponsePaymentsData1234567890ReceiverLinks::fromArray($data['links']),
+            AutoPaymentsListResponsePaymentsData1234567890ReceiverPermissions::fromArray($data['permissions']),
             $data['user_is_ignored'],
             $data['user_is_visitor'],
             $data['user_group_id'],
-            array_map(static fn(array $item): AutoPaymentsListResponsePayments1234567890ReceiverFields => AutoPaymentsListResponsePayments1234567890ReceiverFields::fromArray($item), $data['fields']),
+            array_map(static fn (array $item): AutoPaymentsListResponsePaymentsData1234567890ReceiverFields => AutoPaymentsListResponsePaymentsData1234567890ReceiverFields::fromArray($item), $data['fields']),
         );
     }
 }
 
-final class AutoPaymentsListResponsePayments1234567890ReceiverLinks
+final class AutoPaymentsListResponsePaymentsData1234567890ReceiverLinks
 {
     public function __construct(
         public readonly string $permalink,
@@ -35622,7 +35622,7 @@ final class AutoPaymentsListResponsePayments1234567890ReceiverLinks
     }
 }
 
-final class AutoPaymentsListResponsePayments1234567890ReceiverPermissions
+final class AutoPaymentsListResponsePaymentsData1234567890ReceiverPermissions
 {
     public function __construct(
         public readonly bool $edit,
@@ -35646,7 +35646,7 @@ final class AutoPaymentsListResponsePayments1234567890ReceiverPermissions
     }
 }
 
-final class AutoPaymentsListResponsePayments1234567890ReceiverFields
+final class AutoPaymentsListResponsePaymentsData1234567890ReceiverFields
 {
     public function __construct(
         public readonly string $id,
@@ -35804,7 +35804,7 @@ final class ProxyGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']),
+            array_map(static fn (array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']),
             ProxyGetResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -36143,4 +36143,3 @@ final class BatchResponseSystemInfo
         );
     }
 }
-

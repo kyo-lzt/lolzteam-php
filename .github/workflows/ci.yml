@@ -10,14 +10,39 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  build:
+    name: Build & Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.2"
+          tools: composer
+      - run: composer install --no-interaction
+
+  lint:
+    name: Code Quality
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
           tools: composer
       - run: composer install --no-interaction
       - run: composer cs-check
+
+  test:
+    name: Tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+      - run: composer install --no-interaction
       - run: composer test

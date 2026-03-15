@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Lolzteam\Runtime;
 
-final readonly class RetryConfig
+final class RetryConfig
 {
-    public int $maxRetries;
-    public int $baseDelayMs;
-    public int $maxDelayMs;
+    public readonly int $maxRetries;
+    public readonly int $baseDelayMs;
+    public readonly int $maxDelayMs;
 
     public function __construct(
         int $maxRetries = 3,

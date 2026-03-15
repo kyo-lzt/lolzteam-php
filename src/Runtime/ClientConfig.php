@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Lolzteam\Runtime;
 
-final readonly class ClientConfig
+final class ClientConfig
 {
-    public string $token;
-    public string $baseUrl;
-    public ?string $proxy;
-    public RetryConfig $retry;
-    public int $requestsPerMinute;
-    public ?int $searchRequestsPerMinute;
+    public readonly string $token;
+    public readonly string $baseUrl;
+    public readonly ?string $proxy;
+    public readonly RetryConfig $retry;
+    public readonly int $requestsPerMinute;
+    public readonly ?int $searchRequestsPerMinute;
 
     /** @var callable|null Guzzle handler (for testing) */
-    public mixed $handler;
+    public readonly mixed $handler;
 
     public function __construct(
         string $token,

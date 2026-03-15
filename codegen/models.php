@@ -335,10 +335,15 @@ function hasObjectProperties(array $schema): bool
  */
 function propertyToClassName(string $prop): string
 {
-    // Handle hyphenated names like "sub-categories"
-    $prop = str_replace('-', '_', $prop);
+    // Replace any non-alphanumeric characters with underscores for splitting
+    $prop = (string) preg_replace('/[^a-zA-Z0-9_]/', '_', $prop);
     $parts = explode('_', $prop);
-    return implode('', array_map(fn(string $p) => ucfirst($p), $parts));
+    $result = implode('', array_map(fn(string $p) => ucfirst($p), $parts));
+    // Prefix class name segments starting with a digit
+    if ($result !== '' && ctype_digit($result[0])) {
+        $result = 'Data' . $result;
+    }
+    return $result;
 }
 
 /**
@@ -348,19 +353,15 @@ function propertyToClassName(string $prop): string
  */
 function propertyToPhpName(string $prop): string
 {
-    // Keep snake_case as-is (matches API response keys)
-    // But handle hyphens which are invalid in PHP
-    if (!str_contains($prop, '-')) {
-        return $prop;
+    // Replace any characters invalid in PHP identifiers with underscores
+    $prop = (string) preg_replace('/[^a-zA-Z0-9_]/', '_', $prop);
+
+    // Prefix names starting with a digit (invalid PHP identifiers)
+    if ($prop !== '' && ctype_digit($prop[0])) {
+        $prop = '_' . $prop;
     }
 
-    // Convert hyphenated to camelCase
-    $parts = explode('-', $prop);
-    $result = $parts[0];
-    for ($i = 1; $i < count($parts); $i++) {
-        $result .= ucfirst($parts[$i]);
-    }
-    return $result;
+    return $prop;
 }
 
 // ─── Model Emission ─────────────────────────────────────────────────────────
