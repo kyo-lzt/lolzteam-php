@@ -849,7 +849,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{avatar: string, x?: int, y?: int, crop?: int} $body
+     * @param array{avatar: resource|string, x?: int, y?: int, crop?: int} $body
      * @return Models\UsersAvatarUploadResponse
      */
     public function avatarUpload(string|int $user_id, array $body): Models\UsersAvatarUploadResponse
@@ -887,7 +887,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{background: string, x?: int, y?: int, crop?: int} $body
+     * @param array{background: resource|string, x?: int, y?: int, crop?: int} $body
      * @return Models\UsersBackgroundUploadResponse
      */
     public function backgroundUpload(string|int $user_id, array $body): Models\UsersBackgroundUploadResponse

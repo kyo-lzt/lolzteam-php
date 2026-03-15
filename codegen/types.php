@@ -121,6 +121,10 @@ function schemaToPhpType(?array $schema, array $spec, int $indent = 0): string
     }
 
     if (is_string($type)) {
+        $format = $schema['format'] ?? null;
+        if ($type === 'string' && $format === 'binary') {
+            return 'resource|string';
+        }
         return primitivePhpType($type);
     }
 
@@ -195,6 +199,11 @@ function schemaToPhpHint(?array $schema, array $spec): string
     }
 
     $type = $schema['type'] ?? null;
+
+    $format = $schema['format'] ?? null;
+    if ($type === 'string' && $format === 'binary') {
+        return 'mixed';
+    }
 
     return match ($type) {
         'string' => 'string',
