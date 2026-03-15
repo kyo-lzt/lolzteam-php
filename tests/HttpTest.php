@@ -12,6 +12,7 @@ use Lolzteam\Runtime\ClientConfig;
 use Lolzteam\Runtime\Errors\AuthException;
 use Lolzteam\Runtime\Errors\NotFoundException;
 use Lolzteam\Runtime\Errors\RateLimitException;
+use Lolzteam\Runtime\Errors\RetryExhaustedException;
 use Lolzteam\Runtime\Errors\ServerException;
 use Lolzteam\Runtime\HttpClient;
 use Lolzteam\Runtime\RetryConfig;
@@ -67,7 +68,7 @@ final class HttpTest extends TestCase
     public function testBearerTokenSentInAuthHeader(): void
     {
         $client = $this->createClient(
-            [new Response(200, [], '{}')],
+            [new Response(200, ['Content-Type' => 'application/json'], '{}')],
             token: 'my-secret-token',
         );
 
@@ -110,7 +111,7 @@ final class HttpTest extends TestCase
         $client = $this->createClient(
             [
                 new Response(429, ['Retry-After' => '0'], '{"error":"rate limit"}'),
-                new Response(200, [], '{"threads":[]}'),
+                new Response(200, ['Content-Type' => 'application/json'], '{"threads":[]}'),
             ],
             retry: new RetryConfig(maxRetries: 1, baseDelayMs: 1, maxDelayMs: 1),
         );
@@ -128,7 +129,7 @@ final class HttpTest extends TestCase
         $client = $this->createClient(
             [
                 new Response(502, [], 'Bad Gateway'),
-                new Response(200, [], '{"ok":true}'),
+                new Response(200, ['Content-Type' => 'application/json'], '{"ok":true}'),
             ],
             retry: new RetryConfig(maxRetries: 1, baseDelayMs: 1, maxDelayMs: 1),
         );
@@ -144,7 +145,7 @@ final class HttpTest extends TestCase
         $client = $this->createClient(
             [
                 new Response(503, [], 'Service Unavailable'),
-                new Response(200, [], '{"ok":true}'),
+                new Response(200, ['Content-Type' => 'application/json'], '{"ok":true}'),
             ],
             retry: new RetryConfig(maxRetries: 1, baseDelayMs: 1, maxDelayMs: 1),
         );
@@ -155,9 +156,9 @@ final class HttpTest extends TestCase
         $this->assertCount(2, $this->history);
     }
 
-    // ── 7. 429 retry exhausted → RateLimitException ────────────────
+    // ── 7. 429 retry exhausted → RetryExhaustedException ───────────
 
-    public function testRetryExhaustedThrowsRateLimitException(): void
+    public function testRetryExhaustedThrowsRetryExhaustedException(): void
     {
         $client = $this->createClient(
             [
@@ -168,11 +169,11 @@ final class HttpTest extends TestCase
             retry: new RetryConfig(maxRetries: 2, baseDelayMs: 1, maxDelayMs: 1),
         );
 
-        $this->expectException(RateLimitException::class);
+        $this->expectException(RetryExhaustedException::class);
         $client->request('GET', '/threads');
     }
 
-    public function testRetryExhaustedOn502ThrowsServerException(): void
+    public function testRetryExhaustedOn502ThrowsRetryExhaustedException(): void
     {
         $client = $this->createClient(
             [
@@ -182,7 +183,7 @@ final class HttpTest extends TestCase
             retry: new RetryConfig(maxRetries: 1, baseDelayMs: 1, maxDelayMs: 1),
         );
 
-        $this->expectException(ServerException::class);
+        $this->expectException(RetryExhaustedException::class);
         $client->request('GET', '/threads');
     }
 
@@ -191,7 +192,7 @@ final class HttpTest extends TestCase
     public function testQueryParamsAppendedToUrl(): void
     {
         $client = $this->createClient([
-            new Response(200, [], '{"threads":[]}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"threads":[]}'),
         ]);
 
         $client->request('GET', '/threads', ['forum_id' => 2, 'limit' => 10]);
@@ -209,7 +210,7 @@ final class HttpTest extends TestCase
     public function testPathInterpolation(): void
     {
         $client = $this->createClient([
-            new Response(200, [], '{"thread":{}}'),
+            new Response(200, ['Content-Type' => 'application/json'], '{"thread":{}}'),
         ]);
 
         $threadId = 42;

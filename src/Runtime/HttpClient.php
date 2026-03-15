@@ -109,9 +109,12 @@ final class HttpClient
                 case 'multipart':
                     $options[RequestOptions::MULTIPART] = [];
                     foreach ($body as $name => $value) {
+                        $contents = is_string($value)
+                            ? \GuzzleHttp\Psr7\Utils::streamFor($value)
+                            : $value;
                         $options[RequestOptions::MULTIPART][] = [
                             'name' => (string) $name,
-                            'contents' => $value,
+                            'contents' => $contents,
                         ];
                     }
                     break;
@@ -153,11 +156,16 @@ final class HttpClient
             return null;
         }
 
-        try {
-            return json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
-        } catch (\JsonException) {
-            return $raw;
+        $contentType = $response->getHeaderLine('Content-Type');
+        if (str_contains($contentType, 'json')) {
+            try {
+                return json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $e) {
+                throw new NetworkException('Failed to decode JSON response: ' . $e->getMessage(), 0, $e);
+            }
         }
+
+        return $raw;
     }
 
     /**

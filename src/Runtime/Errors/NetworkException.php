@@ -10,6 +10,17 @@ class NetworkException extends LolzteamException
     {
         $cause = $this->getPrevious();
 
-        return $cause instanceof \GuzzleHttp\Exception\ConnectException;
+        while ($cause !== null) {
+            if ($cause instanceof \GuzzleHttp\Exception\ConnectException) {
+                return true;
+            }
+            if ($cause instanceof \GuzzleHttp\Exception\RequestException
+                && str_contains((string) $cause->getMessage(), 'timed out')) {
+                return true;
+            }
+            $cause = $cause->getPrevious();
+        }
+
+        return false;
     }
 }

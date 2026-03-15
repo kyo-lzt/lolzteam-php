@@ -340,22 +340,21 @@ function emitCombinedFile(
     }
 
     $lines[] = '';
-    $lines[] = '    public function __construct(';
-    $lines[] = '        string $token,';
-    $lines[] = '        ?string $proxy = null,';
-    $lines[] = '        ?RetryConfig $retry = null,';
-    $lines[] = '    ) {';
-    $lines[] = '        $config = new ClientConfig(';
-    $lines[] = '            token: $token,';
-    $lines[] = "            baseUrl: '{$defaultBaseUrl}',";
-    $lines[] = '            proxy: $proxy,';
-    $lines[] = '            retry: $retry ?? new RetryConfig(),';
-    $lines[] = "            requestsPerMinute: {$defaultRateLimit},";
+    $lines[] = '    public function __construct(ClientConfig $config)';
+    $lines[] = '    {';
+    $lines[] = "        \$resolvedConfig = new ClientConfig(";
+    $lines[] = '            token: $config->token,';
+    $lines[] = "            baseUrl: \$config->baseUrl !== '' ? \$config->baseUrl : '{$defaultBaseUrl}',";
+    $lines[] = '            proxy: $config->proxy,';
+    $lines[] = '            retry: $config->retry ?? new RetryConfig(),';
+    $lines[] = "            requestsPerMinute: \$config->requestsPerMinute > 0 ? \$config->requestsPerMinute : {$defaultRateLimit},";
     if ($defaultSearchRateLimit !== null) {
-        $lines[] = "            searchRequestsPerMinute: {$defaultSearchRateLimit},";
+        $lines[] = "            searchRequestsPerMinute: \$config->searchRequestsPerMinute ?? {$defaultSearchRateLimit},";
+    } else {
+        $lines[] = '            searchRequestsPerMinute: $config->searchRequestsPerMinute,';
     }
     $lines[] = '        );';
-    $lines[] = '        $http = new HttpClient($config);';
+    $lines[] = '        $http = new HttpClient($resolvedConfig);';
 
     foreach ($groups as $group) {
         $className = groupToClassName($group['groupName']);

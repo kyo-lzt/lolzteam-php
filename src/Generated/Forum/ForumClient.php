@@ -2053,19 +2053,17 @@ final class ForumClient
     public readonly ChatboxApi $chatbox;
     public readonly FormsApi $forms;
 
-    public function __construct(
-        string $token,
-        ?string $proxy = null,
-        ?RetryConfig $retry = null,
-    ) {
-        $config = new ClientConfig(
-            token: $token,
-            baseUrl: 'https://prod-api.lolz.live',
-            proxy: $proxy,
-            retry: $retry ?? new RetryConfig(),
-            requestsPerMinute: 300,
+    public function __construct(ClientConfig $config)
+    {
+        $resolvedConfig = new ClientConfig(
+            token: $config->token,
+            baseUrl: $config->baseUrl !== '' ? $config->baseUrl : 'https://prod-api.lolz.live',
+            proxy: $config->proxy,
+            retry: $config->retry ?? new RetryConfig(),
+            requestsPerMinute: $config->requestsPerMinute > 0 ? $config->requestsPerMinute : 300,
+            searchRequestsPerMinute: $config->searchRequestsPerMinute,
         );
-        $http = new HttpClient($config);
+        $http = new HttpClient($resolvedConfig);
         $this->oAuth = new OAuthApi($http);
         $this->assets = new AssetsApi($http);
         $this->categories = new CategoriesApi($http);

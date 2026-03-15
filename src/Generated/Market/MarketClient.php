@@ -1593,20 +1593,17 @@ final class MarketClient
     public readonly ImapApi $imap;
     public readonly BatchApi $batch;
 
-    public function __construct(
-        string $token,
-        ?string $proxy = null,
-        ?RetryConfig $retry = null,
-    ) {
-        $config = new ClientConfig(
-            token: $token,
-            baseUrl: 'https://prod-api.lzt.market',
-            proxy: $proxy,
-            retry: $retry ?? new RetryConfig(),
-            requestsPerMinute: 120,
-            searchRequestsPerMinute: 20,
+    public function __construct(ClientConfig $config)
+    {
+        $resolvedConfig = new ClientConfig(
+            token: $config->token,
+            baseUrl: $config->baseUrl !== '' ? $config->baseUrl : 'https://prod-api.lzt.market',
+            proxy: $config->proxy,
+            retry: $config->retry ?? new RetryConfig(),
+            requestsPerMinute: $config->requestsPerMinute > 0 ? $config->requestsPerMinute : 120,
+            searchRequestsPerMinute: $config->searchRequestsPerMinute ?? 20,
         );
-        $http = new HttpClient($config);
+        $http = new HttpClient($resolvedConfig);
         $this->category = new CategoryApi($http);
         $this->list = new ListApi($http);
         $this->managing = new ManagingApi($http);

@@ -54,7 +54,8 @@ final class ClientTest extends TestCase
 
     public function testForumClientConstructsWithTokenOnly(): void
     {
-        $client = new ForumClient('test-token');
+        $config = new ClientConfig(token: 'test-token', baseUrl: 'https://api.lolz.live');
+        $client = new ForumClient($config);
 
         $this->assertInstanceOf(ForumClient::class, $client);
     }
@@ -62,7 +63,13 @@ final class ClientTest extends TestCase
     public function testForumClientConstructsWithProxyAndRetry(): void
     {
         $retry = new RetryConfig(maxRetries: 5, baseDelayMs: 500, maxDelayMs: 10000);
-        $client = new ForumClient('test-token', 'http://proxy:8080', $retry);
+        $config = new ClientConfig(
+            token: 'test-token',
+            baseUrl: 'https://api.lolz.live',
+            proxy: 'http://proxy:8080',
+            retry: $retry,
+        );
+        $client = new ForumClient($config);
 
         $this->assertInstanceOf(ForumClient::class, $client);
     }
@@ -100,7 +107,8 @@ final class ClientTest extends TestCase
      */
     public function testForumClientApiGroupTypes(string $property, string $expectedType): void
     {
-        $client = new ForumClient('test-token');
+        $config = new ClientConfig(token: 'test-token', baseUrl: 'https://api.lolz.live');
+        $client = new ForumClient($config);
 
         $this->assertInstanceOf($expectedType, $client->{$property});
     }
@@ -117,7 +125,8 @@ final class ClientTest extends TestCase
 
     public function testMarketClientConstructsWithTokenOnly(): void
     {
-        $client = new MarketClient('test-token');
+        $config = new ClientConfig(token: 'test-token', baseUrl: 'https://api.lzt.market');
+        $client = new MarketClient($config);
 
         $this->assertInstanceOf(MarketClient::class, $client);
     }
@@ -125,7 +134,13 @@ final class ClientTest extends TestCase
     public function testMarketClientConstructsWithProxyAndRetry(): void
     {
         $retry = new RetryConfig(maxRetries: 1, baseDelayMs: 200, maxDelayMs: 5000);
-        $client = new MarketClient('test-token', 'socks5://proxy:1080', $retry);
+        $config = new ClientConfig(
+            token: 'test-token',
+            baseUrl: 'https://api.lzt.market',
+            proxy: 'socks5://proxy:1080',
+            retry: $retry,
+        );
+        $client = new MarketClient($config);
 
         $this->assertInstanceOf(MarketClient::class, $client);
     }
@@ -158,7 +173,8 @@ final class ClientTest extends TestCase
      */
     public function testMarketClientApiGroupTypes(string $property, string $expectedType): void
     {
-        $client = new MarketClient('test-token');
+        $config = new ClientConfig(token: 'test-token', baseUrl: 'https://api.lzt.market');
+        $client = new MarketClient($config);
 
         $this->assertInstanceOf($expectedType, $client->{$property});
     }

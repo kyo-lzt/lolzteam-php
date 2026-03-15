@@ -6,6 +6,7 @@ namespace Lolzteam\Runtime;
 
 use Lolzteam\Runtime\Errors\NetworkException;
 use Lolzteam\Runtime\Errors\RateLimitException;
+use Lolzteam\Runtime\Errors\RetryExhaustedException;
 use Lolzteam\Runtime\Errors\ServerException;
 
 final class Retry
@@ -29,6 +30,9 @@ final class Retry
             } catch (RateLimitException $e) {
                 $lastException = $e;
                 if ($attempt === $config->maxRetries) {
+                    if ($attempt > 0) {
+                        throw new RetryExhaustedException($attempt + 1, $e);
+                    }
                     throw $e;
                 }
                 $delayMs = self::computeDelay($e, $attempt, $config);
@@ -39,6 +43,9 @@ final class Retry
                 }
                 $lastException = $e;
                 if ($attempt === $config->maxRetries) {
+                    if ($attempt > 0) {
+                        throw new RetryExhaustedException($attempt + 1, $e);
+                    }
                     throw $e;
                 }
                 $delayMs = self::computeDelay(null, $attempt, $config);
@@ -49,6 +56,9 @@ final class Retry
                 }
                 $lastException = $e;
                 if ($attempt === $config->maxRetries) {
+                    if ($attempt > 0) {
+                        throw new RetryExhaustedException($attempt + 1, $e);
+                    }
                     throw $e;
                 }
                 $delayMs = self::computeDelay(null, $attempt, $config);
