@@ -11,6 +11,147 @@ use Lolzteam\Runtime\HttpClient;
 use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\RetryConfig;
 
+final class OAuthTokenClientCredentials
+{
+    public function __construct(
+        public readonly string $client_id,
+        public readonly string $client_secret,
+        public readonly array $scope,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'grant_type' => 'client_credentials',
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
+            'scope' => $this->scope,
+        ];
+    }
+}
+
+final class OAuthTokenAuthorizationCode
+{
+    public function __construct(
+        public readonly string $code,
+        public readonly string $client_id,
+        public readonly string $client_secret,
+        public readonly string $redirect_uri,
+        public readonly array $scope,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'grant_type' => 'authorization_code',
+            'code' => $this->code,
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
+            'redirect_uri' => $this->redirect_uri,
+            'scope' => $this->scope,
+        ];
+    }
+}
+
+final class OAuthTokenRefreshToken
+{
+    public function __construct(
+        public readonly string $refresh_token,
+        public readonly string $client_id,
+        public readonly string $client_secret,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $this->refresh_token,
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
+        ];
+    }
+}
+
+final class OAuthTokenPassword
+{
+    public function __construct(
+        public readonly string $username,
+        public readonly string $password,
+        public readonly string $client_id,
+        public readonly string $client_secret,
+        public readonly array $scope,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'grant_type' => 'password',
+            'username' => $this->username,
+            'password' => $this->password,
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret,
+            'scope' => $this->scope,
+        ];
+    }
+}
+
+
+final class FormsCreateP2PTrade
+{
+    public function __construct(
+        public readonly array $fields,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'form_id' => 1,
+            'fields' => $this->fields,
+        ];
+    }
+}
+
+final class FormsCreateComplaint
+{
+    public function __construct(
+        public readonly array $fields,
+    ) {
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return [
+            'form_id' => 3,
+            'fields' => $this->fields,
+        ];
+    }
+}
+
+
+
 final class OAuthApi
 {
     public function __construct(
@@ -19,13 +160,13 @@ final class OAuthApi
     }
 
     /**
-     * @param array{grant_type: 'client_credentials'|'authorization_code'|'refresh_token'|'password', client_id: string, client_secret: string, scope?: list<'basic'|'read'|'post'|'conversate'|'market'|'payment'|'invoice'>, code?: string, redirect_uri?: string, refresh_token?: string, username?: string, password?: string} $body
+     * @param OAuthTokenClientCredentials|OAuthTokenAuthorizationCode|OAuthTokenRefreshToken|OAuthTokenPassword $body
      * @return Models\OAuthTokenResponse
      */
-    public function token(array $body): Models\OAuthTokenResponse
+    public function token(OAuthTokenClientCredentials|OAuthTokenAuthorizationCode|OAuthTokenRefreshToken|OAuthTokenPassword $body): Models\OAuthTokenResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('POST', '/oauth/token', [], $body, 'multipart');
+        $data = $this->http->request('POST', '/oauth/token', [], $body->toArray(), 'multipart');
 
         return Models\OAuthTokenResponse::fromArray($data);
     }
@@ -59,7 +200,7 @@ final class CategoriesApi
     }
 
     /**
-     * @param array{parent_category_id?: int, parent_forum_id?: int, order?: 'natural'|'list'} $params
+     * @param array{parent_category_id?: int, parent_forum_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\CategoriesListResponse
      */
     public function getList(array $params = []): Models\CategoriesListResponse
@@ -91,7 +232,7 @@ final class ForumsApi
     }
 
     /**
-     * @param array{parent_category_id?: int, parent_forum_id?: int, order?: 'natural'|'list'} $params
+     * @param array{parent_category_id?: int, parent_forum_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\ForumsListResponse
      */
     public function getList(array $params = []): Models\ForumsListResponse
@@ -237,7 +378,7 @@ final class PagesApi
     }
 
     /**
-     * @param array{parent_page_id?: int, order?: 'natural'|'list'} $params
+     * @param array{parent_page_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\PagesListResponse
      */
     public function getList(array $params = []): Models\PagesListResponse
@@ -289,7 +430,7 @@ final class ThreadsApi
     }
 
     /**
-     * @param array{forum_id?: int, tab?: string, state?: 'active'|'closed', period?: 'day'|'week'|'month'|'year', title?: string, title_only?: bool, creator_user_id?: int, sticky?: bool, prefix_ids[]?: list<int>, prefix_ids_not[]?: list<int>, thread_tag_id?: int, page?: int, limit?: int, order?: 'post_date'|'last_post_date'|'reply_count'|'reply_count_asc'|'first_post_likes'|'vote_count', direction?: 'asc'|'desc', thread_create_date?: int, thread_update_date?: int, fields_include?: list<'*'|'latest_posts'>} $params
+     * @param array{forum_id?: int, tab?: string, state?: Enums\State, period?: Enums\Period, title?: string, title_only?: bool, creator_user_id?: int, sticky?: bool, prefix_ids[]?: list<int>, prefix_ids_not[]?: list<int>, thread_tag_id?: int, page?: int, limit?: int, order?: Enums\ThreadsOrder, direction?: Enums\Direction, thread_create_date?: int, thread_update_date?: int, fields_include?: list<'*'|'latest_posts'>} $params
      * @return Models\ThreadsListResponse
      */
     public function getList(array $params = []): Models\ThreadsListResponse
@@ -301,11 +442,12 @@ final class ThreadsApi
     }
 
     /**
-     * @param array{post_body: string, forum_id: int, title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
+     * @param array{post_body: string, forum_id: int, title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
      * @return Models\ThreadsCreateResponse
      */
     public function create(array $body): Models\ThreadsCreateResponse
     {
+        $body = $body + ['reply_group' => 2];
         /** @var array<string, mixed> $data */
         $data = $this->http->request('POST', '/threads', [], $body, 'json');
 
@@ -313,11 +455,12 @@ final class ThreadsApi
     }
 
     /**
-     * @param array{post_body: string, title?: string, title_en?: string, contest_type: 'by_finish_date', length_value?: int, length_option?: 'minutes'|'hours'|'days', prize_type: 'money'|'upgrades', count_winners?: int, prize_data_money?: float, is_money_places?: bool, prize_data_places?: list<float>, prize_data_upgrade?: 1|6|12|14|17|19|20|21|22, require_like_count: int, require_total_like_count: int, secret_answer?: string, tags?: list<string>, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
+     * @param array{post_body: string, title?: string, title_en?: string, contest_type: Enums\ContestType (Default: "by_finish_date"), length_value?: int, length_option?: Enums\LengthOption, prize_type: Enums\PrizeType, count_winners?: int, prize_data_money?: float, is_money_places?: bool, prize_data_places?: list<float>, prize_data_upgrade?: Enums\PrizeDataUpgrade, require_like_count: int, require_total_like_count: int, secret_answer?: string, tags?: list<string>, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
      * @return Models\ThreadsCreateContestResponse
      */
     public function createContest(array $body): Models\ThreadsCreateContestResponse
     {
+        $body = $body + ['contest_type' => 'by_finish_date', 'reply_group' => 2];
         /** @var array<string, mixed> $data */
         $data = $this->http->request('POST', '/contests', [], $body, 'json');
 
@@ -325,11 +468,12 @@ final class ThreadsApi
     }
 
     /**
-     * @param array{as_responder: string, as_is_market_deal: bool, as_market_item_id?: int, as_data?: string, as_amount: float, currency?: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try', transfer_type: 'guarantor'|'safe'|'notsafe', pay_claim?: 'now'|'later', as_funds_receipt?: string, as_tg_login_screenshot?: string, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool, post_body: string} $body
+     * @param array{as_responder: string, as_is_market_deal: bool, as_market_item_id?: int, as_data?: string, as_amount: float, currency?: Enums\Currency, transfer_type: Enums\TransferType, pay_claim?: Enums\PayClaim, as_funds_receipt?: string, as_tg_login_screenshot?: string, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool, post_body: string} $body
      * @return Models\ThreadsClaimResponse
      */
     public function claim(array $body): Models\ThreadsClaimResponse
     {
+        $body = $body + ['reply_group' => 2];
         /** @var array<string, mixed> $data */
         $data = $this->http->request('POST', '/claims', [], $body, 'json');
 
@@ -351,7 +495,7 @@ final class ThreadsApi
 
     /**
      * @param int $thread_id
-     * @param array{title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, discussion_open?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: 0|2|21|22|23|60|351, comment_ignore_group?: bool} $body
+     * @param array{title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, discussion_open?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup, comment_ignore_group?: bool} $body
      * @return Models\ThreadsEditResponse
      */
     public function edit(int $thread_id, array $body = []): Models\ThreadsEditResponse
@@ -567,7 +711,7 @@ final class PostsApi
     }
 
     /**
-     * @param array{thread_id?: int, page_of_post_id?: int, page?: int, limit?: int, order?: 'natural'|'natural_reverse'|'post_likes'|'post_likes_reverse'} $params
+     * @param array{thread_id?: int, page_of_post_id?: int, page?: int, limit?: int, order?: Enums\PostsOrder} $params
      * @return Models\PostsListResponse
      */
     public function getList(array $params = []): Models\PostsListResponse
@@ -808,7 +952,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{username?: string, user_title?: string, display_group_id?: int, display_icon_group_id?: int, display_banner_id?: int, conv_welcome_message?: string, user_dob_day?: int, user_dob_month?: int, user_dob_year?: int, secret_answer?: string, secret_answer_type?: int, short_link?: string, language_id?: 1|2, gender?: ''|'male'|'female', timezone?: 'Pacific/Midway'|'Pacific/Honolulu'|'Pacific/Marquesas'|'America/Anchorage'|'America/Los_Angeles'|'America/Santa_Isabel'|'America/Tijuana'|'America/Denver'|'America/Chihuahua'|'America/Phoenix'|'America/Chicago'|'America/Belize'|'America/Mexico_City'|'Pacific/Easter'|'America/New_York'|'America/Havana'|'America/Bogota'|'America/Caracas'|'America/Halifax'|'America/Goose_Bay'|'America/Asuncion'|'America/Santiago'|'America/Cuiaba'|'America/La_Paz'|'America/St_Johns'|'America/Argentina/Buenos_Aires'|'America/Argentina/San_Luis'|'America/Argentina/Mendoza'|'Atlantic/Stanley'|'America/Godthab'|'America/Montevideo'|'America/Sao_Paulo'|'America/Miquelon'|'America/Noronha'|'Atlantic/Cape_Verde'|'Atlantic/Azores'|'Europe/London'|'Africa/Casablanca'|'Atlantic/Reykjavik'|'Europe/Amsterdam'|'Africa/Algiers'|'Africa/Windhoek'|'Africa/Tunis'|'Europe/Athens'|'Africa/Johannesburg'|'Europe/Kaliningrad'|'Asia/Amman'|'Asia/Beirut'|'Africa/Cairo'|'Asia/Jerusalem'|'Asia/Gaza'|'Asia/Damascus'|'Europe/Moscow'|'Europe/Minsk'|'Africa/Nairobi'|'Asia/Tehran'|'Asia/Dubai'|'Asia/Yerevan'|'Asia/Baku'|'Indian/Mauritius'|'Asia/Kabul'|'Asia/Yekaterinburg'|'Asia/Tashkent'|'Asia/Kolkata'|'Asia/Kathmandu'|'Asia/Novosibirsk'|'Asia/Dhaka'|'Asia/Almaty'|'Asia/Rangoon'|'Asia/Krasnoyarsk'|'Asia/Bangkok'|'Asia/Irkutsk'|'Asia/Hong_Kong'|'Asia/Singapore'|'Australia/Perth'|'Asia/Yakutsk'|'Asia/Tokyo'|'Asia/Seoul'|'Australia/Adelaide'|'Australia/Darwin'|'Asia/Vladivostok'|'Asia/Magadan'|'Australia/Brisbane'|'Australia/Sydney'|'Pacific/Noumea'|'Pacific/Norfolk'|'Asia/Anadyr'|'Pacific/Auckland'|'Pacific/Fiji'|'Pacific/Chatham'|'Pacific/Tongatapu'|'Pacific/Apia'|'Pacific/Kiritimati', receive_admin_email?: bool, activity_visible?: bool, show_dob_date?: bool, show_dob_year?: bool, hide_username_change_logs?: bool, allow_view_profile?: 'none'|'members'|'followed', allow_post_profile?: 'none'|'members'|'followed', allow_send_personal_conversation?: 'none'|'members'|'followed', allow_invite_group?: 'none'|'members'|'followed', allow_receive_news_feed?: 'none'|'members'|'followed', alert?: array<string, bool>, fields?: array{
+     * @param array{username?: string, user_title?: string, display_group_id?: int, display_icon_group_id?: int, display_banner_id?: int, conv_welcome_message?: string, user_dob_day?: int, user_dob_month?: int, user_dob_year?: int, secret_answer?: string, secret_answer_type?: int, short_link?: string, language_id?: Enums\LanguageId, gender?: Enums\Gender, timezone?: Enums\Timezone, receive_admin_email?: bool, activity_visible?: bool, show_dob_date?: bool, show_dob_year?: bool, hide_username_change_logs?: bool, allow_view_profile?: Enums\AllowViewProfile, allow_post_profile?: Enums\AllowPostProfile, allow_send_personal_conversation?: Enums\AllowSendPersonalConversation, allow_invite_group?: Enums\AllowInviteGroup, allow_receive_news_feed?: Enums\AllowReceiveNewsFeed, alert?: array<string, bool>, fields?: array{
     location?: string,
     occupation?: string,
     homepage?: string,
@@ -836,7 +980,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{type?: 'market'|'nomarket', claim_state?: 'active'|'solved'|'rejected'|'settled'} $params
+     * @param array{type?: Enums\UsersType, claim_state?: Enums\ClaimState} $params
      * @return Models\UsersClaimsResponse
      */
     public function claims(string|int $user_id, array $params = []): Models\UsersClaimsResponse
@@ -925,7 +1069,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{order?: 'natural'|'follow_date'|'follow_date_reverse', page?: int, limit?: int} $params
+     * @param array{order?: Enums\UsersOrder, page?: int, limit?: int} $params
      * @return Models\UsersFollowersResponse
      */
     public function followers(string|int $user_id, array $params = []): Models\UsersFollowersResponse
@@ -962,7 +1106,7 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{order?: 'natural'|'follow_date'|'follow_date_reverse', page?: int, limit?: int} $params
+     * @param array{order?: Enums\UsersOrder, page?: int, limit?: int} $params
      * @return Models\UsersFollowingsResponse
      */
     public function followings(string|int $user_id, array $params = []): Models\UsersFollowingsResponse
@@ -975,11 +1119,12 @@ final class UsersApi
 
     /**
      * @param string|int $user_id
-     * @param array{node_id?: int, like_type?: 'like'|'like2', type?: 'gotten'|'given', page?: int, content_type?: 'post'|'post_comment'|'profile_post'|'profile_post_comment', search_user_id?: int, stats?: bool} $params
+     * @param array{node_id?: int, like_type?: Enums\LikeType, type?: Enums\UsersType2 (Default: "gotten"), page?: int, content_type?: Enums\ContentType (Default: "post"), search_user_id?: int, stats?: bool} $params
      * @return Models\UsersLikesResponse
      */
     public function likes(string|int $user_id, array $params = []): Models\UsersLikesResponse
     {
+        $params = $params + ['type' => 'gotten', 'content_type' => 'post'];
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', "/users/{$user_id}/likes", $params);
 
@@ -1332,7 +1477,7 @@ final class ConversationsApi
     }
 
     /**
-     * @param array{folder?: 'all'|'unread'|'groups'|'market'|'market_replacements'|'staff'|'giveaways'|'p2p', page?: int, limit?: int} $params
+     * @param array{folder?: Enums\Folder, page?: int, limit?: int} $params
      * @return Models\ConversationsListResponse
      */
     public function getList(array $params = []): Models\ConversationsListResponse
@@ -1344,11 +1489,12 @@ final class ConversationsApi
     }
 
     /**
-     * @param array{recipient_id?: int, recipients?: list<string>, is_group?: bool, title?: string, open_invite?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool, message_body?: string} $body
+     * @param array{recipient_id?: int, recipients?: list<string>, is_group?: bool (Default: false), title?: string, open_invite?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool, message_body?: string} $body
      * @return Models\ConversationsCreateResponse
      */
     public function create(array $body = []): Models\ConversationsCreateResponse
     {
+        $body = $body + ['is_group' => false];
         /** @var array<string, mixed> $data */
         $data = $this->http->request('POST', '/conversations', [], $body, 'json');
 
@@ -1368,7 +1514,7 @@ final class ConversationsApi
     }
 
     /**
-     * @param array{conversation_id: int, delete_type: 'delete'|'delete_ignore'} $body
+     * @param array{conversation_id: int, delete_type: Enums\DeleteType} $body
      * @return Models\ConversationsDeleteResponse
      */
     public function delete(array $body): Models\ConversationsDeleteResponse
@@ -1417,7 +1563,7 @@ final class ConversationsApi
 
     /**
      * @param int $conversation_id
-     * @param array{page?: int, limit?: int, order?: 'natural'|'natural_reverse', before?: int, after?: int} $params
+     * @param array{page?: int, limit?: int, order?: Enums\ConversationsOrder, before?: int, after?: int} $params
      * @return Models\ConversationsMessagesListResponse
      */
     public function messagesList(int $conversation_id, array $params = []): Models\ConversationsMessagesListResponse
@@ -1624,7 +1770,7 @@ final class NotificationsApi
     }
 
     /**
-     * @param array{type?: 'market'|'nomarket', page?: int, limit?: int} $params
+     * @param array{type?: Enums\UsersType, page?: int, limit?: int} $params
      * @return Models\NotificationsListResponse
      */
     public function getList(array $params = []): Models\NotificationsListResponse
@@ -1842,7 +1988,7 @@ final class ChatboxApi
     }
 
     /**
-     * @param array{room_id?: 1|2|3|4|13} $params
+     * @param array{room_id?: Enums\RoomId} $params
      * @return Models\ChatboxIndexResponse
      */
     public function index(array $params = []): Models\ChatboxIndexResponse
@@ -1854,7 +2000,7 @@ final class ChatboxApi
     }
 
     /**
-     * @param array{room_id: 1|2|3|4|13, before_message_id?: int} $params
+     * @param array{room_id: Enums\RoomId, before_message_id?: int} $params
      * @return Models\ChatboxGetMessagesResponse
      */
     public function getMessages(array $params = []): Models\ChatboxGetMessagesResponse
@@ -1866,7 +2012,7 @@ final class ChatboxApi
     }
 
     /**
-     * @param array{room_id: 1|2|3|4|13, reply_message_id?: int, message: string} $body
+     * @param array{room_id: Enums\RoomId, reply_message_id?: int, message: string} $body
      * @return Models\ChatboxPostMessageResponse
      */
     public function postMessage(array $body): Models\ChatboxPostMessageResponse
@@ -1902,7 +2048,7 @@ final class ChatboxApi
     }
 
     /**
-     * @param array{room_id: 1|2|3|4|13} $params
+     * @param array{room_id: Enums\RoomId} $params
      * @return Models\ChatboxOnlineResponse
      */
     public function online(array $params = []): Models\ChatboxOnlineResponse
@@ -1938,7 +2084,7 @@ final class ChatboxApi
     }
 
     /**
-     * @param array{duration?: 'day'|'week'|'month'} $params
+     * @param array{duration?: Enums\Duration} $params
      * @return Models\ChatboxGetLeaderboardResponse
      */
     public function getLeaderboard(array $params = []): Models\ChatboxGetLeaderboardResponse
@@ -2005,29 +2151,13 @@ final class FormsApi
     }
 
     /**
-     * @param array{form_id: 1|3, fields: array{
-    8: float,
-    11: float,
-    15?: 'market'|'ru_1'|'ru_2'|'ru_3'|'ru_4'|'ru_5'|'ru_6'|'ru_7'|'ru_8'|'ru_9'|'ru_10'|'ru_11'|'ua_1'|'ua_2'|'ua_3'|'ua_4'|'ua_5'|'ua_6'|'ua_7'|'ua_8'|'kz_1'|'kz_2'|'kz_3'|'kz_4'|'kz_5'|'kz_6'|'kz_7'|'kz_8'|'by_1'|'by_2'|'by_3'|'by_4'|'by_5'|'by_6'|'by_7'|'by_8'|'by_9'|'sbp'|'cr_1'|'cr_2'|'cr_3'|'cr_4'|'cr_5'|'cr_6'|'cr_7'|'cr_8'|'cr_12'|'cr_9'|'cr_10'|'cr_11'|'ot_1'|'ot_2'|'ot_3'|'ot_4'|'cr_13'|'by_10',
-    16?: 'rub'|'dollar'|'euro'|'uah'|'tenge'|'byn',
-    17?: 'market'|'ru_1'|'ru_2'|'ru_3'|'ru_4'|'ru_5'|'ru_6'|'ru_7'|'ru_8'|'ru_9'|'ru_10'|'ru_11'|'ua_1'|'ua_2'|'ua_3'|'ua_4'|'ua_5'|'ua_6'|'ua_7'|'ua_8'|'kz_1'|'kz_2'|'kz_3'|'kz_4'|'kz_5'|'kz_6'|'kz_7'|'kz_8'|'by_1'|'by_2'|'by_3'|'by_4'|'by_5'|'by_6'|'by_7'|'by_8'|'by_9'|'sbp'|'cr_1'|'cr_2'|'cr_3'|'cr_4'|'cr_5'|'cr_6'|'cr_7'|'cr_8'|'cr_12'|'cr_9'|'cr_10'|'cr_11'|'ot_1'|'ot_2'|'ot_3'|'ot_4'|'cr_13'|'by_10',
-    18?: 'rub'|'dollar'|'euro'|'uah'|'tenge'|'byn',
-    14?: string,
-}|array{
-    22?: string,
-    23?: 'cp_re_1'|'cp_re_2'|'cp_re_3'|'cp_re_4'|'cp_re_5'|'cp_re_6'|'cp_re_7'|'cp_re_8'|'cp_re_9'|'cp_re_10'|'cp_re_11'|'cp_re_12'|'cp_re_13'|'cp_re_other',
-    24: string,
-    27?: string,
-    28?: string,
-    29?: string,
-    30?: string,
-}} $body
+     * @param FormsCreateP2PTrade|FormsCreateComplaint $body
      * @return Models\FormsCreateResponse
      */
-    public function create(array $body): Models\FormsCreateResponse
+    public function create(FormsCreateP2PTrade|FormsCreateComplaint $body): Models\FormsCreateResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('POST', '/forms/save', [], $body, 'json');
+        $data = $this->http->request('POST', '/forms/save', [], $body->toArray(), 'json');
 
         return Models\FormsCreateResponse::fromArray($data);
     }

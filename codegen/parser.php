@@ -47,6 +47,16 @@ function extractParameters(array $operation, array $spec): array
             'required' => (bool) ($param['required'] ?? false),
         ];
 
+        // Carry enum values through for enum generation
+        if ($paramSchema !== null && isset($paramSchema['enum']) && is_array($paramSchema['enum'])) {
+            $parsed['enum'] = $paramSchema['enum'];
+        }
+
+        // Carry default value
+        if ($paramSchema !== null && array_key_exists('default', $paramSchema)) {
+            $parsed['default'] = $paramSchema['default'];
+        }
+
         if ($in === 'path') {
             $parsed['required'] = true;
             $pathParams[] = $parsed;
@@ -170,12 +180,19 @@ function extractBodyProperties(array $operation, array $spec): array
                 }
             }
 
-            $bodyProperties[] = [
+            $bodyProp = [
                 'name' => (string) $name,
                 'type' => schemaToPhpType($mergedSchema, $spec),
                 'phpType' => schemaToPhpHint($mergedSchema, $spec),
                 'required' => $isRequired,
             ];
+            if (isset($mergedSchema['enum']) && is_array($mergedSchema['enum'])) {
+                $bodyProp['enum'] = $mergedSchema['enum'];
+            }
+            if (array_key_exists('default', $mergedSchema)) {
+                $bodyProp['default'] = $mergedSchema['default'];
+            }
+            $bodyProperties[] = $bodyProp;
         }
     } elseif (isset($schema['properties']) && is_array($schema['properties'])) {
         $requiredSet = [];
@@ -184,16 +201,165 @@ function extractBodyProperties(array $operation, array $spec): array
         }
 
         foreach ($schema['properties'] as $name => $propSchema) {
-            $bodyProperties[] = [
+            $bodyProp = [
                 'name' => (string) $name,
                 'type' => is_array($propSchema) ? schemaToPhpType($propSchema, $spec) : 'mixed',
                 'phpType' => is_array($propSchema) ? schemaToPhpHint($propSchema, $spec) : 'mixed',
                 'required' => isset($requiredSet[$name]),
             ];
+            if (is_array($propSchema) && isset($propSchema['enum']) && is_array($propSchema['enum'])) {
+                $bodyProp['enum'] = $propSchema['enum'];
+            }
+            if (is_array($propSchema) && array_key_exists('default', $propSchema)) {
+                $bodyProp['default'] = $propSchema['default'];
+            }
+            $bodyProperties[] = $bodyProp;
         }
     }
 
     return $bodyProperties;
+}
+
+// ─── Discriminated OneOf Detection ────────────────────────────────────────────
+
+/**
+ * Try to detect a discriminated union from oneOf variants.
+ *
+ * @param list<array<string, mixed>> $oneOf
+ * @param array<string, mixed> $spec
+ * @return list<array{title: string, discriminatorField: string, discriminatorValue: string|int, properties: list<array{name: string, type: string, phpType: string, required: bool}>}>|null
+ */
+function tryExtractDiscriminatedOneOf(array $oneOf, array $spec): ?array
+{
+    if (count($oneOf) < 2) {
+        return null;
+    }
+
+    // All variants must have properties
+    foreach ($oneOf as $variant) {
+        if (!is_array($variant) || !isset($variant['properties']) || !is_array($variant['properties'])) {
+            return null;
+        }
+    }
+
+    // Find a property present in every variant with a single-value enum
+    $firstProps = $oneOf[0]['properties'];
+    $discriminatorField = null;
+
+    foreach ($firstProps as $propName => $propSchema) {
+        if (!is_array($propSchema)) {
+            continue;
+        }
+        $enumVals = $propSchema['enum'] ?? null;
+        if (!is_array($enumVals) || count($enumVals) !== 1) {
+            continue;
+        }
+
+        $allMatch = true;
+        for ($i = 1; $i < count($oneOf); $i++) {
+            $vProps = $oneOf[$i]['properties'];
+            $vProp = $vProps[$propName] ?? null;
+            if (!is_array($vProp)) {
+                $allMatch = false;
+                break;
+            }
+            $vEnum = $vProp['enum'] ?? null;
+            if (!is_array($vEnum) || count($vEnum) !== 1) {
+                $allMatch = false;
+                break;
+            }
+        }
+        if ($allMatch) {
+            $discriminatorField = (string) $propName;
+            break;
+        }
+    }
+
+    if ($discriminatorField === null) {
+        return null;
+    }
+
+    $variants = [];
+    foreach ($oneOf as $variant) {
+        $title = $variant['title'] ?? 'Unknown';
+        $props = $variant['properties'];
+        $requiredList = $variant['required'] ?? [];
+        /** @var array<string, bool> $requiredSet */
+        $requiredSet = [];
+        if (is_array($requiredList)) {
+            foreach ($requiredList as $r) {
+                $requiredSet[(string) $r] = true;
+            }
+        }
+
+        $discValue = $props[$discriminatorField]['enum'][0];
+
+        $bodyProps = [];
+        foreach ($props as $pName => $pSchema) {
+            if ((string) $pName === $discriminatorField) {
+                continue;
+            }
+            $bodyProp = [
+                'name' => (string) $pName,
+                'type' => is_array($pSchema) ? schemaToPhpType($pSchema, $spec) : 'mixed',
+                'phpType' => is_array($pSchema) ? schemaToPhpHint($pSchema, $spec) : 'mixed',
+                'required' => isset($requiredSet[(string) $pName]),
+            ];
+            if (is_array($pSchema) && isset($pSchema['enum']) && is_array($pSchema['enum'])) {
+                $bodyProp['enum'] = $pSchema['enum'];
+            }
+            if (is_array($pSchema) && array_key_exists('default', $pSchema)) {
+                $bodyProp['default'] = $pSchema['default'];
+            }
+            $bodyProps[] = $bodyProp;
+        }
+
+        $variants[] = [
+            'title' => (string) $title,
+            'discriminatorField' => $discriminatorField,
+            'discriminatorValue' => $discValue,
+            'properties' => $bodyProps,
+        ];
+    }
+
+    return $variants;
+}
+
+/**
+ * Extract discriminated oneOf variants from an operation's request body.
+ *
+ * @param array<string, mixed> $operation
+ * @param array<string, mixed> $spec
+ * @return list<array{title: string, discriminatorField: string, discriminatorValue: string|int, properties: list<array{name: string, type: string, phpType: string, required: bool}>}>
+ */
+function extractOneOfVariants(array $operation, array $spec): array
+{
+    if (!isset($operation['requestBody'])) {
+        return [];
+    }
+
+    $requestBody = derefShallow($operation['requestBody'], $spec);
+    if (!is_array($requestBody)) {
+        return [];
+    }
+
+    $content = $requestBody['content'] ?? null;
+    if (!is_array($content)) {
+        return [];
+    }
+
+    $mediaType = $content['application/json'] ?? $content['multipart/form-data'] ?? null;
+    if (!is_array($mediaType) || !isset($mediaType['schema']) || !is_array($mediaType['schema'])) {
+        return [];
+    }
+
+    $schema = $mediaType['schema'];
+    if (!isset($schema['oneOf']) || !is_array($schema['oneOf'])) {
+        return [];
+    }
+
+    $result = tryExtractDiscriminatedOneOf($schema['oneOf'], $spec);
+    return $result ?? [];
 }
 
 // ─── Body Encoding Detection ─────────────────────────────────────────────────
@@ -456,6 +622,7 @@ function parseSpec(array $rawSpec): array
             }
 
             $bodyEncoding = detectBodyEncoding($operation, $specFull);
+            $oneOfVariants = extractOneOfVariants($operation, $specFull);
             $rawBodyInfo = extractRawBodyInfo($operation, $specFull);
             $returnsNonJson = hasNonJsonResponse($operation, $specFull);
 
@@ -464,12 +631,19 @@ function parseSpec(array $rawSpec): array
             if ($upperMethod === 'GET' && count($bodyProperties) > 0) {
                 // Merge body properties into query params (all optional for GET)
                 foreach ($bodyProperties as $bodyProp) {
-                    $params['queryParams'][] = [
+                    $qp = [
                         'name' => $bodyProp['name'],
                         'type' => $bodyProp['type'],
                         'phpType' => $bodyProp['phpType'],
                         'required' => false,
                     ];
+                    if (isset($bodyProp['enum'])) {
+                        $qp['enum'] = $bodyProp['enum'];
+                    }
+                    if (array_key_exists('default', $bodyProp)) {
+                        $qp['default'] = $bodyProp['default'];
+                    }
+                    $params['queryParams'][] = $qp;
                 }
                 $bodyProperties = [];
                 $hasBody = false;
@@ -513,6 +687,7 @@ function parseSpec(array $rawSpec): array
                 'returnsNonJson' => $returnsNonJson,
                 'responseModelClass' => $responseModelClass,
                 'responseModels' => $responseModels,
+                'oneOfVariants' => $oneOfVariants,
             ];
 
             $groupMap[$group][] = $methodDef;

@@ -13,6 +13,7 @@ require_once __DIR__ . '/naming.php';
 require_once __DIR__ . '/types.php';
 require_once __DIR__ . '/parser.php';
 require_once __DIR__ . '/emitter.php';
+require_once __DIR__ . '/enums.php';
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -65,6 +66,16 @@ function cleanOutputDir(string $dir): void
             }
         }
     }
+    // Also clean Enums subdirectory
+    $enumsDir = $dir . '/Enums';
+    if (is_dir($enumsDir)) {
+        $enumFiles = glob($enumsDir . '/*.php');
+        if ($enumFiles !== false) {
+            foreach ($enumFiles as $file) {
+                unlink($file);
+            }
+        }
+    }
 }
 
 /**
@@ -90,6 +101,38 @@ function generateApi(array $config): void
     // Clean old per-tag files
     cleanOutputDir($config['outputDir']);
 
+    // Collect and generate enums
+    $enumResult = collectEnums($result['groups']);
+    $componentSchemaEnums = collectComponentSchemaEnums($rawSpec);
+
+    // Merge component schema enums, skipping duplicates by name
+    /** @var array<string, bool> $existingEnumNames */
+    $existingEnumNames = [];
+    foreach ($enumResult['enums'] as $e) {
+        $existingEnumNames[$e['enumName']] = true;
+    }
+    foreach ($componentSchemaEnums as $cse) {
+        if (!isset($existingEnumNames[$cse['enumName']])) {
+            $enumResult['enums'][] = $cse;
+            $existingEnumNames[$cse['enumName']] = true;
+        }
+    }
+    // Re-sort after merge
+    usort($enumResult['enums'], fn(array $a, array $b): int => strcmp($a['enumName'], $b['enumName']));
+
+    $enumsNamespace = $config['namespace'] . '\\Enums';
+    $enumsDir = $config['outputDir'] . '/Enums';
+    if (!is_dir($enumsDir)) {
+        mkdir($enumsDir, 0755, true);
+    }
+
+    if (count($enumResult['enums']) > 0) {
+        $enumsContent = emitEnumsFile($enumResult['enums'], $enumsNamespace);
+        $enumsFilePath = $enumsDir . '/Enums.php';
+        file_put_contents($enumsFilePath, $enumsContent);
+        echo "  Enums.php (" . count($enumResult['enums']) . " enums)\n";
+    }
+
     // Write single combined file
     $content = emitCombinedFile(
         $result['groups'],
@@ -98,6 +141,7 @@ function generateApi(array $config): void
         $config['defaultBaseUrl'],
         $config['defaultRateLimit'],
         $config['defaultSearchRateLimit'] ?? null,
+        $enumResult['paramEnumMap'],
     );
     $filePath = $config['outputDir'] . '/' . $config['clientName'] . '.php';
     file_put_contents($filePath, $content);

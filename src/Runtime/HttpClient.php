@@ -105,17 +105,18 @@ final class HttpClient
         $options = [];
 
         if ($query !== []) {
-            $options[RequestOptions::QUERY] = $query;
+            $options[RequestOptions::QUERY] = self::resolveEnumValues($query);
         }
 
         if ($body !== null) {
+            $resolvedBody = self::resolveEnumValues($body);
             switch ($bodyEncoding) {
                 case 'json':
-                    $options[RequestOptions::JSON] = $body;
+                    $options[RequestOptions::JSON] = $resolvedBody;
                     break;
                 case 'multipart':
                     $options[RequestOptions::MULTIPART] = [];
-                    foreach ($body as $name => $value) {
+                    foreach ($resolvedBody as $name => $value) {
                         if (is_string($value)) {
                             $stream = fopen('php://memory', 'r+');
                             fwrite($stream, $value);
@@ -131,7 +132,7 @@ final class HttpClient
                     }
                     break;
                 default:
-                    $options[RequestOptions::FORM_PARAMS] = $body;
+                    $options[RequestOptions::FORM_PARAMS] = $resolvedBody;
                     break;
             }
         }
@@ -158,6 +159,28 @@ final class HttpClient
         }
 
         return is_string($responseBody) ? $responseBody : [];
+    }
+
+    /**
+     * Resolve BackedEnum instances in an array to their backing values.
+     *
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    private static function resolveEnumValues(array $data): array
+    {
+        $result = [];
+        foreach ($data as $key => $value) {
+            if ($value instanceof \BackedEnum) {
+                $result[$key] = $value->value;
+            } elseif (is_array($value)) {
+                $result[$key] = self::resolveEnumValues($value);
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 
     private function parseBody(ResponseInterface $response): mixed
