@@ -10,6 +10,44 @@ require_once __DIR__ . '/deref.php';
 require_once __DIR__ . '/naming.php';
 require_once __DIR__ . '/types.php';
 
+// ─── Component Schema Utilities ──────────────────────────────────────────────
+
+/**
+ * Convert a component schema name to a PHP class name.
+ * E.g. "Resp_SystemInfo" -> "RespSystemInfo", "ItemFromListModel" -> "ItemFromListModel"
+ */
+function componentSchemaClassName(string $schemaName): string
+{
+    // Remove underscores and capitalize each segment
+    $parts = explode('_', $schemaName);
+    return implode('', array_map(fn(string $p) => ucfirst($p), $parts));
+}
+
+/**
+ * Collect model classes for all component schemas that have object properties.
+ *
+ * @param array<string, array<string, mixed>> $componentSchemas  name -> resolved schema
+ * @param array<string, array<string, mixed>> $componentSchemasMarked  name -> schema with __component_ref markers
+ * @param array<string, mixed> $spec  Full resolved spec
+ * @return list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}>
+ */
+function collectComponentModels(array $componentSchemas, array $componentSchemasMarked, array $spec): array
+{
+    $allModels = [];
+
+    foreach ($componentSchemas as $name => $schema) {
+        $className = componentSchemaClassName($name);
+        // Use marked schema if available for component ref detection
+        $markedSchema = $componentSchemasMarked[$name] ?? $schema;
+        $models = collectModels($markedSchema, $spec, $className, $componentSchemas);
+        foreach ($models as $model) {
+            $allModels[] = $model;
+        }
+    }
+
+    return $allModels;
+}
+
 // ─── Response Schema Extraction ─────────────────────────────────────────────
 
 /**
@@ -60,17 +98,18 @@ function extractResponseSchema(array $operation, array $spec): ?array
  * Collect all model classes needed for a response schema.
  * Returns a flat list of model definitions, depth-first.
  *
- * @param array<string, mixed> $schema  Resolved schema
+ * @param array<string, mixed> $schema  Schema (may contain __component_ref markers)
  * @param array<string, mixed> $spec    Full spec (for ref resolution)
  * @param string $className             Class name for this schema
+ * @param array<string, array<string, mixed>> $componentSchemas  Known component schemas
  * @return list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}>
  */
-function collectModels(array $schema, array $spec, string $className): array
+function collectModels(array $schema, array $spec, string $className, array $componentSchemas = []): array
 {
     $models = [];
     $properties = [];
 
-    // Resolve the schema
+    // Resolve the schema (strip __component_ref for resolution)
     $resolved = resolveSchemaFully($schema, $spec);
     if ($resolved === null) {
         return [];
@@ -81,6 +120,12 @@ function collectModels(array $schema, array $spec, string $className): array
         return [];
     }
 
+    // Use the schema with __component_ref markers for property traversal
+    $markedProps = $schema['properties'] ?? $props;
+    if (!is_array($markedProps)) {
+        $markedProps = $props;
+    }
+
     $required = [];
     if (isset($resolved['required']) && is_array($resolved['required'])) {
         $required = array_flip($resolved['required']);
@@ -88,14 +133,37 @@ function collectModels(array $schema, array $spec, string $className): array
 
     foreach ($props as $propName => $propSchema) {
         if (!is_array($propSchema)) {
-            $properties[] = buildPropertyDef((string) $propName, null, isset($required[$propName]), $spec, $className, $models);
+            $properties[] = buildPropertyDef((string) $propName, null, isset($required[$propName]), $spec, $className, $models, $componentSchemas, null);
             continue;
         }
 
         $propResolved = resolveSchemaFully($propSchema, $spec);
         $isRequired = isset($required[$propName]);
 
-        $properties[] = buildPropertyDef((string) $propName, $propResolved, $isRequired, $spec, $className, $models);
+        // Check if the original (marked) schema has a component ref
+        $markedProp = $markedProps[$propName] ?? null;
+        $componentRef = is_array($markedProp) ? ($markedProp['__component_ref'] ?? null) : null;
+
+        // For arrays, check items for component ref
+        $itemsComponentRef = null;
+        if (is_array($markedProp) && ($markedProp['type'] ?? null) === 'array') {
+            $markedItems = $markedProp['items'] ?? null;
+            if (is_array($markedItems)) {
+                $itemsComponentRef = $markedItems['__component_ref'] ?? null;
+            }
+        }
+
+        $properties[] = buildPropertyDef(
+            (string) $propName,
+            $propResolved,
+            $isRequired,
+            $spec,
+            $className,
+            $models,
+            $componentSchemas,
+            is_string($componentRef) ? $componentRef : (is_string($itemsComponentRef) ? $itemsComponentRef : null),
+            is_string($itemsComponentRef),
+        );
     }
 
     // Add current model at the beginning (parent first)
@@ -109,6 +177,7 @@ function collectModels(array $schema, array $spec, string $className): array
 
 /**
  * Resolve a schema fully, handling $ref, allOf, etc.
+ * Strips __component_ref markers during resolution.
  *
  * @param array<string, mixed> $schema
  * @param array<string, mixed> $spec
@@ -143,6 +212,10 @@ function resolveSchemaFully(array $schema, array $spec): ?array
                 $merged['required'] = array_merge($merged['required'], $resolved['required']);
             }
         }
+        // Preserve __component_ref if present
+        if (isset($schema['__component_ref'])) {
+            $merged['__component_ref'] = $schema['__component_ref'];
+        }
         return $merged;
     }
 
@@ -155,6 +228,9 @@ function resolveSchemaFully(array $schema, array $spec): ?array
  * @param array<string, mixed>|null $schema
  * @param array<string, mixed> $spec
  * @param list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}> &$models
+ * @param array<string, array<string, mixed>> $componentSchemas Known component schemas
+ * @param string|null $componentRef Component schema name if this property references one
+ * @param bool $isItemsRef True if the component ref is on array items (not the property itself)
  * @return array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}
  */
 function buildPropertyDef(
@@ -164,8 +240,37 @@ function buildPropertyDef(
     array $spec,
     string $parentClassName,
     array &$models,
+    array $componentSchemas = [],
+    ?string $componentRef = null,
+    bool $isItemsRef = false,
 ): array {
     $isNullable = !$isRequired;
+
+    // Handle component schema reference (non-array property)
+    if ($componentRef !== null && !$isItemsRef && isset($componentSchemas[$componentRef])) {
+        $refClassName = componentSchemaClassName($componentRef);
+        return [
+            'name' => $propName,
+            'phpType' => $refClassName,
+            'docType' => $refClassName,
+            'isArray' => false,
+            'isNullable' => $isNullable,
+            'nestedModel' => $refClassName,
+        ];
+    }
+
+    // Handle component schema reference on array items
+    if ($componentRef !== null && $isItemsRef && isset($componentSchemas[$componentRef])) {
+        $refClassName = componentSchemaClassName($componentRef);
+        return [
+            'name' => $propName,
+            'phpType' => 'array',
+            'docType' => "list<{$refClassName}>",
+            'isArray' => true,
+            'isNullable' => $isNullable,
+            'nestedModel' => $refClassName,
+        ];
+    }
 
     if ($schema === null || $schema === []) {
         return [
@@ -232,7 +337,7 @@ function buildPropertyDef(
             // If items are objects, create nested model
             if ($itemResolved !== null && hasObjectProperties($itemResolved)) {
                 $nestedName = $parentClassName . propertyToClassName($propName);
-                $nestedModels = collectModels($itemResolved, $spec, $nestedName);
+                $nestedModels = collectModels($itemResolved, $spec, $nestedName, $componentSchemas);
                 foreach ($nestedModels as $nm) {
                     $models[] = $nm;
                 }
@@ -270,7 +375,7 @@ function buildPropertyDef(
     if ($type === 'object' || hasObjectProperties($schema)) {
         if (hasObjectProperties($schema)) {
             $nestedName = $parentClassName . propertyToClassName($propName);
-            $nestedModels = collectModels($schema, $spec, $nestedName);
+            $nestedModels = collectModels($schema, $spec, $nestedName, $componentSchemas);
             foreach ($nestedModels as $nm) {
                 $models[] = $nm;
             }
@@ -415,13 +520,21 @@ function emitSingleModelClass(array $model, string $namespace): string
         $phpName = propertyToPhpName($prop['name']);
         $typeHint = resolveConstructorType($prop);
         $docType = $prop['docType'];
-        $nullable = $prop['isNullable'] ? '?' : '';
+
+        // Build nullable type hint: use ?Type for simple types, Type|null for unions
+        if ($prop['isNullable']) {
+            if (str_contains($typeHint, '|')) {
+                $typeHint = $typeHint . '|null';
+            } else {
+                $typeHint = '?' . $typeHint;
+            }
+        }
 
         // For nested models and typed arrays, add PHPDoc
         if ($prop['nestedModel'] !== null || ($prop['isArray'] && $prop['docType'] !== 'list<mixed>')) {
-            $ctorParams[] = "        /** @var {$docType}" . ($prop['isNullable'] ? '|null' : '') . " */\n        public readonly {$nullable}{$typeHint} \${$phpName},";
+            $ctorParams[] = "        /** @var {$docType}" . ($prop['isNullable'] ? '|null' : '') . " */\n        public readonly {$typeHint} \${$phpName},";
         } else {
-            $ctorParams[] = "        public readonly {$nullable}{$typeHint} \${$phpName},";
+            $ctorParams[] = "        public readonly {$typeHint} \${$phpName},";
         }
     }
     $lines[] = implode("\n", $ctorParams);
@@ -522,8 +635,9 @@ function emitFromArrayArg(array $prop, string $key, string $namespace): string
  * Emit a complete models file with all response model classes.
  *
  * @param list<array{operationId: string, models: list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}>}> $allModels
+ * @param list<array{className: string, properties: list<array{name: string, phpType: string, docType: string, isArray: bool, isNullable: bool, nestedModel: string|null}>}> $componentModels
  */
-function emitModelsFile(array $allModels, string $namespace): string
+function emitModelsFile(array $allModels, string $namespace, array $componentModels = []): string
 {
     $lines = [];
 
@@ -536,8 +650,30 @@ function emitModelsFile(array $allModels, string $namespace): string
     $lines[] = "namespace {$namespace};";
     $lines[] = '';
 
+    // Emit component schema models first (shared, deduplicated)
+    /** @var array<string, bool> $emittedClasses */
+    $emittedClasses = [];
+    if (count($componentModels) > 0) {
+        $lines[] = '// ─── Component Schema Models ────────────────────────────────────────────────';
+        $lines[] = '';
+        foreach ($componentModels as $model) {
+            if (isset($emittedClasses[$model['className']])) {
+                continue;
+            }
+            $emittedClasses[$model['className']] = true;
+            $lines[] = emitSingleModelClass($model, $namespace);
+        }
+        $lines[] = '// ─── Response Models ────────────────────────────────────────────────────────';
+        $lines[] = '';
+    }
+
     foreach ($allModels as $entry) {
         foreach ($entry['models'] as $model) {
+            // Skip if already emitted as component schema model
+            if (isset($emittedClasses[$model['className']])) {
+                continue;
+            }
+            $emittedClasses[$model['className']] = true;
             $lines[] = emitSingleModelClass($model, $namespace);
         }
     }

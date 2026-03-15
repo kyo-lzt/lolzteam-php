@@ -20,14 +20,14 @@ final class CategoryApi
 
     /**
      * @param array{page?: int, pmin?: int, pmax?: int, title?: string, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', tag_id[]?: list<int>, not_tag_id[]?: list<int>, public_tag_id[]?: list<int>, not_public_tag_id[]?: list<int>, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, user_id?: int, nsb?: bool, sb?: bool, nsb_by_me?: bool, sb_by_me?: bool, currency?: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try'|'jpy'|'brl', email_login_data?: bool, email_provider[]?: list<'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru'>, not_email_provider[]?: 'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru', parse_same_item_ids?: bool} $params
-     * @return Models\CategoryAllResponse
+     * @return Models\ItemListModel
      */
-    public function all(array $params = []): Models\CategoryAllResponse
+    public function all(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/', $params, null, 'form', isSearch: true);
 
-        return Models\CategoryAllResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 
     /**
@@ -364,26 +364,26 @@ final class ListApi
 
     /**
      * @param array{user_id?: int, category_id?: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, page?: int, show?: 'active'|'paid'|'deleted'|'awaiting'|'closed'|'discount_request'|'stickied'|'pre_active', delete_reason?: string, title?: string, pmin?: int, pmax?: int, login?: string, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', sb?: bool, sb_by_me?: bool, nsb?: bool, nsb_by_me?: bool, username?: string, published_startDate?: string, published_endDate?: string, filter_by_published_date?: bool, paid_startDate?: string, paid_endDate?: string, filter_by_buyer_operation_date?: bool, delete_startDate?: string, delete_endDate?: string, filter_by_delete_date?: bool} $params
-     * @return Models\ListUserResponse
+     * @return Models\ItemListModel
      */
-    public function user(array $params = []): Models\ListUserResponse
+    public function user(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/user/items', $params);
 
-        return Models\ListUserResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 
     /**
      * @param array{user_id?: int, category_id?: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, page?: int, show?: 'active'|'paid'|'deleted'|'awaiting'|'closed'|'discount_request'|'stickied'|'pre_active', title?: string, pmin?: int, pmax?: int, login?: string, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', sb?: bool, sb_by_me?: bool, nsb?: bool, nsb_by_me?: bool} $params
-     * @return Models\ListOrdersResponse
+     * @return Models\ItemListModel
      */
-    public function orders(array $params = []): Models\ListOrdersResponse
+    public function orders(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/user/orders', $params);
 
-        return Models\ListOrdersResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 
     /**
@@ -410,26 +410,26 @@ final class ListApi
 
     /**
      * @param array{page?: int, show?: 'active'|'paid'|'deleted'|'awaiting'|'closed'|'discount_request'|'stickied'|'pre_active', title?: string, pmin?: int, pmax?: int, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', sb?: bool, sb_by_me?: bool, nsb?: bool, nsb_by_me?: bool} $params
-     * @return Models\ListFavoritesResponse
+     * @return Models\ItemListModel
      */
-    public function favorites(array $params = []): Models\ListFavoritesResponse
+    public function favorites(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/fave', $params);
 
-        return Models\ListFavoritesResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 
     /**
      * @param array{page?: int, show?: 'active'|'paid'|'deleted'|'awaiting'|'closed'|'discount_request'|'stickied'|'pre_active', title?: string, pmin?: int, pmax?: int, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', sb?: bool, sb_by_me?: bool, nsb?: bool, nsb_by_me?: bool} $params
-     * @return Models\ListViewedResponse
+     * @return Models\ItemListModel
      */
-    public function viewed(array $params = []): Models\ListViewedResponse
+    public function viewed(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/viewed', $params);
 
-        return Models\ListViewedResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 }
 
@@ -664,14 +664,14 @@ final class ManagingApi
 
     /**
      * @param int $item_id
-     * @return Models\ManagingEmailCodeResponse
+     * @return Models\ConfirmationCodeModel
      */
-    public function emailCode(int $item_id): Models\ManagingEmailCodeResponse
+    public function emailCode(int $item_id): Models\ConfirmationCodeModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', "/{$item_id}/email-code");
 
-        return Models\ManagingEmailCodeResponse::fromArray($data);
+        return Models\ConfirmationCodeModel::fromArray($data);
     }
 
     /**
@@ -724,14 +724,14 @@ final class ManagingApi
 
     /**
      * @param int $item_id
-     * @return Models\ManagingSteamMafileCodeResponse
+     * @return Models\ConfirmationCodeModel
      */
-    public function steamMafileCode(int $item_id): Models\ManagingSteamMafileCodeResponse
+    public function steamMafileCode(int $item_id): Models\ConfirmationCodeModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', "/{$item_id}/guard-code");
 
-        return Models\ManagingSteamMafileCodeResponse::fromArray($data);
+        return Models\ConfirmationCodeModel::fromArray($data);
     }
 
     /**
@@ -1011,14 +1011,14 @@ final class CartApi
 
     /**
      * @param array{category_id?: 1|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|22|24|28|30|31, page?: int, pmin?: int, pmax?: int, title?: string, order_by?: 'price_to_up'|'price_to_down'|'pdate_to_down'|'pdate_to_up'|'pdate_to_down_upload'|'pdate_to_up_upload'|'edate_to_up'|'edate_to_down'|'ddate_to_up'|'ddate_to_down', tag_id[]?: list<int>, not_tag_id[]?: list<int>, public_tag_id[]?: list<int>, not_public_tag_id[]?: list<int>, origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, not_origin[]?: list<'brute'|'phishing'|'stealer'|'personal'|'resale'|'autoreg'|'self_registration'|'retrieve'|'retrieve_via_support'|'dummy'>, user_id?: int, nsb?: bool, sb?: bool, nsb_by_me?: bool, sb_by_me?: bool, currency?: 'rub'|'uah'|'kzt'|'byn'|'usd'|'eur'|'gbp'|'cny'|'try'|'jpy'|'brl', email_login_data?: bool, email_provider[]?: list<'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru'>, not_email_provider[]?: 'other'|'rambler'|'outlook'|'firstmail'|'notletters'|'mail_ru', parse_same_item_ids?: bool} $params
-     * @return Models\CartGetResponse
+     * @return Models\ItemListModel
      */
-    public function get(array $params = []): Models\CartGetResponse
+    public function get(array $params = []): Models\ItemListModel
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('GET', '/cart', $params);
 
-        return Models\CartGetResponse::fromArray($data);
+        return Models\ItemListModel::fromArray($data);
     }
 
     /**

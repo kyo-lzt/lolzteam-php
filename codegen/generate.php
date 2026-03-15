@@ -110,6 +110,19 @@ function generateApi(array $config): void
         mkdir($modelsDir, 0755, true);
     }
 
+    // Generate component schema models
+    /** @var array<string, array<string, mixed>> $componentSchemas */
+    $componentSchemas = $result['componentSchemas'] ?? [];
+    /** @var array<string, array<string, mixed>> $componentSchemasMarked */
+    $componentSchemasMarked = $result['componentSchemasMarked'] ?? [];
+
+    // Fully resolve the spec for component model collection
+    $specFull = deref($rawSpec, $rawSpec);
+    if (!is_array($specFull)) {
+        throw new RuntimeException('Failed to resolve spec');
+    }
+    $componentModels = collectComponentModels($componentSchemas, $componentSchemasMarked, $specFull);
+
     // Collect all response models from all groups
     $allModels = [];
     $modelCount = 0;
@@ -125,11 +138,12 @@ function generateApi(array $config): void
         }
     }
 
-    if (count($allModels) > 0) {
-        $modelsContent = emitModelsFile($allModels, $modelsNamespace);
+    $totalModels = count($componentModels) + $modelCount;
+    if ($totalModels > 0) {
+        $modelsContent = emitModelsFile($allModels, $modelsNamespace, $componentModels);
         $modelsFilePath = $modelsDir . '/Models.php';
         file_put_contents($modelsFilePath, $modelsContent);
-        echo "  Models.php ({$modelCount} classes)\n";
+        echo "  Models.php ({$totalModels} classes, " . count($componentModels) . " component schemas)\n";
     }
 
     $methodCount = 0;

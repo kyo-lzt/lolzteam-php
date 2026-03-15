@@ -367,13 +367,49 @@ const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
 
 /**
  * @param array<string, mixed> $rawSpec
- * @return array{groups: list<array{groupName: string, methods: list<array<string, mixed>>}>, baseUrl: string}
+ * @return array{groups: list<array{groupName: string, methods: list<array<string, mixed>>}>, baseUrl: string, componentSchemas: array<string, array<string, mixed>>}
  */
 function parseSpec(array $rawSpec): array
 {
-    // Resolve all $refs first
-    $spec = deref($rawSpec, $rawSpec);
+    // Extract component schemas before dereferencing
+    // We need both:
+    //   - $componentSchemas: fully resolved (for hasObjectProperties check and generating models)
+    //   - $componentSchemasMarked: resolved with component ref markers (for detecting cross-refs)
+    /** @var array<string, array<string, mixed>> $componentSchemas */
+    $componentSchemas = [];
+    /** @var array<string, array<string, mixed>> $componentSchemasMarked */
+    $componentSchemasMarked = [];
+    $rawSchemas = $rawSpec['components']['schemas'] ?? [];
+    if (is_array($rawSchemas)) {
+        $specFullTemp = deref($rawSpec, $rawSpec);
+        if (!is_array($specFullTemp)) {
+            throw new RuntimeException('Failed to resolve spec');
+        }
+        foreach ($rawSchemas as $name => $schema) {
+            if (!is_array($schema)) {
+                continue;
+            }
+            $resolved = resolveSchemaFully(deref($schema, $rawSpec), $specFullTemp);
+            if ($resolved !== null && hasObjectProperties($resolved)) {
+                $componentSchemas[(string) $name] = $resolved;
+                // Also resolve with markers preserved
+                $marked = derefPreservingComponents($schema, $rawSpec);
+                if (is_array($marked)) {
+                    $componentSchemasMarked[(string) $name] = $marked;
+                }
+            }
+        }
+    }
+
+    // Resolve all $refs, preserving component schema markers
+    $spec = derefPreservingComponents($rawSpec, $rawSpec);
     if (!is_array($spec)) {
+        throw new RuntimeException('Failed to resolve spec');
+    }
+
+    // Also keep fully-resolved spec for parameter/type extraction
+    $specFull = deref($rawSpec, $rawSpec);
+    if (!is_array($specFull)) {
         throw new RuntimeException('Failed to resolve spec');
     }
 
@@ -408,20 +444,20 @@ function parseSpec(array $rawSpec): array
             }
             $methodName = sanitizeMethodName(operationIdToMethod($operationId));
 
-            $params = extractParameters($operation, $spec);
-            $bodyProperties = extractBodyProperties($operation, $spec);
-            $responseType = extractResponseType($operation, $spec);
+            $params = extractParameters($operation, $specFull);
+            $bodyProperties = extractBodyProperties($operation, $specFull);
+            $responseType = extractResponseType($operation, $specFull);
 
             $hasBody = isset($operation['requestBody']);
             $bodyRequired = false;
             if ($hasBody) {
-                $rb = derefShallow($operation['requestBody'], $spec);
+                $rb = derefShallow($operation['requestBody'], $specFull);
                 $bodyRequired = is_array($rb) && !empty($rb['required']);
             }
 
-            $bodyEncoding = detectBodyEncoding($operation, $spec);
-            $rawBodyInfo = extractRawBodyInfo($operation, $spec);
-            $returnsNonJson = hasNonJsonResponse($operation, $spec);
+            $bodyEncoding = detectBodyEncoding($operation, $specFull);
+            $rawBodyInfo = extractRawBodyInfo($operation, $specFull);
+            $returnsNonJson = hasNonJsonResponse($operation, $specFull);
 
             // PHP-2: GET requests with requestBody — send body properties as query params
             $upperMethod = strtoupper($httpMethod);
@@ -441,15 +477,22 @@ function parseSpec(array $rawSpec): array
                 $bodyEncoding = 'form';
             }
 
-            // Extract response model
+            // Extract response model (use $spec with component markers)
             $responseSchema = extractResponseSchema($operation, $spec);
             $responseModelClass = null;
             $responseModels = [];
             if ($responseSchema !== null && !$returnsNonJson) {
-                $resolvedResponseSchema = resolveSchemaFully($responseSchema, $spec);
+                // Check if top-level response IS a component schema
+                $topComponentRef = $responseSchema['__component_ref'] ?? null;
+                $resolvedResponseSchema = resolveSchemaFully($responseSchema, $specFull);
                 if ($resolvedResponseSchema !== null && hasObjectProperties($resolvedResponseSchema)) {
-                    $responseModelClass = responseModelClassName($operationId);
-                    $responseModels = collectModels($resolvedResponseSchema, $spec, $responseModelClass);
+                    if (is_string($topComponentRef) && isset($componentSchemas[$topComponentRef])) {
+                        // Top-level response is a component schema — use its class name directly
+                        $responseModelClass = componentSchemaClassName($topComponentRef);
+                    } else {
+                        $responseModelClass = responseModelClassName($operationId);
+                        $responseModels = collectModels($responseSchema, $specFull, $responseModelClass, $componentSchemas);
+                    }
                 }
             }
 
@@ -490,5 +533,10 @@ function parseSpec(array $rawSpec): array
         }
     }
 
-    return ['groups' => $groups, 'baseUrl' => $baseUrl];
+    return [
+        'groups' => $groups,
+        'baseUrl' => $baseUrl,
+        'componentSchemas' => $componentSchemas,
+        'componentSchemasMarked' => $componentSchemasMarked,
+    ];
 }

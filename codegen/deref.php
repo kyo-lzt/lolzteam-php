@@ -66,6 +66,52 @@ function deref(mixed $value, array $spec, array $visited = []): mixed
 }
 
 /**
+ * Recursively resolve all $ref pointers, but preserve component schema references.
+ * When a $ref points to #/components/schemas/*, it is replaced with:
+ *   ['__component_ref' => 'SchemaName', ...resolved properties]
+ *
+ * @param array<string, mixed> $spec
+ * @param array<string, bool> $visited
+ */
+function derefPreservingComponents(mixed $value, array $spec, array $visited = []): mixed
+{
+    if (isRefObject($value)) {
+        /** @var string $ref */
+        $ref = $value['$ref'];
+        if (isset($visited[$ref])) {
+            return [];
+        }
+        $visited[$ref] = true;
+        $resolved = resolveRef($ref, $spec);
+
+        // Preserve component schema reference marker
+        if (str_starts_with($ref, '#/components/schemas/')) {
+            $schemaName = substr($ref, strlen('#/components/schemas/'));
+            $resolvedValue = derefPreservingComponents($resolved, $spec, $visited);
+            if (is_array($resolvedValue)) {
+                return array_merge(['__component_ref' => $schemaName], $resolvedValue);
+            }
+            return ['__component_ref' => $schemaName];
+        }
+
+        return derefPreservingComponents($resolved, $spec, $visited);
+    }
+
+    if (is_array($value)) {
+        if (array_is_list($value)) {
+            return array_map(fn(mixed $item) => derefPreservingComponents($item, $spec, $visited), $value);
+        }
+        $result = [];
+        foreach ($value as $key => $val) {
+            $result[$key] = derefPreservingComponents($val, $spec, $visited);
+        }
+        return $result;
+    }
+
+    return $value;
+}
+
+/**
  * Shallow $ref resolution — only resolves the top-level ref.
  *
  * @param array<string, mixed> $spec

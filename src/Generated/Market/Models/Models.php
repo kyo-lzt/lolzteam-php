@@ -6,10 +6,698 @@ declare(strict_types=1);
 
 namespace Lolzteam\Generated\Market\Models;
 
-final class CategoryAllResponse
+// ─── Component Schema Models ────────────────────────────────────────────────
+
+final class DiscountModel
 {
     public function __construct(
-        /** @var list<CategoryAllResponseItems> */
+        public readonly int $category_id,
+        public readonly int $discount_id,
+        public readonly int $discount_percent,
+        public readonly int $discount_user_id,
+        public readonly int $max_price,
+        public readonly int $min_price,
+        public readonly int $user_id,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['category_id'],
+            $data['discount_id'],
+            $data['discount_percent'],
+            $data['discount_user_id'],
+            $data['max_price'],
+            $data['min_price'],
+            $data['user_id'],
+        );
+    }
+}
+
+final class UserModel
+{
+    public function __construct(
+        public readonly int $active_items_count,
+        public readonly bool $activity_visible,
+        public readonly int $age,
+        public readonly string $balance,
+        /** @var list<UserModelBalances> */
+        public readonly array $balances,
+        public readonly int $bump_item_period,
+        public readonly bool $can_edit,
+        public readonly bool $can_follow,
+        public readonly bool $can_ignore,
+        public readonly bool $can_post_profile,
+        public readonly bool $can_view_profile,
+        public readonly bool $can_view_profile_posts,
+        public readonly bool $can_warn,
+        public readonly int $contest_count,
+        public readonly string $conv_welcome_message,
+        public readonly int $convertedBalance,
+        public readonly int $convertedDeposit,
+        public readonly int $convertedHold,
+        public readonly string $currency,
+        public readonly string $currencyPhrase,
+        public readonly string $custom_account_download_format,
+        /** @var UserModelCustomFields */
+        public readonly UserModelCustomFields $custom_fields,
+        public readonly string $custom_title,
+        public readonly int $deposit,
+        /** @var UserModelDob */
+        public readonly UserModelDob $dob,
+        /** @var UserModelFeedbackData */
+        public readonly UserModelFeedbackData $feedback_data,
+        public readonly string $hold,
+        public readonly string $homepage,
+        /** @var UserModelImapData */
+        public readonly UserModelImapData $imap_data,
+        public readonly bool $is_admin,
+        public readonly bool $is_banned,
+        public readonly bool $is_followed,
+        public readonly bool $is_ignored,
+        public readonly bool $is_moderator,
+        public readonly bool $is_staff,
+        public readonly bool $is_super_admin,
+        public readonly int $joined_date,
+        public readonly int $last_activity,
+        public readonly int $like2_count,
+        public readonly int $like_count,
+        public readonly string $location,
+        public readonly string $market_custom_title,
+        public readonly int $max_discount_percent,
+        public readonly int $message_count,
+        public readonly int $paid_mail_left,
+        /** @var list<UserModelPublicTags> */
+        public readonly array $public_tags,
+        public readonly int $register_date,
+        /** @var UserModelRendered */
+        public readonly UserModelRendered $rendered,
+        public readonly int $restore_count,
+        /** @var UserModelRestoreData */
+        public readonly UserModelRestoreData $restore_data,
+        public readonly string $short_link,
+        public readonly int $sold_items_count,
+        /** @var list<UserModelTags> */
+        public readonly array $tags,
+        /** @var UserModelTelegramClient */
+        public readonly UserModelTelegramClient $telegram_client,
+        public readonly int $trophy_points,
+        public readonly bool $user_allow_ask_discount,
+        public readonly int $user_id,
+        public readonly string $user_title,
+        public readonly string $username,
+        public readonly string $view_url,
+        public readonly bool $visible,
+        public readonly int $warning_points,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['active_items_count'],
+            $data['activity_visible'],
+            $data['age'],
+            $data['balance'],
+            array_map(static fn(array $item): UserModelBalances => UserModelBalances::fromArray($item), $data['balances']),
+            $data['bump_item_period'],
+            $data['can_edit'],
+            $data['can_follow'],
+            $data['can_ignore'],
+            $data['can_post_profile'],
+            $data['can_view_profile'],
+            $data['can_view_profile_posts'],
+            $data['can_warn'],
+            $data['contest_count'],
+            $data['conv_welcome_message'],
+            $data['convertedBalance'],
+            $data['convertedDeposit'],
+            $data['convertedHold'],
+            $data['currency'],
+            $data['currencyPhrase'],
+            $data['custom_account_download_format'],
+            UserModelCustomFields::fromArray($data['custom_fields']),
+            $data['custom_title'],
+            $data['deposit'],
+            UserModelDob::fromArray($data['dob']),
+            UserModelFeedbackData::fromArray($data['feedback_data']),
+            $data['hold'],
+            $data['homepage'],
+            UserModelImapData::fromArray($data['imap_data']),
+            $data['is_admin'],
+            $data['is_banned'],
+            $data['is_followed'],
+            $data['is_ignored'],
+            $data['is_moderator'],
+            $data['is_staff'],
+            $data['is_super_admin'],
+            $data['joined_date'],
+            $data['last_activity'],
+            $data['like2_count'],
+            $data['like_count'],
+            $data['location'],
+            $data['market_custom_title'],
+            $data['max_discount_percent'],
+            $data['message_count'],
+            $data['paid_mail_left'],
+            array_map(static fn(array $item): UserModelPublicTags => UserModelPublicTags::fromArray($item), $data['public_tags']),
+            $data['register_date'],
+            UserModelRendered::fromArray($data['rendered']),
+            $data['restore_count'],
+            UserModelRestoreData::fromArray($data['restore_data']),
+            $data['short_link'],
+            $data['sold_items_count'],
+            array_map(static fn(array $item): UserModelTags => UserModelTags::fromArray($item), $data['tags']),
+            UserModelTelegramClient::fromArray($data['telegram_client']),
+            $data['trophy_points'],
+            $data['user_allow_ask_discount'],
+            $data['user_id'],
+            $data['user_title'],
+            $data['username'],
+            $data['view_url'],
+            $data['visible'],
+            $data['warning_points'],
+        );
+    }
+}
+
+final class UserModelBalances
+{
+    public function __construct(
+        public readonly string $balance,
+        public readonly int $balance_id,
+        public readonly float $convertedBalance,
+        public readonly mixed $custom_title,
+        public readonly string $fullTitle,
+        public readonly int $merchant_id,
+        public readonly string $title,
+        public readonly string $type,
+        public readonly int $user_id,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['balance'],
+            $data['balance_id'],
+            $data['convertedBalance'],
+            $data['custom_title'],
+            $data['fullTitle'],
+            $data['merchant_id'],
+            $data['title'],
+            $data['type'],
+            $data['user_id'],
+        );
+    }
+}
+
+final class UserModelCustomFields
+{
+    public function __construct(
+        public readonly string $_4,
+        public readonly array $allowSelfUnban,
+        public readonly string $ban_reason,
+        public readonly string $discord,
+        public readonly string $github,
+        public readonly string $jabber,
+        public readonly string $lztAwardUserTrophy,
+        public readonly string $lztLikesIncreasing,
+        public readonly string $lztLikesZeroing,
+        public readonly string $lztSympathyIncreasing,
+        public readonly string $lztSympathyZeroing,
+        public readonly string $lztUnbanAmount,
+        public readonly string $maecenasValue,
+        public readonly string $scamURL,
+        public readonly string $steam,
+        public readonly string $telegram,
+        public readonly string $vk,
+        public readonly string $favoritePorn,
+        public readonly string $favoriteVape,
+        public readonly string $favoriteAnime,
+        public readonly string $matrix,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['_4'],
+            $data['allowSelfUnban'],
+            $data['ban_reason'],
+            $data['discord'],
+            $data['github'],
+            $data['jabber'],
+            $data['lztAwardUserTrophy'],
+            $data['lztLikesIncreasing'],
+            $data['lztLikesZeroing'],
+            $data['lztSympathyIncreasing'],
+            $data['lztSympathyZeroing'],
+            $data['lztUnbanAmount'],
+            $data['maecenasValue'],
+            $data['scamURL'],
+            $data['steam'],
+            $data['telegram'],
+            $data['vk'],
+            $data['favoritePorn'],
+            $data['favoriteVape'],
+            $data['favoriteAnime'],
+            $data['matrix'],
+        );
+    }
+}
+
+final class UserModelDob
+{
+    public function __construct(
+        public readonly int $year,
+        public readonly int $month,
+        public readonly int $day,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['year'],
+            $data['month'],
+            $data['day'],
+        );
+    }
+}
+
+final class UserModelFeedbackData
+{
+    public function __construct(
+        /** @var UserModelFeedbackDataData12345 */
+        public readonly UserModelFeedbackDataData12345 $_12345,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            UserModelFeedbackDataData12345::fromArray($data['12345']),
+        );
+    }
+}
+
+final class UserModelFeedbackDataData12345
+{
+    public function __construct(
+        public readonly int $positive,
+        public readonly int $negative,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['positive'],
+            $data['negative'],
+        );
+    }
+}
+
+final class UserModelImapData
+{
+    public function __construct(
+        /** @var UserModelImapDataDomainZone */
+        public readonly UserModelImapDataDomainZone $domain_zone,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            UserModelImapDataDomainZone::fromArray($data['domain.zone']),
+        );
+    }
+}
+
+final class UserModelImapDataDomainZone
+{
+    public function __construct(
+        public readonly string $domain,
+        public readonly string $imap_server,
+        public readonly int $port,
+        public readonly bool $secure,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['domain'],
+            $data['imap_server'],
+            $data['port'],
+            $data['secure'],
+        );
+    }
+}
+
+final class UserModelPublicTags
+{
+    public function __construct(
+        public readonly string $background_color,
+        public readonly int $tag_id,
+        public readonly string $title,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['background_color'],
+            $data['tag_id'],
+            $data['title'],
+        );
+    }
+}
+
+final class UserModelRendered
+{
+    public function __construct(
+        public readonly string $username,
+        /** @var UserModelRenderedAvatars */
+        public readonly UserModelRenderedAvatars $avatars,
+        /** @var UserModelRenderedBackgrounds */
+        public readonly UserModelRenderedBackgrounds $backgrounds,
+        public readonly string $link,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['username'],
+            UserModelRenderedAvatars::fromArray($data['avatars']),
+            UserModelRenderedBackgrounds::fromArray($data['backgrounds']),
+            $data['link'],
+        );
+    }
+}
+
+final class UserModelRenderedAvatars
+{
+    public function __construct(
+        public readonly string $l,
+        public readonly string $m,
+        public readonly string $s,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['l'],
+            $data['m'],
+            $data['s'],
+        );
+    }
+}
+
+final class UserModelRenderedBackgrounds
+{
+    public function __construct(
+        public readonly string $l,
+        public readonly string $m,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['l'],
+            $data['m'],
+        );
+    }
+}
+
+final class UserModelRestoreData
+{
+    public function __construct(
+        public readonly int $_12345,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['12345'],
+        );
+    }
+}
+
+final class UserModelTags
+{
+    public function __construct(
+        public readonly int $tag_id,
+        public readonly string $title,
+        public readonly bool $isDefault,
+        public readonly bool $forOwnedAccountsOnly,
+        public readonly string $bc,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['tag_id'],
+            $data['title'],
+            $data['isDefault'],
+            $data['forOwnedAccountsOnly'],
+            $data['bc'],
+        );
+    }
+}
+
+final class UserModelTelegramClient
+{
+    public function __construct(
+        public readonly string $telegram_api_id,
+        public readonly string $telegram_api_hash,
+        public readonly string $telegram_device_model,
+        public readonly string $telegram_system_version,
+        public readonly string $telegram_app_version,
+        public readonly string $telegram_system_lang_code,
+        public readonly string $telegram_lang_code,
+        public readonly string $telegram_lang_pack,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['telegram_api_id'],
+            $data['telegram_api_hash'],
+            $data['telegram_device_model'],
+            $data['telegram_system_version'],
+            $data['telegram_app_version'],
+            $data['telegram_system_lang_code'],
+            $data['telegram_lang_code'],
+            $data['telegram_lang_pack'],
+        );
+    }
+}
+
+final class BalanceModel
+{
+    public function __construct(
+        public readonly string $balance,
+        public readonly int $balance_id,
+        public readonly mixed $custom_title,
+        public readonly string $fullTitle,
+        public readonly int $merchant_id,
+        public readonly string $title,
+        public readonly string $type,
+        public readonly int $user_id,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['balance'],
+            $data['balance_id'],
+            $data['custom_title'],
+            $data['fullTitle'],
+            $data['merchant_id'],
+            $data['title'],
+            $data['type'],
+            $data['user_id'],
+        );
+    }
+}
+
+final class ExtraModel
+{
+    public function __construct(
+        public readonly ?string $proxy,
+        public readonly ?bool $close_item,
+        public readonly ?string $region,
+        public readonly string|int|null $service,
+        public readonly string|int|null $system,
+        public readonly ?string $confirmationCode,
+        public readonly ?string $cookies,
+        public readonly ?bool $login_without_cookies,
+        public readonly ?bool $cookie_login,
+        public readonly ?string $mfa_file,
+        public readonly ?int $dota2_mmr,
+        public readonly ?bool $ea_games,
+        public readonly ?bool $uplay_games,
+        public readonly ?bool $the_quarry,
+        public readonly ?bool $warframe,
+        public readonly ?bool $ark,
+        public readonly ?bool $ark_ascended,
+        public readonly ?int $genshin_currency,
+        public readonly ?int $honkai_currency,
+        public readonly ?int $zenless_currency,
+        public readonly ?string $password,
+        public readonly ?string $telegramClient,
+        public readonly ?string $telegramJson,
+        public readonly ?bool $checkChannels,
+        public readonly ?bool $checkSpam,
+        public readonly ?bool $checkHypixelBan,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['proxy'] ?? null,
+            $data['close_item'] ?? null,
+            $data['region'] ?? null,
+            $data['service'] ?? null,
+            $data['system'] ?? null,
+            $data['confirmationCode'] ?? null,
+            $data['cookies'] ?? null,
+            $data['login_without_cookies'] ?? null,
+            $data['cookie_login'] ?? null,
+            $data['mfa_file'] ?? null,
+            $data['dota2_mmr'] ?? null,
+            $data['ea_games'] ?? null,
+            $data['uplay_games'] ?? null,
+            $data['the_quarry'] ?? null,
+            $data['warframe'] ?? null,
+            $data['ark'] ?? null,
+            $data['ark_ascended'] ?? null,
+            $data['genshin_currency'] ?? null,
+            $data['honkai_currency'] ?? null,
+            $data['zenless_currency'] ?? null,
+            $data['password'] ?? null,
+            $data['telegramClient'] ?? null,
+            $data['telegramJson'] ?? null,
+            $data['checkChannels'] ?? null,
+            $data['checkSpam'] ?? null,
+            $data['checkHypixelBan'] ?? null,
+        );
+    }
+}
+
+final class ConfirmationCodeModel
+{
+    public function __construct(
+        /** @var ItemModel */
+        public readonly ItemModel $item,
+        /** @var ConfirmationCodeModelCodeData */
+        public readonly ConfirmationCodeModelCodeData $codeData,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            ItemModel::fromArray($data['item']),
+            ConfirmationCodeModelCodeData::fromArray($data['codeData']),
+        );
+    }
+}
+
+final class ConfirmationCodeModelCodeData
+{
+    public function __construct(
+        public readonly string $code,
+        public readonly int $date,
+        public readonly string $textPlain,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['code'],
+            $data['date'],
+            $data['textPlain'],
+        );
+    }
+}
+
+final class ItemListModel
+{
+    public function __construct(
+        /** @var list<ItemFromListModel> */
         public readonly array $items,
         public readonly int $totalItems,
         public readonly mixed $totalItemsPrice,
@@ -17,10 +705,10 @@ final class CategoryAllResponse
         public readonly int $perPage,
         public readonly int $page,
         public readonly string $searchUrl,
-        /** @var list<CategoryAllResponseStickyItems> */
+        /** @var list<ItemFromListModel> */
         public readonly array $stickyItems,
-        /** @var CategoryAllResponseSystemInfo */
-        public readonly CategoryAllResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -30,20 +718,20 @@ final class CategoryAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CategoryAllResponseItems => CategoryAllResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn(array $item): CategoryAllResponseStickyItems => CategoryAllResponseStickyItems::fromArray($item), $data['stickyItems']),
-            CategoryAllResponseSystemInfo::fromArray($data['system_info']),
+            array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), $data['stickyItems']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
 
-final class CategoryAllResponseItems
+final class ItemFromListModel
 {
     public function __construct(
         public readonly ?int $item_id,
@@ -77,8 +765,8 @@ final class CategoryAllResponseItems
         public readonly ?bool $canDeleteItem,
         public readonly ?bool $canStickItem,
         public readonly ?bool $canUnstickItem,
-        /** @var CategoryAllResponseItemsBumpSettings|null */
-        public readonly ?CategoryAllResponseItemsBumpSettings $bumpSettings,
+        /** @var ItemFromListModelBumpSettings|null */
+        public readonly ?ItemFromListModelBumpSettings $bumpSettings,
         public readonly ?bool $canBumpItem,
         public readonly ?bool $canBuyItem,
         public readonly ?int $rub_price,
@@ -92,8 +780,8 @@ final class CategoryAllResponseItems
         public readonly ?string $note_text,
         public readonly ?string $description_html,
         public readonly ?string $description_html_en,
-        /** @var CategoryAllResponseItemsSeller|null */
-        public readonly ?CategoryAllResponseItemsSeller $seller,
+        /** @var ItemFromListModelSeller|null */
+        public readonly ?ItemFromListModelSeller $seller,
     ) {
     }
 
@@ -134,7 +822,7 @@ final class CategoryAllResponseItems
             $data['canDeleteItem'] ?? null,
             $data['canStickItem'] ?? null,
             $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? CategoryAllResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
+            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ItemFromListModelBumpSettings::fromArray($data['bumpSettings']) : null,
             $data['canBumpItem'] ?? null,
             $data['canBuyItem'] ?? null,
             $data['rub_price'] ?? null,
@@ -147,12 +835,12 @@ final class CategoryAllResponseItems
             $data['note_text'] ?? null,
             $data['description_html'] ?? null,
             $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? CategoryAllResponseItemsSeller::fromArray($data['seller']) : null,
+            isset($data['seller']) && is_array($data['seller']) ? ItemFromListModelSeller::fromArray($data['seller']) : null,
         );
     }
 }
 
-final class CategoryAllResponseItemsBumpSettings
+final class ItemFromListModelBumpSettings
 {
     public function __construct(
         public readonly ?bool $canBumpItem,
@@ -176,7 +864,7 @@ final class CategoryAllResponseItemsBumpSettings
     }
 }
 
-final class CategoryAllResponseItemsSeller
+final class ItemFromListModelSeller
 {
     public function __construct(
         public readonly ?int $user_id,
@@ -210,57 +898,120 @@ final class CategoryAllResponseItemsSeller
     }
 }
 
-final class CategoryAllResponseStickyItems
+final class ItemModel
 {
     public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var CategoryAllResponseStickyItemsBumpSettings|null */
-        public readonly ?CategoryAllResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var CategoryAllResponseStickyItemsSeller|null */
-        public readonly ?CategoryAllResponseStickyItemsSeller $seller,
+        public readonly int $item_id,
+        public readonly string $item_state,
+        public readonly int $category_id,
+        public readonly int $published_date,
+        public readonly string $title,
+        public readonly string $description,
+        public readonly int $price,
+        public readonly int $update_stat_date,
+        public readonly int $refreshed_date,
+        public readonly int $edit_date,
+        public readonly int $pending_deletion_date,
+        public readonly string $login,
+        public readonly string $temp_email,
+        public readonly int $view_count,
+        public readonly int $is_sticky,
+        public readonly string $information,
+        public readonly string $item_origin,
+        public readonly int $extended_guarantee,
+        public readonly int $nsb,
+        public readonly int $allow_ask_discount,
+        public readonly string $title_en,
+        public readonly string $description_en,
+        public readonly string $information_en,
+        public readonly string $email_type,
+        public readonly string $email_provider,
+        public readonly string $item_domain,
+        public readonly string $resale_item_origin,
+        public readonly string $note_text,
+        public readonly mixed $content_type,
+        public readonly mixed $content_id,
+        public readonly int $delete_date,
+        public readonly int $delete_user_id,
+        public readonly string $delete_username,
+        public readonly string $delete_reason,
+        public readonly int $user_allow_ask_discount,
+        public readonly int $max_discount_percent,
+        public readonly string $market_custom_title,
+        public readonly string $feedback_data,
+        public readonly int $buyer_display_icon_group_id,
+        public readonly string $buyer_uniq_banner,
+        public readonly int $buyer_avatar_date,
+        public readonly int $buyer_user_group_id,
+        public readonly mixed $is_fave,
+        public readonly mixed $in_cart,
+        public readonly mixed $cart_price,
+        public readonly bool $canResellItem,
+        public readonly float $priceWithSellerFee,
+        /** @var ItemModelGuarantee */
+        public readonly ItemModelGuarantee $guarantee,
+        public readonly bool $canViewLoginData,
+        public readonly bool $canUpdateItemStats,
+        public readonly bool $canReportItem,
+        public readonly bool $canViewItemViews,
+        /** @var ItemModelLoginData */
+        public readonly ItemModelLoginData $loginData,
+        public readonly bool $canViewEmailLoginData,
+        /** @var ItemModelCopyFormatData */
+        public readonly ItemModelCopyFormatData $copyFormatData,
+        public readonly bool $showGetEmailCodeButton,
+        public readonly mixed $getEmailCodeDisplayLogin,
+        /** @var ItemModelBuyer */
+        public readonly ItemModelBuyer $buyer,
+        public readonly bool $isPersonalAccount,
+        public readonly int $rub_price,
+        public readonly string $price_currency,
+        public readonly string $priceWithSellerFeeLabel,
+        public readonly bool $canValidateAccount,
+        public readonly bool $canResellItemAfterPurchase,
+        public readonly bool $isSmallExf,
+        public readonly int $account_last_activity,
+        public readonly bool $canViewAccountLink,
+        /** @var list<ItemModelAccountLinks> */
+        public readonly array $accountLinks,
+        public readonly string $accountLink,
+        /** @var list<string> */
+        public readonly array $imagePreviewLinks,
+        public readonly bool $canChangePassword,
+        public readonly bool $canChangeEmailPassword,
+        public readonly bool $uniqueKeyExists,
+        public readonly string $itemOriginPhrase,
+        public readonly bool $visitorIsAuthor,
+        public readonly bool $canAskDiscount,
+        /** @var ItemModelTags */
+        public readonly ItemModelTags $tags,
+        /** @var ItemModelCustomFields */
+        public readonly ItemModelCustomFields $customFields,
+        public readonly array $externalAuth,
+        public readonly bool $isTrusted,
+        public readonly bool $isBirthdayToday,
+        public readonly bool $isIgnored,
+        public readonly int $deposit,
+        /** @var list<ItemModelExtraPrices> */
+        public readonly array $extraPrices,
+        public readonly bool $canViewAccountLoginAndTempEmail,
+        /** @var ItemModelBumpSettings */
+        public readonly ItemModelBumpSettings $bumpSettings,
+        public readonly bool $canCheckGuarantee,
+        public readonly bool $canShareItem,
+        public readonly bool $canCheckAiPrice,
+        public readonly int $aiPrice,
+        public readonly int $aiPriceCheckDate,
+        public readonly bool $needToRequireVideoToViewLoginData,
+        public readonly bool $canCheckAutoBuyPrice,
+        public readonly int $autoBuyPrice,
+        public readonly int $autoBuyPriceCheckDate,
+        public readonly string $descriptionHtml,
+        public readonly string $descriptionEnHtml,
+        public readonly string $descriptionPlain,
+        public readonly string $descriptionEnPlain,
+        /** @var ItemModelSeller */
+        public readonly ItemModelSeller $seller,
     ) {
     }
 
@@ -270,62 +1021,123 @@ final class CategoryAllResponseStickyItems
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? CategoryAllResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? CategoryAllResponseStickyItemsSeller::fromArray($data['seller']) : null,
+            $data['item_id'],
+            $data['item_state'],
+            $data['category_id'],
+            $data['published_date'],
+            $data['title'],
+            $data['description'],
+            $data['price'],
+            $data['update_stat_date'],
+            $data['refreshed_date'],
+            $data['edit_date'],
+            $data['pending_deletion_date'],
+            $data['login'],
+            $data['temp_email'],
+            $data['view_count'],
+            $data['is_sticky'],
+            $data['information'],
+            $data['item_origin'],
+            $data['extended_guarantee'],
+            $data['nsb'],
+            $data['allow_ask_discount'],
+            $data['title_en'],
+            $data['description_en'],
+            $data['information_en'],
+            $data['email_type'],
+            $data['email_provider'],
+            $data['item_domain'],
+            $data['resale_item_origin'],
+            $data['note_text'],
+            $data['content_type'],
+            $data['content_id'],
+            $data['delete_date'],
+            $data['delete_user_id'],
+            $data['delete_username'],
+            $data['delete_reason'],
+            $data['user_allow_ask_discount'],
+            $data['max_discount_percent'],
+            $data['market_custom_title'],
+            $data['feedback_data'],
+            $data['buyer_display_icon_group_id'],
+            $data['buyer_uniq_banner'],
+            $data['buyer_avatar_date'],
+            $data['buyer_user_group_id'],
+            $data['is_fave'],
+            $data['in_cart'],
+            $data['cart_price'],
+            $data['canResellItem'],
+            $data['priceWithSellerFee'],
+            ItemModelGuarantee::fromArray($data['guarantee']),
+            $data['canViewLoginData'],
+            $data['canUpdateItemStats'],
+            $data['canReportItem'],
+            $data['canViewItemViews'],
+            ItemModelLoginData::fromArray($data['loginData']),
+            $data['canViewEmailLoginData'],
+            ItemModelCopyFormatData::fromArray($data['copyFormatData']),
+            $data['showGetEmailCodeButton'],
+            $data['getEmailCodeDisplayLogin'],
+            ItemModelBuyer::fromArray($data['buyer']),
+            $data['isPersonalAccount'],
+            $data['rub_price'],
+            $data['price_currency'],
+            $data['priceWithSellerFeeLabel'],
+            $data['canValidateAccount'],
+            $data['canResellItemAfterPurchase'],
+            $data['isSmallExf'],
+            $data['account_last_activity'],
+            $data['canViewAccountLink'],
+            array_map(static fn(array $item): ItemModelAccountLinks => ItemModelAccountLinks::fromArray($item), $data['accountLinks']),
+            $data['accountLink'],
+            $data['imagePreviewLinks'],
+            $data['canChangePassword'],
+            $data['canChangeEmailPassword'],
+            $data['uniqueKeyExists'],
+            $data['itemOriginPhrase'],
+            $data['visitorIsAuthor'],
+            $data['canAskDiscount'],
+            ItemModelTags::fromArray($data['tags']),
+            ItemModelCustomFields::fromArray($data['customFields']),
+            $data['externalAuth'],
+            $data['isTrusted'],
+            $data['isBirthdayToday'],
+            $data['isIgnored'],
+            $data['deposit'],
+            array_map(static fn(array $item): ItemModelExtraPrices => ItemModelExtraPrices::fromArray($item), $data['extraPrices']),
+            $data['canViewAccountLoginAndTempEmail'],
+            ItemModelBumpSettings::fromArray($data['bumpSettings']),
+            $data['canCheckGuarantee'],
+            $data['canShareItem'],
+            $data['canCheckAiPrice'],
+            $data['aiPrice'],
+            $data['aiPriceCheckDate'],
+            $data['needToRequireVideoToViewLoginData'],
+            $data['canCheckAutoBuyPrice'],
+            $data['autoBuyPrice'],
+            $data['autoBuyPriceCheckDate'],
+            $data['descriptionHtml'],
+            $data['descriptionEnHtml'],
+            $data['descriptionPlain'],
+            $data['descriptionEnPlain'],
+            ItemModelSeller::fromArray($data['seller']),
         );
     }
 }
 
-final class CategoryAllResponseStickyItemsBumpSettings
+final class ItemModelGuarantee
 {
     public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
+        public readonly int $duration,
+        public readonly string $class,
+        public readonly string $durationPhrase,
+        public readonly int $endDate,
+        public readonly bool $active,
+        public readonly bool $cancelled,
+        public readonly int $remainingTime,
+        public readonly string $remainingTimePhrase,
+        public readonly string $cancelledReason,
+        public readonly string $cancelledReasonPhrase,
     ) {
     }
 
@@ -335,26 +1147,30 @@ final class CategoryAllResponseStickyItemsBumpSettings
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
+            $data['duration'],
+            $data['class'],
+            $data['durationPhrase'],
+            $data['endDate'],
+            $data['active'],
+            $data['cancelled'],
+            $data['remainingTime'],
+            $data['remainingTimePhrase'],
+            $data['cancelledReason'],
+            $data['cancelledReasonPhrase'],
         );
     }
 }
 
-final class CategoryAllResponseStickyItemsSeller
+final class ItemModelLoginData
 {
     public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
+        public readonly string $raw,
+        public readonly string $encodedRaw,
+        public readonly string $login,
+        public readonly string $password,
+        public readonly string $encodedPassword,
+        public readonly string $oldPassword,
+        public readonly mixed $encodedOldPassword,
     ) {
     }
 
@@ -364,20 +1180,340 @@ final class CategoryAllResponseStickyItemsSeller
     public static function fromArray(array $data): self
     {
         return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
+            $data['raw'],
+            $data['encodedRaw'],
+            $data['login'],
+            $data['password'],
+            $data['encodedPassword'],
+            $data['oldPassword'],
+            $data['encodedOldPassword'],
         );
     }
 }
 
-final class CategoryAllResponseSystemInfo
+final class ItemModelCopyFormatData
+{
+    public function __construct(
+        public readonly string $title_link,
+        public readonly string $login_data,
+        public readonly string $full,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['title_link'],
+            $data['login_data'],
+            $data['full'],
+        );
+    }
+}
+
+final class ItemModelBuyer
+{
+    public function __construct(
+        public readonly int $user_id,
+        public readonly int $operation_date,
+        public readonly bool $visitorIsBuyer,
+        public readonly string $username,
+        public readonly int $is_banned,
+        public readonly int $display_style_group_id,
+        public readonly int $display_icon_group_id,
+        public readonly string $uniq_username_css,
+        public readonly string $uniq_banner,
+        public readonly int $user_group_id,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['user_id'],
+            $data['operation_date'],
+            $data['visitorIsBuyer'],
+            $data['username'],
+            $data['is_banned'],
+            $data['display_style_group_id'],
+            $data['display_icon_group_id'],
+            $data['uniq_username_css'],
+            $data['uniq_banner'],
+            $data['user_group_id'],
+        );
+    }
+}
+
+final class ItemModelAccountLinks
+{
+    public function __construct(
+        public readonly string $link,
+        public readonly string $text,
+        public readonly string $iconClass,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['link'],
+            $data['text'],
+            $data['iconClass'],
+        );
+    }
+}
+
+final class ItemModelTags
+{
+    public function __construct(
+        /** @var ItemModelTagsData1234567890 */
+        public readonly ItemModelTagsData1234567890 $_1234567890,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            ItemModelTagsData1234567890::fromArray($data['1234567890']),
+        );
+    }
+}
+
+final class ItemModelTagsData1234567890
+{
+    public function __construct(
+        public readonly int $tag_id,
+        public readonly string $title,
+        public readonly bool $isDefault,
+        public readonly bool $forOwnedAccountsOnly,
+        public readonly string $bc,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['tag_id'],
+            $data['title'],
+            $data['isDefault'],
+            $data['forOwnedAccountsOnly'],
+            $data['bc'],
+        );
+    }
+}
+
+final class ItemModelCustomFields
+{
+    public function __construct(
+        public readonly string $_4,
+        public readonly array $allowSelfUnban,
+        public readonly string $ban_reason,
+        public readonly string $discord,
+        public readonly string $github,
+        public readonly string $jabber,
+        public readonly string $lztUnbanAmount,
+        public readonly string $steam,
+        public readonly string $telegram,
+        public readonly string $vk,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['_4'],
+            $data['allowSelfUnban'],
+            $data['ban_reason'],
+            $data['discord'],
+            $data['github'],
+            $data['jabber'],
+            $data['lztUnbanAmount'],
+            $data['steam'],
+            $data['telegram'],
+            $data['vk'],
+        );
+    }
+}
+
+final class ItemModelExtraPrices
+{
+    public function __construct(
+        public readonly string $currency,
+        public readonly string $price,
+        public readonly float $priceValue,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['currency'],
+            $data['price'],
+            $data['priceValue'],
+        );
+    }
+}
+
+final class ItemModelBumpSettings
+{
+    public function __construct(
+        public readonly bool $canBumpItem,
+        public readonly bool $canBumpItemGlobally,
+        public readonly mixed $shortErrorPhrase,
+        public readonly mixed $nextAllowedBumpDate,
+        public readonly mixed $errorPhrase,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['canBumpItem'],
+            $data['canBumpItemGlobally'],
+            $data['shortErrorPhrase'],
+            $data['nextAllowedBumpDate'],
+            $data['errorPhrase'],
+        );
+    }
+}
+
+final class ItemModelSeller
+{
+    public function __construct(
+        public readonly int $user_id,
+        public readonly string $username,
+        public readonly int $avatar_date,
+        public readonly int $is_banned,
+        public readonly int $display_style_group_id,
+        public readonly int $joined_date,
+        public readonly int $sold_items_count,
+        public readonly int $active_items_count,
+        public readonly string $restore_data,
+        public readonly int $effective_last_activity,
+        public readonly mixed $restore_percents,
+        public readonly bool $isOnline,
+        /** @var ItemModelSellerContacts */
+        public readonly ItemModelSellerContacts $contacts,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['user_id'],
+            $data['username'],
+            $data['avatar_date'],
+            $data['is_banned'],
+            $data['display_style_group_id'],
+            $data['joined_date'],
+            $data['sold_items_count'],
+            $data['active_items_count'],
+            $data['restore_data'],
+            $data['effective_last_activity'],
+            $data['restore_percents'],
+            $data['isOnline'],
+            ItemModelSellerContacts::fromArray($data['contacts']),
+        );
+    }
+}
+
+final class ItemModelSellerContacts
+{
+    public function __construct(
+        public readonly string $ban_reason,
+        public readonly string $telegram,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['ban_reason'],
+            $data['telegram'],
+        );
+    }
+}
+
+final class InvoiceModel
+{
+    public function __construct(
+        public readonly string $additional_data,
+        public readonly int $amount,
+        public readonly string $comment,
+        public readonly int $expires_at,
+        public readonly int $invoice_date,
+        public readonly int $invoice_id,
+        public readonly bool $is_test,
+        public readonly int $merchant_id,
+        public readonly int $paid_date,
+        public readonly int $payer_user_id,
+        public readonly string $payment_id,
+        public readonly int $resend_attempts,
+        public readonly string $status,
+        public readonly string $url,
+        public readonly string $url_callback,
+        public readonly string $url_success,
+        public readonly int $user_id,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            $data['additional_data'],
+            $data['amount'],
+            $data['comment'],
+            $data['expires_at'],
+            $data['invoice_date'],
+            $data['invoice_id'],
+            $data['is_test'],
+            $data['merchant_id'],
+            $data['paid_date'],
+            $data['payer_user_id'],
+            $data['payment_id'],
+            $data['resend_attempts'],
+            $data['status'],
+            $data['url'],
+            $data['url_callback'],
+            $data['url_success'],
+            $data['user_id'],
+        );
+    }
+}
+
+final class RespSystemInfo
 {
     public function __construct(
         public readonly int $visitor_id,
@@ -399,6 +1535,8 @@ final class CategoryAllResponseSystemInfo
     }
 }
 
+// ─── Response Models ────────────────────────────────────────────────────────
+
 final class CategorySteamResponse
 {
     public function __construct(
@@ -415,8 +1553,8 @@ final class CategorySteamResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategorySteamResponseSystemInfo */
-        public readonly CategorySteamResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -438,7 +1576,7 @@ final class CategorySteamResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategorySteamResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -972,28 +2110,6 @@ final class CategorySteamResponseItemsSeller
     }
 }
 
-final class CategorySteamResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryFortniteResponse
 {
     public function __construct(
@@ -1010,8 +2126,8 @@ final class CategoryFortniteResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryFortniteResponseSystemInfo */
-        public readonly CategoryFortniteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -1033,7 +2149,7 @@ final class CategoryFortniteResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryFortniteResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -1497,28 +2613,6 @@ final class CategoryFortniteResponseItemsSeller
     }
 }
 
-final class CategoryFortniteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryMihoyoResponse
 {
     public function __construct(
@@ -1535,8 +2629,8 @@ final class CategoryMihoyoResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryMihoyoResponseSystemInfo */
-        public readonly CategoryMihoyoResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -1558,7 +2652,7 @@ final class CategoryMihoyoResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryMihoyoResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -2367,28 +3461,6 @@ final class CategoryMihoyoResponseItemsSeller
     }
 }
 
-final class CategoryMihoyoResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryRiotResponse
 {
     public function __construct(
@@ -2405,8 +3477,8 @@ final class CategoryRiotResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryRiotResponseSystemInfo */
-        public readonly CategoryRiotResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -2428,7 +3500,7 @@ final class CategoryRiotResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryRiotResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -2785,28 +3857,6 @@ final class CategoryRiotResponseItemsSeller
     }
 }
 
-final class CategoryRiotResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryTelegramResponse
 {
     public function __construct(
@@ -2823,8 +3873,8 @@ final class CategoryTelegramResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryTelegramResponseSystemInfo */
-        public readonly CategoryTelegramResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -2846,7 +3896,7 @@ final class CategoryTelegramResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryTelegramResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -3098,28 +4148,6 @@ final class CategoryTelegramResponseItemsSeller
     }
 }
 
-final class CategoryTelegramResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategorySupercellResponse
 {
     public function __construct(
@@ -3136,8 +4164,8 @@ final class CategorySupercellResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategorySupercellResponseSystemInfo */
-        public readonly CategorySupercellResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -3159,7 +4187,7 @@ final class CategorySupercellResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategorySupercellResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -3441,28 +4469,6 @@ final class CategorySupercellResponseItemsSeller
     }
 }
 
-final class CategorySupercellResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryEAResponse
 {
     public function __construct(
@@ -3479,8 +4485,8 @@ final class CategoryEAResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryEAResponseSystemInfo */
-        public readonly CategoryEAResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -3502,7 +4508,7 @@ final class CategoryEAResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryEAResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -3804,28 +4810,6 @@ final class CategoryEAResponseItemsSeller
     }
 }
 
-final class CategoryEAResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryWotResponse
 {
     public function __construct(
@@ -3842,8 +4826,8 @@ final class CategoryWotResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryWotResponseSystemInfo */
-        public readonly CategoryWotResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -3865,7 +4849,7 @@ final class CategoryWotResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryWotResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -4651,28 +5635,6 @@ final class CategoryWotResponseItemsSeller
     }
 }
 
-final class CategoryWotResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryWotBlitzResponse
 {
     public function __construct(
@@ -4689,8 +5651,8 @@ final class CategoryWotBlitzResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryWotBlitzResponseSystemInfo */
-        public readonly CategoryWotBlitzResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -4712,7 +5674,7 @@ final class CategoryWotBlitzResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryWotBlitzResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -12260,28 +13222,6 @@ final class CategoryWotBlitzResponseItemsSeller
     }
 }
 
-final class CategoryWotBlitzResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryGiftsResponse
 {
     public function __construct(
@@ -12298,8 +13238,8 @@ final class CategoryGiftsResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryGiftsResponseSystemInfo */
-        public readonly CategoryGiftsResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -12321,7 +13261,7 @@ final class CategoryGiftsResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryGiftsResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -12524,28 +13464,6 @@ final class CategoryGiftsResponseItemsSeller
     }
 }
 
-final class CategoryGiftsResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryEpicGamesResponse
 {
     public function __construct(
@@ -12562,8 +13480,8 @@ final class CategoryEpicGamesResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryEpicGamesResponseSystemInfo */
-        public readonly CategoryEpicGamesResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -12585,7 +13503,7 @@ final class CategoryEpicGamesResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryEpicGamesResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -12903,28 +13821,6 @@ final class CategoryEpicGamesResponseItemsSeller
     }
 }
 
-final class CategoryEpicGamesResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryEscapeFromTarkovResponse
 {
     public function __construct(
@@ -12941,8 +13837,8 @@ final class CategoryEscapeFromTarkovResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryEscapeFromTarkovResponseSystemInfo */
-        public readonly CategoryEscapeFromTarkovResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -12964,7 +13860,7 @@ final class CategoryEscapeFromTarkovResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryEscapeFromTarkovResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -13211,28 +14107,6 @@ final class CategoryEscapeFromTarkovResponseItemsSeller
     }
 }
 
-final class CategoryEscapeFromTarkovResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategorySocialClubResponse
 {
     public function __construct(
@@ -13249,8 +14123,8 @@ final class CategorySocialClubResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategorySocialClubResponseSystemInfo */
-        public readonly CategorySocialClubResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -13272,7 +14146,7 @@ final class CategorySocialClubResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategorySocialClubResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -13530,28 +14404,6 @@ final class CategorySocialClubResponseItemsSeller
     }
 }
 
-final class CategorySocialClubResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryUplayResponse
 {
     public function __construct(
@@ -13568,8 +14420,8 @@ final class CategoryUplayResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryUplayResponseSystemInfo */
-        public readonly CategoryUplayResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -13591,7 +14443,7 @@ final class CategoryUplayResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryUplayResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -13915,28 +14767,6 @@ final class CategoryUplayResponseItemsSeller
     }
 }
 
-final class CategoryUplayResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryDiscordResponse
 {
     public function __construct(
@@ -13953,8 +14783,8 @@ final class CategoryDiscordResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryDiscordResponseSystemInfo */
-        public readonly CategoryDiscordResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -13976,7 +14806,7 @@ final class CategoryDiscordResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryDiscordResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -14203,28 +15033,6 @@ final class CategoryDiscordResponseItemsSeller
     }
 }
 
-final class CategoryDiscordResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryTikTokResponse
 {
     public function __construct(
@@ -14241,8 +15049,8 @@ final class CategoryTikTokResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryTikTokResponseSystemInfo */
-        public readonly CategoryTikTokResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -14264,7 +15072,7 @@ final class CategoryTikTokResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryTikTokResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -14524,28 +15332,6 @@ final class CategoryTikTokResponseItemsSeller
     }
 }
 
-final class CategoryTikTokResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryInstagramResponse
 {
     public function __construct(
@@ -14562,8 +15348,8 @@ final class CategoryInstagramResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryInstagramResponseSystemInfo */
-        public readonly CategoryInstagramResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -14585,7 +15371,7 @@ final class CategoryInstagramResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryInstagramResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -14827,28 +15613,6 @@ final class CategoryInstagramResponseItemsSeller
     }
 }
 
-final class CategoryInstagramResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryBattleNetResponse
 {
     public function __construct(
@@ -14865,8 +15629,8 @@ final class CategoryBattleNetResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryBattleNetResponseSystemInfo */
-        public readonly CategoryBattleNetResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -14888,7 +15652,7 @@ final class CategoryBattleNetResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryBattleNetResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -15231,28 +15995,6 @@ final class CategoryBattleNetResponseItemsSeller
     }
 }
 
-final class CategoryBattleNetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryChatGPTResponse
 {
     public function __construct(
@@ -15269,8 +16011,8 @@ final class CategoryChatGPTResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryChatGPTResponseSystemInfo */
-        public readonly CategoryChatGPTResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -15292,7 +16034,7 @@ final class CategoryChatGPTResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryChatGPTResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -15532,28 +16274,6 @@ final class CategoryChatGPTResponseItemsSeller
     }
 }
 
-final class CategoryChatGPTResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryVpnResponse
 {
     public function __construct(
@@ -15570,8 +16290,8 @@ final class CategoryVpnResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryVpnResponseSystemInfo */
-        public readonly CategoryVpnResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -15593,7 +16313,7 @@ final class CategoryVpnResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryVpnResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -15798,28 +16518,6 @@ final class CategoryVpnResponseItemsSeller
     }
 }
 
-final class CategoryVpnResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryRobloxResponse
 {
     public function __construct(
@@ -15836,8 +16534,8 @@ final class CategoryRobloxResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryRobloxResponseSystemInfo */
-        public readonly CategoryRobloxResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -15859,7 +16557,7 @@ final class CategoryRobloxResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryRobloxResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -16183,28 +16881,6 @@ final class CategoryRobloxResponseItemsSeller
     }
 }
 
-final class CategoryRobloxResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryWarfaceResponse
 {
     public function __construct(
@@ -16221,8 +16897,8 @@ final class CategoryWarfaceResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryWarfaceResponseSystemInfo */
-        public readonly CategoryWarfaceResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -16244,7 +16920,7 @@ final class CategoryWarfaceResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryWarfaceResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -16494,28 +17170,6 @@ final class CategoryWarfaceResponseItemsSeller
     }
 }
 
-final class CategoryWarfaceResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryMinecraftResponse
 {
     public function __construct(
@@ -16532,8 +17186,8 @@ final class CategoryMinecraftResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryMinecraftResponseSystemInfo */
-        public readonly CategoryMinecraftResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -16555,7 +17209,7 @@ final class CategoryMinecraftResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryMinecraftResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -16827,28 +17481,6 @@ final class CategoryMinecraftResponseItemsSeller
     }
 }
 
-final class CategoryMinecraftResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryHytaleResponse
 {
     public function __construct(
@@ -16865,8 +17497,8 @@ final class CategoryHytaleResponse
         public readonly int $serverTime,
         public readonly string $searchUrl,
         public readonly array $stickyItems,
-        /** @var CategoryHytaleResponseSystemInfo */
-        public readonly CategoryHytaleResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -16888,7 +17520,7 @@ final class CategoryHytaleResponse
             $data['serverTime'],
             $data['searchUrl'],
             $data['stickyItems'],
-            CategoryHytaleResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -17138,35 +17770,13 @@ final class CategoryHytaleResponseItemsSeller
     }
 }
 
-final class CategoryHytaleResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryListResponse
 {
     public function __construct(
         /** @var CategoryListResponseCategory */
         public readonly CategoryListResponseCategory $category,
-        /** @var CategoryListResponseSystemInfo */
-        public readonly CategoryListResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -17177,7 +17787,7 @@ final class CategoryListResponse
     {
         return new self(
             CategoryListResponseCategory::fromArray($data['category']),
-            CategoryListResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -17231,28 +17841,6 @@ final class CategoryListResponseCategoryLinks
     }
 }
 
-final class CategoryListResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryParamsResponse
 {
     public function __construct(
@@ -17262,8 +17850,8 @@ final class CategoryParamsResponse
         public readonly ?array $params,
         /** @var CategoryParamsResponseBaseParams|null */
         public readonly ?CategoryParamsResponseBaseParams $base_params,
-        /** @var CategoryParamsResponseSystemInfo|null */
-        public readonly ?CategoryParamsResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -17276,7 +17864,7 @@ final class CategoryParamsResponse
             isset($data['category']) && is_array($data['category']) ? CategoryParamsResponseCategory::fromArray($data['category']) : null,
             isset($data['params']) && is_array($data['params']) ? array_map(static fn(array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
             isset($data['base_params']) && is_array($data['base_params']) ? CategoryParamsResponseBaseParams::fromArray($data['base_params']) : null,
-            isset($data['system_info']) && is_array($data['system_info']) ? CategoryParamsResponseSystemInfo::fromArray($data['system_info']) : null,
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -17433,35 +18021,13 @@ final class CategoryParamsResponseBaseParamsData0
     }
 }
 
-final class CategoryParamsResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class CategoryGamesResponse
 {
     public function __construct(
         /** @var list<CategoryGamesResponseGames>|null */
         public readonly ?array $games,
-        /** @var CategoryGamesResponseSystemInfo|null */
-        public readonly ?CategoryGamesResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -17472,7 +18038,7 @@ final class CategoryGamesResponse
     {
         return new self(
             isset($data['games']) && is_array($data['games']) ? array_map(static fn(array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
-            isset($data['system_info']) && is_array($data['system_info']) ? CategoryGamesResponseSystemInfo::fromArray($data['system_info']) : null,
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -17507,821 +18073,13 @@ final class CategoryGamesResponseGames
     }
 }
 
-final class CategoryGamesResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ListUserResponse
-{
-    public function __construct(
-        /** @var list<ListUserResponseItems> */
-        public readonly array $items,
-        public readonly int $totalItems,
-        public readonly mixed $totalItemsPrice,
-        public readonly bool $hasNextPage,
-        public readonly int $perPage,
-        public readonly int $page,
-        public readonly string $searchUrl,
-        /** @var list<ListUserResponseStickyItems> */
-        public readonly array $stickyItems,
-        /** @var ListUserResponseSystemInfo */
-        public readonly ListUserResponseSystemInfo $system_info,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            array_map(static fn(array $item): ListUserResponseItems => ListUserResponseItems::fromArray($item), $data['items']),
-            $data['totalItems'],
-            $data['totalItemsPrice'],
-            $data['hasNextPage'],
-            $data['perPage'],
-            $data['page'],
-            $data['searchUrl'],
-            array_map(static fn(array $item): ListUserResponseStickyItems => ListUserResponseStickyItems::fromArray($item), $data['stickyItems']),
-            ListUserResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ListUserResponseItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListUserResponseItemsBumpSettings|null */
-        public readonly ?ListUserResponseItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListUserResponseItemsSeller|null */
-        public readonly ?ListUserResponseItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListUserResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListUserResponseItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListUserResponseItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListUserResponseItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListUserResponseStickyItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListUserResponseStickyItemsBumpSettings|null */
-        public readonly ?ListUserResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListUserResponseStickyItemsSeller|null */
-        public readonly ?ListUserResponseStickyItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListUserResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListUserResponseStickyItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListUserResponseStickyItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListUserResponseStickyItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListUserResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ListOrdersResponse
-{
-    public function __construct(
-        /** @var list<ListOrdersResponseItems> */
-        public readonly array $items,
-        public readonly int $totalItems,
-        public readonly mixed $totalItemsPrice,
-        public readonly bool $hasNextPage,
-        public readonly int $perPage,
-        public readonly int $page,
-        public readonly string $searchUrl,
-        /** @var list<ListOrdersResponseStickyItems> */
-        public readonly array $stickyItems,
-        /** @var ListOrdersResponseSystemInfo */
-        public readonly ListOrdersResponseSystemInfo $system_info,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            array_map(static fn(array $item): ListOrdersResponseItems => ListOrdersResponseItems::fromArray($item), $data['items']),
-            $data['totalItems'],
-            $data['totalItemsPrice'],
-            $data['hasNextPage'],
-            $data['perPage'],
-            $data['page'],
-            $data['searchUrl'],
-            array_map(static fn(array $item): ListOrdersResponseStickyItems => ListOrdersResponseStickyItems::fromArray($item), $data['stickyItems']),
-            ListOrdersResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ListOrdersResponseItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListOrdersResponseItemsBumpSettings|null */
-        public readonly ?ListOrdersResponseItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListOrdersResponseItemsSeller|null */
-        public readonly ?ListOrdersResponseItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListOrdersResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListOrdersResponseItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListOrdersResponseItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListOrdersResponseItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListOrdersResponseStickyItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListOrdersResponseStickyItemsBumpSettings|null */
-        public readonly ?ListOrdersResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListOrdersResponseStickyItemsSeller|null */
-        public readonly ?ListOrdersResponseStickyItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListOrdersResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListOrdersResponseStickyItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListOrdersResponseStickyItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListOrdersResponseStickyItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListOrdersResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ListStatesResponse
 {
     public function __construct(
         /** @var ListStatesResponseUserItemStates */
         public readonly ListStatesResponseUserItemStates $userItemStates,
-        /** @var ListStatesResponseSystemInfo */
-        public readonly ListStatesResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -18332,7 +18090,7 @@ final class ListStatesResponse
     {
         return new self(
             ListStatesResponseUserItemStates::fromArray($data['userItemStates']),
-            ListStatesResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -18680,819 +18438,11 @@ final class ListStatesResponseUserItemStatesAutoBump
     }
 }
 
-final class ListStatesResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ListFavoritesResponse
-{
-    public function __construct(
-        /** @var list<ListFavoritesResponseItems> */
-        public readonly array $items,
-        public readonly int $totalItems,
-        public readonly mixed $totalItemsPrice,
-        public readonly bool $hasNextPage,
-        public readonly int $perPage,
-        public readonly int $page,
-        public readonly string $searchUrl,
-        /** @var list<ListFavoritesResponseStickyItems> */
-        public readonly array $stickyItems,
-        /** @var ListFavoritesResponseSystemInfo */
-        public readonly ListFavoritesResponseSystemInfo $system_info,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            array_map(static fn(array $item): ListFavoritesResponseItems => ListFavoritesResponseItems::fromArray($item), $data['items']),
-            $data['totalItems'],
-            $data['totalItemsPrice'],
-            $data['hasNextPage'],
-            $data['perPage'],
-            $data['page'],
-            $data['searchUrl'],
-            array_map(static fn(array $item): ListFavoritesResponseStickyItems => ListFavoritesResponseStickyItems::fromArray($item), $data['stickyItems']),
-            ListFavoritesResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ListFavoritesResponseItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListFavoritesResponseItemsBumpSettings|null */
-        public readonly ?ListFavoritesResponseItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListFavoritesResponseItemsSeller|null */
-        public readonly ?ListFavoritesResponseItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListFavoritesResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListFavoritesResponseItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListFavoritesResponseItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListFavoritesResponseItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListFavoritesResponseStickyItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListFavoritesResponseStickyItemsBumpSettings|null */
-        public readonly ?ListFavoritesResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListFavoritesResponseStickyItemsSeller|null */
-        public readonly ?ListFavoritesResponseStickyItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListFavoritesResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListFavoritesResponseStickyItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListFavoritesResponseStickyItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListFavoritesResponseStickyItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListFavoritesResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ListViewedResponse
-{
-    public function __construct(
-        /** @var list<ListViewedResponseItems> */
-        public readonly array $items,
-        public readonly int $totalItems,
-        public readonly mixed $totalItemsPrice,
-        public readonly bool $hasNextPage,
-        public readonly int $perPage,
-        public readonly int $page,
-        public readonly string $searchUrl,
-        /** @var list<ListViewedResponseStickyItems> */
-        public readonly array $stickyItems,
-        /** @var ListViewedResponseSystemInfo */
-        public readonly ListViewedResponseSystemInfo $system_info,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            array_map(static fn(array $item): ListViewedResponseItems => ListViewedResponseItems::fromArray($item), $data['items']),
-            $data['totalItems'],
-            $data['totalItemsPrice'],
-            $data['hasNextPage'],
-            $data['perPage'],
-            $data['page'],
-            $data['searchUrl'],
-            array_map(static fn(array $item): ListViewedResponseStickyItems => ListViewedResponseStickyItems::fromArray($item), $data['stickyItems']),
-            ListViewedResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ListViewedResponseItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListViewedResponseItemsBumpSettings|null */
-        public readonly ?ListViewedResponseItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListViewedResponseItemsSeller|null */
-        public readonly ?ListViewedResponseItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListViewedResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListViewedResponseItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListViewedResponseItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListViewedResponseItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListViewedResponseStickyItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var ListViewedResponseStickyItemsBumpSettings|null */
-        public readonly ?ListViewedResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var ListViewedResponseStickyItemsSeller|null */
-        public readonly ?ListViewedResponseStickyItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ListViewedResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? ListViewedResponseStickyItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class ListViewedResponseStickyItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class ListViewedResponseStickyItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class ListViewedResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingGetResponse
 {
     public function __construct(
-        /** @var ManagingGetResponseItem */
-        public readonly ManagingGetResponseItem $item,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
         public readonly bool $canStickItem,
         public readonly bool $canUnstickItem,
         public readonly bool $canBuyItem,
@@ -19513,8 +18463,8 @@ final class ManagingGetResponse
         /** @var list<int> */
         public readonly array $sameItemsIds,
         public readonly int $sameItemsCount,
-        /** @var ManagingGetResponseSystemInfo */
-        public readonly ManagingGetResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -19524,7 +18474,7 @@ final class ManagingGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingGetResponseItem::fromArray($data['item']),
+            ItemModel::fromArray($data['item']),
             $data['canStickItem'],
             $data['canUnstickItem'],
             $data['canBuyItem'],
@@ -19544,594 +18494,7 @@ final class ManagingGetResponse
             $data['canChangeOwner'],
             $data['sameItemsIds'],
             $data['sameItemsCount'],
-            ManagingGetResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingGetResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingGetResponseItemGuarantee */
-        public readonly ManagingGetResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingGetResponseItemLoginData */
-        public readonly ManagingGetResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingGetResponseItemCopyFormatData */
-        public readonly ManagingGetResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingGetResponseItemBuyer */
-        public readonly ManagingGetResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingGetResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingGetResponseItemTags */
-        public readonly ManagingGetResponseItemTags $tags,
-        /** @var ManagingGetResponseItemCustomFields */
-        public readonly ManagingGetResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingGetResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingGetResponseItemBumpSettings */
-        public readonly ManagingGetResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingGetResponseItemSeller */
-        public readonly ManagingGetResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingGetResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingGetResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingGetResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingGetResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingGetResponseItemAccountLinks => ManagingGetResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingGetResponseItemTags::fromArray($data['tags']),
-            ManagingGetResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingGetResponseItemExtraPrices => ManagingGetResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingGetResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingGetResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingGetResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingGetResponseItemTagsData1234567890 */
-        public readonly ManagingGetResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingGetResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingGetResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingGetResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingGetResponseItemSellerContacts */
-        public readonly ManagingGetResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingGetResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingGetResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -20141,8 +18504,8 @@ final class MangingDeleteResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var MangingDeleteResponseSystemInfo */
-        public readonly MangingDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -20154,29 +18517,7 @@ final class MangingDeleteResponse
         return new self(
             $data['status'],
             $data['message'],
-            MangingDeleteResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class MangingDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -20643,8 +18984,8 @@ final class ManagingBulkGetResponse
         public readonly array $items,
         /** @var list<int> */
         public readonly array $left_item_id,
-        /** @var ManagingBulkGetResponseSystemInfo */
-        public readonly ManagingBulkGetResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -20656,7 +18997,7 @@ final class ManagingBulkGetResponse
         return new self(
             array_map(static fn(array $item): ManagingBulkGetResponseItems => ManagingBulkGetResponseItems::fromArray($item), $data['items']),
             $data['left_item_id'],
-            ManagingBulkGetResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -20664,8 +19005,8 @@ final class ManagingBulkGetResponse
 final class ManagingBulkGetResponseItems
 {
     public function __construct(
-        /** @var ManagingBulkGetResponseItemsData0|null */
-        public readonly ?ManagingBulkGetResponseItemsData0 $_0,
+        /** @var ItemModel|null */
+        public readonly ?ItemModel $_0,
     ) {
     }
 
@@ -20675,594 +19016,7 @@ final class ManagingBulkGetResponseItems
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['0']) && is_array($data['0']) ? ManagingBulkGetResponseItemsData0::fromArray($data['0']) : null,
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingBulkGetResponseItemsData0Guarantee */
-        public readonly ManagingBulkGetResponseItemsData0Guarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingBulkGetResponseItemsData0LoginData */
-        public readonly ManagingBulkGetResponseItemsData0LoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingBulkGetResponseItemsData0CopyFormatData */
-        public readonly ManagingBulkGetResponseItemsData0CopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingBulkGetResponseItemsData0Buyer */
-        public readonly ManagingBulkGetResponseItemsData0Buyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingBulkGetResponseItemsData0AccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingBulkGetResponseItemsData0Tags */
-        public readonly ManagingBulkGetResponseItemsData0Tags $tags,
-        /** @var ManagingBulkGetResponseItemsData0CustomFields */
-        public readonly ManagingBulkGetResponseItemsData0CustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingBulkGetResponseItemsData0ExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingBulkGetResponseItemsData0BumpSettings */
-        public readonly ManagingBulkGetResponseItemsData0BumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingBulkGetResponseItemsData0Seller */
-        public readonly ManagingBulkGetResponseItemsData0Seller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingBulkGetResponseItemsData0Guarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingBulkGetResponseItemsData0LoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingBulkGetResponseItemsData0CopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingBulkGetResponseItemsData0Buyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingBulkGetResponseItemsData0AccountLinks => ManagingBulkGetResponseItemsData0AccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingBulkGetResponseItemsData0Tags::fromArray($data['tags']),
-            ManagingBulkGetResponseItemsData0CustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingBulkGetResponseItemsData0ExtraPrices => ManagingBulkGetResponseItemsData0ExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingBulkGetResponseItemsData0BumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingBulkGetResponseItemsData0Seller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0Guarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0LoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0CopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0Buyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0AccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0Tags
-{
-    public function __construct(
-        /** @var ManagingBulkGetResponseItemsData0TagsData1234567890 */
-        public readonly ManagingBulkGetResponseItemsData0TagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingBulkGetResponseItemsData0TagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0TagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0CustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0ExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0BumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0Seller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingBulkGetResponseItemsData0SellerContacts */
-        public readonly ManagingBulkGetResponseItemsData0SellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingBulkGetResponseItemsData0SellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingBulkGetResponseItemsData0SellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingBulkGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['0']) && is_array($data['0']) ? ItemModel::fromArray($data['0']) : null,
         );
     }
 }
@@ -21274,8 +19028,8 @@ final class ManagingSteamInventoryValueResponse
         /** @var ManagingSteamInventoryValueResponseData|null */
         public readonly ?ManagingSteamInventoryValueResponseData $data,
         public readonly ?int $appId,
-        /** @var ManagingSteamInventoryValueResponseSystemInfo|null */
-        public readonly ?ManagingSteamInventoryValueResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -21288,7 +19042,7 @@ final class ManagingSteamInventoryValueResponse
             $data['query'] ?? null,
             isset($data['data']) && is_array($data['data']) ? ManagingSteamInventoryValueResponseData::fromArray($data['data']) : null,
             $data['appId'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingSteamInventoryValueResponseSystemInfo::fromArray($data['system_info']) : null,
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -21415,28 +19169,6 @@ final class ManagingSteamInventoryValueResponseDataItemsData0Stickers
     }
 }
 
-final class ManagingSteamInventoryValueResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingSteamValueResponse
 {
     public function __construct(
@@ -21444,8 +19176,8 @@ final class ManagingSteamValueResponse
         /** @var ManagingSteamValueResponseData|null */
         public readonly ?ManagingSteamValueResponseData $data,
         public readonly ?int $appId,
-        /** @var ManagingSteamValueResponseSystemInfo|null */
-        public readonly ?ManagingSteamValueResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -21458,7 +19190,7 @@ final class ManagingSteamValueResponse
             $data['query'] ?? null,
             isset($data['data']) && is_array($data['data']) ? ManagingSteamValueResponseData::fromArray($data['data']) : null,
             $data['appId'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingSteamValueResponseSystemInfo::fromArray($data['system_info']) : null,
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -21585,35 +19317,13 @@ final class ManagingSteamValueResponseDataItemsData0Stickers
     }
 }
 
-final class ManagingSteamValueResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingEditResponse
 {
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingEditResponseSystemInfo|null */
-        public readonly ?ManagingEditResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -21625,29 +19335,7 @@ final class ManagingEditResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingEditResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingEditResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -21656,8 +19344,8 @@ final class ManagingAIPriceResponse
 {
     public function __construct(
         public readonly int $price,
-        /** @var ManagingAIPriceResponseSystemInfo */
-        public readonly ManagingAIPriceResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -21668,29 +19356,7 @@ final class ManagingAIPriceResponse
     {
         return new self(
             $data['price'],
-            ManagingAIPriceResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingAIPriceResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -21699,8 +19365,8 @@ final class ManagingAutoBuyPriceResponse
 {
     public function __construct(
         public readonly int $price,
-        /** @var ManagingAutoBuyPriceResponseSystemInfo */
-        public readonly ManagingAutoBuyPriceResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -21711,29 +19377,7 @@ final class ManagingAutoBuyPriceResponse
     {
         return new self(
             $data['price'],
-            ManagingAutoBuyPriceResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingAutoBuyPriceResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -21743,8 +19387,8 @@ final class ManagingNoteResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingNoteResponseSystemInfo */
-        public readonly ManagingNoteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -21756,29 +19400,7 @@ final class ManagingNoteResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingNoteResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingNoteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -21787,10 +19409,10 @@ final class ManagingSteamUpdateValueResponse
 {
     public function __construct(
         public readonly string $status,
-        /** @var ManagingSteamUpdateValueResponseItem */
-        public readonly ManagingSteamUpdateValueResponseItem $item,
-        /** @var ManagingSteamUpdateValueResponseSystemInfo */
-        public readonly ManagingSteamUpdateValueResponseSystemInfo $system_info,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -21801,595 +19423,8 @@ final class ManagingSteamUpdateValueResponse
     {
         return new self(
             $data['status'],
-            ManagingSteamUpdateValueResponseItem::fromArray($data['item']),
-            ManagingSteamUpdateValueResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingSteamUpdateValueResponseItemGuarantee */
-        public readonly ManagingSteamUpdateValueResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingSteamUpdateValueResponseItemLoginData */
-        public readonly ManagingSteamUpdateValueResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingSteamUpdateValueResponseItemCopyFormatData */
-        public readonly ManagingSteamUpdateValueResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingSteamUpdateValueResponseItemBuyer */
-        public readonly ManagingSteamUpdateValueResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingSteamUpdateValueResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingSteamUpdateValueResponseItemTags */
-        public readonly ManagingSteamUpdateValueResponseItemTags $tags,
-        /** @var ManagingSteamUpdateValueResponseItemCustomFields */
-        public readonly ManagingSteamUpdateValueResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingSteamUpdateValueResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingSteamUpdateValueResponseItemBumpSettings */
-        public readonly ManagingSteamUpdateValueResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingSteamUpdateValueResponseItemSeller */
-        public readonly ManagingSteamUpdateValueResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingSteamUpdateValueResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingSteamUpdateValueResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingSteamUpdateValueResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingSteamUpdateValueResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemAccountLinks => ManagingSteamUpdateValueResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingSteamUpdateValueResponseItemTags::fromArray($data['tags']),
-            ManagingSteamUpdateValueResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemExtraPrices => ManagingSteamUpdateValueResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingSteamUpdateValueResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingSteamUpdateValueResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingSteamUpdateValueResponseItemTagsData1234567890 */
-        public readonly ManagingSteamUpdateValueResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingSteamUpdateValueResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingSteamUpdateValueResponseItemSellerContacts */
-        public readonly ManagingSteamUpdateValueResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingSteamUpdateValueResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingSteamUpdateValueResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            ItemModel::fromArray($data['item']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22399,8 +19434,8 @@ final class ManagingBumpResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingBumpResponseSystemInfo */
-        public readonly ManagingBumpResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22412,29 +19447,7 @@ final class ManagingBumpResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingBumpResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingBumpResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22444,8 +19457,8 @@ final class ManagingAutoBumpResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingAutoBumpResponseSystemInfo */
-        public readonly ManagingAutoBumpResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22457,29 +19470,7 @@ final class ManagingAutoBumpResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingAutoBumpResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingAutoBumpResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22489,8 +19480,8 @@ final class ManagingAutoBumpDisableResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingAutoBumpDisableResponseSystemInfo */
-        public readonly ManagingAutoBumpDisableResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22502,29 +19493,7 @@ final class ManagingAutoBumpDisableResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingAutoBumpDisableResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingAutoBumpDisableResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22534,8 +19503,8 @@ final class ManagingOpenResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingOpenResponseSystemInfo */
-        public readonly ManagingOpenResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22547,29 +19516,7 @@ final class ManagingOpenResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingOpenResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingOpenResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22579,8 +19526,8 @@ final class ManagingCloseResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingCloseResponseSystemInfo */
-        public readonly ManagingCloseResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22592,29 +19539,7 @@ final class ManagingCloseResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingCloseResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingCloseResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -22623,8 +19548,8 @@ final class ManagingImageResponse
 {
     public function __construct(
         public readonly string $base64,
-        /** @var ManagingImageResponseSystemInfo */
-        public readonly ManagingImageResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -22635,638 +19560,7 @@ final class ManagingImageResponse
     {
         return new self(
             $data['base64'],
-            ManagingImageResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingImageResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponse
-{
-    public function __construct(
-        /** @var ManagingEmailCodeResponseItem */
-        public readonly ManagingEmailCodeResponseItem $item,
-        /** @var ManagingEmailCodeResponseCodeData */
-        public readonly ManagingEmailCodeResponseCodeData $codeData,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingEmailCodeResponseItem::fromArray($data['item']),
-            ManagingEmailCodeResponseCodeData::fromArray($data['codeData']),
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingEmailCodeResponseItemGuarantee */
-        public readonly ManagingEmailCodeResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingEmailCodeResponseItemLoginData */
-        public readonly ManagingEmailCodeResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingEmailCodeResponseItemCopyFormatData */
-        public readonly ManagingEmailCodeResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingEmailCodeResponseItemBuyer */
-        public readonly ManagingEmailCodeResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingEmailCodeResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingEmailCodeResponseItemTags */
-        public readonly ManagingEmailCodeResponseItemTags $tags,
-        /** @var ManagingEmailCodeResponseItemCustomFields */
-        public readonly ManagingEmailCodeResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingEmailCodeResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingEmailCodeResponseItemBumpSettings */
-        public readonly ManagingEmailCodeResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingEmailCodeResponseItemSeller */
-        public readonly ManagingEmailCodeResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingEmailCodeResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingEmailCodeResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingEmailCodeResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingEmailCodeResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingEmailCodeResponseItemAccountLinks => ManagingEmailCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingEmailCodeResponseItemTags::fromArray($data['tags']),
-            ManagingEmailCodeResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingEmailCodeResponseItemExtraPrices => ManagingEmailCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingEmailCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingEmailCodeResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingEmailCodeResponseItemTagsData1234567890 */
-        public readonly ManagingEmailCodeResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingEmailCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingEmailCodeResponseItemSellerContacts */
-        public readonly ManagingEmailCodeResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingEmailCodeResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingEmailCodeResponseCodeData
-{
-    public function __construct(
-        public readonly string $code,
-        public readonly int $date,
-        public readonly string $textPlain,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['code'],
-            $data['date'],
-            $data['textPlain'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -23277,8 +19571,8 @@ final class ManagingGetLetters2Response
         public readonly string $email,
         /** @var list<ManagingGetLetters2ResponseLetters> */
         public readonly array $letters,
-        /** @var ManagingGetLetters2ResponseSystemInfo */
-        public readonly ManagingGetLetters2ResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -23290,7 +19584,7 @@ final class ManagingGetLetters2Response
         return new self(
             $data['email'],
             array_map(static fn(array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']),
-            ManagingGetLetters2ResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -23319,35 +19613,13 @@ final class ManagingGetLetters2ResponseLetters
     }
 }
 
-final class ManagingGetLetters2ResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingSteamGetMafileResponse
 {
     public function __construct(
         /** @var ManagingSteamGetMafileResponseMaFile */
         public readonly ManagingSteamGetMafileResponseMaFile $maFile,
-        /** @var ManagingSteamGetMafileResponseSystemInfo */
-        public readonly ManagingSteamGetMafileResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -23358,7 +19630,7 @@ final class ManagingSteamGetMafileResponse
     {
         return new self(
             ManagingSteamGetMafileResponseMaFile::fromArray($data['maFile']),
-            ManagingSteamGetMafileResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -23428,37 +19700,15 @@ final class ManagingSteamGetMafileResponseMaFileSession
     }
 }
 
-final class ManagingSteamGetMafileResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingSteamAddMafileResponse
 {
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingSteamAddMafileResponseItem */
-        public readonly ManagingSteamAddMafileResponseItem $item,
-        /** @var ManagingSteamAddMafileResponseSystemInfo */
-        public readonly ManagingSteamAddMafileResponseSystemInfo $system_info,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -23470,595 +19720,8 @@ final class ManagingSteamAddMafileResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingSteamAddMafileResponseItem::fromArray($data['item']),
-            ManagingSteamAddMafileResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingSteamAddMafileResponseItemGuarantee */
-        public readonly ManagingSteamAddMafileResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingSteamAddMafileResponseItemLoginData */
-        public readonly ManagingSteamAddMafileResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingSteamAddMafileResponseItemCopyFormatData */
-        public readonly ManagingSteamAddMafileResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingSteamAddMafileResponseItemBuyer */
-        public readonly ManagingSteamAddMafileResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingSteamAddMafileResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingSteamAddMafileResponseItemTags */
-        public readonly ManagingSteamAddMafileResponseItemTags $tags,
-        /** @var ManagingSteamAddMafileResponseItemCustomFields */
-        public readonly ManagingSteamAddMafileResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingSteamAddMafileResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingSteamAddMafileResponseItemBumpSettings */
-        public readonly ManagingSteamAddMafileResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingSteamAddMafileResponseItemSeller */
-        public readonly ManagingSteamAddMafileResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingSteamAddMafileResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingSteamAddMafileResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingSteamAddMafileResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingSteamAddMafileResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemAccountLinks => ManagingSteamAddMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingSteamAddMafileResponseItemTags::fromArray($data['tags']),
-            ManagingSteamAddMafileResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemExtraPrices => ManagingSteamAddMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingSteamAddMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingSteamAddMafileResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingSteamAddMafileResponseItemTagsData1234567890 */
-        public readonly ManagingSteamAddMafileResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingSteamAddMafileResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingSteamAddMafileResponseItemSellerContacts */
-        public readonly ManagingSteamAddMafileResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingSteamAddMafileResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingSteamAddMafileResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            ItemModel::fromArray($data['item']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -24068,10 +19731,10 @@ final class ManagingSteamRemoveMafileResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingSteamRemoveMafileResponseItem */
-        public readonly ManagingSteamRemoveMafileResponseItem $item,
-        /** @var ManagingSteamRemoveMafileResponseSystemInfo */
-        public readonly ManagingSteamRemoveMafileResponseSystemInfo $system_info,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -24083,1204 +19746,8 @@ final class ManagingSteamRemoveMafileResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingSteamRemoveMafileResponseItem::fromArray($data['item']),
-            ManagingSteamRemoveMafileResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingSteamRemoveMafileResponseItemGuarantee */
-        public readonly ManagingSteamRemoveMafileResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingSteamRemoveMafileResponseItemLoginData */
-        public readonly ManagingSteamRemoveMafileResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingSteamRemoveMafileResponseItemCopyFormatData */
-        public readonly ManagingSteamRemoveMafileResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingSteamRemoveMafileResponseItemBuyer */
-        public readonly ManagingSteamRemoveMafileResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingSteamRemoveMafileResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingSteamRemoveMafileResponseItemTags */
-        public readonly ManagingSteamRemoveMafileResponseItemTags $tags,
-        /** @var ManagingSteamRemoveMafileResponseItemCustomFields */
-        public readonly ManagingSteamRemoveMafileResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingSteamRemoveMafileResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingSteamRemoveMafileResponseItemBumpSettings */
-        public readonly ManagingSteamRemoveMafileResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingSteamRemoveMafileResponseItemSeller */
-        public readonly ManagingSteamRemoveMafileResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingSteamRemoveMafileResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingSteamRemoveMafileResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingSteamRemoveMafileResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingSteamRemoveMafileResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemAccountLinks => ManagingSteamRemoveMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingSteamRemoveMafileResponseItemTags::fromArray($data['tags']),
-            ManagingSteamRemoveMafileResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemExtraPrices => ManagingSteamRemoveMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingSteamRemoveMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingSteamRemoveMafileResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingSteamRemoveMafileResponseItemTagsData1234567890 */
-        public readonly ManagingSteamRemoveMafileResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingSteamRemoveMafileResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingSteamRemoveMafileResponseItemSellerContacts */
-        public readonly ManagingSteamRemoveMafileResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingSteamRemoveMafileResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingSteamRemoveMafileResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponse
-{
-    public function __construct(
-        /** @var ManagingSteamMafileCodeResponseItem */
-        public readonly ManagingSteamMafileCodeResponseItem $item,
-        /** @var ManagingSteamMafileCodeResponseCodeData */
-        public readonly ManagingSteamMafileCodeResponseCodeData $codeData,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingSteamMafileCodeResponseItem::fromArray($data['item']),
-            ManagingSteamMafileCodeResponseCodeData::fromArray($data['codeData']),
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingSteamMafileCodeResponseItemGuarantee */
-        public readonly ManagingSteamMafileCodeResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingSteamMafileCodeResponseItemLoginData */
-        public readonly ManagingSteamMafileCodeResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingSteamMafileCodeResponseItemCopyFormatData */
-        public readonly ManagingSteamMafileCodeResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingSteamMafileCodeResponseItemBuyer */
-        public readonly ManagingSteamMafileCodeResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingSteamMafileCodeResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingSteamMafileCodeResponseItemTags */
-        public readonly ManagingSteamMafileCodeResponseItemTags $tags,
-        /** @var ManagingSteamMafileCodeResponseItemCustomFields */
-        public readonly ManagingSteamMafileCodeResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingSteamMafileCodeResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingSteamMafileCodeResponseItemBumpSettings */
-        public readonly ManagingSteamMafileCodeResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingSteamMafileCodeResponseItemSeller */
-        public readonly ManagingSteamMafileCodeResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingSteamMafileCodeResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingSteamMafileCodeResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingSteamMafileCodeResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingSteamMafileCodeResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemAccountLinks => ManagingSteamMafileCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingSteamMafileCodeResponseItemTags::fromArray($data['tags']),
-            ManagingSteamMafileCodeResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemExtraPrices => ManagingSteamMafileCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingSteamMafileCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingSteamMafileCodeResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingSteamMafileCodeResponseItemTagsData1234567890 */
-        public readonly ManagingSteamMafileCodeResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingSteamMafileCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingSteamMafileCodeResponseItemSellerContacts */
-        public readonly ManagingSteamMafileCodeResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingSteamMafileCodeResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class ManagingSteamMafileCodeResponseCodeData
-{
-    public function __construct(
-        public readonly string $code,
-        public readonly int $date,
-        public readonly string $textPlain,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['code'],
-            $data['date'],
-            $data['textPlain'],
+            ItemModel::fromArray($data['item']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -25290,8 +19757,8 @@ final class ManagingSteamSDAResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingSteamSDAResponseSystemInfo */
-        public readonly ManagingSteamSDAResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -25303,29 +19770,7 @@ final class ManagingSteamSDAResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingSteamSDAResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingSteamSDAResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -25333,8 +19778,8 @@ final class ManagingSteamSDAResponseSystemInfo
 final class ManagingTelegramCodeResponse
 {
     public function __construct(
-        /** @var ManagingTelegramCodeResponseItem */
-        public readonly ManagingTelegramCodeResponseItem $item,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
         /** @var ManagingTelegramCodeResponseCodes */
         public readonly ManagingTelegramCodeResponseCodes $codes,
     ) {
@@ -25346,573 +19791,8 @@ final class ManagingTelegramCodeResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            ManagingTelegramCodeResponseItem::fromArray($data['item']),
+            ItemModel::fromArray($data['item']),
             ManagingTelegramCodeResponseCodes::fromArray($data['codes']),
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var ManagingTelegramCodeResponseItemGuarantee */
-        public readonly ManagingTelegramCodeResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var ManagingTelegramCodeResponseItemLoginData */
-        public readonly ManagingTelegramCodeResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var ManagingTelegramCodeResponseItemCopyFormatData */
-        public readonly ManagingTelegramCodeResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var ManagingTelegramCodeResponseItemBuyer */
-        public readonly ManagingTelegramCodeResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<ManagingTelegramCodeResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var ManagingTelegramCodeResponseItemTags */
-        public readonly ManagingTelegramCodeResponseItemTags $tags,
-        /** @var ManagingTelegramCodeResponseItemCustomFields */
-        public readonly ManagingTelegramCodeResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<ManagingTelegramCodeResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var ManagingTelegramCodeResponseItemBumpSettings */
-        public readonly ManagingTelegramCodeResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var ManagingTelegramCodeResponseItemSeller */
-        public readonly ManagingTelegramCodeResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            ManagingTelegramCodeResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            ManagingTelegramCodeResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            ManagingTelegramCodeResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            ManagingTelegramCodeResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): ManagingTelegramCodeResponseItemAccountLinks => ManagingTelegramCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            ManagingTelegramCodeResponseItemTags::fromArray($data['tags']),
-            ManagingTelegramCodeResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): ManagingTelegramCodeResponseItemExtraPrices => ManagingTelegramCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            ManagingTelegramCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            ManagingTelegramCodeResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemTags
-{
-    public function __construct(
-        /** @var ManagingTelegramCodeResponseItemTagsData1234567890 */
-        public readonly ManagingTelegramCodeResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ManagingTelegramCodeResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var ManagingTelegramCodeResponseItemSellerContacts */
-        public readonly ManagingTelegramCodeResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            ManagingTelegramCodeResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class ManagingTelegramCodeResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
         );
     }
 }
@@ -25942,8 +19822,8 @@ final class ManagingTelegramResetAuthResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingTelegramResetAuthResponseSystemInfo|null */
-        public readonly ?ManagingTelegramResetAuthResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -25955,29 +19835,7 @@ final class ManagingTelegramResetAuthResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingTelegramResetAuthResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingTelegramResetAuthResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -25987,8 +19845,8 @@ final class ManagingRefuseGuaranteeResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingRefuseGuaranteeResponseSystemInfo|null */
-        public readonly ?ManagingRefuseGuaranteeResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26000,29 +19858,7 @@ final class ManagingRefuseGuaranteeResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingRefuseGuaranteeResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingRefuseGuaranteeResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26032,8 +19868,8 @@ final class ManagingDeclineVideoRecordingResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingDeclineVideoRecordingResponseSystemInfo|null */
-        public readonly ?ManagingDeclineVideoRecordingResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26045,29 +19881,7 @@ final class ManagingDeclineVideoRecordingResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingDeclineVideoRecordingResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingDeclineVideoRecordingResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26076,8 +19890,8 @@ final class ManagingCheckGuaranteeResponse
 {
     public function __construct(
         public readonly string $message,
-        /** @var ManagingCheckGuaranteeResponseSystemInfo */
-        public readonly ManagingCheckGuaranteeResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26088,29 +19902,7 @@ final class ManagingCheckGuaranteeResponse
     {
         return new self(
             $data['message'],
-            ManagingCheckGuaranteeResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingCheckGuaranteeResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26183,8 +19975,8 @@ final class ManagingTagResponse
         public readonly int $addedTagId,
         /** @var list<int> */
         public readonly array $deleteTags,
-        /** @var ManagingTagResponseSystemInfo */
-        public readonly ManagingTagResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26198,7 +19990,7 @@ final class ManagingTagResponse
             ManagingTagResponseTag::fromArray($data['tag']),
             $data['addedTagId'],
             $data['deleteTags'],
-            ManagingTagResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26229,28 +20021,6 @@ final class ManagingTagResponseTag
     }
 }
 
-final class ManagingTagResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingUntagResponse
 {
     public function __construct(
@@ -26260,8 +20030,8 @@ final class ManagingUntagResponse
         public readonly int $addedTagId,
         /** @var list<int> */
         public readonly array $deleteTags,
-        /** @var ManagingUntagResponseSystemInfo */
-        public readonly ManagingUntagResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26275,7 +20045,7 @@ final class ManagingUntagResponse
             ManagingUntagResponseTag::fromArray($data['tag']),
             $data['addedTagId'],
             $data['deleteTags'],
-            ManagingUntagResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26306,28 +20076,6 @@ final class ManagingUntagResponseTag
     }
 }
 
-final class ManagingUntagResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingPublicTagResponse
 {
     public function __construct(
@@ -26337,8 +20085,8 @@ final class ManagingPublicTagResponse
         public readonly int $addedTagId,
         /** @var list<int> */
         public readonly array $deleteTags,
-        /** @var ManagingPublicTagResponseSystemInfo */
-        public readonly ManagingPublicTagResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26352,7 +20100,7 @@ final class ManagingPublicTagResponse
             ManagingPublicTagResponseTag::fromArray($data['tag']),
             $data['addedTagId'],
             $data['deleteTags'],
-            ManagingPublicTagResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26383,28 +20131,6 @@ final class ManagingPublicTagResponseTag
     }
 }
 
-final class ManagingPublicTagResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingPublicUntagResponse
 {
     public function __construct(
@@ -26414,8 +20140,8 @@ final class ManagingPublicUntagResponse
         public readonly int $addedTagId,
         /** @var list<int> */
         public readonly array $deleteTags,
-        /** @var ManagingPublicUntagResponseSystemInfo */
-        public readonly ManagingPublicUntagResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26429,7 +20155,7 @@ final class ManagingPublicUntagResponse
             ManagingPublicUntagResponseTag::fromArray($data['tag']),
             $data['addedTagId'],
             $data['deleteTags'],
-            ManagingPublicUntagResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26460,35 +20186,13 @@ final class ManagingPublicUntagResponseTag
     }
 }
 
-final class ManagingPublicUntagResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ManagingFavoriteResponse
 {
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var ManagingFavoriteResponseSystemInfo */
-        public readonly ManagingFavoriteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26500,29 +20204,7 @@ final class ManagingFavoriteResponse
         return new self(
             $data['status'],
             $data['message'],
-            ManagingFavoriteResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ManagingFavoriteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26532,8 +20214,8 @@ final class ManagingUnfavoriteResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingUnfavoriteResponseSystemInfo|null */
-        public readonly ?ManagingUnfavoriteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26545,29 +20227,7 @@ final class ManagingUnfavoriteResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingUnfavoriteResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingUnfavoriteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26577,8 +20237,8 @@ final class ManagingStickResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingStickResponseSystemInfo|null */
-        public readonly ?ManagingStickResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26590,29 +20250,7 @@ final class ManagingStickResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingStickResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingStickResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26622,8 +20260,8 @@ final class ManagingUnstickResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingUnstickResponseSystemInfo|null */
-        public readonly ?ManagingUnstickResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26635,29 +20273,7 @@ final class ManagingUnstickResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingUnstickResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingUnstickResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26667,8 +20283,8 @@ final class ManagingTransferResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ManagingTransferResponseSystemInfo|null */
-        public readonly ?ManagingTransferResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -26680,29 +20296,7 @@ final class ManagingTransferResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ManagingTransferResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ManagingTransferResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -26714,8 +20308,8 @@ final class ProfileClaimsResponse
         public readonly array $claims,
         /** @var ProfileClaimsResponseStats */
         public readonly ProfileClaimsResponseStats $stats,
-        /** @var ProfileClaimsResponseSystemInfo */
-        public readonly ProfileClaimsResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -26727,7 +20321,7 @@ final class ProfileClaimsResponse
         return new self(
             array_map(static fn(array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']),
             ProfileClaimsResponseStats::fromArray($data['stats']),
-            ProfileClaimsResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -26978,35 +20572,13 @@ final class ProfileClaimsResponseStatsNoMarket
     }
 }
 
-final class ProfileClaimsResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ProfileGetResponse
 {
     public function __construct(
-        /** @var ProfileGetResponseUser */
-        public readonly ProfileGetResponseUser $user,
-        /** @var ProfileGetResponseSystemInfo */
-        public readonly ProfileGetResponseSystemInfo $system_info,
+        /** @var UserModel */
+        public readonly UserModel $user,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -27016,542 +20588,8 @@ final class ProfileGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            ProfileGetResponseUser::fromArray($data['user']),
-            ProfileGetResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class ProfileGetResponseUser
-{
-    public function __construct(
-        public readonly int $active_items_count,
-        public readonly bool $activity_visible,
-        public readonly int $age,
-        public readonly string $balance,
-        /** @var list<ProfileGetResponseUserBalances> */
-        public readonly array $balances,
-        public readonly int $bump_item_period,
-        public readonly bool $can_edit,
-        public readonly bool $can_follow,
-        public readonly bool $can_ignore,
-        public readonly bool $can_post_profile,
-        public readonly bool $can_view_profile,
-        public readonly bool $can_view_profile_posts,
-        public readonly bool $can_warn,
-        public readonly int $contest_count,
-        public readonly string $conv_welcome_message,
-        public readonly int $convertedBalance,
-        public readonly int $convertedDeposit,
-        public readonly int $convertedHold,
-        public readonly string $currency,
-        public readonly string $currencyPhrase,
-        public readonly string $custom_account_download_format,
-        /** @var ProfileGetResponseUserCustomFields */
-        public readonly ProfileGetResponseUserCustomFields $custom_fields,
-        public readonly string $custom_title,
-        public readonly int $deposit,
-        /** @var ProfileGetResponseUserDob */
-        public readonly ProfileGetResponseUserDob $dob,
-        /** @var ProfileGetResponseUserFeedbackData */
-        public readonly ProfileGetResponseUserFeedbackData $feedback_data,
-        public readonly string $hold,
-        public readonly string $homepage,
-        /** @var ProfileGetResponseUserImapData */
-        public readonly ProfileGetResponseUserImapData $imap_data,
-        public readonly bool $is_admin,
-        public readonly bool $is_banned,
-        public readonly bool $is_followed,
-        public readonly bool $is_ignored,
-        public readonly bool $is_moderator,
-        public readonly bool $is_staff,
-        public readonly bool $is_super_admin,
-        public readonly int $joined_date,
-        public readonly int $last_activity,
-        public readonly int $like2_count,
-        public readonly int $like_count,
-        public readonly string $location,
-        public readonly string $market_custom_title,
-        public readonly int $max_discount_percent,
-        public readonly int $message_count,
-        public readonly int $paid_mail_left,
-        /** @var list<ProfileGetResponseUserPublicTags> */
-        public readonly array $public_tags,
-        public readonly int $register_date,
-        /** @var ProfileGetResponseUserRendered */
-        public readonly ProfileGetResponseUserRendered $rendered,
-        public readonly int $restore_count,
-        /** @var ProfileGetResponseUserRestoreData */
-        public readonly ProfileGetResponseUserRestoreData $restore_data,
-        public readonly string $short_link,
-        public readonly int $sold_items_count,
-        /** @var list<ProfileGetResponseUserTags> */
-        public readonly array $tags,
-        /** @var ProfileGetResponseUserTelegramClient */
-        public readonly ProfileGetResponseUserTelegramClient $telegram_client,
-        public readonly int $trophy_points,
-        public readonly bool $user_allow_ask_discount,
-        public readonly int $user_id,
-        public readonly string $user_title,
-        public readonly string $username,
-        public readonly string $view_url,
-        public readonly bool $visible,
-        public readonly int $warning_points,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['active_items_count'],
-            $data['activity_visible'],
-            $data['age'],
-            $data['balance'],
-            array_map(static fn(array $item): ProfileGetResponseUserBalances => ProfileGetResponseUserBalances::fromArray($item), $data['balances']),
-            $data['bump_item_period'],
-            $data['can_edit'],
-            $data['can_follow'],
-            $data['can_ignore'],
-            $data['can_post_profile'],
-            $data['can_view_profile'],
-            $data['can_view_profile_posts'],
-            $data['can_warn'],
-            $data['contest_count'],
-            $data['conv_welcome_message'],
-            $data['convertedBalance'],
-            $data['convertedDeposit'],
-            $data['convertedHold'],
-            $data['currency'],
-            $data['currencyPhrase'],
-            $data['custom_account_download_format'],
-            ProfileGetResponseUserCustomFields::fromArray($data['custom_fields']),
-            $data['custom_title'],
-            $data['deposit'],
-            ProfileGetResponseUserDob::fromArray($data['dob']),
-            ProfileGetResponseUserFeedbackData::fromArray($data['feedback_data']),
-            $data['hold'],
-            $data['homepage'],
-            ProfileGetResponseUserImapData::fromArray($data['imap_data']),
-            $data['is_admin'],
-            $data['is_banned'],
-            $data['is_followed'],
-            $data['is_ignored'],
-            $data['is_moderator'],
-            $data['is_staff'],
-            $data['is_super_admin'],
-            $data['joined_date'],
-            $data['last_activity'],
-            $data['like2_count'],
-            $data['like_count'],
-            $data['location'],
-            $data['market_custom_title'],
-            $data['max_discount_percent'],
-            $data['message_count'],
-            $data['paid_mail_left'],
-            array_map(static fn(array $item): ProfileGetResponseUserPublicTags => ProfileGetResponseUserPublicTags::fromArray($item), $data['public_tags']),
-            $data['register_date'],
-            ProfileGetResponseUserRendered::fromArray($data['rendered']),
-            $data['restore_count'],
-            ProfileGetResponseUserRestoreData::fromArray($data['restore_data']),
-            $data['short_link'],
-            $data['sold_items_count'],
-            array_map(static fn(array $item): ProfileGetResponseUserTags => ProfileGetResponseUserTags::fromArray($item), $data['tags']),
-            ProfileGetResponseUserTelegramClient::fromArray($data['telegram_client']),
-            $data['trophy_points'],
-            $data['user_allow_ask_discount'],
-            $data['user_id'],
-            $data['user_title'],
-            $data['username'],
-            $data['view_url'],
-            $data['visible'],
-            $data['warning_points'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserBalances
-{
-    public function __construct(
-        public readonly string $balance,
-        public readonly int $balance_id,
-        public readonly float $convertedBalance,
-        public readonly mixed $custom_title,
-        public readonly string $fullTitle,
-        public readonly int $merchant_id,
-        public readonly string $title,
-        public readonly string $type,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['balance'],
-            $data['balance_id'],
-            $data['convertedBalance'],
-            $data['custom_title'],
-            $data['fullTitle'],
-            $data['merchant_id'],
-            $data['title'],
-            $data['type'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztAwardUserTrophy,
-        public readonly string $lztLikesIncreasing,
-        public readonly string $lztLikesZeroing,
-        public readonly string $lztSympathyIncreasing,
-        public readonly string $lztSympathyZeroing,
-        public readonly string $lztUnbanAmount,
-        public readonly string $maecenasValue,
-        public readonly string $scamURL,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-        public readonly string $favoritePorn,
-        public readonly string $favoriteVape,
-        public readonly string $favoriteAnime,
-        public readonly string $matrix,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztAwardUserTrophy'],
-            $data['lztLikesIncreasing'],
-            $data['lztLikesZeroing'],
-            $data['lztSympathyIncreasing'],
-            $data['lztSympathyZeroing'],
-            $data['lztUnbanAmount'],
-            $data['maecenasValue'],
-            $data['scamURL'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-            $data['favoritePorn'],
-            $data['favoriteVape'],
-            $data['favoriteAnime'],
-            $data['matrix'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserDob
-{
-    public function __construct(
-        public readonly int $year,
-        public readonly int $month,
-        public readonly int $day,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['year'],
-            $data['month'],
-            $data['day'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserFeedbackData
-{
-    public function __construct(
-        /** @var ProfileGetResponseUserFeedbackDataData12345 */
-        public readonly ProfileGetResponseUserFeedbackDataData12345 $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ProfileGetResponseUserFeedbackDataData12345::fromArray($data['12345']),
-        );
-    }
-}
-
-final class ProfileGetResponseUserFeedbackDataData12345
-{
-    public function __construct(
-        public readonly int $positive,
-        public readonly int $negative,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['positive'],
-            $data['negative'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserImapData
-{
-    public function __construct(
-        /** @var ProfileGetResponseUserImapDataDomainZone */
-        public readonly ProfileGetResponseUserImapDataDomainZone $domain_zone,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            ProfileGetResponseUserImapDataDomainZone::fromArray($data['domain.zone']),
-        );
-    }
-}
-
-final class ProfileGetResponseUserImapDataDomainZone
-{
-    public function __construct(
-        public readonly string $domain,
-        public readonly string $imap_server,
-        public readonly int $port,
-        public readonly bool $secure,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['domain'],
-            $data['imap_server'],
-            $data['port'],
-            $data['secure'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserPublicTags
-{
-    public function __construct(
-        public readonly string $background_color,
-        public readonly int $tag_id,
-        public readonly string $title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['background_color'],
-            $data['tag_id'],
-            $data['title'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserRendered
-{
-    public function __construct(
-        public readonly string $username,
-        /** @var ProfileGetResponseUserRenderedAvatars */
-        public readonly ProfileGetResponseUserRenderedAvatars $avatars,
-        /** @var ProfileGetResponseUserRenderedBackgrounds */
-        public readonly ProfileGetResponseUserRenderedBackgrounds $backgrounds,
-        public readonly string $link,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['username'],
-            ProfileGetResponseUserRenderedAvatars::fromArray($data['avatars']),
-            ProfileGetResponseUserRenderedBackgrounds::fromArray($data['backgrounds']),
-            $data['link'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserRenderedAvatars
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-        public readonly string $s,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-            $data['s'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserRenderedBackgrounds
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserRestoreData
-{
-    public function __construct(
-        public readonly int $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['12345'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserTags
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class ProfileGetResponseUserTelegramClient
-{
-    public function __construct(
-        public readonly string $telegram_api_id,
-        public readonly string $telegram_api_hash,
-        public readonly string $telegram_device_model,
-        public readonly string $telegram_system_version,
-        public readonly string $telegram_app_version,
-        public readonly string $telegram_system_lang_code,
-        public readonly string $telegram_lang_code,
-        public readonly string $telegram_lang_pack,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['telegram_api_id'],
-            $data['telegram_api_hash'],
-            $data['telegram_device_model'],
-            $data['telegram_system_version'],
-            $data['telegram_app_version'],
-            $data['telegram_system_lang_code'],
-            $data['telegram_lang_code'],
-            $data['telegram_lang_pack'],
-        );
-    }
-}
-
-final class ProfileGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            UserModel::fromArray($data['user']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -27561,8 +20599,8 @@ final class ProfileEditResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ProfileEditResponseSystemInfo|null */
-        public readonly ?ProfileEditResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -27574,422 +20612,7 @@ final class ProfileEditResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ProfileEditResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ProfileEditResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
-final class CartGetResponse
-{
-    public function __construct(
-        /** @var list<CartGetResponseItems> */
-        public readonly array $items,
-        public readonly int $totalItems,
-        public readonly mixed $totalItemsPrice,
-        public readonly bool $hasNextPage,
-        public readonly int $perPage,
-        public readonly int $page,
-        public readonly string $searchUrl,
-        /** @var list<CartGetResponseStickyItems> */
-        public readonly array $stickyItems,
-        /** @var CartGetResponseSystemInfo */
-        public readonly CartGetResponseSystemInfo $system_info,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            array_map(static fn(array $item): CartGetResponseItems => CartGetResponseItems::fromArray($item), $data['items']),
-            $data['totalItems'],
-            $data['totalItemsPrice'],
-            $data['hasNextPage'],
-            $data['perPage'],
-            $data['page'],
-            $data['searchUrl'],
-            array_map(static fn(array $item): CartGetResponseStickyItems => CartGetResponseStickyItems::fromArray($item), $data['stickyItems']),
-            CartGetResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CartGetResponseItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var CartGetResponseItemsBumpSettings|null */
-        public readonly ?CartGetResponseItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var CartGetResponseItemsSeller|null */
-        public readonly ?CartGetResponseItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? CartGetResponseItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? CartGetResponseItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class CartGetResponseItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class CartGetResponseItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class CartGetResponseStickyItems
-{
-    public function __construct(
-        public readonly ?int $item_id,
-        public readonly ?string $item_state,
-        public readonly ?int $category_id,
-        public readonly ?int $published_date,
-        public readonly ?string $title,
-        public readonly ?string $description,
-        public readonly ?int $price,
-        public readonly ?int $update_stat_date,
-        public readonly ?int $refreshed_date,
-        public readonly ?int $view_count,
-        public readonly ?int $is_sticky,
-        public readonly ?string $item_origin,
-        public readonly ?int $extended_guarantee,
-        public readonly ?int $nsb,
-        public readonly ?int $allow_ask_discount,
-        public readonly ?string $title_en,
-        public readonly ?string $description_en,
-        public readonly ?string $item_domain,
-        public readonly ?string $resale_item_origin,
-        public readonly ?int $isIgnored,
-        public readonly ?bool $guarantee,
-        public readonly ?bool $canViewLoginData,
-        public readonly ?bool $canUpdateItemStats,
-        public readonly ?bool $canViewEmailLoginData,
-        public readonly ?bool $showGetEmailCodeButton,
-        public readonly ?bool $canOpenItem,
-        public readonly ?bool $canCloseItem,
-        public readonly ?bool $canEditItem,
-        public readonly ?bool $canDeleteItem,
-        public readonly ?bool $canStickItem,
-        public readonly ?bool $canUnstickItem,
-        /** @var CartGetResponseStickyItemsBumpSettings|null */
-        public readonly ?CartGetResponseStickyItemsBumpSettings $bumpSettings,
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBuyItem,
-        public readonly ?int $rub_price,
-        public readonly ?string $price_currency,
-        public readonly ?bool $canValidateAccount,
-        public readonly ?bool $canResellItemAfterPurchase,
-        public readonly ?bool $canViewAccountLink,
-        public readonly ?string $itemOriginPhrase,
-        /** @var list<string>|null */
-        public readonly ?array $tags,
-        public readonly ?string $note_text,
-        public readonly ?string $description_html,
-        public readonly ?string $description_html_en,
-        /** @var CartGetResponseStickyItemsSeller|null */
-        public readonly ?CartGetResponseStickyItemsSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'] ?? null,
-            $data['item_state'] ?? null,
-            $data['category_id'] ?? null,
-            $data['published_date'] ?? null,
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['price'] ?? null,
-            $data['update_stat_date'] ?? null,
-            $data['refreshed_date'] ?? null,
-            $data['view_count'] ?? null,
-            $data['is_sticky'] ?? null,
-            $data['item_origin'] ?? null,
-            $data['extended_guarantee'] ?? null,
-            $data['nsb'] ?? null,
-            $data['allow_ask_discount'] ?? null,
-            $data['title_en'] ?? null,
-            $data['description_en'] ?? null,
-            $data['item_domain'] ?? null,
-            $data['resale_item_origin'] ?? null,
-            $data['isIgnored'] ?? null,
-            $data['guarantee'] ?? null,
-            $data['canViewLoginData'] ?? null,
-            $data['canUpdateItemStats'] ?? null,
-            $data['canViewEmailLoginData'] ?? null,
-            $data['showGetEmailCodeButton'] ?? null,
-            $data['canOpenItem'] ?? null,
-            $data['canCloseItem'] ?? null,
-            $data['canEditItem'] ?? null,
-            $data['canDeleteItem'] ?? null,
-            $data['canStickItem'] ?? null,
-            $data['canUnstickItem'] ?? null,
-            isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? CartGetResponseStickyItemsBumpSettings::fromArray($data['bumpSettings']) : null,
-            $data['canBumpItem'] ?? null,
-            $data['canBuyItem'] ?? null,
-            $data['rub_price'] ?? null,
-            $data['price_currency'] ?? null,
-            $data['canValidateAccount'] ?? null,
-            $data['canResellItemAfterPurchase'] ?? null,
-            $data['canViewAccountLink'] ?? null,
-            $data['itemOriginPhrase'] ?? null,
-            $data['tags'] ?? null,
-            $data['note_text'] ?? null,
-            $data['description_html'] ?? null,
-            $data['description_html_en'] ?? null,
-            isset($data['seller']) && is_array($data['seller']) ? CartGetResponseStickyItemsSeller::fromArray($data['seller']) : null,
-        );
-    }
-}
-
-final class CartGetResponseStickyItemsBumpSettings
-{
-    public function __construct(
-        public readonly ?bool $canBumpItem,
-        public readonly ?bool $canBumpItemGlobally,
-        public readonly ?string $shortErrorPhrase,
-        public readonly ?string $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'] ?? null,
-            $data['canBumpItemGlobally'] ?? null,
-            $data['shortErrorPhrase'] ?? null,
-            $data['errorPhrase'] ?? null,
-        );
-    }
-}
-
-final class CartGetResponseStickyItemsSeller
-{
-    public function __construct(
-        public readonly ?int $user_id,
-        public readonly ?int $sold_items_count,
-        public readonly ?int $active_item_count,
-        public readonly ?string $restore_data,
-        public readonly ?string $username,
-        public readonly ?int $avatar_date,
-        public readonly ?int $is_banned,
-        public readonly ?int $display_style_group_id,
-        public readonly ?int $restore_percents,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'] ?? null,
-            $data['sold_items_count'] ?? null,
-            $data['active_item_count'] ?? null,
-            $data['restore_data'] ?? null,
-            $data['username'] ?? null,
-            $data['avatar_date'] ?? null,
-            $data['is_banned'] ?? null,
-            $data['display_style_group_id'] ?? null,
-            $data['restore_percents'] ?? null,
-        );
-    }
-}
-
-final class CartGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -27998,8 +20621,8 @@ final class CartAddResponse
 {
     public function __construct(
         public readonly bool $success,
-        /** @var CartAddResponseSystemInfo */
-        public readonly CartAddResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -28010,29 +20633,7 @@ final class CartAddResponse
     {
         return new self(
             $data['success'],
-            CartAddResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CartAddResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -28041,8 +20642,8 @@ final class CartDeleteResponse
 {
     public function __construct(
         public readonly bool $success,
-        /** @var CartDeleteResponseSystemInfo */
-        public readonly CartDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -28053,29 +20654,7 @@ final class CartDeleteResponse
     {
         return new self(
             $data['success'],
-            CartDeleteResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CartDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -28086,8 +20665,8 @@ final class PurchasingFastBuyResponse
         public readonly string $status,
         /** @var PurchasingFastBuyResponseItem */
         public readonly PurchasingFastBuyResponseItem $item,
-        /** @var PurchasingFastBuyResponseSystemInfo */
-        public readonly PurchasingFastBuyResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -28099,7 +20678,7 @@ final class PurchasingFastBuyResponse
         return new self(
             $data['status'],
             PurchasingFastBuyResponseItem::fromArray($data['item']),
-            PurchasingFastBuyResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -28556,28 +21135,6 @@ final class PurchasingFastBuyResponseItemSeller
     }
 }
 
-final class PurchasingFastBuyResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PurchasingCheckResponse
 {
     public function __construct(
@@ -28585,8 +21142,8 @@ final class PurchasingCheckResponse
         /** @var PurchasingCheckResponseItem */
         public readonly PurchasingCheckResponseItem $item,
         public readonly bool $requireVideoRecording,
-        /** @var PurchasingCheckResponseSystemInfo */
-        public readonly PurchasingCheckResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -28599,7 +21156,7 @@ final class PurchasingCheckResponse
             $data['status'],
             PurchasingCheckResponseItem::fromArray($data['item']),
             $data['requireVideoRecording'],
-            PurchasingCheckResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -28931,36 +21488,14 @@ final class PurchasingCheckResponseItemSeller
     }
 }
 
-final class PurchasingCheckResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PurchasingConfirmResponse
 {
     public function __construct(
         public readonly ?string $status,
         /** @var PurchasingConfirmResponseItem */
         public readonly PurchasingConfirmResponseItem $item,
-        /** @var PurchasingConfirmResponseSystemInfo */
-        public readonly PurchasingConfirmResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -28972,7 +21507,7 @@ final class PurchasingConfirmResponse
         return new self(
             $data['status'] ?? null,
             PurchasingConfirmResponseItem::fromArray($data['item']),
-            PurchasingConfirmResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -29028,35 +21563,13 @@ final class PurchasingConfirmResponseItemLoginData
     }
 }
 
-final class PurchasingConfirmResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PurchasingDiscountRequestResponse
 {
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var PurchasingDiscountRequestResponseSystemInfo|null */
-        public readonly ?PurchasingDiscountRequestResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -29068,29 +21581,7 @@ final class PurchasingDiscountRequestResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? PurchasingDiscountRequestResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class PurchasingDiscountRequestResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -29100,8 +21591,8 @@ final class PurchasingDiscountCancelResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var PurchasingDiscountCancelResponseSystemInfo|null */
-        public readonly ?PurchasingDiscountCancelResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -29113,29 +21604,7 @@ final class PurchasingDiscountCancelResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? PurchasingDiscountCancelResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class PurchasingDiscountCancelResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -29143,11 +21612,11 @@ final class PurchasingDiscountCancelResponseSystemInfo
 final class CustomDiscountsGetResponse
 {
     public function __construct(
-        /** @var list<CustomDiscountsGetResponseDiscounts> */
+        /** @var list<DiscountModel> */
         public readonly array $discounts,
         public readonly int $total,
-        /** @var CustomDiscountsGetResponseSystemInfo */
-        public readonly CustomDiscountsGetResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -29157,61 +21626,9 @@ final class CustomDiscountsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CustomDiscountsGetResponseDiscounts => CustomDiscountsGetResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), $data['discounts']),
             $data['total'],
-            CustomDiscountsGetResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CustomDiscountsGetResponseDiscounts
-{
-    public function __construct(
-        public readonly int $category_id,
-        public readonly int $discount_id,
-        public readonly int $discount_percent,
-        public readonly int $discount_user_id,
-        public readonly int $max_price,
-        public readonly int $min_price,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['category_id'],
-            $data['discount_id'],
-            $data['discount_percent'],
-            $data['discount_user_id'],
-            $data['max_price'],
-            $data['min_price'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class CustomDiscountsGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -29219,11 +21636,11 @@ final class CustomDiscountsGetResponseSystemInfo
 final class CustomDiscountsCreateResponse
 {
     public function __construct(
-        /** @var CustomDiscountsCreateResponseDiscount */
-        public readonly CustomDiscountsCreateResponseDiscount $discount,
+        /** @var DiscountModel */
+        public readonly DiscountModel $discount,
         public readonly int $total,
-        /** @var CustomDiscountsCreateResponseSystemInfo */
-        public readonly CustomDiscountsCreateResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -29233,61 +21650,9 @@ final class CustomDiscountsCreateResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            CustomDiscountsCreateResponseDiscount::fromArray($data['discount']),
+            DiscountModel::fromArray($data['discount']),
             $data['total'],
-            CustomDiscountsCreateResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CustomDiscountsCreateResponseDiscount
-{
-    public function __construct(
-        public readonly int $category_id,
-        public readonly int $discount_id,
-        public readonly int $discount_percent,
-        public readonly int $discount_user_id,
-        public readonly int $max_price,
-        public readonly int $min_price,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['category_id'],
-            $data['discount_id'],
-            $data['discount_percent'],
-            $data['discount_user_id'],
-            $data['max_price'],
-            $data['min_price'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class CustomDiscountsCreateResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -29295,11 +21660,11 @@ final class CustomDiscountsCreateResponseSystemInfo
 final class CustomDiscountsEditResponse
 {
     public function __construct(
-        /** @var list<CustomDiscountsEditResponseDiscounts> */
+        /** @var list<DiscountModel> */
         public readonly array $discounts,
         public readonly int $total,
-        /** @var CustomDiscountsEditResponseSystemInfo */
-        public readonly CustomDiscountsEditResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -29309,61 +21674,9 @@ final class CustomDiscountsEditResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): CustomDiscountsEditResponseDiscounts => CustomDiscountsEditResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), $data['discounts']),
             $data['total'],
-            CustomDiscountsEditResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class CustomDiscountsEditResponseDiscounts
-{
-    public function __construct(
-        public readonly int $category_id,
-        public readonly int $discount_id,
-        public readonly int $discount_percent,
-        public readonly int $discount_user_id,
-        public readonly int $max_price,
-        public readonly int $min_price,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['category_id'],
-            $data['discount_id'],
-            $data['discount_percent'],
-            $data['discount_user_id'],
-            $data['max_price'],
-            $data['min_price'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class CustomDiscountsEditResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -29373,8 +21686,8 @@ final class CustomDiscountsDeleteResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var CustomDiscountsDeleteResponseSystemInfo|null */
-        public readonly ?CustomDiscountsDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -29386,29 +21699,7 @@ final class CustomDiscountsDeleteResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? CustomDiscountsDeleteResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class CustomDiscountsDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -29416,11 +21707,11 @@ final class CustomDiscountsDeleteResponseSystemInfo
 final class PublishingFastSellResponse
 {
     public function __construct(
-        /** @var PublishingFastSellResponseItem */
-        public readonly PublishingFastSellResponseItem $item,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
         public readonly string $itemLink,
-        /** @var PublishingFastSellResponseSystemInfo */
-        public readonly PublishingFastSellResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -29430,596 +21721,9 @@ final class PublishingFastSellResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            PublishingFastSellResponseItem::fromArray($data['item']),
+            ItemModel::fromArray($data['item']),
             $data['itemLink'],
-            PublishingFastSellResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PublishingFastSellResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var PublishingFastSellResponseItemGuarantee */
-        public readonly PublishingFastSellResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var PublishingFastSellResponseItemLoginData */
-        public readonly PublishingFastSellResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var PublishingFastSellResponseItemCopyFormatData */
-        public readonly PublishingFastSellResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var PublishingFastSellResponseItemBuyer */
-        public readonly PublishingFastSellResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<PublishingFastSellResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var PublishingFastSellResponseItemTags */
-        public readonly PublishingFastSellResponseItemTags $tags,
-        /** @var PublishingFastSellResponseItemCustomFields */
-        public readonly PublishingFastSellResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<PublishingFastSellResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var PublishingFastSellResponseItemBumpSettings */
-        public readonly PublishingFastSellResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var PublishingFastSellResponseItemSeller */
-        public readonly PublishingFastSellResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            PublishingFastSellResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            PublishingFastSellResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            PublishingFastSellResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            PublishingFastSellResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): PublishingFastSellResponseItemAccountLinks => PublishingFastSellResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            PublishingFastSellResponseItemTags::fromArray($data['tags']),
-            PublishingFastSellResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): PublishingFastSellResponseItemExtraPrices => PublishingFastSellResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            PublishingFastSellResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            PublishingFastSellResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemTags
-{
-    public function __construct(
-        /** @var PublishingFastSellResponseItemTagsData1234567890 */
-        public readonly PublishingFastSellResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PublishingFastSellResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var PublishingFastSellResponseItemSellerContacts */
-        public readonly PublishingFastSellResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            PublishingFastSellResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class PublishingFastSellResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class PublishingFastSellResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -30028,10 +21732,10 @@ final class PublishingAddResponse
 {
     public function __construct(
         public readonly string $status,
-        /** @var PublishingAddResponseItem */
-        public readonly PublishingAddResponseItem $item,
-        /** @var PublishingAddResponseSystemInfo */
-        public readonly PublishingAddResponseSystemInfo $system_info,
+        /** @var ItemModel */
+        public readonly ItemModel $item,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -30042,595 +21746,8 @@ final class PublishingAddResponse
     {
         return new self(
             $data['status'],
-            PublishingAddResponseItem::fromArray($data['item']),
-            PublishingAddResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PublishingAddResponseItem
-{
-    public function __construct(
-        public readonly int $item_id,
-        public readonly string $item_state,
-        public readonly int $category_id,
-        public readonly int $published_date,
-        public readonly string $title,
-        public readonly string $description,
-        public readonly int $price,
-        public readonly int $update_stat_date,
-        public readonly int $refreshed_date,
-        public readonly int $edit_date,
-        public readonly int $pending_deletion_date,
-        public readonly string $login,
-        public readonly string $temp_email,
-        public readonly int $view_count,
-        public readonly int $is_sticky,
-        public readonly string $information,
-        public readonly string $item_origin,
-        public readonly int $extended_guarantee,
-        public readonly int $nsb,
-        public readonly int $allow_ask_discount,
-        public readonly string $title_en,
-        public readonly string $description_en,
-        public readonly string $information_en,
-        public readonly string $email_type,
-        public readonly string $email_provider,
-        public readonly string $item_domain,
-        public readonly string $resale_item_origin,
-        public readonly string $note_text,
-        public readonly mixed $content_type,
-        public readonly mixed $content_id,
-        public readonly int $delete_date,
-        public readonly int $delete_user_id,
-        public readonly string $delete_username,
-        public readonly string $delete_reason,
-        public readonly int $user_allow_ask_discount,
-        public readonly int $max_discount_percent,
-        public readonly string $market_custom_title,
-        public readonly string $feedback_data,
-        public readonly int $buyer_display_icon_group_id,
-        public readonly string $buyer_uniq_banner,
-        public readonly int $buyer_avatar_date,
-        public readonly int $buyer_user_group_id,
-        public readonly mixed $is_fave,
-        public readonly mixed $in_cart,
-        public readonly mixed $cart_price,
-        public readonly bool $canResellItem,
-        public readonly float $priceWithSellerFee,
-        /** @var PublishingAddResponseItemGuarantee */
-        public readonly PublishingAddResponseItemGuarantee $guarantee,
-        public readonly bool $canViewLoginData,
-        public readonly bool $canUpdateItemStats,
-        public readonly bool $canReportItem,
-        public readonly bool $canViewItemViews,
-        /** @var PublishingAddResponseItemLoginData */
-        public readonly PublishingAddResponseItemLoginData $loginData,
-        public readonly bool $canViewEmailLoginData,
-        /** @var PublishingAddResponseItemCopyFormatData */
-        public readonly PublishingAddResponseItemCopyFormatData $copyFormatData,
-        public readonly bool $showGetEmailCodeButton,
-        public readonly mixed $getEmailCodeDisplayLogin,
-        /** @var PublishingAddResponseItemBuyer */
-        public readonly PublishingAddResponseItemBuyer $buyer,
-        public readonly bool $isPersonalAccount,
-        public readonly int $rub_price,
-        public readonly string $price_currency,
-        public readonly string $priceWithSellerFeeLabel,
-        public readonly bool $canValidateAccount,
-        public readonly bool $canResellItemAfterPurchase,
-        public readonly bool $isSmallExf,
-        public readonly int $account_last_activity,
-        public readonly bool $canViewAccountLink,
-        /** @var list<PublishingAddResponseItemAccountLinks> */
-        public readonly array $accountLinks,
-        public readonly string $accountLink,
-        /** @var list<string> */
-        public readonly array $imagePreviewLinks,
-        public readonly bool $canChangePassword,
-        public readonly bool $canChangeEmailPassword,
-        public readonly bool $uniqueKeyExists,
-        public readonly string $itemOriginPhrase,
-        public readonly bool $visitorIsAuthor,
-        public readonly bool $canAskDiscount,
-        /** @var PublishingAddResponseItemTags */
-        public readonly PublishingAddResponseItemTags $tags,
-        /** @var PublishingAddResponseItemCustomFields */
-        public readonly PublishingAddResponseItemCustomFields $customFields,
-        public readonly array $externalAuth,
-        public readonly bool $isTrusted,
-        public readonly bool $isBirthdayToday,
-        public readonly bool $isIgnored,
-        public readonly int $deposit,
-        /** @var list<PublishingAddResponseItemExtraPrices> */
-        public readonly array $extraPrices,
-        public readonly bool $canViewAccountLoginAndTempEmail,
-        /** @var PublishingAddResponseItemBumpSettings */
-        public readonly PublishingAddResponseItemBumpSettings $bumpSettings,
-        public readonly bool $canCheckGuarantee,
-        public readonly bool $canShareItem,
-        public readonly bool $canCheckAiPrice,
-        public readonly int $aiPrice,
-        public readonly int $aiPriceCheckDate,
-        public readonly bool $needToRequireVideoToViewLoginData,
-        public readonly bool $canCheckAutoBuyPrice,
-        public readonly int $autoBuyPrice,
-        public readonly int $autoBuyPriceCheckDate,
-        public readonly string $descriptionHtml,
-        public readonly string $descriptionEnHtml,
-        public readonly string $descriptionPlain,
-        public readonly string $descriptionEnPlain,
-        /** @var PublishingAddResponseItemSeller */
-        public readonly PublishingAddResponseItemSeller $seller,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['item_id'],
-            $data['item_state'],
-            $data['category_id'],
-            $data['published_date'],
-            $data['title'],
-            $data['description'],
-            $data['price'],
-            $data['update_stat_date'],
-            $data['refreshed_date'],
-            $data['edit_date'],
-            $data['pending_deletion_date'],
-            $data['login'],
-            $data['temp_email'],
-            $data['view_count'],
-            $data['is_sticky'],
-            $data['information'],
-            $data['item_origin'],
-            $data['extended_guarantee'],
-            $data['nsb'],
-            $data['allow_ask_discount'],
-            $data['title_en'],
-            $data['description_en'],
-            $data['information_en'],
-            $data['email_type'],
-            $data['email_provider'],
-            $data['item_domain'],
-            $data['resale_item_origin'],
-            $data['note_text'],
-            $data['content_type'],
-            $data['content_id'],
-            $data['delete_date'],
-            $data['delete_user_id'],
-            $data['delete_username'],
-            $data['delete_reason'],
-            $data['user_allow_ask_discount'],
-            $data['max_discount_percent'],
-            $data['market_custom_title'],
-            $data['feedback_data'],
-            $data['buyer_display_icon_group_id'],
-            $data['buyer_uniq_banner'],
-            $data['buyer_avatar_date'],
-            $data['buyer_user_group_id'],
-            $data['is_fave'],
-            $data['in_cart'],
-            $data['cart_price'],
-            $data['canResellItem'],
-            $data['priceWithSellerFee'],
-            PublishingAddResponseItemGuarantee::fromArray($data['guarantee']),
-            $data['canViewLoginData'],
-            $data['canUpdateItemStats'],
-            $data['canReportItem'],
-            $data['canViewItemViews'],
-            PublishingAddResponseItemLoginData::fromArray($data['loginData']),
-            $data['canViewEmailLoginData'],
-            PublishingAddResponseItemCopyFormatData::fromArray($data['copyFormatData']),
-            $data['showGetEmailCodeButton'],
-            $data['getEmailCodeDisplayLogin'],
-            PublishingAddResponseItemBuyer::fromArray($data['buyer']),
-            $data['isPersonalAccount'],
-            $data['rub_price'],
-            $data['price_currency'],
-            $data['priceWithSellerFeeLabel'],
-            $data['canValidateAccount'],
-            $data['canResellItemAfterPurchase'],
-            $data['isSmallExf'],
-            $data['account_last_activity'],
-            $data['canViewAccountLink'],
-            array_map(static fn(array $item): PublishingAddResponseItemAccountLinks => PublishingAddResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
-            $data['accountLink'],
-            $data['imagePreviewLinks'],
-            $data['canChangePassword'],
-            $data['canChangeEmailPassword'],
-            $data['uniqueKeyExists'],
-            $data['itemOriginPhrase'],
-            $data['visitorIsAuthor'],
-            $data['canAskDiscount'],
-            PublishingAddResponseItemTags::fromArray($data['tags']),
-            PublishingAddResponseItemCustomFields::fromArray($data['customFields']),
-            $data['externalAuth'],
-            $data['isTrusted'],
-            $data['isBirthdayToday'],
-            $data['isIgnored'],
-            $data['deposit'],
-            array_map(static fn(array $item): PublishingAddResponseItemExtraPrices => PublishingAddResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
-            $data['canViewAccountLoginAndTempEmail'],
-            PublishingAddResponseItemBumpSettings::fromArray($data['bumpSettings']),
-            $data['canCheckGuarantee'],
-            $data['canShareItem'],
-            $data['canCheckAiPrice'],
-            $data['aiPrice'],
-            $data['aiPriceCheckDate'],
-            $data['needToRequireVideoToViewLoginData'],
-            $data['canCheckAutoBuyPrice'],
-            $data['autoBuyPrice'],
-            $data['autoBuyPriceCheckDate'],
-            $data['descriptionHtml'],
-            $data['descriptionEnHtml'],
-            $data['descriptionPlain'],
-            $data['descriptionEnPlain'],
-            PublishingAddResponseItemSeller::fromArray($data['seller']),
-        );
-    }
-}
-
-final class PublishingAddResponseItemGuarantee
-{
-    public function __construct(
-        public readonly int $duration,
-        public readonly string $class,
-        public readonly string $durationPhrase,
-        public readonly int $endDate,
-        public readonly bool $active,
-        public readonly bool $cancelled,
-        public readonly int $remainingTime,
-        public readonly string $remainingTimePhrase,
-        public readonly string $cancelledReason,
-        public readonly string $cancelledReasonPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['duration'],
-            $data['class'],
-            $data['durationPhrase'],
-            $data['endDate'],
-            $data['active'],
-            $data['cancelled'],
-            $data['remainingTime'],
-            $data['remainingTimePhrase'],
-            $data['cancelledReason'],
-            $data['cancelledReasonPhrase'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemLoginData
-{
-    public function __construct(
-        public readonly string $raw,
-        public readonly string $encodedRaw,
-        public readonly string $login,
-        public readonly string $password,
-        public readonly string $encodedPassword,
-        public readonly string $oldPassword,
-        public readonly mixed $encodedOldPassword,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['raw'],
-            $data['encodedRaw'],
-            $data['login'],
-            $data['password'],
-            $data['encodedPassword'],
-            $data['oldPassword'],
-            $data['encodedOldPassword'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemCopyFormatData
-{
-    public function __construct(
-        public readonly string $title_link,
-        public readonly string $login_data,
-        public readonly string $full,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['title_link'],
-            $data['login_data'],
-            $data['full'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemBuyer
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly int $operation_date,
-        public readonly bool $visitorIsBuyer,
-        public readonly string $username,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $display_icon_group_id,
-        public readonly string $uniq_username_css,
-        public readonly string $uniq_banner,
-        public readonly int $user_group_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['operation_date'],
-            $data['visitorIsBuyer'],
-            $data['username'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['display_icon_group_id'],
-            $data['uniq_username_css'],
-            $data['uniq_banner'],
-            $data['user_group_id'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemAccountLinks
-{
-    public function __construct(
-        public readonly string $link,
-        public readonly string $text,
-        public readonly string $iconClass,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['link'],
-            $data['text'],
-            $data['iconClass'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemTags
-{
-    public function __construct(
-        /** @var PublishingAddResponseItemTagsData1234567890 */
-        public readonly PublishingAddResponseItemTagsData1234567890 $_1234567890,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PublishingAddResponseItemTagsData1234567890::fromArray($data['1234567890']),
-        );
-    }
-}
-
-final class PublishingAddResponseItemTagsData1234567890
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztUnbanAmount,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztUnbanAmount'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemExtraPrices
-{
-    public function __construct(
-        public readonly string $currency,
-        public readonly string $price,
-        public readonly float $priceValue,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['currency'],
-            $data['price'],
-            $data['priceValue'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemBumpSettings
-{
-    public function __construct(
-        public readonly bool $canBumpItem,
-        public readonly bool $canBumpItemGlobally,
-        public readonly mixed $shortErrorPhrase,
-        public readonly mixed $nextAllowedBumpDate,
-        public readonly mixed $errorPhrase,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['canBumpItem'],
-            $data['canBumpItemGlobally'],
-            $data['shortErrorPhrase'],
-            $data['nextAllowedBumpDate'],
-            $data['errorPhrase'],
-        );
-    }
-}
-
-final class PublishingAddResponseItemSeller
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $avatar_date,
-        public readonly int $is_banned,
-        public readonly int $display_style_group_id,
-        public readonly int $joined_date,
-        public readonly int $sold_items_count,
-        public readonly int $active_items_count,
-        public readonly string $restore_data,
-        public readonly int $effective_last_activity,
-        public readonly mixed $restore_percents,
-        public readonly bool $isOnline,
-        /** @var PublishingAddResponseItemSellerContacts */
-        public readonly PublishingAddResponseItemSellerContacts $contacts,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['user_id'],
-            $data['username'],
-            $data['avatar_date'],
-            $data['is_banned'],
-            $data['display_style_group_id'],
-            $data['joined_date'],
-            $data['sold_items_count'],
-            $data['active_items_count'],
-            $data['restore_data'],
-            $data['effective_last_activity'],
-            $data['restore_percents'],
-            $data['isOnline'],
-            PublishingAddResponseItemSellerContacts::fromArray($data['contacts']),
-        );
-    }
-}
-
-final class PublishingAddResponseItemSellerContacts
-{
-    public function __construct(
-        public readonly string $ban_reason,
-        public readonly string $telegram,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['ban_reason'],
-            $data['telegram'],
-        );
-    }
-}
-
-final class PublishingAddResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            ItemModel::fromArray($data['item']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -30641,8 +21758,8 @@ final class PublishingCheckResponse
         public readonly string $status,
         /** @var PublishingCheckResponseItem */
         public readonly PublishingCheckResponseItem $item,
-        /** @var PublishingCheckResponseSystemInfo */
-        public readonly PublishingCheckResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -30654,7 +21771,7 @@ final class PublishingCheckResponse
         return new self(
             $data['status'],
             PublishingCheckResponseItem::fromArray($data['item']),
-            PublishingCheckResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -31111,35 +22228,13 @@ final class PublishingCheckResponseItemSeller
     }
 }
 
-final class PublishingCheckResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PublishingExternalResponse
 {
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var PublishingExternalResponseSystemInfo|null */
-        public readonly ?PublishingExternalResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -31151,29 +22246,7 @@ final class PublishingExternalResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? PublishingExternalResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class PublishingExternalResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -31181,10 +22254,10 @@ final class PublishingExternalResponseSystemInfo
 final class PaymentsInvoiceGetResponse
 {
     public function __construct(
-        /** @var PaymentsInvoiceGetResponseInvoice */
-        public readonly PaymentsInvoiceGetResponseInvoice $invoice,
-        /** @var PaymentsInvoiceGetResponseSystemInfo */
-        public readonly PaymentsInvoiceGetResponseSystemInfo $system_info,
+        /** @var InvoiceModel */
+        public readonly InvoiceModel $invoice,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -31194,80 +22267,8 @@ final class PaymentsInvoiceGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsInvoiceGetResponseInvoice::fromArray($data['invoice']),
-            PaymentsInvoiceGetResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PaymentsInvoiceGetResponseInvoice
-{
-    public function __construct(
-        public readonly string $additional_data,
-        public readonly int $amount,
-        public readonly string $comment,
-        public readonly int $expires_at,
-        public readonly int $invoice_date,
-        public readonly int $invoice_id,
-        public readonly bool $is_test,
-        public readonly int $merchant_id,
-        public readonly int $paid_date,
-        public readonly int $payer_user_id,
-        public readonly string $payment_id,
-        public readonly int $resend_attempts,
-        public readonly string $status,
-        public readonly string $url,
-        public readonly string $url_callback,
-        public readonly string $url_success,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['additional_data'],
-            $data['amount'],
-            $data['comment'],
-            $data['expires_at'],
-            $data['invoice_date'],
-            $data['invoice_id'],
-            $data['is_test'],
-            $data['merchant_id'],
-            $data['paid_date'],
-            $data['payer_user_id'],
-            $data['payment_id'],
-            $data['resend_attempts'],
-            $data['status'],
-            $data['url'],
-            $data['url_callback'],
-            $data['url_success'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class PaymentsInvoiceGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            InvoiceModel::fromArray($data['invoice']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -31275,10 +22276,10 @@ final class PaymentsInvoiceGetResponseSystemInfo
 final class PaymentsInvoiceCreateResponse
 {
     public function __construct(
-        /** @var PaymentsInvoiceCreateResponseInvoice */
-        public readonly PaymentsInvoiceCreateResponseInvoice $invoice,
-        /** @var PaymentsInvoiceCreateResponseSystemInfo */
-        public readonly PaymentsInvoiceCreateResponseSystemInfo $system_info,
+        /** @var InvoiceModel */
+        public readonly InvoiceModel $invoice,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -31288,80 +22289,8 @@ final class PaymentsInvoiceCreateResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsInvoiceCreateResponseInvoice::fromArray($data['invoice']),
-            PaymentsInvoiceCreateResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PaymentsInvoiceCreateResponseInvoice
-{
-    public function __construct(
-        public readonly string $additional_data,
-        public readonly int $amount,
-        public readonly string $comment,
-        public readonly int $expires_at,
-        public readonly int $invoice_date,
-        public readonly int $invoice_id,
-        public readonly bool $is_test,
-        public readonly int $merchant_id,
-        public readonly int $paid_date,
-        public readonly int $payer_user_id,
-        public readonly string $payment_id,
-        public readonly int $resend_attempts,
-        public readonly string $status,
-        public readonly string $url,
-        public readonly string $url_callback,
-        public readonly string $url_success,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['additional_data'],
-            $data['amount'],
-            $data['comment'],
-            $data['expires_at'],
-            $data['invoice_date'],
-            $data['invoice_id'],
-            $data['is_test'],
-            $data['merchant_id'],
-            $data['paid_date'],
-            $data['payer_user_id'],
-            $data['payment_id'],
-            $data['resend_attempts'],
-            $data['status'],
-            $data['url'],
-            $data['url_callback'],
-            $data['url_success'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class PaymentsInvoiceCreateResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            InvoiceModel::fromArray($data['invoice']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -31369,13 +22298,13 @@ final class PaymentsInvoiceCreateResponseSystemInfo
 final class PaymentsInvoiceListResponse
 {
     public function __construct(
-        /** @var list<PaymentsInvoiceListResponseInvoices> */
+        /** @var list<InvoiceModel> */
         public readonly array $invoices,
         public readonly int $count,
         public readonly int $page,
         public readonly int $perPage,
-        /** @var PaymentsInvoiceListResponseSystemInfo */
-        public readonly PaymentsInvoiceListResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -31385,83 +22314,11 @@ final class PaymentsInvoiceListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn(array $item): PaymentsInvoiceListResponseInvoices => PaymentsInvoiceListResponseInvoices::fromArray($item), $data['invoices']),
+            array_map(static fn(array $item): InvoiceModel => InvoiceModel::fromArray($item), $data['invoices']),
             $data['count'],
             $data['page'],
             $data['perPage'],
-            PaymentsInvoiceListResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PaymentsInvoiceListResponseInvoices
-{
-    public function __construct(
-        public readonly string $additional_data,
-        public readonly int $amount,
-        public readonly string $comment,
-        public readonly int $expires_at,
-        public readonly int $invoice_date,
-        public readonly int $invoice_id,
-        public readonly bool $is_test,
-        public readonly int $merchant_id,
-        public readonly int $paid_date,
-        public readonly int $payer_user_id,
-        public readonly string $payment_id,
-        public readonly int $resend_attempts,
-        public readonly string $status,
-        public readonly string $url,
-        public readonly string $url_callback,
-        public readonly string $url_success,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['additional_data'],
-            $data['amount'],
-            $data['comment'],
-            $data['expires_at'],
-            $data['invoice_date'],
-            $data['invoice_id'],
-            $data['is_test'],
-            $data['merchant_id'],
-            $data['paid_date'],
-            $data['payer_user_id'],
-            $data['payment_id'],
-            $data['resend_attempts'],
-            $data['status'],
-            $data['url'],
-            $data['url_callback'],
-            $data['url_success'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class PaymentsInvoiceListResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -31473,8 +22330,8 @@ final class PaymentsCurrencyResponse
         public readonly PaymentsCurrencyResponseCurrencyList $currencyList,
         public readonly int $lastUpdate,
         public readonly string $visitorCurrency,
-        /** @var PaymentsCurrencyResponseSystemInfo */
-        public readonly PaymentsCurrencyResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -31487,7 +22344,7 @@ final class PaymentsCurrencyResponse
             PaymentsCurrencyResponseCurrencyList::fromArray($data['currencyList']),
             $data['lastUpdate'],
             $data['visitorCurrency'],
-            PaymentsCurrencyResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -33128,28 +23985,6 @@ final class PaymentsCurrencyResponseCurrencyListVND
     }
 }
 
-final class PaymentsCurrencyResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PaymentsBalanceListResponse
 {
     public function __construct(
@@ -33157,8 +23992,8 @@ final class PaymentsBalanceListResponse
         public readonly PaymentsBalanceListResponseFrom $from,
         /** @var PaymentsBalanceListResponseTo */
         public readonly PaymentsBalanceListResponseTo $to,
-        /** @var PaymentsBalanceListResponseSystemInfo */
-        public readonly PaymentsBalanceListResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -33170,7 +24005,7 @@ final class PaymentsBalanceListResponse
         return new self(
             PaymentsBalanceListResponseFrom::fromArray($data['from']),
             PaymentsBalanceListResponseTo::fromArray($data['to']),
-            PaymentsBalanceListResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -33180,8 +24015,8 @@ final class PaymentsBalanceListResponseFrom
     public function __construct(
         /** @var PaymentsBalanceListResponseFromBalance */
         public readonly PaymentsBalanceListResponseFromBalance $balance,
-        /** @var PaymentsBalanceListResponseFromData12345 */
-        public readonly PaymentsBalanceListResponseFromData12345 $_12345,
+        /** @var BalanceModel */
+        public readonly BalanceModel $_12345,
     ) {
     }
 
@@ -33192,7 +24027,7 @@ final class PaymentsBalanceListResponseFrom
     {
         return new self(
             PaymentsBalanceListResponseFromBalance::fromArray($data['balance']),
-            PaymentsBalanceListResponseFromData12345::fromArray($data['12345']),
+            BalanceModel::fromArray($data['12345']),
         );
     }
 }
@@ -33223,43 +24058,11 @@ final class PaymentsBalanceListResponseFromBalance
     }
 }
 
-final class PaymentsBalanceListResponseFromData12345
-{
-    public function __construct(
-        public readonly string $balance,
-        public readonly int $balance_id,
-        public readonly mixed $custom_title,
-        public readonly string $fullTitle,
-        public readonly int $merchant_id,
-        public readonly string $title,
-        public readonly string $type,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['balance'],
-            $data['balance_id'],
-            $data['custom_title'],
-            $data['fullTitle'],
-            $data['merchant_id'],
-            $data['title'],
-            $data['type'],
-            $data['user_id'],
-        );
-    }
-}
-
 final class PaymentsBalanceListResponseTo
 {
     public function __construct(
-        /** @var PaymentsBalanceListResponseToBalance */
-        public readonly PaymentsBalanceListResponseToBalance $balance,
+        /** @var UserModel */
+        public readonly UserModel $balance,
     ) {
     }
 
@@ -33269,541 +24072,7 @@ final class PaymentsBalanceListResponseTo
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceListResponseToBalance::fromArray($data['balance']),
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalance
-{
-    public function __construct(
-        public readonly int $active_items_count,
-        public readonly bool $activity_visible,
-        public readonly int $age,
-        public readonly string $balance,
-        /** @var list<PaymentsBalanceListResponseToBalanceBalances> */
-        public readonly array $balances,
-        public readonly int $bump_item_period,
-        public readonly bool $can_edit,
-        public readonly bool $can_follow,
-        public readonly bool $can_ignore,
-        public readonly bool $can_post_profile,
-        public readonly bool $can_view_profile,
-        public readonly bool $can_view_profile_posts,
-        public readonly bool $can_warn,
-        public readonly int $contest_count,
-        public readonly string $conv_welcome_message,
-        public readonly int $convertedBalance,
-        public readonly int $convertedDeposit,
-        public readonly int $convertedHold,
-        public readonly string $currency,
-        public readonly string $currencyPhrase,
-        public readonly string $custom_account_download_format,
-        /** @var PaymentsBalanceListResponseToBalanceCustomFields */
-        public readonly PaymentsBalanceListResponseToBalanceCustomFields $custom_fields,
-        public readonly string $custom_title,
-        public readonly int $deposit,
-        /** @var PaymentsBalanceListResponseToBalanceDob */
-        public readonly PaymentsBalanceListResponseToBalanceDob $dob,
-        /** @var PaymentsBalanceListResponseToBalanceFeedbackData */
-        public readonly PaymentsBalanceListResponseToBalanceFeedbackData $feedback_data,
-        public readonly string $hold,
-        public readonly string $homepage,
-        /** @var PaymentsBalanceListResponseToBalanceImapData */
-        public readonly PaymentsBalanceListResponseToBalanceImapData $imap_data,
-        public readonly bool $is_admin,
-        public readonly bool $is_banned,
-        public readonly bool $is_followed,
-        public readonly bool $is_ignored,
-        public readonly bool $is_moderator,
-        public readonly bool $is_staff,
-        public readonly bool $is_super_admin,
-        public readonly int $joined_date,
-        public readonly int $last_activity,
-        public readonly int $like2_count,
-        public readonly int $like_count,
-        public readonly string $location,
-        public readonly string $market_custom_title,
-        public readonly int $max_discount_percent,
-        public readonly int $message_count,
-        public readonly int $paid_mail_left,
-        /** @var list<PaymentsBalanceListResponseToBalancePublicTags> */
-        public readonly array $public_tags,
-        public readonly int $register_date,
-        /** @var PaymentsBalanceListResponseToBalanceRendered */
-        public readonly PaymentsBalanceListResponseToBalanceRendered $rendered,
-        public readonly int $restore_count,
-        /** @var PaymentsBalanceListResponseToBalanceRestoreData */
-        public readonly PaymentsBalanceListResponseToBalanceRestoreData $restore_data,
-        public readonly string $short_link,
-        public readonly int $sold_items_count,
-        /** @var list<PaymentsBalanceListResponseToBalanceTags> */
-        public readonly array $tags,
-        /** @var PaymentsBalanceListResponseToBalanceTelegramClient */
-        public readonly PaymentsBalanceListResponseToBalanceTelegramClient $telegram_client,
-        public readonly int $trophy_points,
-        public readonly bool $user_allow_ask_discount,
-        public readonly int $user_id,
-        public readonly string $user_title,
-        public readonly string $username,
-        public readonly string $view_url,
-        public readonly bool $visible,
-        public readonly int $warning_points,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['active_items_count'],
-            $data['activity_visible'],
-            $data['age'],
-            $data['balance'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceBalances => PaymentsBalanceListResponseToBalanceBalances::fromArray($item), $data['balances']),
-            $data['bump_item_period'],
-            $data['can_edit'],
-            $data['can_follow'],
-            $data['can_ignore'],
-            $data['can_post_profile'],
-            $data['can_view_profile'],
-            $data['can_view_profile_posts'],
-            $data['can_warn'],
-            $data['contest_count'],
-            $data['conv_welcome_message'],
-            $data['convertedBalance'],
-            $data['convertedDeposit'],
-            $data['convertedHold'],
-            $data['currency'],
-            $data['currencyPhrase'],
-            $data['custom_account_download_format'],
-            PaymentsBalanceListResponseToBalanceCustomFields::fromArray($data['custom_fields']),
-            $data['custom_title'],
-            $data['deposit'],
-            PaymentsBalanceListResponseToBalanceDob::fromArray($data['dob']),
-            PaymentsBalanceListResponseToBalanceFeedbackData::fromArray($data['feedback_data']),
-            $data['hold'],
-            $data['homepage'],
-            PaymentsBalanceListResponseToBalanceImapData::fromArray($data['imap_data']),
-            $data['is_admin'],
-            $data['is_banned'],
-            $data['is_followed'],
-            $data['is_ignored'],
-            $data['is_moderator'],
-            $data['is_staff'],
-            $data['is_super_admin'],
-            $data['joined_date'],
-            $data['last_activity'],
-            $data['like2_count'],
-            $data['like_count'],
-            $data['location'],
-            $data['market_custom_title'],
-            $data['max_discount_percent'],
-            $data['message_count'],
-            $data['paid_mail_left'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalancePublicTags => PaymentsBalanceListResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
-            $data['register_date'],
-            PaymentsBalanceListResponseToBalanceRendered::fromArray($data['rendered']),
-            $data['restore_count'],
-            PaymentsBalanceListResponseToBalanceRestoreData::fromArray($data['restore_data']),
-            $data['short_link'],
-            $data['sold_items_count'],
-            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceTags => PaymentsBalanceListResponseToBalanceTags::fromArray($item), $data['tags']),
-            PaymentsBalanceListResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
-            $data['trophy_points'],
-            $data['user_allow_ask_discount'],
-            $data['user_id'],
-            $data['user_title'],
-            $data['username'],
-            $data['view_url'],
-            $data['visible'],
-            $data['warning_points'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceBalances
-{
-    public function __construct(
-        public readonly string $balance,
-        public readonly int $balance_id,
-        public readonly float $convertedBalance,
-        public readonly mixed $custom_title,
-        public readonly string $fullTitle,
-        public readonly int $merchant_id,
-        public readonly string $title,
-        public readonly string $type,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['balance'],
-            $data['balance_id'],
-            $data['convertedBalance'],
-            $data['custom_title'],
-            $data['fullTitle'],
-            $data['merchant_id'],
-            $data['title'],
-            $data['type'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztAwardUserTrophy,
-        public readonly string $lztLikesIncreasing,
-        public readonly string $lztLikesZeroing,
-        public readonly string $lztSympathyIncreasing,
-        public readonly string $lztSympathyZeroing,
-        public readonly string $lztUnbanAmount,
-        public readonly string $maecenasValue,
-        public readonly string $scamURL,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-        public readonly string $favoritePorn,
-        public readonly string $favoriteVape,
-        public readonly string $favoriteAnime,
-        public readonly string $matrix,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztAwardUserTrophy'],
-            $data['lztLikesIncreasing'],
-            $data['lztLikesZeroing'],
-            $data['lztSympathyIncreasing'],
-            $data['lztSympathyZeroing'],
-            $data['lztUnbanAmount'],
-            $data['maecenasValue'],
-            $data['scamURL'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-            $data['favoritePorn'],
-            $data['favoriteVape'],
-            $data['favoriteAnime'],
-            $data['matrix'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceDob
-{
-    public function __construct(
-        public readonly int $year,
-        public readonly int $month,
-        public readonly int $day,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['year'],
-            $data['month'],
-            $data['day'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceFeedbackData
-{
-    public function __construct(
-        /** @var PaymentsBalanceListResponseToBalanceFeedbackDataData12345 */
-        public readonly PaymentsBalanceListResponseToBalanceFeedbackDataData12345 $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PaymentsBalanceListResponseToBalanceFeedbackDataData12345::fromArray($data['12345']),
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceFeedbackDataData12345
-{
-    public function __construct(
-        public readonly int $positive,
-        public readonly int $negative,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['positive'],
-            $data['negative'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceImapData
-{
-    public function __construct(
-        /** @var PaymentsBalanceListResponseToBalanceImapDataDomainZone */
-        public readonly PaymentsBalanceListResponseToBalanceImapDataDomainZone $domain_zone,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PaymentsBalanceListResponseToBalanceImapDataDomainZone::fromArray($data['domain.zone']),
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceImapDataDomainZone
-{
-    public function __construct(
-        public readonly string $domain,
-        public readonly string $imap_server,
-        public readonly int $port,
-        public readonly bool $secure,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['domain'],
-            $data['imap_server'],
-            $data['port'],
-            $data['secure'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalancePublicTags
-{
-    public function __construct(
-        public readonly string $background_color,
-        public readonly int $tag_id,
-        public readonly string $title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['background_color'],
-            $data['tag_id'],
-            $data['title'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceRendered
-{
-    public function __construct(
-        public readonly string $username,
-        /** @var PaymentsBalanceListResponseToBalanceRenderedAvatars */
-        public readonly PaymentsBalanceListResponseToBalanceRenderedAvatars $avatars,
-        /** @var PaymentsBalanceListResponseToBalanceRenderedBackgrounds */
-        public readonly PaymentsBalanceListResponseToBalanceRenderedBackgrounds $backgrounds,
-        public readonly string $link,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['username'],
-            PaymentsBalanceListResponseToBalanceRenderedAvatars::fromArray($data['avatars']),
-            PaymentsBalanceListResponseToBalanceRenderedBackgrounds::fromArray($data['backgrounds']),
-            $data['link'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceRenderedAvatars
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-        public readonly string $s,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-            $data['s'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceRenderedBackgrounds
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceRestoreData
-{
-    public function __construct(
-        public readonly int $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['12345'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceTags
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseToBalanceTelegramClient
-{
-    public function __construct(
-        public readonly string $telegram_api_id,
-        public readonly string $telegram_api_hash,
-        public readonly string $telegram_device_model,
-        public readonly string $telegram_system_version,
-        public readonly string $telegram_app_version,
-        public readonly string $telegram_system_lang_code,
-        public readonly string $telegram_lang_code,
-        public readonly string $telegram_lang_pack,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['telegram_api_id'],
-            $data['telegram_api_hash'],
-            $data['telegram_device_model'],
-            $data['telegram_system_version'],
-            $data['telegram_app_version'],
-            $data['telegram_system_lang_code'],
-            $data['telegram_lang_code'],
-            $data['telegram_lang_pack'],
-        );
-    }
-}
-
-final class PaymentsBalanceListResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            UserModel::fromArray($data['balance']),
         );
     }
 }
@@ -33815,8 +24084,8 @@ final class PaymentsBalanceExchangeResponse
         public readonly PaymentsBalanceExchangeResponseFrom $from,
         /** @var PaymentsBalanceExchangeResponseTo */
         public readonly PaymentsBalanceExchangeResponseTo $to,
-        /** @var PaymentsBalanceExchangeResponseSystemInfo */
-        public readonly PaymentsBalanceExchangeResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -33828,7 +24097,7 @@ final class PaymentsBalanceExchangeResponse
         return new self(
             PaymentsBalanceExchangeResponseFrom::fromArray($data['from']),
             PaymentsBalanceExchangeResponseTo::fromArray($data['to']),
-            PaymentsBalanceExchangeResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -33838,8 +24107,8 @@ final class PaymentsBalanceExchangeResponseFrom
     public function __construct(
         /** @var PaymentsBalanceExchangeResponseFromBalance */
         public readonly PaymentsBalanceExchangeResponseFromBalance $balance,
-        /** @var PaymentsBalanceExchangeResponseFromData12345 */
-        public readonly PaymentsBalanceExchangeResponseFromData12345 $_12345,
+        /** @var BalanceModel */
+        public readonly BalanceModel $_12345,
     ) {
     }
 
@@ -33850,7 +24119,7 @@ final class PaymentsBalanceExchangeResponseFrom
     {
         return new self(
             PaymentsBalanceExchangeResponseFromBalance::fromArray($data['balance']),
-            PaymentsBalanceExchangeResponseFromData12345::fromArray($data['12345']),
+            BalanceModel::fromArray($data['12345']),
         );
     }
 }
@@ -33881,43 +24150,11 @@ final class PaymentsBalanceExchangeResponseFromBalance
     }
 }
 
-final class PaymentsBalanceExchangeResponseFromData12345
-{
-    public function __construct(
-        public readonly string $balance,
-        public readonly int $balance_id,
-        public readonly mixed $custom_title,
-        public readonly string $fullTitle,
-        public readonly int $merchant_id,
-        public readonly string $title,
-        public readonly string $type,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['balance'],
-            $data['balance_id'],
-            $data['custom_title'],
-            $data['fullTitle'],
-            $data['merchant_id'],
-            $data['title'],
-            $data['type'],
-            $data['user_id'],
-        );
-    }
-}
-
 final class PaymentsBalanceExchangeResponseTo
 {
     public function __construct(
-        /** @var PaymentsBalanceExchangeResponseToBalance */
-        public readonly PaymentsBalanceExchangeResponseToBalance $balance,
+        /** @var UserModel */
+        public readonly UserModel $balance,
     ) {
     }
 
@@ -33927,541 +24164,7 @@ final class PaymentsBalanceExchangeResponseTo
     public static function fromArray(array $data): self
     {
         return new self(
-            PaymentsBalanceExchangeResponseToBalance::fromArray($data['balance']),
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalance
-{
-    public function __construct(
-        public readonly int $active_items_count,
-        public readonly bool $activity_visible,
-        public readonly int $age,
-        public readonly string $balance,
-        /** @var list<PaymentsBalanceExchangeResponseToBalanceBalances> */
-        public readonly array $balances,
-        public readonly int $bump_item_period,
-        public readonly bool $can_edit,
-        public readonly bool $can_follow,
-        public readonly bool $can_ignore,
-        public readonly bool $can_post_profile,
-        public readonly bool $can_view_profile,
-        public readonly bool $can_view_profile_posts,
-        public readonly bool $can_warn,
-        public readonly int $contest_count,
-        public readonly string $conv_welcome_message,
-        public readonly int $convertedBalance,
-        public readonly int $convertedDeposit,
-        public readonly int $convertedHold,
-        public readonly string $currency,
-        public readonly string $currencyPhrase,
-        public readonly string $custom_account_download_format,
-        /** @var PaymentsBalanceExchangeResponseToBalanceCustomFields */
-        public readonly PaymentsBalanceExchangeResponseToBalanceCustomFields $custom_fields,
-        public readonly string $custom_title,
-        public readonly int $deposit,
-        /** @var PaymentsBalanceExchangeResponseToBalanceDob */
-        public readonly PaymentsBalanceExchangeResponseToBalanceDob $dob,
-        /** @var PaymentsBalanceExchangeResponseToBalanceFeedbackData */
-        public readonly PaymentsBalanceExchangeResponseToBalanceFeedbackData $feedback_data,
-        public readonly string $hold,
-        public readonly string $homepage,
-        /** @var PaymentsBalanceExchangeResponseToBalanceImapData */
-        public readonly PaymentsBalanceExchangeResponseToBalanceImapData $imap_data,
-        public readonly bool $is_admin,
-        public readonly bool $is_banned,
-        public readonly bool $is_followed,
-        public readonly bool $is_ignored,
-        public readonly bool $is_moderator,
-        public readonly bool $is_staff,
-        public readonly bool $is_super_admin,
-        public readonly int $joined_date,
-        public readonly int $last_activity,
-        public readonly int $like2_count,
-        public readonly int $like_count,
-        public readonly string $location,
-        public readonly string $market_custom_title,
-        public readonly int $max_discount_percent,
-        public readonly int $message_count,
-        public readonly int $paid_mail_left,
-        /** @var list<PaymentsBalanceExchangeResponseToBalancePublicTags> */
-        public readonly array $public_tags,
-        public readonly int $register_date,
-        /** @var PaymentsBalanceExchangeResponseToBalanceRendered */
-        public readonly PaymentsBalanceExchangeResponseToBalanceRendered $rendered,
-        public readonly int $restore_count,
-        /** @var PaymentsBalanceExchangeResponseToBalanceRestoreData */
-        public readonly PaymentsBalanceExchangeResponseToBalanceRestoreData $restore_data,
-        public readonly string $short_link,
-        public readonly int $sold_items_count,
-        /** @var list<PaymentsBalanceExchangeResponseToBalanceTags> */
-        public readonly array $tags,
-        /** @var PaymentsBalanceExchangeResponseToBalanceTelegramClient */
-        public readonly PaymentsBalanceExchangeResponseToBalanceTelegramClient $telegram_client,
-        public readonly int $trophy_points,
-        public readonly bool $user_allow_ask_discount,
-        public readonly int $user_id,
-        public readonly string $user_title,
-        public readonly string $username,
-        public readonly string $view_url,
-        public readonly bool $visible,
-        public readonly int $warning_points,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['active_items_count'],
-            $data['activity_visible'],
-            $data['age'],
-            $data['balance'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceBalances => PaymentsBalanceExchangeResponseToBalanceBalances::fromArray($item), $data['balances']),
-            $data['bump_item_period'],
-            $data['can_edit'],
-            $data['can_follow'],
-            $data['can_ignore'],
-            $data['can_post_profile'],
-            $data['can_view_profile'],
-            $data['can_view_profile_posts'],
-            $data['can_warn'],
-            $data['contest_count'],
-            $data['conv_welcome_message'],
-            $data['convertedBalance'],
-            $data['convertedDeposit'],
-            $data['convertedHold'],
-            $data['currency'],
-            $data['currencyPhrase'],
-            $data['custom_account_download_format'],
-            PaymentsBalanceExchangeResponseToBalanceCustomFields::fromArray($data['custom_fields']),
-            $data['custom_title'],
-            $data['deposit'],
-            PaymentsBalanceExchangeResponseToBalanceDob::fromArray($data['dob']),
-            PaymentsBalanceExchangeResponseToBalanceFeedbackData::fromArray($data['feedback_data']),
-            $data['hold'],
-            $data['homepage'],
-            PaymentsBalanceExchangeResponseToBalanceImapData::fromArray($data['imap_data']),
-            $data['is_admin'],
-            $data['is_banned'],
-            $data['is_followed'],
-            $data['is_ignored'],
-            $data['is_moderator'],
-            $data['is_staff'],
-            $data['is_super_admin'],
-            $data['joined_date'],
-            $data['last_activity'],
-            $data['like2_count'],
-            $data['like_count'],
-            $data['location'],
-            $data['market_custom_title'],
-            $data['max_discount_percent'],
-            $data['message_count'],
-            $data['paid_mail_left'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalancePublicTags => PaymentsBalanceExchangeResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
-            $data['register_date'],
-            PaymentsBalanceExchangeResponseToBalanceRendered::fromArray($data['rendered']),
-            $data['restore_count'],
-            PaymentsBalanceExchangeResponseToBalanceRestoreData::fromArray($data['restore_data']),
-            $data['short_link'],
-            $data['sold_items_count'],
-            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceTags => PaymentsBalanceExchangeResponseToBalanceTags::fromArray($item), $data['tags']),
-            PaymentsBalanceExchangeResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
-            $data['trophy_points'],
-            $data['user_allow_ask_discount'],
-            $data['user_id'],
-            $data['user_title'],
-            $data['username'],
-            $data['view_url'],
-            $data['visible'],
-            $data['warning_points'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceBalances
-{
-    public function __construct(
-        public readonly string $balance,
-        public readonly int $balance_id,
-        public readonly float $convertedBalance,
-        public readonly mixed $custom_title,
-        public readonly string $fullTitle,
-        public readonly int $merchant_id,
-        public readonly string $title,
-        public readonly string $type,
-        public readonly int $user_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['balance'],
-            $data['balance_id'],
-            $data['convertedBalance'],
-            $data['custom_title'],
-            $data['fullTitle'],
-            $data['merchant_id'],
-            $data['title'],
-            $data['type'],
-            $data['user_id'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceCustomFields
-{
-    public function __construct(
-        public readonly string $_4,
-        public readonly array $allowSelfUnban,
-        public readonly string $ban_reason,
-        public readonly string $discord,
-        public readonly string $github,
-        public readonly string $jabber,
-        public readonly string $lztAwardUserTrophy,
-        public readonly string $lztLikesIncreasing,
-        public readonly string $lztLikesZeroing,
-        public readonly string $lztSympathyIncreasing,
-        public readonly string $lztSympathyZeroing,
-        public readonly string $lztUnbanAmount,
-        public readonly string $maecenasValue,
-        public readonly string $scamURL,
-        public readonly string $steam,
-        public readonly string $telegram,
-        public readonly string $vk,
-        public readonly string $favoritePorn,
-        public readonly string $favoriteVape,
-        public readonly string $favoriteAnime,
-        public readonly string $matrix,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['_4'],
-            $data['allowSelfUnban'],
-            $data['ban_reason'],
-            $data['discord'],
-            $data['github'],
-            $data['jabber'],
-            $data['lztAwardUserTrophy'],
-            $data['lztLikesIncreasing'],
-            $data['lztLikesZeroing'],
-            $data['lztSympathyIncreasing'],
-            $data['lztSympathyZeroing'],
-            $data['lztUnbanAmount'],
-            $data['maecenasValue'],
-            $data['scamURL'],
-            $data['steam'],
-            $data['telegram'],
-            $data['vk'],
-            $data['favoritePorn'],
-            $data['favoriteVape'],
-            $data['favoriteAnime'],
-            $data['matrix'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceDob
-{
-    public function __construct(
-        public readonly int $year,
-        public readonly int $month,
-        public readonly int $day,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['year'],
-            $data['month'],
-            $data['day'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceFeedbackData
-{
-    public function __construct(
-        /** @var PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345 */
-        public readonly PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345 $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345::fromArray($data['12345']),
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceFeedbackDataData12345
-{
-    public function __construct(
-        public readonly int $positive,
-        public readonly int $negative,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['positive'],
-            $data['negative'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceImapData
-{
-    public function __construct(
-        /** @var PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone */
-        public readonly PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone $domain_zone,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone::fromArray($data['domain.zone']),
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceImapDataDomainZone
-{
-    public function __construct(
-        public readonly string $domain,
-        public readonly string $imap_server,
-        public readonly int $port,
-        public readonly bool $secure,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['domain'],
-            $data['imap_server'],
-            $data['port'],
-            $data['secure'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalancePublicTags
-{
-    public function __construct(
-        public readonly string $background_color,
-        public readonly int $tag_id,
-        public readonly string $title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['background_color'],
-            $data['tag_id'],
-            $data['title'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceRendered
-{
-    public function __construct(
-        public readonly string $username,
-        /** @var PaymentsBalanceExchangeResponseToBalanceRenderedAvatars */
-        public readonly PaymentsBalanceExchangeResponseToBalanceRenderedAvatars $avatars,
-        /** @var PaymentsBalanceExchangeResponseToBalanceRenderedBackgrounds */
-        public readonly PaymentsBalanceExchangeResponseToBalanceRenderedBackgrounds $backgrounds,
-        public readonly string $link,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['username'],
-            PaymentsBalanceExchangeResponseToBalanceRenderedAvatars::fromArray($data['avatars']),
-            PaymentsBalanceExchangeResponseToBalanceRenderedBackgrounds::fromArray($data['backgrounds']),
-            $data['link'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceRenderedAvatars
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-        public readonly string $s,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-            $data['s'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceRenderedBackgrounds
-{
-    public function __construct(
-        public readonly string $l,
-        public readonly string $m,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['l'],
-            $data['m'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceRestoreData
-{
-    public function __construct(
-        public readonly int $_12345,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['12345'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceTags
-{
-    public function __construct(
-        public readonly int $tag_id,
-        public readonly string $title,
-        public readonly bool $isDefault,
-        public readonly bool $forOwnedAccountsOnly,
-        public readonly string $bc,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['tag_id'],
-            $data['title'],
-            $data['isDefault'],
-            $data['forOwnedAccountsOnly'],
-            $data['bc'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseToBalanceTelegramClient
-{
-    public function __construct(
-        public readonly string $telegram_api_id,
-        public readonly string $telegram_api_hash,
-        public readonly string $telegram_device_model,
-        public readonly string $telegram_system_version,
-        public readonly string $telegram_app_version,
-        public readonly string $telegram_system_lang_code,
-        public readonly string $telegram_lang_code,
-        public readonly string $telegram_lang_pack,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['telegram_api_id'],
-            $data['telegram_api_hash'],
-            $data['telegram_device_model'],
-            $data['telegram_system_version'],
-            $data['telegram_app_version'],
-            $data['telegram_system_lang_code'],
-            $data['telegram_lang_code'],
-            $data['telegram_lang_pack'],
-        );
-    }
-}
-
-final class PaymentsBalanceExchangeResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            UserModel::fromArray($data['balance']),
         );
     }
 }
@@ -34471,8 +24174,8 @@ final class PaymentsTransferResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var PaymentsTransferResponseSystemInfo */
-        public readonly PaymentsTransferResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -34484,29 +24187,7 @@ final class PaymentsTransferResponse
         return new self(
             $data['status'],
             $data['message'],
-            PaymentsTransferResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PaymentsTransferResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -34518,8 +24199,8 @@ final class PaymentsFeeResponse
         public readonly int $spentCurrentMonth,
         /** @var PaymentsFeeResponseCalculator */
         public readonly PaymentsFeeResponseCalculator $calculator,
-        /** @var PaymentsFeeResponseSystemInfo */
-        public readonly PaymentsFeeResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -34532,7 +24213,7 @@ final class PaymentsFeeResponse
             $data['commission_percentage'],
             $data['spentCurrentMonth'],
             PaymentsFeeResponseCalculator::fromArray($data['calculator']),
-            PaymentsFeeResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -34559,35 +24240,13 @@ final class PaymentsFeeResponseCalculator
     }
 }
 
-final class PaymentsFeeResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PaymentsCancelResponse
 {
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var PaymentsCancelResponseSystemInfo */
-        public readonly PaymentsCancelResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -34599,29 +24258,7 @@ final class PaymentsCancelResponse
         return new self(
             $data['status'],
             $data['message'],
-            PaymentsCancelResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class PaymentsCancelResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -34645,8 +24282,8 @@ final class PaymentsHistoryResponse
         public readonly bool $hasNextPage,
         public readonly int $lastOperationId,
         public readonly string $nextPageHref,
-        /** @var PaymentsHistoryResponseSystemInfo */
-        public readonly PaymentsHistoryResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -34669,7 +24306,7 @@ final class PaymentsHistoryResponse
             $data['hasNextPage'],
             $data['lastOperationId'],
             $data['nextPageHref'],
-            PaymentsHistoryResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -34959,35 +24596,13 @@ final class PaymentsHistoryResponseInput
     }
 }
 
-final class PaymentsHistoryResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PaymentsPayoutServicesResponse
 {
     public function __construct(
         /** @var list<PaymentsPayoutServicesResponseSystems> */
         public readonly array $systems,
-        /** @var PaymentsPayoutServicesResponseSystemInfo */
-        public readonly PaymentsPayoutServicesResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -34998,7 +24613,7 @@ final class PaymentsPayoutServicesResponse
     {
         return new self(
             array_map(static fn(array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']),
-            PaymentsPayoutServicesResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -35378,35 +24993,13 @@ final class PaymentsPayoutServicesResponseSystemsProvidersBCH
     }
 }
 
-final class PaymentsPayoutServicesResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class PaymentsPayoutResponse
 {
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var PaymentsPayoutResponseSystemInfo|null */
-        public readonly ?PaymentsPayoutResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -35418,29 +25011,7 @@ final class PaymentsPayoutResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? PaymentsPayoutResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class PaymentsPayoutResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -35450,8 +25021,8 @@ final class AutoPaymentsListResponse
     public function __construct(
         /** @var AutoPaymentsListResponsePayments */
         public readonly AutoPaymentsListResponsePayments $payments,
-        /** @var AutoPaymentsListResponseSystemInfo */
-        public readonly AutoPaymentsListResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -35462,7 +25033,7 @@ final class AutoPaymentsListResponse
     {
         return new self(
             AutoPaymentsListResponsePayments::fromArray($data['payments']),
-            AutoPaymentsListResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -35674,36 +25245,14 @@ final class AutoPaymentsListResponsePaymentsData1234567890ReceiverFields
     }
 }
 
-final class AutoPaymentsListResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class AutoPaymentsCreateResponse
 {
     public function __construct(
         public readonly string $status,
         public readonly string $message,
         public readonly int $auto_payment_id,
-        /** @var AutoPaymentsCreateResponseSystemInfo */
-        public readonly AutoPaymentsCreateResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -35716,29 +25265,7 @@ final class AutoPaymentsCreateResponse
             $data['status'],
             $data['message'],
             $data['auto_payment_id'],
-            AutoPaymentsCreateResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class AutoPaymentsCreateResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -35748,8 +25275,8 @@ final class AutoPaymentsDeleteResponse
     public function __construct(
         public readonly string $status,
         public readonly string $message,
-        /** @var AutoPaymentsDeleteResponseSystemInfo */
-        public readonly AutoPaymentsDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -35761,29 +25288,7 @@ final class AutoPaymentsDeleteResponse
         return new self(
             $data['status'],
             $data['message'],
-            AutoPaymentsDeleteResponseSystemInfo::fromArray($data['system_info']),
-        );
-    }
-}
-
-final class AutoPaymentsDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -35793,8 +25298,8 @@ final class ProxyGetResponse
     public function __construct(
         /** @var list<ProxyGetResponseProxies> */
         public readonly array $proxies,
-        /** @var ProxyGetResponseSystemInfo */
-        public readonly ProxyGetResponseSystemInfo $system_info,
+        /** @var RespSystemInfo */
+        public readonly RespSystemInfo $system_info,
     ) {
     }
 
@@ -35805,7 +25310,7 @@ final class ProxyGetResponse
     {
         return new self(
             array_map(static fn(array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']),
-            ProxyGetResponseSystemInfo::fromArray($data['system_info']),
+            RespSystemInfo::fromArray($data['system_info']),
         );
     }
 }
@@ -35859,35 +25364,13 @@ final class ProxyGetResponseProxiesProxy
     }
 }
 
-final class ProxyGetResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
-        );
-    }
-}
-
 final class ProxyAddResponse
 {
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ProxyAddResponseSystemInfo|null */
-        public readonly ?ProxyAddResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -35899,29 +25382,7 @@ final class ProxyAddResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ProxyAddResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ProxyAddResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -35931,8 +25392,8 @@ final class ProxyDeleteResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ProxyDeleteResponseSystemInfo|null */
-        public readonly ?ProxyDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -35944,29 +25405,7 @@ final class ProxyDeleteResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ProxyDeleteResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ProxyDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -35976,8 +25415,8 @@ final class ImapCreateResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ImapCreateResponseSystemInfo|null */
-        public readonly ?ImapCreateResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -35989,29 +25428,7 @@ final class ImapCreateResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ImapCreateResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ImapCreateResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -36021,8 +25438,8 @@ final class ImapDeleteResponse
     public function __construct(
         public readonly ?string $status,
         public readonly ?string $message,
-        /** @var ImapDeleteResponseSystemInfo|null */
-        public readonly ?ImapDeleteResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -36034,29 +25451,7 @@ final class ImapDeleteResponse
         return new self(
             $data['status'] ?? null,
             $data['message'] ?? null,
-            isset($data['system_info']) && is_array($data['system_info']) ? ImapDeleteResponseSystemInfo::fromArray($data['system_info']) : null,
-        );
-    }
-}
-
-final class ImapDeleteResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -36066,8 +25461,8 @@ final class BatchResponse
     public function __construct(
         /** @var BatchResponseJobs */
         public readonly BatchResponseJobs $jobs,
-        /** @var BatchResponseSystemInfo|null */
-        public readonly ?BatchResponseSystemInfo $system_info,
+        /** @var RespSystemInfo|null */
+        public readonly ?RespSystemInfo $system_info,
     ) {
     }
 
@@ -36078,7 +25473,7 @@ final class BatchResponse
     {
         return new self(
             BatchResponseJobs::fromArray($data['jobs']),
-            isset($data['system_info']) && is_array($data['system_info']) ? BatchResponseSystemInfo::fromArray($data['system_info']) : null,
+            isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
 }
@@ -36118,28 +25513,6 @@ final class BatchResponseJobsJobId
         return new self(
             $data['_job_result'] ?? null,
             $data['_job_error'] ?? null,
-        );
-    }
-}
-
-final class BatchResponseSystemInfo
-{
-    public function __construct(
-        public readonly int $visitor_id,
-        public readonly int $time,
-        public readonly int $log_id,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            $data['visitor_id'],
-            $data['time'],
-            $data['log_id'],
         );
     }
 }
