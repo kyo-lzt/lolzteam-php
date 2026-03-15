@@ -13,6 +13,7 @@ use Lolzteam\Runtime\Errors\AuthException;
 use Lolzteam\Runtime\Errors\NotFoundException;
 use Lolzteam\Runtime\Errors\RetryExhaustedException;
 use Lolzteam\Runtime\HttpClient;
+use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\RetryConfig;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
@@ -41,7 +42,7 @@ final class HttpTest extends TestCase
             token: $token,
             baseUrl: 'https://api.lolz.live',
             retry: $retry,
-            requestsPerMinute: 60000,
+            rateLimit: new RateLimitConfig(requestsPerMinute: 60000),
             handler: $stack,
         );
 

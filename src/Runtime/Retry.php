@@ -14,6 +14,7 @@ final class Retry
     /**
      * @template T
      * @param callable(): T $fn
+     * @param (\Closure(RetryInfo): void)|null $onRetry
      * @return T
      */
     public static function withRetry(
@@ -21,6 +22,7 @@ final class Retry
         RetryConfig $config,
         string $method = '',
         string $path = '',
+        ?\Closure $onRetry = null,
     ): mixed {
         $lastException = null;
 
@@ -36,7 +38,7 @@ final class Retry
                     throw $e;
                 }
                 $delayMs = self::computeDelay($e, $attempt, $config);
-                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $onRetry);
             } catch (ServerException $e) {
                 if (!in_array($e->statusCode, [502, 503, 504], true)) {
                     throw $e;
@@ -49,7 +51,7 @@ final class Retry
                     throw $e;
                 }
                 $delayMs = self::computeDelay(null, $attempt, $config);
-                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $onRetry);
             } catch (NetworkException $e) {
                 if (!$e->isTransient()) {
                     throw $e;
@@ -62,7 +64,7 @@ final class Retry
                     throw $e;
                 }
                 $delayMs = self::computeDelay(null, $attempt, $config);
-                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $onRetry);
             }
         }
 
@@ -86,17 +88,20 @@ final class Retry
         return min($delayMs, $config->maxDelayMs);
     }
 
+    /**
+     * @param (\Closure(RetryInfo): void)|null $onRetry
+     */
     private static function notifyAndSleep(
         int $delayMs,
         int $attempt,
         \Throwable $error,
         string $method,
         string $path,
-        RetryConfig $config,
+        ?\Closure $onRetry,
     ): void {
-        if ($config->onRetry !== null) {
-            ($config->onRetry)(new RetryInfo(
-                attempt: $attempt + 1,
+        if ($onRetry !== null) {
+            $onRetry(new RetryInfo(
+                attempt: $attempt,
                 delayMs: (float) $delayMs,
                 error: $error,
                 method: $method,

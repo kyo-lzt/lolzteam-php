@@ -18,6 +18,7 @@ use Lolzteam\Runtime\Errors\ServerException;
 use Lolzteam\Runtime\HttpClient;
 use Lolzteam\Runtime\HttpExceptionFactory;
 use Lolzteam\Runtime\RateLimiter;
+use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\Retry;
 use Lolzteam\Runtime\RetryConfig;
 use PHPUnit\Framework\TestCase;
@@ -103,7 +104,7 @@ final class RuntimeTest extends TestCase
             token: 'tok',
             baseUrl: 'https://api.lolz.live',
             retry: new RetryConfig(maxRetries: 2, baseDelayMs: 1, maxDelayMs: 1),
-            requestsPerMinute: 60000,
+            rateLimit: new RateLimitConfig(requestsPerMinute: 60000),
             handler: $stack,
         );
         $client = new HttpClient($config);
@@ -122,7 +123,7 @@ final class RuntimeTest extends TestCase
             token: 'tok',
             baseUrl: 'https://api.lolz.live',
             retry: new RetryConfig(maxRetries: 2, baseDelayMs: 1, maxDelayMs: 1),
-            requestsPerMinute: 60000,
+            rateLimit: new RateLimitConfig(requestsPerMinute: 60000),
             handler: $stack,
         );
         $client = new HttpClient($config);
@@ -141,7 +142,7 @@ final class RuntimeTest extends TestCase
             token: 'tok',
             baseUrl: 'https://api.lolz.live',
             retry: new RetryConfig(maxRetries: 2, baseDelayMs: 1, maxDelayMs: 1),
-            requestsPerMinute: 60000,
+            rateLimit: new RateLimitConfig(requestsPerMinute: 60000),
             handler: $stack,
         );
         $client = new HttpClient($config);

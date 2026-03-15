@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Lolzteam\Runtime;
 
-final class RetryConfig
+final readonly class RetryConfig
 {
-    public readonly int $maxRetries;
-    public readonly int $baseDelayMs;
-    public readonly int $maxDelayMs;
-
-    /** @var (\Closure(RetryInfo): void)|null */
-    public readonly ?\Closure $onRetry;
+    public int $maxRetries;
+    public int $baseDelayMs;
+    public int $maxDelayMs;
 
     public function __construct(
         int $maxRetries = 3,
         int $baseDelayMs = 1000,
         int $maxDelayMs = 30000,
-        ?\Closure $onRetry = null,
     ) {
         if ($maxRetries < 0) {
             throw new \InvalidArgumentException('maxRetries must be >= 0');
@@ -31,6 +27,5 @@ final class RetryConfig
         $this->maxRetries = $maxRetries;
         $this->baseDelayMs = $baseDelayMs;
         $this->maxDelayMs = $maxDelayMs;
-        $this->onRetry = $onRetry;
     }
 }

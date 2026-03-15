@@ -17,26 +17,32 @@ final class HttpClient
     private ?RateLimiter $searchRateLimiter;
     private ?RetryConfig $retryConfig;
 
+    /** @var (\Closure(RetryInfo): void)|null */
+    private ?\Closure $onRetry;
+
     public function __construct(ClientConfig $config)
     {
         $this->retryConfig = $config->retry;
-        $this->rateLimiter = new RateLimiter($config->requestsPerMinute);
-        $this->searchRateLimiter = $config->searchRequestsPerMinute !== null
-            ? new RateLimiter($config->searchRequestsPerMinute)
+        $this->onRetry = $config->onRetry;
+
+        $rateLimit = $config->rateLimit;
+        $this->rateLimiter = new RateLimiter($rateLimit?->requestsPerMinute ?? 300);
+        $this->searchRateLimiter = $rateLimit?->searchRequestsPerMinute !== null
+            ? new RateLimiter($rateLimit->searchRequestsPerMinute)
             : null;
 
         /** @var array<string, mixed> $guzzleConfig */
         $guzzleConfig = [
             'base_uri' => rtrim($config->baseUrl, '/') . '/',
             'http_errors' => false,
-            'timeout' => 30,
+            'timeout' => $config->timeout,
             'headers' => [
                 'Authorization' => "Bearer {$config->token}",
             ],
         ];
 
         if ($config->proxy !== null) {
-            $guzzleConfig['proxy'] = $config->proxy;
+            $guzzleConfig['proxy'] = $config->proxy->url;
         }
 
         if ($config->handler !== null) {
@@ -72,6 +78,7 @@ final class HttpClient
             $this->retryConfig,
             $method,
             $path,
+            $this->onRetry,
         );
     }
 
@@ -109,9 +116,14 @@ final class HttpClient
                 case 'multipart':
                     $options[RequestOptions::MULTIPART] = [];
                     foreach ($body as $name => $value) {
-                        $contents = is_string($value)
-                            ? \GuzzleHttp\Psr7\Utils::streamFor($value)
-                            : $value;
+                        if (is_string($value)) {
+                            $stream = fopen('php://memory', 'r+');
+                            fwrite($stream, $value);
+                            rewind($stream);
+                            $contents = $stream;
+                        } else {
+                            $contents = $value;
+                        }
                         $options[RequestOptions::MULTIPART][] = [
                             'name' => (string) $name,
                             'contents' => $contents,

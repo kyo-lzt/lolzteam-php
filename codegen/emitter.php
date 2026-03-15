@@ -320,6 +320,7 @@ function emitCombinedFile(
     $lines[] = '';
     $lines[] = 'use Lolzteam\\Runtime\\ClientConfig;';
     $lines[] = 'use Lolzteam\\Runtime\\HttpClient;';
+    $lines[] = 'use Lolzteam\\Runtime\\RateLimitConfig;';
     $lines[] = 'use Lolzteam\\Runtime\\RetryConfig;';
 
     // Emit all group API classes
@@ -340,19 +341,30 @@ function emitCombinedFile(
     }
 
     $lines[] = '';
-    $lines[] = '    public function __construct(ClientConfig $config)';
+    $lines[] = '    /**';
+    $lines[] = '     * @param ClientConfig|string $config Config object or API token (deprecated)';
+    $lines[] = '     */';
+    $lines[] = '    public function __construct(ClientConfig|string $config)';
     $lines[] = '    {';
+    $lines[] = '        if (is_string($config)) {';
+    $lines[] = '            $config = new ClientConfig(token: $config);';
+    $lines[] = '        }';
+    $lines[] = "        \$defaultRateLimit = new RateLimitConfig(";
+    $lines[] = "            requestsPerMinute: \$config->rateLimit?->requestsPerMinute ?? {$defaultRateLimit},";
+    if ($defaultSearchRateLimit !== null) {
+        $lines[] = "            searchRequestsPerMinute: \$config->rateLimit?->searchRequestsPerMinute ?? {$defaultSearchRateLimit},";
+    } else {
+        $lines[] = '            searchRequestsPerMinute: $config->rateLimit?->searchRequestsPerMinute,';
+    }
+    $lines[] = '        );';
     $lines[] = "        \$resolvedConfig = new ClientConfig(";
     $lines[] = '            token: $config->token,';
     $lines[] = "            baseUrl: \$config->baseUrl !== '' ? \$config->baseUrl : '{$defaultBaseUrl}',";
     $lines[] = '            proxy: $config->proxy,';
     $lines[] = '            retry: $config->retry ?? new RetryConfig(),';
-    $lines[] = "            requestsPerMinute: \$config->requestsPerMinute > 0 ? \$config->requestsPerMinute : {$defaultRateLimit},";
-    if ($defaultSearchRateLimit !== null) {
-        $lines[] = "            searchRequestsPerMinute: \$config->searchRequestsPerMinute ?? {$defaultSearchRateLimit},";
-    } else {
-        $lines[] = '            searchRequestsPerMinute: $config->searchRequestsPerMinute,';
-    }
+    $lines[] = '            rateLimit: $defaultRateLimit,';
+    $lines[] = '            onRetry: $config->onRetry,';
+    $lines[] = '            timeout: $config->timeout,';
     $lines[] = '        );';
     $lines[] = '        $http = new HttpClient($resolvedConfig);';
 

@@ -45,6 +45,8 @@ use Lolzteam\Runtime\Errors\NetworkException;
 use Lolzteam\Runtime\Errors\NotFoundException;
 use Lolzteam\Runtime\Errors\RateLimitException;
 use Lolzteam\Runtime\Errors\ServerException;
+use Lolzteam\Runtime\ProxyConfig;
+use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\RetryConfig;
 use PHPUnit\Framework\TestCase;
 
@@ -66,7 +68,7 @@ final class ClientTest extends TestCase
         $config = new ClientConfig(
             token: 'test-token',
             baseUrl: 'https://api.lolz.live',
-            proxy: 'http://proxy:8080',
+            proxy: new ProxyConfig('http://proxy:8080'),
             retry: $retry,
         );
         $client = new ForumClient($config);
@@ -137,7 +139,7 @@ final class ClientTest extends TestCase
         $config = new ClientConfig(
             token: 'test-token',
             baseUrl: 'https://api.lzt.market',
-            proxy: 'socks5://proxy:1080',
+            proxy: new ProxyConfig('socks5://proxy:1080'),
             retry: $retry,
         );
         $client = new MarketClient($config);
@@ -235,6 +237,73 @@ final class ClientTest extends TestCase
         new RetryConfig(maxDelayMs: 0);
     }
 
+    // ── ProxyConfig ─────────────────────────────────────────────────
+
+    public function testProxyConfigAcceptsValidHttpProxy(): void
+    {
+        $proxy = new ProxyConfig('http://proxy:8080');
+        $this->assertSame('http://proxy:8080', $proxy->url);
+    }
+
+    public function testProxyConfigAcceptsValidSocks5Proxy(): void
+    {
+        $proxy = new ProxyConfig('socks5://proxy:1080');
+        $this->assertSame('socks5://proxy:1080', $proxy->url);
+    }
+
+    public function testProxyConfigRejectsUnsupportedScheme(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('unsupported proxy scheme');
+        new ProxyConfig('ftp://proxy:8080');
+    }
+
+    public function testProxyConfigRejectsNoScheme(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('unsupported proxy scheme');
+        new ProxyConfig('just-a-host:8080');
+    }
+
+    public function testProxyConfigRejectsNoHost(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('invalid proxy URL');
+        new ProxyConfig('http://');
+    }
+
+    // ── RateLimitConfig ─────────────────────────────────────────────
+
+    public function testRateLimitConfigDefaults(): void
+    {
+        $config = new RateLimitConfig();
+
+        $this->assertSame(300, $config->requestsPerMinute);
+        $this->assertNull($config->searchRequestsPerMinute);
+    }
+
+    public function testRateLimitConfigCustomValues(): void
+    {
+        $config = new RateLimitConfig(requestsPerMinute: 120, searchRequestsPerMinute: 20);
+
+        $this->assertSame(120, $config->requestsPerMinute);
+        $this->assertSame(20, $config->searchRequestsPerMinute);
+    }
+
+    public function testRateLimitConfigRejectsZeroRequestsPerMinute(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('requestsPerMinute must be >= 1');
+        new RateLimitConfig(requestsPerMinute: 0);
+    }
+
+    public function testRateLimitConfigRejectsZeroSearchRequestsPerMinute(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('searchRequestsPerMinute must be >= 1');
+        new RateLimitConfig(searchRequestsPerMinute: 0);
+    }
+
     // ── ClientConfig ────────────────────────────────────────────────
 
     public function testClientConfigCreation(): void
@@ -247,23 +316,25 @@ final class ClientTest extends TestCase
         $this->assertSame('my-token', $config->token);
         $this->assertSame('https://api.lolz.live', $config->baseUrl);
         $this->assertNull($config->proxy);
-        $this->assertSame(300, $config->requestsPerMinute);
+        $this->assertNull($config->rateLimit);
         $this->assertSame(3, $config->retry->maxRetries);
     }
 
     public function testClientConfigWithAllOptions(): void
     {
         $retry = new RetryConfig(maxRetries: 1, baseDelayMs: 100, maxDelayMs: 5000);
+        $proxy = new ProxyConfig('http://proxy:8080');
+        $rateLimit = new RateLimitConfig(requestsPerMinute: 120);
         $config = new ClientConfig(
             token: 'my-token',
             baseUrl: 'https://api.lzt.market',
-            proxy: 'http://proxy:8080',
+            proxy: $proxy,
             retry: $retry,
-            requestsPerMinute: 120,
+            rateLimit: $rateLimit,
         );
 
-        $this->assertSame('http://proxy:8080', $config->proxy);
-        $this->assertSame(120, $config->requestsPerMinute);
+        $this->assertSame('http://proxy:8080', $config->proxy->url);
+        $this->assertSame(120, $config->rateLimit->requestsPerMinute);
         $this->assertSame(1, $config->retry->maxRetries);
     }
 
@@ -274,51 +345,18 @@ final class ClientTest extends TestCase
         new ClientConfig(token: '', baseUrl: 'https://api.lolz.live');
     }
 
-    public function testClientConfigRejectsZeroRequestsPerMinute(): void
+    public function testClientConfigOnRetryCallback(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('requestsPerMinute must be >= 1');
-        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', requestsPerMinute: 0);
-    }
+        $called = false;
+        $config = new ClientConfig(
+            token: 'my-token',
+            baseUrl: 'https://api.lolz.live',
+            onRetry: function () use (&$called): void {
+                $called = true;
+            },
+        );
 
-    public function testClientConfigRejectsNegativeRequestsPerMinute(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('requestsPerMinute must be >= 1');
-        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', requestsPerMinute: -5);
-    }
-
-    public function testClientConfigRejectsProxyWithUnsupportedScheme(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('unsupported proxy scheme');
-        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'ftp://proxy:8080');
-    }
-
-    public function testClientConfigRejectsProxyWithNoScheme(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('unsupported proxy scheme');
-        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'just-a-host:8080');
-    }
-
-    public function testClientConfigRejectsProxyWithNoHost(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('invalid proxy URL');
-        new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'http://');
-    }
-
-    public function testClientConfigAcceptsValidHttpProxy(): void
-    {
-        $config = new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'http://proxy:8080');
-        $this->assertSame('http://proxy:8080', $config->proxy);
-    }
-
-    public function testClientConfigAcceptsValidSocks5Proxy(): void
-    {
-        $config = new ClientConfig(token: 'tok', baseUrl: 'https://api.lolz.live', proxy: 'socks5://proxy:1080');
-        $this->assertSame('socks5://proxy:1080', $config->proxy);
+        $this->assertNotNull($config->onRetry);
     }
 
     // ── Exception hierarchy ─────────────────────────────────────────

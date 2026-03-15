@@ -8,6 +8,7 @@ namespace Lolzteam\Generated\Market;
 
 use Lolzteam\Runtime\ClientConfig;
 use Lolzteam\Runtime\HttpClient;
+use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\RetryConfig;
 
 final class CategoryApi
@@ -1593,15 +1594,26 @@ final class MarketClient
     public readonly ImapApi $imap;
     public readonly BatchApi $batch;
 
-    public function __construct(ClientConfig $config)
+    /**
+     * @param ClientConfig|string $config Config object or API token (deprecated)
+     */
+    public function __construct(ClientConfig|string $config)
     {
+        if (is_string($config)) {
+            $config = new ClientConfig(token: $config);
+        }
+        $defaultRateLimit = new RateLimitConfig(
+            requestsPerMinute: $config->rateLimit?->requestsPerMinute ?? 120,
+            searchRequestsPerMinute: $config->rateLimit?->searchRequestsPerMinute ?? 20,
+        );
         $resolvedConfig = new ClientConfig(
             token: $config->token,
             baseUrl: $config->baseUrl !== '' ? $config->baseUrl : 'https://prod-api.lzt.market',
             proxy: $config->proxy,
             retry: $config->retry ?? new RetryConfig(),
-            requestsPerMinute: $config->requestsPerMinute > 0 ? $config->requestsPerMinute : 120,
-            searchRequestsPerMinute: $config->searchRequestsPerMinute ?? 20,
+            rateLimit: $defaultRateLimit,
+            onRetry: $config->onRetry,
+            timeout: $config->timeout,
         );
         $http = new HttpClient($resolvedConfig);
         $this->category = new CategoryApi($http);

@@ -51,15 +51,21 @@ Market API groups: `category`, `list`, `managing`, `profile`, `cart`, `purchasin
 ## Configuration
 
 ```php
+use Lolzteam\Runtime\ProxyConfig;
+use Lolzteam\Runtime\RateLimitConfig;
 use Lolzteam\Runtime\RetryConfig;
 
 $forum = new ForumClient(
     token: 'your_token',
-    proxy: 'http://user:pass@127.0.0.1:8080',
+    proxy: new ProxyConfig('http://user:pass@127.0.0.1:8080'),
     retry: new RetryConfig(
         maxRetries: 5,        // default: 3
         baseDelayMs: 1000,    // default: 1000
         maxDelayMs: 30000,    // default: 30000
+    ),
+    rateLimit: new RateLimitConfig(
+        requestsPerMinute: 300,       // default: 300
+        searchRequestsPerMinute: 20,  // default: null
     ),
 );
 ```
@@ -67,8 +73,10 @@ $forum = new ForumClient(
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `token` | `string` | *required* | API access token |
-| `proxy` | `?string` | `null` | Proxy URL (`http://`, `https://`, `socks5://`) |
+| `proxy` | `?ProxyConfig` | `null` | Proxy URL (`http://`, `https://`, `socks5://`) |
 | `retry` | `?RetryConfig` | 3 retries, 1s base, 30s max | Retry behavior |
+| `rateLimit` | `?RateLimitConfig` | `null` (uses client defaults) | Rate limit settings |
+| `onRetry` | `?Closure` | `null` | Callback invoked before each retry |
 
 ## Retry Logic
 
@@ -91,9 +99,9 @@ $client = new ForumClient(token: '...', retry: null);
 // onRetry callback
 $client = new ForumClient(
     token: '...',
-    retry: new RetryConfig(onRetry: function (RetryInfo $info) {
+    onRetry: function (RetryInfo $info) {
         echo "Retry #{$info->attempt}\n";
-    }),
+    },
 );
 ```
 
@@ -102,14 +110,16 @@ $client = new ForumClient(
 Supported schemes: `http`, `https`, `socks5`.
 
 ```php
+use Lolzteam\Runtime\ProxyConfig;
+
 // HTTP proxy
-$client = new ForumClient(token: '...', proxy: 'http://127.0.0.1:8080');
+$client = new ForumClient(token: '...', proxy: new ProxyConfig('http://127.0.0.1:8080'));
 
 // Authenticated proxy
-$client = new ForumClient(token: '...', proxy: 'http://user:pass@127.0.0.1:8080');
+$client = new ForumClient(token: '...', proxy: new ProxyConfig('http://user:pass@127.0.0.1:8080'));
 
 // SOCKS5 proxy
-$client = new ForumClient(token: '...', proxy: 'socks5://127.0.0.1:1080');
+$client = new ForumClient(token: '...', proxy: new ProxyConfig('socks5://127.0.0.1:1080'));
 ```
 
 ## Error Handling
@@ -159,9 +169,14 @@ The built-in rate limiter uses a token bucket algorithm. When the bucket is empt
 | Market (search) | 20 req/min |
 
 ```php
+use Lolzteam\Runtime\RateLimitConfig;
+
 $client = new MarketClient(
     token: '...',
-    searchRateLimit: new RateLimitConfig(requestsPerMinute: 30),
+    rateLimit: new RateLimitConfig(
+        requestsPerMinute: 120,
+        searchRequestsPerMinute: 30,
+    ),
 );
 ```
 
@@ -192,6 +207,8 @@ src/
     Retry.php                   Retry with exponential backoff + jitter
     RateLimiter.php             Token bucket rate limiter
     RetryConfig.php             Retry configuration
+    RateLimitConfig.php         Rate limit configuration
+    ProxyConfig.php             Proxy configuration
     Errors/                     Exception class hierarchy
   Generated/
     Forum/
