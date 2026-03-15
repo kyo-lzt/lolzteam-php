@@ -6,7 +6,8 @@ $finder = PhpCsFixer\Finder::create()
     ->in([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-    ]);
+    ])
+    ->exclude('Generated');
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
