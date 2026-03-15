@@ -90,7 +90,7 @@ final class CategoriesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoriesListResponseCategories => CategoriesListResponseCategories::fromArray($item), $data['categories']),
+            array_map(static fn(array $item): CategoriesListResponseCategories => CategoriesListResponseCategories::fromArray($item), $data['categories']),
             $data['categories_total'],
             CategoriesListResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -326,9 +326,9 @@ final class ForumsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ForumsListResponseForums => ForumsListResponseForums::fromArray($item), $data['forums']),
+            array_map(static fn(array $item): ForumsListResponseForums => ForumsListResponseForums::fromArray($item), $data['forums']),
             $data['forums_total'],
-            array_map(static fn (array $item): ForumsListResponseTabs => ForumsListResponseTabs::fromArray($item), $data['tabs']),
+            array_map(static fn(array $item): ForumsListResponseTabs => ForumsListResponseTabs::fromArray($item), $data['tabs']),
             ForumsListResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -365,7 +365,7 @@ final class ForumsListResponseForums
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): ForumsListResponseForumsForumPrefixes => ForumsListResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): ForumsListResponseForumsForumPrefixes => ForumsListResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             ForumsListResponseForumsLinks::fromArray($data['links']),
@@ -391,7 +391,7 @@ final class ForumsListResponseForumsForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): ForumsListResponseForumsForumPrefixesGroupPrefixes => ForumsListResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): ForumsListResponseForumsForumPrefixesGroupPrefixes => ForumsListResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -535,7 +535,7 @@ final class ForumsGroupedResponse
     {
         return new self(
             ForumsGroupedResponseData::fromArray($data['data']),
-            array_map(static fn (array $item): ForumsGroupedResponseTabs => ForumsGroupedResponseTabs::fromArray($item), $data['tabs']),
+            array_map(static fn(array $item): ForumsGroupedResponseTabs => ForumsGroupedResponseTabs::fromArray($item), $data['tabs']),
             ForumsGroupedResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -768,7 +768,7 @@ final class ForumsGetResponseForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): ForumsGetResponseForumForumPrefixes => ForumsGetResponseForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): ForumsGetResponseForumForumPrefixes => ForumsGetResponseForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             ForumsGetResponseForumLinks::fromArray($data['links']),
@@ -794,7 +794,7 @@ final class ForumsGetResponseForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): ForumsGetResponseForumForumPrefixesGroupPrefixes => ForumsGetResponseForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): ForumsGetResponseForumForumPrefixesGroupPrefixes => ForumsGetResponseForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -913,7 +913,7 @@ final class ForumsFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ForumsFollowersResponseUsers => ForumsFollowersResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ForumsFollowersResponseUsers => ForumsFollowersResponseUsers::fromArray($item), $data['users']),
             ForumsFollowersResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -1086,7 +1086,7 @@ final class ForumsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ForumsFollowedResponseForums => ForumsFollowedResponseForums::fromArray($item), $data['forums']),
+            array_map(static fn(array $item): ForumsFollowedResponseForums => ForumsFollowedResponseForums::fromArray($item), $data['forums']),
             ForumsFollowedResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -1125,7 +1125,7 @@ final class ForumsFollowedResponseForums
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): ForumsFollowedResponseForumsForumPrefixes => ForumsFollowedResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): ForumsFollowedResponseForumsForumPrefixes => ForumsFollowedResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             ForumsFollowedResponseForumsLinks::fromArray($data['links']),
@@ -1152,7 +1152,7 @@ final class ForumsFollowedResponseForumsForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): ForumsFollowedResponseForumsForumPrefixesGroupPrefixes => ForumsFollowedResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): ForumsFollowedResponseForumsForumPrefixesGroupPrefixes => ForumsFollowedResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -1298,7 +1298,7 @@ final class ForumsGetFeedOptionsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ForumsGetFeedOptionsResponseForums => ForumsGetFeedOptionsResponseForums::fromArray($item), $data['forums']),
+            array_map(static fn(array $item): ForumsGetFeedOptionsResponseForums => ForumsGetFeedOptionsResponseForums::fromArray($item), $data['forums']),
             $data['excluded_forums_ids'],
             $data['default_excluded_forums_ids'],
             $data['keywords'],
@@ -1477,7 +1477,7 @@ final class LinksListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): LinksListResponseLinkForums => LinksListResponseLinkForums::fromArray($item), $data['link-forums']),
+            array_map(static fn(array $item): LinksListResponseLinkForums => LinksListResponseLinkForums::fromArray($item), $data['link-forums']),
             $data['link-forums_total'],
             LinksListResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -1695,7 +1695,7 @@ final class PagesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PagesListResponsePages => PagesListResponsePages::fromArray($item), $data['pages']),
+            array_map(static fn(array $item): PagesListResponsePages => PagesListResponsePages::fromArray($item), $data['pages']),
             $data['pages_total'],
             PagesListResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -1929,7 +1929,7 @@ final class NavigationListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): NavigationListResponseElements => NavigationListResponseElements::fromArray($item), $data['elements']),
+            array_map(static fn(array $item): NavigationListResponseElements => NavigationListResponseElements::fromArray($item), $data['elements']),
             $data['elements_count'],
             NavigationListResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -2061,7 +2061,7 @@ final class ThreadsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsListResponseThreads => ThreadsListResponseThreads::fromArray($item), $data['threads']),
+            array_map(static fn(array $item): ThreadsListResponseThreads => ThreadsListResponseThreads::fromArray($item), $data['threads']),
             ThreadsListResponseForum::fromArray($data['forum']),
             $data['threads_total'],
             ThreadsListResponseLinks::fromArray($data['links']),
@@ -5826,7 +5826,7 @@ final class ThreadsFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsFollowersResponseUsers => ThreadsFollowersResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ThreadsFollowersResponseUsers => ThreadsFollowersResponseUsers::fromArray($item), $data['users']),
             ThreadsFollowersResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -5998,7 +5998,7 @@ final class ThreadsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsFollowedResponseThreads => ThreadsFollowedResponseThreads::fromArray($item), $data['threads']),
+            array_map(static fn(array $item): ThreadsFollowedResponseThreads => ThreadsFollowedResponseThreads::fromArray($item), $data['threads']),
             $data['threads_total'],
             ThreadsFollowedResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -6122,7 +6122,7 @@ final class ThreadsFollowedResponseThreadsFirstPost
             $data['signature_plain_text'],
             $data['post_like_count'],
             $data['post_attachment_count'],
-            array_map(static fn (array $item): ThreadsFollowedResponseThreadsFirstPostLikeUsers => ThreadsFollowedResponseThreadsFirstPostLikeUsers::fromArray($item), $data['like_users']),
+            array_map(static fn(array $item): ThreadsFollowedResponseThreadsFirstPostLikeUsers => ThreadsFollowedResponseThreadsFirstPostLikeUsers::fromArray($item), $data['like_users']),
             $data['user_is_ignored'],
             $data['post_is_published'],
             $data['post_is_deleted'],
@@ -6469,7 +6469,7 @@ final class ThreadsNavigationResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsNavigationResponseElements => ThreadsNavigationResponseElements::fromArray($item), $data['elements']),
+            array_map(static fn(array $item): ThreadsNavigationResponseElements => ThreadsNavigationResponseElements::fromArray($item), $data['elements']),
             $data['elements_count'],
             ThreadsNavigationResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -6634,7 +6634,7 @@ final class ThreadsPollGetResponsePoll
             $data['poll_max_votes'],
             $data['poll_is_open'],
             $data['poll_is_voted'],
-            array_map(static fn (array $item): ThreadsPollGetResponsePollResponses => ThreadsPollGetResponsePollResponses::fromArray($item), $data['responses']),
+            array_map(static fn(array $item): ThreadsPollGetResponsePollResponses => ThreadsPollGetResponsePollResponses::fromArray($item), $data['responses']),
             ThreadsPollGetResponsePollPermissions::fromArray($data['permissions']),
             ThreadsPollGetResponsePollLinks::fromArray($data['links']),
         );
@@ -6782,8 +6782,8 @@ final class ThreadsUnreadResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsUnreadResponseThreads => ThreadsUnreadResponseThreads::fromArray($item), $data['threads']),
-            array_map(static fn (array $item): ThreadsUnreadResponseData => ThreadsUnreadResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): ThreadsUnreadResponseThreads => ThreadsUnreadResponseThreads::fromArray($item), $data['threads']),
+            array_map(static fn(array $item): ThreadsUnreadResponseData => ThreadsUnreadResponseData::fromArray($item), $data['data']),
             ThreadsUnreadResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -7428,7 +7428,7 @@ final class ThreadsUnreadResponseDataFirstPost
             $data['signature_plain_text'],
             $data['post_like_count'],
             $data['post_attachment_count'],
-            array_map(static fn (array $item): ThreadsUnreadResponseDataFirstPostLikeUsers => ThreadsUnreadResponseDataFirstPostLikeUsers::fromArray($item), $data['like_users']),
+            array_map(static fn(array $item): ThreadsUnreadResponseDataFirstPostLikeUsers => ThreadsUnreadResponseDataFirstPostLikeUsers::fromArray($item), $data['like_users']),
             $data['user_is_ignored'],
             $data['post_is_published'],
             $data['post_is_deleted'],
@@ -7728,8 +7728,8 @@ final class ThreadsRecentResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ThreadsRecentResponseThreads => ThreadsRecentResponseThreads::fromArray($item), $data['threads']),
-            array_map(static fn (array $item): ThreadsRecentResponseData => ThreadsRecentResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): ThreadsRecentResponseThreads => ThreadsRecentResponseThreads::fromArray($item), $data['threads']),
+            array_map(static fn(array $item): ThreadsRecentResponseData => ThreadsRecentResponseData::fromArray($item), $data['data']),
             ThreadsRecentResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -8689,7 +8689,7 @@ final class PostsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PostsListResponsePosts => PostsListResponsePosts::fromArray($item), $data['posts']),
+            array_map(static fn(array $item): PostsListResponsePosts => PostsListResponsePosts::fromArray($item), $data['posts']),
             PostsListResponseThread::fromArray($data['thread']),
             $data['posts_total'],
             PostsListResponseSystemInfo::fromArray($data['system_info']),
@@ -10300,7 +10300,7 @@ final class PostsLikesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PostsLikesResponseUsers => PostsLikesResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): PostsLikesResponseUsers => PostsLikesResponseUsers::fromArray($item), $data['users']),
             PostsLikesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -10533,7 +10533,7 @@ final class PostsCommentsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PostsCommentsGetResponseComments => PostsCommentsGetResponseComments::fromArray($item), $data['comments']),
+            array_map(static fn(array $item): PostsCommentsGetResponseComments => PostsCommentsGetResponseComments::fromArray($item), $data['comments']),
             PostsCommentsGetResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -11080,7 +11080,7 @@ final class UsersListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersListResponseUsers => UsersListResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersListResponseUsers => UsersListResponseUsers::fromArray($item), $data['users']),
             $data['users_total'],
             UsersListResponseLinks::fromArray($data['links']),
             UsersListResponseSystemInfo::fromArray($data['system_info']),
@@ -11189,10 +11189,10 @@ final class UsersListResponseUsers
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersListResponseUsersUserGroups => UsersListResponseUsersUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersListResponseUsersFields => UsersListResponseUsersFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersListResponseUsersUserGroups => UsersListResponseUsersUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersListResponseUsersFields => UsersListResponseUsersFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersListResponseUsersUserExternalAuthentications => UsersListResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersListResponseUsersUserExternalAuthentications => UsersListResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersListResponseUsersSelfPermissions::fromArray($data['self_permissions']),
             UsersListResponseUsersEditPermissions::fromArray($data['edit_permissions']),
             UsersListResponseUsersBirthday::fromArray($data['birthday']),
@@ -11336,7 +11336,7 @@ final class UsersListResponseUsersFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersListResponseUsersFieldsChoices => UsersListResponseUsersFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersListResponseUsersFieldsChoices => UsersListResponseUsersFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -11500,7 +11500,7 @@ final class UsersListResponseUsersUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersListResponseUsersUserFollowingUsers => UsersListResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersListResponseUsersUserFollowingUsers => UsersListResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -11545,7 +11545,7 @@ final class UsersListResponseUsersUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersListResponseUsersUserFollowersUsers => UsersListResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersListResponseUsersUserFollowersUsers => UsersListResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -11633,7 +11633,7 @@ final class UsersFieldsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFieldsResponseFields => UsersFieldsResponseFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersFieldsResponseFields => UsersFieldsResponseFields::fromArray($item), $data['fields']),
             UsersFieldsResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -11701,7 +11701,7 @@ final class UsersFindResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFindResponseUsers => UsersFindResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersFindResponseUsers => UsersFindResponseUsers::fromArray($item), $data['users']),
             UsersFindResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -11808,10 +11808,10 @@ final class UsersFindResponseUsers
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersFindResponseUsersUserGroups => UsersFindResponseUsersUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersFindResponseUsersFields => UsersFindResponseUsersFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersFindResponseUsersUserGroups => UsersFindResponseUsersUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersFindResponseUsersFields => UsersFindResponseUsersFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersFindResponseUsersUserExternalAuthentications => UsersFindResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersFindResponseUsersUserExternalAuthentications => UsersFindResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersFindResponseUsersSelfPermissions::fromArray($data['self_permissions']),
             UsersFindResponseUsersEditPermissions::fromArray($data['edit_permissions']),
             UsersFindResponseUsersBirthday::fromArray($data['birthday']),
@@ -11955,7 +11955,7 @@ final class UsersFindResponseUsersFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersFindResponseUsersFieldsChoices => UsersFindResponseUsersFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersFindResponseUsersFieldsChoices => UsersFindResponseUsersFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -12119,7 +12119,7 @@ final class UsersFindResponseUsersUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFindResponseUsersUserFollowingUsers => UsersFindResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersFindResponseUsersUserFollowingUsers => UsersFindResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -12164,7 +12164,7 @@ final class UsersFindResponseUsersUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFindResponseUsersUserFollowersUsers => UsersFindResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersFindResponseUsersUserFollowersUsers => UsersFindResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -12337,10 +12337,10 @@ final class UsersGetResponseUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersGetResponseUserUserGroups => UsersGetResponseUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersGetResponseUserFields => UsersGetResponseUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersGetResponseUserUserGroups => UsersGetResponseUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersGetResponseUserFields => UsersGetResponseUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersGetResponseUserUserExternalAuthentications => UsersGetResponseUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersGetResponseUserUserExternalAuthentications => UsersGetResponseUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersGetResponseUserSelfPermissions::fromArray($data['self_permissions']),
             UsersGetResponseUserEditPermissions::fromArray($data['edit_permissions']),
             UsersGetResponseUserBirthday::fromArray($data['birthday']),
@@ -12484,7 +12484,7 @@ final class UsersGetResponseUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersGetResponseUserFieldsChoices => UsersGetResponseUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersGetResponseUserFieldsChoices => UsersGetResponseUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -12648,7 +12648,7 @@ final class UsersGetResponseUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersGetResponseUserUserFollowingUsers => UsersGetResponseUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersGetResponseUserUserFollowingUsers => UsersGetResponseUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -12693,7 +12693,7 @@ final class UsersGetResponseUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersGetResponseUserUserFollowersUsers => UsersGetResponseUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersGetResponseUserUserFollowersUsers => UsersGetResponseUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -12804,7 +12804,7 @@ final class UsersClaimsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersClaimsResponseClaims => UsersClaimsResponseClaims::fromArray($item), $data['claims']),
+            array_map(static fn(array $item): UsersClaimsResponseClaims => UsersClaimsResponseClaims::fromArray($item), $data['claims']),
             UsersClaimsResponseStats::fromArray($data['stats']),
             UsersClaimsResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -12947,10 +12947,10 @@ final class UsersClaimsResponseClaimsAuthor
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorUserGroups => UsersClaimsResponseClaimsAuthorUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorFields => UsersClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorUserGroups => UsersClaimsResponseClaimsAuthorUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorFields => UsersClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorUserExternalAuthentications => UsersClaimsResponseClaimsAuthorUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorUserExternalAuthentications => UsersClaimsResponseClaimsAuthorUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersClaimsResponseClaimsAuthorSelfPermissions::fromArray($data['self_permissions']),
             UsersClaimsResponseClaimsAuthorEditPermissions::fromArray($data['edit_permissions']),
             UsersClaimsResponseClaimsAuthorBirthday::fromArray($data['birthday']),
@@ -13094,7 +13094,7 @@ final class UsersClaimsResponseClaimsAuthorFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorFieldsChoices => UsersClaimsResponseClaimsAuthorFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorFieldsChoices => UsersClaimsResponseClaimsAuthorFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -13258,7 +13258,7 @@ final class UsersClaimsResponseClaimsAuthorUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorUserFollowingUsers => UsersClaimsResponseClaimsAuthorUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorUserFollowingUsers => UsersClaimsResponseClaimsAuthorUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -13303,7 +13303,7 @@ final class UsersClaimsResponseClaimsAuthorUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersClaimsResponseClaimsAuthorUserFollowersUsers => UsersClaimsResponseClaimsAuthorUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersClaimsResponseClaimsAuthorUserFollowersUsers => UsersClaimsResponseClaimsAuthorUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -13700,7 +13700,7 @@ final class UsersFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFollowersResponseUsers => UsersFollowersResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersFollowersResponseUsers => UsersFollowersResponseUsers::fromArray($item), $data['users']),
             $data['users_total'],
             UsersFollowersResponseLinks::fromArray($data['links']),
             UsersFollowersResponseSystemInfo::fromArray($data['system_info']),
@@ -14008,7 +14008,7 @@ final class UsersFollowingsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersFollowingsResponseUsers => UsersFollowingsResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersFollowingsResponseUsers => UsersFollowingsResponseUsers::fromArray($item), $data['users']),
             $data['users_total'],
             UsersFollowingsResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -14416,10 +14416,10 @@ final class UsersLikesResponseLikesData1234567890User
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserUserGroups => UsersLikesResponseLikesData1234567890UserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserFields => UsersLikesResponseLikesData1234567890UserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserUserGroups => UsersLikesResponseLikesData1234567890UserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserFields => UsersLikesResponseLikesData1234567890UserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserUserExternalAuthentications => UsersLikesResponseLikesData1234567890UserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserUserExternalAuthentications => UsersLikesResponseLikesData1234567890UserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersLikesResponseLikesData1234567890UserSelfPermissions::fromArray($data['self_permissions']),
             UsersLikesResponseLikesData1234567890UserEditPermissions::fromArray($data['edit_permissions']),
             UsersLikesResponseLikesData1234567890UserBirthday::fromArray($data['birthday']),
@@ -14563,7 +14563,7 @@ final class UsersLikesResponseLikesData1234567890UserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserFieldsChoices => UsersLikesResponseLikesData1234567890UserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserFieldsChoices => UsersLikesResponseLikesData1234567890UserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -14727,7 +14727,7 @@ final class UsersLikesResponseLikesData1234567890UserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserUserFollowingUsers => UsersLikesResponseLikesData1234567890UserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserUserFollowingUsers => UsersLikesResponseLikesData1234567890UserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -14772,7 +14772,7 @@ final class UsersLikesResponseLikesData1234567890UserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890UserUserFollowersUsers => UsersLikesResponseLikesData1234567890UserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890UserUserFollowersUsers => UsersLikesResponseLikesData1234567890UserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -14903,10 +14903,10 @@ final class UsersLikesResponseLikesData1234567890ActionUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserUserGroups => UsersLikesResponseLikesData1234567890ActionUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserFields => UsersLikesResponseLikesData1234567890ActionUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserUserGroups => UsersLikesResponseLikesData1234567890ActionUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserFields => UsersLikesResponseLikesData1234567890ActionUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserUserExternalAuthentications => UsersLikesResponseLikesData1234567890ActionUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserUserExternalAuthentications => UsersLikesResponseLikesData1234567890ActionUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersLikesResponseLikesData1234567890ActionUserSelfPermissions::fromArray($data['self_permissions']),
             UsersLikesResponseLikesData1234567890ActionUserEditPermissions::fromArray($data['edit_permissions']),
             UsersLikesResponseLikesData1234567890ActionUserBirthday::fromArray($data['birthday']),
@@ -15050,7 +15050,7 @@ final class UsersLikesResponseLikesData1234567890ActionUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserFieldsChoices => UsersLikesResponseLikesData1234567890ActionUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserFieldsChoices => UsersLikesResponseLikesData1234567890ActionUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -15214,7 +15214,7 @@ final class UsersLikesResponseLikesData1234567890ActionUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserUserFollowingUsers => UsersLikesResponseLikesData1234567890ActionUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserUserFollowingUsers => UsersLikesResponseLikesData1234567890ActionUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -15259,7 +15259,7 @@ final class UsersLikesResponseLikesData1234567890ActionUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersLikesResponseLikesData1234567890ActionUserUserFollowersUsers => UsersLikesResponseLikesData1234567890ActionUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersLikesResponseLikesData1234567890ActionUserUserFollowersUsers => UsersLikesResponseLikesData1234567890ActionUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -15325,7 +15325,7 @@ final class UsersIgnoredResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersIgnoredResponseUsers => UsersIgnoredResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersIgnoredResponseUsers => UsersIgnoredResponseUsers::fromArray($item), $data['users']),
             UsersIgnoredResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -15699,7 +15699,7 @@ final class UsersContentsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersContentsResponseData => UsersContentsResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): UsersContentsResponseData => UsersContentsResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             UsersContentsResponseUser::fromArray($data['user']),
             UsersContentsResponseLinks::fromArray($data['links']),
@@ -15765,7 +15765,7 @@ final class UsersContentsResponseData
             $data['signature_plain_text'],
             $data['post_like_count'],
             $data['post_attachment_count'],
-            array_map(static fn (array $item): UsersContentsResponseDataLikeUsers => UsersContentsResponseDataLikeUsers::fromArray($item), $data['like_users']),
+            array_map(static fn(array $item): UsersContentsResponseDataLikeUsers => UsersContentsResponseDataLikeUsers::fromArray($item), $data['like_users']),
             $data['user_is_ignored'],
             $data['post_is_published'],
             $data['post_is_deleted'],
@@ -16085,10 +16085,10 @@ final class UsersContentsResponseUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): UsersContentsResponseUserUserGroups => UsersContentsResponseUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): UsersContentsResponseUserFields => UsersContentsResponseUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): UsersContentsResponseUserUserGroups => UsersContentsResponseUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): UsersContentsResponseUserFields => UsersContentsResponseUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): UsersContentsResponseUserUserExternalAuthentications => UsersContentsResponseUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): UsersContentsResponseUserUserExternalAuthentications => UsersContentsResponseUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             UsersContentsResponseUserSelfPermissions::fromArray($data['self_permissions']),
             UsersContentsResponseUserEditPermissions::fromArray($data['edit_permissions']),
             UsersContentsResponseUserBirthday::fromArray($data['birthday']),
@@ -16232,7 +16232,7 @@ final class UsersContentsResponseUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): UsersContentsResponseUserFieldsChoices => UsersContentsResponseUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): UsersContentsResponseUserFieldsChoices => UsersContentsResponseUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -16396,7 +16396,7 @@ final class UsersContentsResponseUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersContentsResponseUserUserFollowingUsers => UsersContentsResponseUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersContentsResponseUserUserFollowingUsers => UsersContentsResponseUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -16441,7 +16441,7 @@ final class UsersContentsResponseUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersContentsResponseUserUserFollowersUsers => UsersContentsResponseUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): UsersContentsResponseUserUserFollowersUsers => UsersContentsResponseUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -16529,7 +16529,7 @@ final class UsersTrophiesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersTrophiesResponseTrophies => UsersTrophiesResponseTrophies::fromArray($item), $data['trophies']),
+            array_map(static fn(array $item): UsersTrophiesResponseTrophies => UsersTrophiesResponseTrophies::fromArray($item), $data['trophies']),
             UsersTrophiesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -16595,7 +16595,7 @@ final class UsersSecretAnswerTypesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): UsersSecretAnswerTypesResponseData => UsersSecretAnswerTypesResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): UsersSecretAnswerTypesResponseData => UsersSecretAnswerTypesResponseData::fromArray($item), $data['data']),
             UsersSecretAnswerTypesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -16747,7 +16747,7 @@ final class ProfilePostsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePosts => ProfilePostsListResponseProfilePosts::fromArray($item), $data['profile_posts']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePosts => ProfilePostsListResponseProfilePosts::fromArray($item), $data['profile_posts']),
             $data['totalProfilePosts'],
             $data['canPostOnProfile'],
             ProfilePostsListResponseLinks::fromArray($data['links']),
@@ -16982,10 +16982,10 @@ final class ProfilePostsListResponseProfilePostsTimelineUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserUserGroups => ProfilePostsListResponseProfilePostsTimelineUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserFields => ProfilePostsListResponseProfilePostsTimelineUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserUserGroups => ProfilePostsListResponseProfilePostsTimelineUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserFields => ProfilePostsListResponseProfilePostsTimelineUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserUserExternalAuthentications => ProfilePostsListResponseProfilePostsTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserUserExternalAuthentications => ProfilePostsListResponseProfilePostsTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             ProfilePostsListResponseProfilePostsTimelineUserSelfPermissions::fromArray($data['self_permissions']),
             ProfilePostsListResponseProfilePostsTimelineUserEditPermissions::fromArray($data['edit_permissions']),
             ProfilePostsListResponseProfilePostsTimelineUserBirthday::fromArray($data['birthday']),
@@ -17129,7 +17129,7 @@ final class ProfilePostsListResponseProfilePostsTimelineUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserFieldsChoices => ProfilePostsListResponseProfilePostsTimelineUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserFieldsChoices => ProfilePostsListResponseProfilePostsTimelineUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -17293,7 +17293,7 @@ final class ProfilePostsListResponseProfilePostsTimelineUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserUserFollowingUsers => ProfilePostsListResponseProfilePostsTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserUserFollowingUsers => ProfilePostsListResponseProfilePostsTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -17338,7 +17338,7 @@ final class ProfilePostsListResponseProfilePostsTimelineUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsListResponseProfilePostsTimelineUserUserFollowersUsers => ProfilePostsListResponseProfilePostsTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsListResponseProfilePostsTimelineUserUserFollowersUsers => ProfilePostsListResponseProfilePostsTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -17658,10 +17658,10 @@ final class ProfilePostsGetResponseProfilePostTimelineUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserUserGroups => ProfilePostsGetResponseProfilePostTimelineUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserFields => ProfilePostsGetResponseProfilePostTimelineUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserUserGroups => ProfilePostsGetResponseProfilePostTimelineUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserFields => ProfilePostsGetResponseProfilePostTimelineUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserUserExternalAuthentications => ProfilePostsGetResponseProfilePostTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserUserExternalAuthentications => ProfilePostsGetResponseProfilePostTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             ProfilePostsGetResponseProfilePostTimelineUserSelfPermissions::fromArray($data['self_permissions']),
             ProfilePostsGetResponseProfilePostTimelineUserEditPermissions::fromArray($data['edit_permissions']),
             ProfilePostsGetResponseProfilePostTimelineUserBirthday::fromArray($data['birthday']),
@@ -17805,7 +17805,7 @@ final class ProfilePostsGetResponseProfilePostTimelineUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserFieldsChoices => ProfilePostsGetResponseProfilePostTimelineUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserFieldsChoices => ProfilePostsGetResponseProfilePostTimelineUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -17969,7 +17969,7 @@ final class ProfilePostsGetResponseProfilePostTimelineUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserUserFollowingUsers => ProfilePostsGetResponseProfilePostTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserUserFollowingUsers => ProfilePostsGetResponseProfilePostTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -18014,7 +18014,7 @@ final class ProfilePostsGetResponseProfilePostTimelineUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsGetResponseProfilePostTimelineUserUserFollowersUsers => ProfilePostsGetResponseProfilePostTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsGetResponseProfilePostTimelineUserUserFollowersUsers => ProfilePostsGetResponseProfilePostTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -18598,7 +18598,7 @@ final class ProfilePostsLikesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsLikesResponseUsers => ProfilePostsLikesResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsLikesResponseUsers => ProfilePostsLikesResponseUsers::fromArray($item), $data['users']),
             ProfilePostsLikesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -18751,7 +18751,7 @@ final class ProfilePostsCommentsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseComments => ProfilePostsCommentsListResponseComments::fromArray($item), $data['comments']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseComments => ProfilePostsCommentsListResponseComments::fromArray($item), $data['comments']),
             $data['comments_total'],
             ProfilePostsCommentsListResponseProfilePost::fromArray($data['profile_post']),
             ProfilePostsCommentsListResponseTimelineUser::fromArray($data['timeline_user']),
@@ -19063,10 +19063,10 @@ final class ProfilePostsCommentsListResponseTimelineUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserUserGroups => ProfilePostsCommentsListResponseTimelineUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserFields => ProfilePostsCommentsListResponseTimelineUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserUserGroups => ProfilePostsCommentsListResponseTimelineUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserFields => ProfilePostsCommentsListResponseTimelineUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserUserExternalAuthentications => ProfilePostsCommentsListResponseTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserUserExternalAuthentications => ProfilePostsCommentsListResponseTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             ProfilePostsCommentsListResponseTimelineUserSelfPermissions::fromArray($data['self_permissions']),
             ProfilePostsCommentsListResponseTimelineUserEditPermissions::fromArray($data['edit_permissions']),
             ProfilePostsCommentsListResponseTimelineUserBirthday::fromArray($data['birthday']),
@@ -19210,7 +19210,7 @@ final class ProfilePostsCommentsListResponseTimelineUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserFieldsChoices => ProfilePostsCommentsListResponseTimelineUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserFieldsChoices => ProfilePostsCommentsListResponseTimelineUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -19374,7 +19374,7 @@ final class ProfilePostsCommentsListResponseTimelineUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserUserFollowingUsers => ProfilePostsCommentsListResponseTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserUserFollowingUsers => ProfilePostsCommentsListResponseTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -19419,7 +19419,7 @@ final class ProfilePostsCommentsListResponseTimelineUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfilePostsCommentsListResponseTimelineUserUserFollowersUsers => ProfilePostsCommentsListResponseTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ProfilePostsCommentsListResponseTimelineUserUserFollowersUsers => ProfilePostsCommentsListResponseTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -19970,9 +19970,9 @@ final class ConversationsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ConversationsListResponseConversations => ConversationsListResponseConversations::fromArray($item), $data['conversations']),
+            array_map(static fn(array $item): ConversationsListResponseConversations => ConversationsListResponseConversations::fromArray($item), $data['conversations']),
             $data['can_start'],
-            array_map(static fn (array $item): ConversationsListResponseFolders => ConversationsListResponseFolders::fromArray($item), $data['folders']),
+            array_map(static fn(array $item): ConversationsListResponseFolders => ConversationsListResponseFolders::fromArray($item), $data['folders']),
             ConversationsListResponseLinks::fromArray($data['links']),
             ConversationsListResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -20037,7 +20037,7 @@ final class ConversationsListResponseConversations
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsListResponseConversationsRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsListResponseConversationsRecipients => ConversationsListResponseConversationsRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsListResponseConversationsRecipients => ConversationsListResponseConversationsRecipients::fromArray($item), $data['recipients']),
             ConversationsListResponseConversationsLinks::fromArray($data['links']),
         );
     }
@@ -20303,7 +20303,7 @@ final class ConversationsCreateResponseConversation
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsCreateResponseConversationRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsCreateResponseConversationRecipients => ConversationsCreateResponseConversationRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsCreateResponseConversationRecipients => ConversationsCreateResponseConversationRecipients::fromArray($item), $data['recipients']),
             ConversationsCreateResponseConversationLinks::fromArray($data['links']),
         );
     }
@@ -20525,7 +20525,7 @@ final class ConversationsUpdateResponseConversation
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsUpdateResponseConversationRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsUpdateResponseConversationRecipients => ConversationsUpdateResponseConversationRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsUpdateResponseConversationRecipients => ConversationsUpdateResponseConversationRecipients::fromArray($item), $data['recipients']),
             ConversationsUpdateResponseConversationLinks::fromArray($data['links']),
         );
     }
@@ -20790,7 +20790,7 @@ final class ConversationsStartResponseConversation
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsStartResponseConversationRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsStartResponseConversationRecipients => ConversationsStartResponseConversationRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsStartResponseConversationRecipients => ConversationsStartResponseConversationRecipients::fromArray($item), $data['recipients']),
             ConversationsStartResponseConversationLinks::fromArray($data['links']),
         );
     }
@@ -21055,7 +21055,7 @@ final class ConversationsGetResponseConversation
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsGetResponseConversationRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsGetResponseConversationRecipients => ConversationsGetResponseConversationRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsGetResponseConversationRecipients => ConversationsGetResponseConversationRecipients::fromArray($item), $data['recipients']),
             ConversationsGetResponseConversationLinks::fromArray($data['links']),
         );
     }
@@ -21216,7 +21216,7 @@ final class ConversationsMessagesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ConversationsMessagesListResponseMessages => ConversationsMessagesListResponseMessages::fromArray($item), $data['messages']),
+            array_map(static fn(array $item): ConversationsMessagesListResponseMessages => ConversationsMessagesListResponseMessages::fromArray($item), $data['messages']),
             $data['messages_total'],
             ConversationsMessagesListResponseLinks::fromArray($data['links']),
             ConversationsMessagesListResponseSystemInfo::fromArray($data['system_info']),
@@ -21521,7 +21521,7 @@ final class ConversationsSearchResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ConversationsSearchResponseConversations => ConversationsSearchResponseConversations::fromArray($item), $data['conversations']),
+            array_map(static fn(array $item): ConversationsSearchResponseConversations => ConversationsSearchResponseConversations::fromArray($item), $data['conversations']),
             $data['recipients'],
             ConversationsSearchResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -21586,7 +21586,7 @@ final class ConversationsSearchResponseConversations
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsSearchResponseConversationsRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsSearchResponseConversationsRecipients => ConversationsSearchResponseConversationsRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsSearchResponseConversationsRecipients => ConversationsSearchResponseConversationsRecipients::fromArray($item), $data['recipients']),
             ConversationsSearchResponseConversationsLinks::fromArray($data['links']),
         );
     }
@@ -21808,7 +21808,7 @@ final class ConversationsMessagesGetResponseMessage
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsMessagesGetResponseMessageRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsMessagesGetResponseMessageRecipients => ConversationsMessagesGetResponseMessageRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsMessagesGetResponseMessageRecipients => ConversationsMessagesGetResponseMessageRecipients::fromArray($item), $data['recipients']),
             ConversationsMessagesGetResponseMessageLinks::fromArray($data['links']),
         );
     }
@@ -22030,7 +22030,7 @@ final class ConversationsMessagesEditResponseMessage
             $data['conversation_is_open'],
             $data['conversation_is_deleted'],
             ConversationsMessagesEditResponseMessageRecipient::fromArray($data['recipient']),
-            array_map(static fn (array $item): ConversationsMessagesEditResponseMessageRecipients => ConversationsMessagesEditResponseMessageRecipients::fromArray($item), $data['recipients']),
+            array_map(static fn(array $item): ConversationsMessagesEditResponseMessageRecipients => ConversationsMessagesEditResponseMessageRecipients::fromArray($item), $data['recipients']),
             ConversationsMessagesEditResponseMessageLinks::fromArray($data['links']),
         );
     }
@@ -22664,7 +22664,7 @@ final class NotificationsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): NotificationsListResponseNotifications => NotificationsListResponseNotifications::fromArray($item), $data['notifications']),
+            array_map(static fn(array $item): NotificationsListResponseNotifications => NotificationsListResponseNotifications::fromArray($item), $data['notifications']),
             $data['notifications_total'],
             NotificationsListResponseLinks::fromArray($data['links']),
             NotificationsListResponseSystemInfo::fromArray($data['system_info']),
@@ -23130,7 +23130,7 @@ final class TagsGetResponse
     {
         return new self(
             TagsGetResponseTag::fromArray($data['tag']),
-            array_map(static fn (array $item): TagsGetResponseTagged => TagsGetResponseTagged::fromArray($item), $data['tagged']),
+            array_map(static fn(array $item): TagsGetResponseTagged => TagsGetResponseTagged::fromArray($item), $data['tagged']),
             $data['tagged_total'],
             TagsGetResponseLinks::fromArray($data['links']),
             TagsGetResponseSystemInfo::fromArray($data['system_info']),
@@ -23242,7 +23242,7 @@ final class TagsGetResponseTagged
             $data['thread_is_sticky'],
             $data['thread_is_followed'],
             TagsGetResponseTaggedFirstPost::fromArray($data['first_post']),
-            array_map(static fn (array $item): TagsGetResponseTaggedThreadPrefixes => TagsGetResponseTaggedThreadPrefixes::fromArray($item), $data['thread_prefixes']),
+            array_map(static fn(array $item): TagsGetResponseTaggedThreadPrefixes => TagsGetResponseTaggedThreadPrefixes::fromArray($item), $data['thread_prefixes']),
             TagsGetResponseTaggedThreadTags::fromArray($data['thread_tags']),
             TagsGetResponseTaggedLinks::fromArray($data['links']),
             TagsGetResponseTaggedPermissions::fromArray($data['permissions']),
@@ -23508,7 +23508,7 @@ final class TagsGetResponseTaggedForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): TagsGetResponseTaggedForumForumPrefixes => TagsGetResponseTaggedForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): TagsGetResponseTaggedForumForumPrefixes => TagsGetResponseTaggedForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             TagsGetResponseTaggedForumLinks::fromArray($data['links']),
@@ -23534,7 +23534,7 @@ final class TagsGetResponseTaggedForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): TagsGetResponseTaggedForumForumPrefixesGroupPrefixes => TagsGetResponseTaggedForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): TagsGetResponseTaggedForumForumPrefixesGroupPrefixes => TagsGetResponseTaggedForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -23725,9 +23725,9 @@ final class SearchAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchAllResponseData => SearchAllResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchAllResponseData => SearchAllResponseData::fromArray($item), $data['data']),
             $data['data_total'],
-            array_map(static fn (array $item): SearchAllResponseUsers => SearchAllResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchAllResponseUsers => SearchAllResponseUsers::fromArray($item), $data['users']),
             SearchAllResponseLinks::fromArray($data['links']),
             SearchAllResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -24337,10 +24337,10 @@ final class SearchAllResponseUsers
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): SearchAllResponseUsersUserGroups => SearchAllResponseUsersUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): SearchAllResponseUsersFields => SearchAllResponseUsersFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): SearchAllResponseUsersUserGroups => SearchAllResponseUsersUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): SearchAllResponseUsersFields => SearchAllResponseUsersFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): SearchAllResponseUsersUserExternalAuthentications => SearchAllResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): SearchAllResponseUsersUserExternalAuthentications => SearchAllResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             SearchAllResponseUsersSelfPermissions::fromArray($data['self_permissions']),
             SearchAllResponseUsersEditPermissions::fromArray($data['edit_permissions']),
             SearchAllResponseUsersBirthday::fromArray($data['birthday']),
@@ -24484,7 +24484,7 @@ final class SearchAllResponseUsersFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): SearchAllResponseUsersFieldsChoices => SearchAllResponseUsersFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): SearchAllResponseUsersFieldsChoices => SearchAllResponseUsersFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -24648,7 +24648,7 @@ final class SearchAllResponseUsersUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchAllResponseUsersUserFollowingUsers => SearchAllResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchAllResponseUsersUserFollowingUsers => SearchAllResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -24693,7 +24693,7 @@ final class SearchAllResponseUsersUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchAllResponseUsersUserFollowersUsers => SearchAllResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchAllResponseUsersUserFollowersUsers => SearchAllResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -24784,7 +24784,7 @@ final class SearchThreadsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchThreadsResponseData => SearchThreadsResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchThreadsResponseData => SearchThreadsResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             SearchThreadsResponseLinks::fromArray($data['links']),
             SearchThreadsResponseSystemInfo::fromArray($data['system_info']),
@@ -25201,7 +25201,7 @@ final class SearchPostsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchPostsResponseData => SearchPostsResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchPostsResponseData => SearchPostsResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             SearchPostsResponseLinks::fromArray($data['links']),
             SearchPostsResponseSystemInfo::fromArray($data['system_info']),
@@ -25615,7 +25615,7 @@ final class SearchUsersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchUsersResponseUsers => SearchUsersResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchUsersResponseUsers => SearchUsersResponseUsers::fromArray($item), $data['users']),
             SearchUsersResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -25722,10 +25722,10 @@ final class SearchUsersResponseUsers
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): SearchUsersResponseUsersUserGroups => SearchUsersResponseUsersUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): SearchUsersResponseUsersFields => SearchUsersResponseUsersFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): SearchUsersResponseUsersUserGroups => SearchUsersResponseUsersUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): SearchUsersResponseUsersFields => SearchUsersResponseUsersFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): SearchUsersResponseUsersUserExternalAuthentications => SearchUsersResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): SearchUsersResponseUsersUserExternalAuthentications => SearchUsersResponseUsersUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             SearchUsersResponseUsersSelfPermissions::fromArray($data['self_permissions']),
             SearchUsersResponseUsersEditPermissions::fromArray($data['edit_permissions']),
             SearchUsersResponseUsersBirthday::fromArray($data['birthday']),
@@ -25869,7 +25869,7 @@ final class SearchUsersResponseUsersFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): SearchUsersResponseUsersFieldsChoices => SearchUsersResponseUsersFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): SearchUsersResponseUsersFieldsChoices => SearchUsersResponseUsersFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -26033,7 +26033,7 @@ final class SearchUsersResponseUsersUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchUsersResponseUsersUserFollowingUsers => SearchUsersResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchUsersResponseUsersUserFollowingUsers => SearchUsersResponseUsersUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -26078,7 +26078,7 @@ final class SearchUsersResponseUsersUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchUsersResponseUsersUserFollowersUsers => SearchUsersResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchUsersResponseUsersUserFollowersUsers => SearchUsersResponseUsersUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -26147,7 +26147,7 @@ final class SearchProfilePostsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchProfilePostsResponseData => SearchProfilePostsResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchProfilePostsResponseData => SearchProfilePostsResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             SearchProfilePostsResponseLinks::fromArray($data['links']),
             SearchProfilePostsResponseSystemInfo::fromArray($data['system_info']),
@@ -26373,10 +26373,10 @@ final class SearchProfilePostsResponseDataTimelineUser
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['curator_titles'],
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserUserGroups => SearchProfilePostsResponseDataTimelineUserUserGroups::fromArray($item), $data['user_groups']),
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserFields => SearchProfilePostsResponseDataTimelineUserFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserUserGroups => SearchProfilePostsResponseDataTimelineUserUserGroups::fromArray($item), $data['user_groups']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserFields => SearchProfilePostsResponseDataTimelineUserFields::fromArray($item), $data['fields']),
             $data['user_timezone_offset'],
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserUserExternalAuthentications => SearchProfilePostsResponseDataTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserUserExternalAuthentications => SearchProfilePostsResponseDataTimelineUserUserExternalAuthentications::fromArray($item), $data['user_external_authentications']),
             SearchProfilePostsResponseDataTimelineUserSelfPermissions::fromArray($data['self_permissions']),
             SearchProfilePostsResponseDataTimelineUserEditPermissions::fromArray($data['edit_permissions']),
             SearchProfilePostsResponseDataTimelineUserBirthday::fromArray($data['birthday']),
@@ -26520,7 +26520,7 @@ final class SearchProfilePostsResponseDataTimelineUserFields
             $data['is_required'],
             $data['value'] ?? null,
             $data['is_multi_choice'],
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserFieldsChoices => SearchProfilePostsResponseDataTimelineUserFieldsChoices::fromArray($item), $data['choices']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserFieldsChoices => SearchProfilePostsResponseDataTimelineUserFieldsChoices::fromArray($item), $data['choices']),
             $data['values'],
         );
     }
@@ -26684,7 +26684,7 @@ final class SearchProfilePostsResponseDataTimelineUserUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserUserFollowingUsers => SearchProfilePostsResponseDataTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserUserFollowingUsers => SearchProfilePostsResponseDataTimelineUserUserFollowingUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -26729,7 +26729,7 @@ final class SearchProfilePostsResponseDataTimelineUserUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchProfilePostsResponseDataTimelineUserUserFollowersUsers => SearchProfilePostsResponseDataTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): SearchProfilePostsResponseDataTimelineUserUserFollowersUsers => SearchProfilePostsResponseDataTimelineUserUserFollowersUsers::fromArray($item), $data['users']),
             $data['count'],
         );
     }
@@ -26820,7 +26820,7 @@ final class SearchTaggedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchTaggedResponseData => SearchTaggedResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchTaggedResponseData => SearchTaggedResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             SearchTaggedResponseSearchTags::fromArray($data['search_tags']),
             SearchTaggedResponseSystemInfo::fromArray($data['system_info']),
@@ -27132,7 +27132,7 @@ final class SearchTaggedResponseDataForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): SearchTaggedResponseDataForumForumPrefixes => SearchTaggedResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): SearchTaggedResponseDataForumForumPrefixes => SearchTaggedResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             SearchTaggedResponseDataForumLinks::fromArray($data['links']),
@@ -27158,7 +27158,7 @@ final class SearchTaggedResponseDataForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): SearchTaggedResponseDataForumForumPrefixesGroupPrefixes => SearchTaggedResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): SearchTaggedResponseDataForumForumPrefixesGroupPrefixes => SearchTaggedResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -27298,7 +27298,7 @@ final class SearchResultsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): SearchResultsResponseData => SearchResultsResponseData::fromArray($item), $data['data']),
+            array_map(static fn(array $item): SearchResultsResponseData => SearchResultsResponseData::fromArray($item), $data['data']),
             $data['data_total'],
             SearchResultsResponseSearchTags::fromArray($data['search_tags']),
             SearchResultsResponseSystemInfo::fromArray($data['system_info']),
@@ -27610,7 +27610,7 @@ final class SearchResultsResponseDataForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): SearchResultsResponseDataForumForumPrefixes => SearchResultsResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): SearchResultsResponseDataForumForumPrefixes => SearchResultsResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             SearchResultsResponseDataForumLinks::fromArray($data['links']),
@@ -27636,7 +27636,7 @@ final class SearchResultsResponseDataForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): SearchResultsResponseDataForumForumPrefixesGroupPrefixes => SearchResultsResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): SearchResultsResponseDataForumForumPrefixesGroupPrefixes => SearchResultsResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -27819,9 +27819,9 @@ final class ChatboxIndexResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ChatboxIndexResponseRooms => ChatboxIndexResponseRooms::fromArray($item), $data['rooms']),
+            array_map(static fn(array $item): ChatboxIndexResponseRooms => ChatboxIndexResponseRooms::fromArray($item), $data['rooms']),
             $data['ban'],
-            array_map(static fn (array $item): ChatboxIndexResponseIgnore => ChatboxIndexResponseIgnore::fromArray($item), $data['ignore']),
+            array_map(static fn(array $item): ChatboxIndexResponseIgnore => ChatboxIndexResponseIgnore::fromArray($item), $data['ignore']),
             ChatboxIndexResponsePermissions::fromArray($data['permissions']),
             $data['commands'],
             ChatboxIndexResponseRoomsOnline::fromArray($data['roomsOnline']),
@@ -28046,7 +28046,7 @@ final class ChatboxGetMessagesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ChatboxGetMessagesResponseMessages => ChatboxGetMessagesResponseMessages::fromArray($item), $data['messages']),
+            array_map(static fn(array $item): ChatboxGetMessagesResponseMessages => ChatboxGetMessagesResponseMessages::fromArray($item), $data['messages']),
             ChatboxGetMessagesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -28800,7 +28800,7 @@ final class ChatboxOnlineResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ChatboxOnlineResponseUsers => ChatboxOnlineResponseUsers::fromArray($item), $data['users']),
+            array_map(static fn(array $item): ChatboxOnlineResponseUsers => ChatboxOnlineResponseUsers::fromArray($item), $data['users']),
             ChatboxOnlineResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -29060,7 +29060,7 @@ final class ChatboxGetLeaderboardResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ChatboxGetLeaderboardResponseLeaderboard => ChatboxGetLeaderboardResponseLeaderboard::fromArray($item), $data['leaderboard']),
+            array_map(static fn(array $item): ChatboxGetLeaderboardResponseLeaderboard => ChatboxGetLeaderboardResponseLeaderboard::fromArray($item), $data['leaderboard']),
             ChatboxGetLeaderboardResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -29229,7 +29229,7 @@ final class ChatboxGetIgnoreResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ChatboxGetIgnoreResponseIgnored => ChatboxGetIgnoreResponseIgnored::fromArray($item), $data['ignored']),
+            array_map(static fn(array $item): ChatboxGetIgnoreResponseIgnored => ChatboxGetIgnoreResponseIgnored::fromArray($item), $data['ignored']),
             ChatboxGetIgnoreResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -29462,7 +29462,7 @@ final class FormsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): FormsListResponseForms => FormsListResponseForms::fromArray($item), $data['forms']),
+            array_map(static fn(array $item): FormsListResponseForms => FormsListResponseForms::fromArray($item), $data['forms']),
             $data['formsPerPage'],
             $data['page'],
             $data['totalForms'],
@@ -29491,7 +29491,7 @@ final class FormsListResponseForms
             $data['form_id'],
             $data['title'],
             $data['description'],
-            array_map(static fn (array $item): FormsListResponseFormsFields => FormsListResponseFormsFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): FormsListResponseFormsFields => FormsListResponseFormsFields::fromArray($item), $data['fields']),
         );
     }
 }
@@ -29724,3 +29724,4 @@ final class FormsCreateResponseSystemInfo
         );
     }
 }
+

@@ -30,14 +30,14 @@ final class CategoryAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryAllResponseItems => CategoryAllResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryAllResponseItems => CategoryAllResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): CategoryAllResponseStickyItems => CategoryAllResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): CategoryAllResponseStickyItems => CategoryAllResponseStickyItems::fromArray($item), $data['stickyItems']),
             CategoryAllResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -426,7 +426,7 @@ final class CategorySteamResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -722,14 +722,14 @@ final class CategorySteamResponseItems
             $data['steamCs2Medals'],
             $data['cs2RankExpired'],
             $data['steamDota2WinRate'],
-            array_map(static fn (array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), $data['steamTransactions']),
+            array_map(static fn(array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), $data['steamTransactions']),
             $data['hasPossibleBanInDota2'],
             $data['chineseAccount'],
             $data['cs2MapsRanks'],
             $data['cs2PremierElo'],
             $data['steamLifetimeTradeBan'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -1021,7 +1021,7 @@ final class CategoryFortniteResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -1217,17 +1217,17 @@ final class CategoryFortniteResponseItems
             $data['price_currency'],
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), $data['fortniteSkins']),
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), $data['fortnitePickaxe']),
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), $data['fortniteDance']),
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), $data['fortniteGliders']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), $data['fortniteSkins']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), $data['fortnitePickaxe']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), $data['fortniteDance']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), $data['fortniteGliders']),
             $data['fortnite_pickaxe_count'],
             $data['fortnite_dance_count'],
             $data['fortnite_glider_count'],
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), $data['fortnitePastSeasons']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), $data['fortnitePastSeasons']),
             $data['isSmallExf'],
             $data['account_last_activity'],
-            array_map(static fn (array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), $data['fortniteTransactions']),
+            array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), $data['fortniteTransactions']),
             $data['domain'],
             CategoryFortniteResponseItemsShopCounts::fromArray($data['shopCounts']),
             $data['canViewAccountLink'],
@@ -1546,7 +1546,7 @@ final class CategoryMihoyoResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -1761,11 +1761,11 @@ final class CategoryMihoyoResponseItems
             $data['mihoyoRegionPhrase'],
             CategoryMihoyoResponseItemsMihoyoLinkedAccounts::fromArray($data['mihoyoLinkedAccounts']),
             $data['mihoyoLinkedAccountsString'],
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), $data['honkaiCharacters']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), $data['genshinCharacters']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), $data['zenlessCharacters']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), $data['honkaiCharacters']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), $data['genshinCharacters']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), $data['zenlessCharacters']),
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -1867,8 +1867,8 @@ final class CategoryMihoyoResponseItemsHonkaiCharacters
             $data['rank'],
             $data['image'],
             CategoryMihoyoResponseItemsHonkaiCharactersEquip::fromArray($data['equip']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), $data['relics']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), $data['ornaments']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), $data['relics']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), $data['ornaments']),
             $data['base_type'],
             $data['figure_path'],
             $data['elementImage'],
@@ -1937,7 +1937,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersRelics
             $data['icon'],
             $data['rarity'],
             CategoryMihoyoResponseItemsHonkaiCharactersRelicsMainProperty::fromArray($data['main_property']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), $data['properties']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), $data['properties']),
         );
     }
 }
@@ -2017,7 +2017,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersOrnaments
             $data['icon'],
             $data['rarity'],
             CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsMainProperty::fromArray($data['main_property']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), $data['properties']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), $data['properties']),
         );
     }
 }
@@ -2103,7 +2103,7 @@ final class CategoryMihoyoResponseItemsGenshinCharacters
             $data['level'],
             $data['rarity'],
             CategoryMihoyoResponseItemsGenshinCharactersWeapon::fromArray($data['weapon']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), $data['reliquaries']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), $data['reliquaries']),
             $data['actived_constellation_num'],
             $data['costumes'],
             $data['external'],
@@ -2256,8 +2256,8 @@ final class CategoryMihoyoResponseItemsZenlessCharactersWeapon
             $data['star'],
             $data['icon'],
             $data['rarity'],
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), $data['properties']),
-            array_map(static fn (array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), $data['main_properties']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), $data['properties']),
+            array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), $data['main_properties']),
             $data['talent_title'],
             $data['talent_content'],
             $data['profession'],
@@ -2416,7 +2416,7 @@ final class CategoryRiotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -2639,7 +2639,7 @@ final class CategoryRiotResponseItems
             CategoryRiotResponseItemsValorantInventory::fromArray($data['valorantInventory']),
             CategoryRiotResponseItemsLolInventory::fromArray($data['lolInventory']),
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -2834,7 +2834,7 @@ final class CategoryTelegramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3147,7 +3147,7 @@ final class CategorySupercellResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3344,7 +3344,7 @@ final class CategorySupercellResponseItems
             $data['isSmallExf'],
             $data['supercellBrawlers'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -3490,7 +3490,7 @@ final class CategoryEAResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -3660,7 +3660,7 @@ final class CategoryEAResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -3853,7 +3853,7 @@ final class CategoryWotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -4700,7 +4700,7 @@ final class CategoryWotBlitzResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -12309,7 +12309,7 @@ final class CategoryGiftsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -12573,7 +12573,7 @@ final class CategoryEpicGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -12746,7 +12746,7 @@ final class CategoryEpicGamesResponseItems
             $data['canResellItemAfterPurchase'],
             $data['egBalance'],
             $data['egGameCount'],
-            array_map(static fn (array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), $data['egTransactions']),
+            array_map(static fn(array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), $data['egTransactions']),
             $data['canViewAccountLink'],
             $data['accountLinks'],
             $data['emailLoginUrl'],
@@ -12952,7 +12952,7 @@ final class CategoryEscapeFromTarkovResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13260,7 +13260,7 @@ final class CategorySocialClubResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13385,7 +13385,7 @@ final class CategorySocialClubResponseItems
             $data['socialclub_level'],
             $data['socialclub_cash'],
             $data['socialclub_bank_cash'],
-            array_map(static fn (array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), $data['socialclub_games']),
+            array_map(static fn(array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), $data['socialclub_games']),
             $data['socialclub_last_activity'],
             $data['socialclub_has_gtav'],
             $data['socialclub_has_rdr2'],
@@ -13579,7 +13579,7 @@ final class CategoryUplayResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -13769,7 +13769,7 @@ final class CategoryUplayResponseItems
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['r6Skins'],
-            array_map(static fn (array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), $data['r6Operators']),
+            array_map(static fn(array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), $data['r6Operators']),
             $data['canViewAccountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -13964,7 +13964,7 @@ final class CategoryDiscordResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14252,7 +14252,7 @@ final class CategoryTikTokResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14426,7 +14426,7 @@ final class CategoryTikTokResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['canChangePassword'],
             $data['itemOriginPhrase'],
@@ -14573,7 +14573,7 @@ final class CategoryInstagramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -14730,7 +14730,7 @@ final class CategoryInstagramResponseItems
             $data['canValidateAccount'],
             $data['canResellItemAfterPurchase'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -14876,7 +14876,7 @@ final class CategoryBattleNetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15047,7 +15047,7 @@ final class CategoryBattleNetResponseItems
             $data['battlenetBans'],
             CategoryBattleNetResponseItemsBattlenetGames::fromArray($data['battlenetGames']),
             $data['hasOverwatch'],
-            array_map(static fn (array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), $data['battlenetTransactions']),
+            array_map(static fn(array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), $data['battlenetTransactions']),
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
             $data['accountLinks'],
@@ -15280,7 +15280,7 @@ final class CategoryChatGPTResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15581,7 +15581,7 @@ final class CategoryVpnResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -15847,7 +15847,7 @@ final class CategoryRobloxResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16037,10 +16037,10 @@ final class CategoryRobloxResponseItems
             $data['canResellItemAfterPurchase'],
             $data['robloxLinkedAccounts'],
             $data['creditBalance'],
-            array_map(static fn (array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), $data['robloxGameDonations']),
-            array_map(static fn (array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), $data['robloxGameDonationsDetails']),
+            array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), $data['robloxGameDonations']),
+            array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), $data['robloxGameDonationsDetails']),
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -16232,7 +16232,7 @@ final class CategoryWarfaceResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16395,7 +16395,7 @@ final class CategoryWarfaceResponseItems
             $data['canResellItemAfterPurchase'],
             $data['isSmallExf'],
             $data['account_last_activity'],
-            array_map(static fn (array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), $data['wf_servers']),
+            array_map(static fn(array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), $data['wf_servers']),
             $data['domain'],
             $data['canViewAccountLink'],
             $data['canChangePassword'],
@@ -16543,7 +16543,7 @@ final class CategoryMinecraftResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -16730,7 +16730,7 @@ final class CategoryMinecraftResponseItems
             $data['canResellItemAfterPurchase'],
             $data['minecraftHasPaidLicense'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -16876,7 +16876,7 @@ final class CategoryHytaleResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
@@ -17274,7 +17274,7 @@ final class CategoryParamsResponse
     {
         return new self(
             isset($data['category']) && is_array($data['category']) ? CategoryParamsResponseCategory::fromArray($data['category']) : null,
-            isset($data['params']) && is_array($data['params']) ? array_map(static fn (array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
+            isset($data['params']) && is_array($data['params']) ? array_map(static fn(array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
             isset($data['base_params']) && is_array($data['base_params']) ? CategoryParamsResponseBaseParams::fromArray($data['base_params']) : null,
             isset($data['system_info']) && is_array($data['system_info']) ? CategoryParamsResponseSystemInfo::fromArray($data['system_info']) : null,
         );
@@ -17471,7 +17471,7 @@ final class CategoryGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['games']) && is_array($data['games']) ? array_map(static fn (array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
+            isset($data['games']) && is_array($data['games']) ? array_map(static fn(array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
             isset($data['system_info']) && is_array($data['system_info']) ? CategoryGamesResponseSystemInfo::fromArray($data['system_info']) : null,
         );
     }
@@ -17553,14 +17553,14 @@ final class ListUserResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ListUserResponseItems => ListUserResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ListUserResponseItems => ListUserResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): ListUserResponseStickyItems => ListUserResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): ListUserResponseStickyItems => ListUserResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListUserResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -17946,14 +17946,14 @@ final class ListOrdersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ListOrdersResponseItems => ListOrdersResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ListOrdersResponseItems => ListOrdersResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): ListOrdersResponseStickyItems => ListOrdersResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): ListOrdersResponseStickyItems => ListOrdersResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListOrdersResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -18726,14 +18726,14 @@ final class ListFavoritesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ListFavoritesResponseItems => ListFavoritesResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ListFavoritesResponseItems => ListFavoritesResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): ListFavoritesResponseStickyItems => ListFavoritesResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): ListFavoritesResponseStickyItems => ListFavoritesResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListFavoritesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -19119,14 +19119,14 @@ final class ListViewedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ListViewedResponseItems => ListViewedResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ListViewedResponseItems => ListViewedResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): ListViewedResponseStickyItems => ListViewedResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): ListViewedResponseStickyItems => ListViewedResponseStickyItems::fromArray($item), $data['stickyItems']),
             ListViewedResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -19739,7 +19739,7 @@ final class ManagingGetResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingGetResponseItemAccountLinks => ManagingGetResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingGetResponseItemAccountLinks => ManagingGetResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -19755,7 +19755,7 @@ final class ManagingGetResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingGetResponseItemExtraPrices => ManagingGetResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingGetResponseItemExtraPrices => ManagingGetResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingGetResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -20312,7 +20312,7 @@ final class ManagingCreateClaimResponseThreadFirstPost
             $data['signature_plain_text'],
             $data['post_like_count'],
             $data['post_attachment_count'],
-            array_map(static fn (array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), $data['like_users']),
+            array_map(static fn(array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), $data['like_users']),
             $data['user_is_ignored'],
             $data['post_is_published'],
             $data['post_is_deleted'],
@@ -20507,7 +20507,7 @@ final class ManagingCreateClaimResponseThreadForum
             $data['forum_description'],
             $data['forum_thread_count'],
             $data['forum_post_count'],
-            array_map(static fn (array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
+            array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), $data['forum_prefixes']),
             $data['thread_default_prefix_id'],
             $data['thread_prefix_is_required'],
             ManagingCreateClaimResponseThreadForumLinks::fromArray($data['links']),
@@ -20533,7 +20533,7 @@ final class ManagingCreateClaimResponseThreadForumForumPrefixes
     {
         return new self(
             $data['group_title'],
-            array_map(static fn (array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
+            array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']),
         );
     }
 }
@@ -20654,7 +20654,7 @@ final class ManagingBulkGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ManagingBulkGetResponseItems => ManagingBulkGetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): ManagingBulkGetResponseItems => ManagingBulkGetResponseItems::fromArray($item), $data['items']),
             $data['left_item_id'],
             ManagingBulkGetResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -20870,7 +20870,7 @@ final class ManagingBulkGetResponseItemsData0
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingBulkGetResponseItemsData0AccountLinks => ManagingBulkGetResponseItemsData0AccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingBulkGetResponseItemsData0AccountLinks => ManagingBulkGetResponseItemsData0AccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -20886,7 +20886,7 @@ final class ManagingBulkGetResponseItemsData0
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingBulkGetResponseItemsData0ExtraPrices => ManagingBulkGetResponseItemsData0ExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingBulkGetResponseItemsData0ExtraPrices => ManagingBulkGetResponseItemsData0ExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingBulkGetResponseItemsData0BumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -21997,7 +21997,7 @@ final class ManagingSteamUpdateValueResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingSteamUpdateValueResponseItemAccountLinks => ManagingSteamUpdateValueResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemAccountLinks => ManagingSteamUpdateValueResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -22013,7 +22013,7 @@ final class ManagingSteamUpdateValueResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingSteamUpdateValueResponseItemExtraPrices => ManagingSteamUpdateValueResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingSteamUpdateValueResponseItemExtraPrices => ManagingSteamUpdateValueResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamUpdateValueResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -22874,7 +22874,7 @@ final class ManagingEmailCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingEmailCodeResponseItemAccountLinks => ManagingEmailCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingEmailCodeResponseItemAccountLinks => ManagingEmailCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -22890,7 +22890,7 @@ final class ManagingEmailCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingEmailCodeResponseItemExtraPrices => ManagingEmailCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingEmailCodeResponseItemExtraPrices => ManagingEmailCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingEmailCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -23289,7 +23289,7 @@ final class ManagingGetLetters2Response
     {
         return new self(
             $data['email'],
-            array_map(static fn (array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']),
+            array_map(static fn(array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']),
             ManagingGetLetters2ResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -23666,7 +23666,7 @@ final class ManagingSteamAddMafileResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingSteamAddMafileResponseItemAccountLinks => ManagingSteamAddMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemAccountLinks => ManagingSteamAddMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -23682,7 +23682,7 @@ final class ManagingSteamAddMafileResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingSteamAddMafileResponseItemExtraPrices => ManagingSteamAddMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingSteamAddMafileResponseItemExtraPrices => ManagingSteamAddMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamAddMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -24279,7 +24279,7 @@ final class ManagingSteamRemoveMafileResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingSteamRemoveMafileResponseItemAccountLinks => ManagingSteamRemoveMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemAccountLinks => ManagingSteamRemoveMafileResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -24295,7 +24295,7 @@ final class ManagingSteamRemoveMafileResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingSteamRemoveMafileResponseItemExtraPrices => ManagingSteamRemoveMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingSteamRemoveMafileResponseItemExtraPrices => ManagingSteamRemoveMafileResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamRemoveMafileResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -24888,7 +24888,7 @@ final class ManagingSteamMafileCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingSteamMafileCodeResponseItemAccountLinks => ManagingSteamMafileCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemAccountLinks => ManagingSteamMafileCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -24904,7 +24904,7 @@ final class ManagingSteamMafileCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingSteamMafileCodeResponseItemExtraPrices => ManagingSteamMafileCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingSteamMafileCodeResponseItemExtraPrices => ManagingSteamMafileCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingSteamMafileCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -25542,7 +25542,7 @@ final class ManagingTelegramCodeResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): ManagingTelegramCodeResponseItemAccountLinks => ManagingTelegramCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): ManagingTelegramCodeResponseItemAccountLinks => ManagingTelegramCodeResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -25558,7 +25558,7 @@ final class ManagingTelegramCodeResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): ManagingTelegramCodeResponseItemExtraPrices => ManagingTelegramCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): ManagingTelegramCodeResponseItemExtraPrices => ManagingTelegramCodeResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             ManagingTelegramCodeResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -26725,7 +26725,7 @@ final class ProfileClaimsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']),
+            array_map(static fn(array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']),
             ProfileClaimsResponseStats::fromArray($data['stats']),
             ProfileClaimsResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -26821,7 +26821,7 @@ final class ProfileClaimsResponseClaimsAuthor
             $data['user_is_visitor'],
             $data['user_group_id'],
             $data['ban_reason'],
-            array_map(static fn (array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']),
         );
     }
 }
@@ -27110,7 +27110,7 @@ final class ProfileGetResponseUser
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn (array $item): ProfileGetResponseUserBalances => ProfileGetResponseUserBalances::fromArray($item), $data['balances']),
+            array_map(static fn(array $item): ProfileGetResponseUserBalances => ProfileGetResponseUserBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -27151,14 +27151,14 @@ final class ProfileGetResponseUser
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn (array $item): ProfileGetResponseUserPublicTags => ProfileGetResponseUserPublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn(array $item): ProfileGetResponseUserPublicTags => ProfileGetResponseUserPublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             ProfileGetResponseUserRendered::fromArray($data['rendered']),
             $data['restore_count'],
             ProfileGetResponseUserRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn (array $item): ProfileGetResponseUserTags => ProfileGetResponseUserTags::fromArray($item), $data['tags']),
+            array_map(static fn(array $item): ProfileGetResponseUserTags => ProfileGetResponseUserTags::fromArray($item), $data['tags']),
             ProfileGetResponseUserTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -27625,14 +27625,14 @@ final class CartGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CartGetResponseItems => CartGetResponseItems::fromArray($item), $data['items']),
+            array_map(static fn(array $item): CartGetResponseItems => CartGetResponseItems::fromArray($item), $data['items']),
             $data['totalItems'],
             $data['totalItemsPrice'],
             $data['hasNextPage'],
             $data['perPage'],
             $data['page'],
             $data['searchUrl'],
-            array_map(static fn (array $item): CartGetResponseStickyItems => CartGetResponseStickyItems::fromArray($item), $data['stickyItems']),
+            array_map(static fn(array $item): CartGetResponseStickyItems => CartGetResponseStickyItems::fromArray($item), $data['stickyItems']),
             CartGetResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -28255,7 +28255,7 @@ final class PurchasingFastBuyResponseItem
             $data['account_last_activity'],
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -28269,7 +28269,7 @@ final class PurchasingFastBuyResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PurchasingFastBuyResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -28769,7 +28769,7 @@ final class PurchasingCheckResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -28783,7 +28783,7 @@ final class PurchasingCheckResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PurchasingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -29157,7 +29157,7 @@ final class CustomDiscountsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CustomDiscountsGetResponseDiscounts => CustomDiscountsGetResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn(array $item): CustomDiscountsGetResponseDiscounts => CustomDiscountsGetResponseDiscounts::fromArray($item), $data['discounts']),
             $data['total'],
             CustomDiscountsGetResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -29309,7 +29309,7 @@ final class CustomDiscountsEditResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): CustomDiscountsEditResponseDiscounts => CustomDiscountsEditResponseDiscounts::fromArray($item), $data['discounts']),
+            array_map(static fn(array $item): CustomDiscountsEditResponseDiscounts => CustomDiscountsEditResponseDiscounts::fromArray($item), $data['discounts']),
             $data['total'],
             CustomDiscountsEditResponseSystemInfo::fromArray($data['system_info']),
         );
@@ -29627,7 +29627,7 @@ final class PublishingFastSellResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): PublishingFastSellResponseItemAccountLinks => PublishingFastSellResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): PublishingFastSellResponseItemAccountLinks => PublishingFastSellResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -29643,7 +29643,7 @@ final class PublishingFastSellResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): PublishingFastSellResponseItemExtraPrices => PublishingFastSellResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): PublishingFastSellResponseItemExtraPrices => PublishingFastSellResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingFastSellResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -30238,7 +30238,7 @@ final class PublishingAddResponseItem
             $data['isSmallExf'],
             $data['account_last_activity'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): PublishingAddResponseItemAccountLinks => PublishingAddResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): PublishingAddResponseItemAccountLinks => PublishingAddResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['imagePreviewLinks'],
             $data['canChangePassword'],
@@ -30254,7 +30254,7 @@ final class PublishingAddResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): PublishingAddResponseItemExtraPrices => PublishingAddResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): PublishingAddResponseItemExtraPrices => PublishingAddResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingAddResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -30810,7 +30810,7 @@ final class PublishingCheckResponseItem
             $data['account_last_activity'],
             $data['displayConvertedBalance'],
             $data['canViewAccountLink'],
-            array_map(static fn (array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
+            array_map(static fn(array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']),
             $data['accountLink'],
             $data['emailLoginUrl'],
             $data['canChangePassword'],
@@ -30824,7 +30824,7 @@ final class PublishingCheckResponseItem
             $data['isBirthdayToday'],
             $data['isIgnored'],
             $data['deposit'],
-            array_map(static fn (array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
+            array_map(static fn(array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']),
             $data['canViewAccountLoginAndTempEmail'],
             PublishingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']),
             $data['canCheckGuarantee'],
@@ -31385,7 +31385,7 @@ final class PaymentsInvoiceListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PaymentsInvoiceListResponseInvoices => PaymentsInvoiceListResponseInvoices::fromArray($item), $data['invoices']),
+            array_map(static fn(array $item): PaymentsInvoiceListResponseInvoices => PaymentsInvoiceListResponseInvoices::fromArray($item), $data['invoices']),
             $data['count'],
             $data['page'],
             $data['perPage'],
@@ -33362,7 +33362,7 @@ final class PaymentsBalanceListResponseToBalance
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn (array $item): PaymentsBalanceListResponseToBalanceBalances => PaymentsBalanceListResponseToBalanceBalances::fromArray($item), $data['balances']),
+            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceBalances => PaymentsBalanceListResponseToBalanceBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -33403,14 +33403,14 @@ final class PaymentsBalanceListResponseToBalance
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn (array $item): PaymentsBalanceListResponseToBalancePublicTags => PaymentsBalanceListResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn(array $item): PaymentsBalanceListResponseToBalancePublicTags => PaymentsBalanceListResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             PaymentsBalanceListResponseToBalanceRendered::fromArray($data['rendered']),
             $data['restore_count'],
             PaymentsBalanceListResponseToBalanceRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn (array $item): PaymentsBalanceListResponseToBalanceTags => PaymentsBalanceListResponseToBalanceTags::fromArray($item), $data['tags']),
+            array_map(static fn(array $item): PaymentsBalanceListResponseToBalanceTags => PaymentsBalanceListResponseToBalanceTags::fromArray($item), $data['tags']),
             PaymentsBalanceListResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -34020,7 +34020,7 @@ final class PaymentsBalanceExchangeResponseToBalance
             $data['activity_visible'],
             $data['age'],
             $data['balance'],
-            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalanceBalances => PaymentsBalanceExchangeResponseToBalanceBalances::fromArray($item), $data['balances']),
+            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceBalances => PaymentsBalanceExchangeResponseToBalanceBalances::fromArray($item), $data['balances']),
             $data['bump_item_period'],
             $data['can_edit'],
             $data['can_follow'],
@@ -34061,14 +34061,14 @@ final class PaymentsBalanceExchangeResponseToBalance
             $data['max_discount_percent'],
             $data['message_count'],
             $data['paid_mail_left'],
-            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalancePublicTags => PaymentsBalanceExchangeResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
+            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalancePublicTags => PaymentsBalanceExchangeResponseToBalancePublicTags::fromArray($item), $data['public_tags']),
             $data['register_date'],
             PaymentsBalanceExchangeResponseToBalanceRendered::fromArray($data['rendered']),
             $data['restore_count'],
             PaymentsBalanceExchangeResponseToBalanceRestoreData::fromArray($data['restore_data']),
             $data['short_link'],
             $data['sold_items_count'],
-            array_map(static fn (array $item): PaymentsBalanceExchangeResponseToBalanceTags => PaymentsBalanceExchangeResponseToBalanceTags::fromArray($item), $data['tags']),
+            array_map(static fn(array $item): PaymentsBalanceExchangeResponseToBalanceTags => PaymentsBalanceExchangeResponseToBalanceTags::fromArray($item), $data['tags']),
             PaymentsBalanceExchangeResponseToBalanceTelegramClient::fromArray($data['telegram_client']),
             $data['trophy_points'],
             $data['user_allow_ask_discount'],
@@ -34997,7 +34997,7 @@ final class PaymentsPayoutServicesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']),
+            array_map(static fn(array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']),
             PaymentsPayoutServicesResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -35583,7 +35583,7 @@ final class AutoPaymentsListResponsePaymentsData1234567890Receiver
             $data['user_is_ignored'],
             $data['user_is_visitor'],
             $data['user_group_id'],
-            array_map(static fn (array $item): AutoPaymentsListResponsePaymentsData1234567890ReceiverFields => AutoPaymentsListResponsePaymentsData1234567890ReceiverFields::fromArray($item), $data['fields']),
+            array_map(static fn(array $item): AutoPaymentsListResponsePaymentsData1234567890ReceiverFields => AutoPaymentsListResponsePaymentsData1234567890ReceiverFields::fromArray($item), $data['fields']),
         );
     }
 }
@@ -35804,7 +35804,7 @@ final class ProxyGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            array_map(static fn (array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']),
+            array_map(static fn(array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']),
             ProxyGetResponseSystemInfo::fromArray($data['system_info']),
         );
     }
@@ -36143,3 +36143,4 @@ final class BatchResponseSystemInfo
         );
     }
 }
+
