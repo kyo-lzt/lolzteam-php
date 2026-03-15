@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lolzteam\Runtime;
 
+use Lolzteam\Runtime\Errors\NetworkException;
 use Lolzteam\Runtime\Errors\RateLimitException;
 use Lolzteam\Runtime\Errors\ServerException;
 
@@ -14,8 +15,12 @@ final class Retry
      * @param callable(): T $fn
      * @return T
      */
-    public static function withRetry(callable $fn, RetryConfig $config): mixed
-    {
+    public static function withRetry(
+        callable $fn,
+        RetryConfig $config,
+        string $method = '',
+        string $path = '',
+    ): mixed {
         $lastException = null;
 
         for ($attempt = 0; $attempt <= $config->maxRetries; $attempt++) {
@@ -26,16 +31,28 @@ final class Retry
                 if ($attempt === $config->maxRetries) {
                     throw $e;
                 }
-                self::sleep($e, $attempt, $config);
+                $delayMs = self::computeDelay($e, $attempt, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
             } catch (ServerException $e) {
-                if (!in_array($e->statusCode, [502, 503], true)) {
+                if (!in_array($e->statusCode, [502, 503, 504], true)) {
                     throw $e;
                 }
                 $lastException = $e;
                 if ($attempt === $config->maxRetries) {
                     throw $e;
                 }
-                self::sleep(null, $attempt, $config);
+                $delayMs = self::computeDelay(null, $attempt, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
+            } catch (NetworkException $e) {
+                if (!$e->isTransient()) {
+                    throw $e;
+                }
+                $lastException = $e;
+                if ($attempt === $config->maxRetries) {
+                    throw $e;
+                }
+                $delayMs = self::computeDelay(null, $attempt, $config);
+                self::notifyAndSleep($delayMs, $attempt, $e, $method, $path, $config);
             }
         }
 
@@ -43,11 +60,11 @@ final class Retry
         throw $lastException;
     }
 
-    private static function sleep(
+    private static function computeDelay(
         ?RateLimitException $rateLimitException,
         int $attempt,
         RetryConfig $config,
-    ): void {
+    ): int {
         if ($rateLimitException?->retryAfter !== null) {
             $delayMs = $rateLimitException->retryAfter * 1000;
         } else {
@@ -56,7 +73,27 @@ final class Retry
             $delayMs += $jitter;
         }
 
-        $delayMs = min($delayMs, $config->maxDelayMs);
+        return min($delayMs, $config->maxDelayMs);
+    }
+
+    private static function notifyAndSleep(
+        int $delayMs,
+        int $attempt,
+        \Throwable $error,
+        string $method,
+        string $path,
+        RetryConfig $config,
+    ): void {
+        if ($config->onRetry !== null) {
+            ($config->onRetry)(new RetryInfo(
+                attempt: $attempt + 1,
+                delayMs: (float) $delayMs,
+                error: $error,
+                method: $method,
+                path: $path,
+            ));
+        }
+
         usleep($delayMs * 1000);
     }
 }

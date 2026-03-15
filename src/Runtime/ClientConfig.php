@@ -9,7 +9,7 @@ final class ClientConfig
     public readonly string $token;
     public readonly string $baseUrl;
     public readonly ?string $proxy;
-    public readonly RetryConfig $retry;
+    public readonly ?RetryConfig $retry;
     public readonly int $requestsPerMinute;
     public readonly ?int $searchRequestsPerMinute;
 
@@ -20,7 +20,7 @@ final class ClientConfig
         string $token,
         string $baseUrl,
         ?string $proxy = null,
-        RetryConfig $retry = new RetryConfig(),
+        ?RetryConfig $retry = new RetryConfig(),
         int $requestsPerMinute = 300,
         ?int $searchRequestsPerMinute = null,
         ?callable $handler = null,

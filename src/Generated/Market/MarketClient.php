@@ -24,7 +24,7 @@ final class CategoryApi
     public function all(array $params = []): Models\CategoryAllResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/', $params, null, 'form', isSearch: true);
 
         return Models\CategoryAllResponse::fromArray($data);
     }
@@ -36,7 +36,7 @@ final class CategoryApi
     public function steam(array $params = []): Models\CategorySteamResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/steam', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/steam', $params, null, 'form', isSearch: true);
 
         return Models\CategorySteamResponse::fromArray($data);
     }
@@ -48,7 +48,7 @@ final class CategoryApi
     public function fortnite(array $params = []): Models\CategoryFortniteResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/fortnite', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/fortnite', $params, null, 'form', isSearch: true);
 
         return Models\CategoryFortniteResponse::fromArray($data);
     }
@@ -60,7 +60,7 @@ final class CategoryApi
     public function mihoyo(array $params = []): Models\CategoryMihoyoResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/mihoyo', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/mihoyo', $params, null, 'form', isSearch: true);
 
         return Models\CategoryMihoyoResponse::fromArray($data);
     }
@@ -72,7 +72,7 @@ final class CategoryApi
     public function riot(array $params = []): Models\CategoryRiotResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/riot', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/riot', $params, null, 'form', isSearch: true);
 
         return Models\CategoryRiotResponse::fromArray($data);
     }
@@ -84,7 +84,7 @@ final class CategoryApi
     public function telegram(array $params = []): Models\CategoryTelegramResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/telegram', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/telegram', $params, null, 'form', isSearch: true);
 
         return Models\CategoryTelegramResponse::fromArray($data);
     }
@@ -96,7 +96,7 @@ final class CategoryApi
     public function supercell(array $params = []): Models\CategorySupercellResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/supercell', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/supercell', $params, null, 'form', isSearch: true);
 
         return Models\CategorySupercellResponse::fromArray($data);
     }
@@ -108,7 +108,7 @@ final class CategoryApi
     public function eA(array $params = []): Models\CategoryEAResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/ea', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/ea', $params, null, 'form', isSearch: true);
 
         return Models\CategoryEAResponse::fromArray($data);
     }
@@ -120,7 +120,7 @@ final class CategoryApi
     public function wot(array $params = []): Models\CategoryWotResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/world-of-tanks', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/world-of-tanks', $params, null, 'form', isSearch: true);
 
         return Models\CategoryWotResponse::fromArray($data);
     }
@@ -132,7 +132,7 @@ final class CategoryApi
     public function wotBlitz(array $params = []): Models\CategoryWotBlitzResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/wot-blitz', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/wot-blitz', $params, null, 'form', isSearch: true);
 
         return Models\CategoryWotBlitzResponse::fromArray($data);
     }
@@ -144,7 +144,7 @@ final class CategoryApi
     public function gifts(array $params = []): Models\CategoryGiftsResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/gifts', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/gifts', $params, null, 'form', isSearch: true);
 
         return Models\CategoryGiftsResponse::fromArray($data);
     }
@@ -156,7 +156,7 @@ final class CategoryApi
     public function epicGames(array $params = []): Models\CategoryEpicGamesResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/epicgames', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/epicgames', $params, null, 'form', isSearch: true);
 
         return Models\CategoryEpicGamesResponse::fromArray($data);
     }
@@ -168,7 +168,7 @@ final class CategoryApi
     public function escapeFromTarkov(array $params = []): Models\CategoryEscapeFromTarkovResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/escape-from-tarkov', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/escape-from-tarkov', $params, null, 'form', isSearch: true);
 
         return Models\CategoryEscapeFromTarkovResponse::fromArray($data);
     }
@@ -180,7 +180,7 @@ final class CategoryApi
     public function socialClub(array $params = []): Models\CategorySocialClubResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/socialclub', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/socialclub', $params, null, 'form', isSearch: true);
 
         return Models\CategorySocialClubResponse::fromArray($data);
     }
@@ -192,7 +192,7 @@ final class CategoryApi
     public function uplay(array $params = []): Models\CategoryUplayResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/uplay', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/uplay', $params, null, 'form', isSearch: true);
 
         return Models\CategoryUplayResponse::fromArray($data);
     }
@@ -204,7 +204,7 @@ final class CategoryApi
     public function discord(array $params = []): Models\CategoryDiscordResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/discord', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/discord', $params, null, 'form', isSearch: true);
 
         return Models\CategoryDiscordResponse::fromArray($data);
     }
@@ -216,7 +216,7 @@ final class CategoryApi
     public function tikTok(array $params = []): Models\CategoryTikTokResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/tiktok', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/tiktok', $params, null, 'form', isSearch: true);
 
         return Models\CategoryTikTokResponse::fromArray($data);
     }
@@ -228,7 +228,7 @@ final class CategoryApi
     public function instagram(array $params = []): Models\CategoryInstagramResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/instagram', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/instagram', $params, null, 'form', isSearch: true);
 
         return Models\CategoryInstagramResponse::fromArray($data);
     }
@@ -240,7 +240,7 @@ final class CategoryApi
     public function battleNet(array $params = []): Models\CategoryBattleNetResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/battlenet', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/battlenet', $params, null, 'form', isSearch: true);
 
         return Models\CategoryBattleNetResponse::fromArray($data);
     }
@@ -252,7 +252,7 @@ final class CategoryApi
     public function chatGPT(array $params = []): Models\CategoryChatGPTResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/chatgpt', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/chatgpt', $params, null, 'form', isSearch: true);
 
         return Models\CategoryChatGPTResponse::fromArray($data);
     }
@@ -264,7 +264,7 @@ final class CategoryApi
     public function vpn(array $params = []): Models\CategoryVpnResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/vpn', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/vpn', $params, null, 'form', isSearch: true);
 
         return Models\CategoryVpnResponse::fromArray($data);
     }
@@ -276,7 +276,7 @@ final class CategoryApi
     public function roblox(array $params = []): Models\CategoryRobloxResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/roblox', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/roblox', $params, null, 'form', isSearch: true);
 
         return Models\CategoryRobloxResponse::fromArray($data);
     }
@@ -288,7 +288,7 @@ final class CategoryApi
     public function warface(array $params = []): Models\CategoryWarfaceResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/warface', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/warface', $params, null, 'form', isSearch: true);
 
         return Models\CategoryWarfaceResponse::fromArray($data);
     }
@@ -300,7 +300,7 @@ final class CategoryApi
     public function minecraft(array $params = []): Models\CategoryMinecraftResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/minecraft', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/minecraft', $params, null, 'form', isSearch: true);
 
         return Models\CategoryMinecraftResponse::fromArray($data);
     }
@@ -312,7 +312,7 @@ final class CategoryApi
     public function hytale(array $params = []): Models\CategoryHytaleResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/hytale', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/hytale', $params, null, 'form', isSearch: true);
 
         return Models\CategoryHytaleResponse::fromArray($data);
     }
@@ -324,7 +324,7 @@ final class CategoryApi
     public function getList(array $params = []): Models\CategoryListResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', '/category', $params, null, 'form', true);
+        $data = $this->http->request('GET', '/category', $params, null, 'form', isSearch: true);
 
         return Models\CategoryListResponse::fromArray($data);
     }
@@ -336,7 +336,7 @@ final class CategoryApi
     public function params(string $categoryName): Models\CategoryParamsResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', "/{$categoryName}/params", [], null, 'form', true);
+        $data = $this->http->request('GET', "/{$categoryName}/params", [], null, 'form', isSearch: true);
 
         return Models\CategoryParamsResponse::fromArray($data);
     }
@@ -348,7 +348,7 @@ final class CategoryApi
     public function games(string $categoryName): Models\CategoryGamesResponse
     {
         /** @var array<string, mixed> $data */
-        $data = $this->http->request('GET', "/{$categoryName}/games", [], null, 'form', true);
+        $data = $this->http->request('GET', "/{$categoryName}/games", [], null, 'form', isSearch: true);
 
         return Models\CategoryGamesResponse::fromArray($data);
     }

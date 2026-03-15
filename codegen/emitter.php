@@ -200,10 +200,10 @@ function emitMethod(array $method, bool $isSearch = false): string
         if ($bodyEncoding === 'form' && count($requestArgs) < 5) {
             $requestArgs[] = "'form'";
         }
-        $requestArgs[] = 'true';
+        $requestArgs[] = 'isSearch: true';
     }
 
-    // Trim trailing default arguments
+    // Trim trailing default arguments (but never trim named args like isSearch: true)
     while (count($requestArgs) > 2) {
         $last = $requestArgs[count($requestArgs) - 1];
         if ($last === 'null' || $last === '[]' || $last === "'form'") {

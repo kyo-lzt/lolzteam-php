@@ -15,7 +15,7 @@ final class HttpClient
     private Client $guzzle;
     private RateLimiter $rateLimiter;
     private ?RateLimiter $searchRateLimiter;
-    private RetryConfig $retryConfig;
+    private ?RetryConfig $retryConfig;
 
     public function __construct(ClientConfig $config)
     {
@@ -61,10 +61,18 @@ final class HttpClient
         string $bodyEncoding = 'form',
         bool $isSearch = false,
     ): array|string {
-        /** @var array<string, mixed> */
-        return Retry::withRetry(function () use ($method, $path, $query, $body, $bodyEncoding, $isSearch): array {
+        if ($this->retryConfig === null) {
+            /** @var array<string, mixed> */
             return $this->doRequest($method, $path, $query, $body, $bodyEncoding, $isSearch);
-        }, $this->retryConfig);
+        }
+
+        /** @var array<string, mixed> */
+        return Retry::withRetry(
+            fn (): array => $this->doRequest($method, $path, $query, $body, $bodyEncoding, $isSearch),
+            $this->retryConfig,
+            $method,
+            $path,
+        );
     }
 
     /**

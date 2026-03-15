@@ -77,12 +77,25 @@ Failed requests are retried automatically for transient errors. The delay uses e
 | Status | Retried | Behavior |
 |--------|---------|----------|
 | 429 | Yes | Uses `Retry-After` header if present |
-| 502, 503 | Yes | Exponential backoff with jitter |
+| 502, 503, 504 | Yes | Exponential backoff with jitter |
+| Network errors | Yes | Timeout and connection errors |
 | 401, 403 | No | Thrown immediately |
 | 404 | No | Thrown immediately |
-| Other | No | Thrown immediately |
 
 Delay formula: `min(baseDelayMs * 2^attempt + random(0, baseDelayMs), maxDelayMs)`
+
+```php
+// Disable retry
+$client = new ForumClient(token: '...', retry: null);
+
+// onRetry callback
+$client = new ForumClient(
+    token: '...',
+    retry: new RetryConfig(onRetry: function (RetryInfo $info) {
+        echo "Retry #{$info->attempt}\n";
+    }),
+);
+```
 
 ## Proxy
 
@@ -143,6 +156,14 @@ The built-in rate limiter uses a token bucket algorithm. When the bucket is empt
 |--------|---------------|
 | Forum  | 300 req/min   |
 | Market | 120 req/min   |
+| Market (search) | 20 req/min |
+
+```php
+$client = new MarketClient(
+    token: '...',
+    searchRateLimit: new RateLimitConfig(requestsPerMinute: 30),
+);
+```
 
 ## Code Generation
 
