@@ -81,7 +81,7 @@ final class Retry
             $delayMs = $rateLimitException->retryAfter * 1000;
         } else {
             $delayMs = (int) ($config->baseDelayMs * (2 ** $attempt));
-            $jitter = random_int(0, max(1, (int) ($delayMs * 0.25)));
+            $jitter = random_int(0, max(1, (int) $config->baseDelayMs));
             $delayMs += $jitter;
         }
 

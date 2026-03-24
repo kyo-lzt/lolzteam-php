@@ -600,18 +600,21 @@ function emitCombinedFile(
     $lines[] = '        }';
     $lines[] = "        \$defaultRateLimit = new RateLimitConfig(";
     $lines[] = "            requestsPerMinute: \$config->rateLimit?->requestsPerMinute ?? {$defaultRateLimit},";
-    if ($defaultSearchRateLimit !== null) {
-        $lines[] = "            searchRequestsPerMinute: \$config->rateLimit?->searchRequestsPerMinute ?? {$defaultSearchRateLimit},";
-    } else {
-        $lines[] = '            searchRequestsPerMinute: $config->rateLimit?->searchRequestsPerMinute,';
-    }
     $lines[] = '        );';
+    if ($defaultSearchRateLimit !== null) {
+        $lines[] = "        \$defaultSearchRateLimit = \$config->searchRateLimit ?? new RateLimitConfig(";
+        $lines[] = "            requestsPerMinute: {$defaultSearchRateLimit},";
+        $lines[] = '        );';
+    } else {
+        $lines[] = '        $defaultSearchRateLimit = $config->searchRateLimit;';
+    }
     $lines[] = "        \$resolvedConfig = new ClientConfig(";
     $lines[] = '            token: $config->token,';
     $lines[] = "            baseUrl: \$config->baseUrl !== '' ? \$config->baseUrl : '{$defaultBaseUrl}',";
     $lines[] = '            proxy: $config->proxy,';
     $lines[] = '            retry: $config->retry ?? new RetryConfig(),';
     $lines[] = '            rateLimit: $defaultRateLimit,';
+    $lines[] = '            searchRateLimit: $defaultSearchRateLimit,';
     $lines[] = '            onRetry: $config->onRetry,';
     $lines[] = '            timeout: $config->timeout,';
     $lines[] = '        );';

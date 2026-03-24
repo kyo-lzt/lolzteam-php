@@ -1606,7 +1606,9 @@ final class MarketClient
         }
         $defaultRateLimit = new RateLimitConfig(
             requestsPerMinute: $config->rateLimit?->requestsPerMinute ?? 120,
-            searchRequestsPerMinute: $config->rateLimit?->searchRequestsPerMinute ?? 20,
+        );
+        $defaultSearchRateLimit = $config->searchRateLimit ?? new RateLimitConfig(
+            requestsPerMinute: 20,
         );
         $resolvedConfig = new ClientConfig(
             token: $config->token,
@@ -1614,6 +1616,7 @@ final class MarketClient
             proxy: $config->proxy,
             retry: $config->retry ?? new RetryConfig(),
             rateLimit: $defaultRateLimit,
+            searchRateLimit: $defaultSearchRateLimit,
             onRetry: $config->onRetry,
             timeout: $config->timeout,
         );

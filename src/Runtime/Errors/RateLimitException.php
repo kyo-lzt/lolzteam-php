@@ -26,8 +26,13 @@ class RateLimitException extends HttpException
             $retryAfterRaw = $retryAfterRaw[0] ?? null;
         }
 
-        $this->retryAfter = is_numeric($retryAfterRaw)
-            ? (int) $retryAfterRaw
-            : null;
+        if (is_numeric($retryAfterRaw)) {
+            $this->retryAfter = (int) $retryAfterRaw;
+        } elseif (is_string($retryAfterRaw)) {
+            $time = strtotime($retryAfterRaw);
+            $this->retryAfter = $time !== false ? max(0, $time - time()) : null;
+        } else {
+            $this->retryAfter = null;
+        }
     }
 }

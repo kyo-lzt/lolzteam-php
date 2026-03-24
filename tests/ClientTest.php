@@ -279,15 +279,13 @@ final class ClientTest extends TestCase
         $config = new RateLimitConfig();
 
         $this->assertSame(300, $config->requestsPerMinute);
-        $this->assertNull($config->searchRequestsPerMinute);
     }
 
     public function testRateLimitConfigCustomValues(): void
     {
-        $config = new RateLimitConfig(requestsPerMinute: 120, searchRequestsPerMinute: 20);
+        $config = new RateLimitConfig(requestsPerMinute: 120);
 
         $this->assertSame(120, $config->requestsPerMinute);
-        $this->assertSame(20, $config->searchRequestsPerMinute);
     }
 
     public function testRateLimitConfigRejectsZeroRequestsPerMinute(): void
@@ -295,13 +293,6 @@ final class ClientTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('requestsPerMinute must be >= 1');
         new RateLimitConfig(requestsPerMinute: 0);
-    }
-
-    public function testRateLimitConfigRejectsZeroSearchRequestsPerMinute(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('searchRequestsPerMinute must be >= 1');
-        new RateLimitConfig(searchRequestsPerMinute: 0);
     }
 
     // ── ClientConfig ────────────────────────────────────────────────
@@ -427,9 +418,17 @@ final class ClientTest extends TestCase
         $this->assertNull($e->retryAfter);
     }
 
-    public function testRateLimitExceptionRetryAfterNullWhenNonNumeric(): void
+    public function testRateLimitExceptionRetryAfterParsesHttpDate(): void
     {
         $e = new RateLimitException(429, null, ['Retry-After' => 'Wed, 21 Oct 2025 07:28:00 GMT']);
+
+        // Date is in the past, so max(0, ...) clamps to 0
+        $this->assertSame(0, $e->retryAfter);
+    }
+
+    public function testRateLimitExceptionRetryAfterNullWhenUnparseable(): void
+    {
+        $e = new RateLimitException(429, null, ['Retry-After' => 'not-a-date-or-number']);
 
         $this->assertNull($e->retryAfter);
     }

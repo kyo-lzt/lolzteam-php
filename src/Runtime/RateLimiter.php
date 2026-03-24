@@ -12,6 +12,10 @@ final class RateLimiter
 
     public function __construct(int $requestsPerMinute)
     {
+        if ($requestsPerMinute <= 0) {
+            throw new Errors\ConfigException('requestsPerMinute must be greater than 0');
+        }
+
         $this->maxTokens = $requestsPerMinute;
         $this->tokens = (float) $requestsPerMinute;
         $this->lastRefillTime = microtime(true);

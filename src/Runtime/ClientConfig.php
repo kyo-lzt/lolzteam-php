@@ -11,6 +11,7 @@ final class ClientConfig
     public readonly ?ProxyConfig $proxy;
     public readonly ?RetryConfig $retry;
     public readonly ?RateLimitConfig $rateLimit;
+    public readonly ?RateLimitConfig $searchRateLimit;
     public readonly int $timeout;
 
     /** @var (\Closure(RetryInfo): void)|null */
@@ -28,6 +29,7 @@ final class ClientConfig
         ?ProxyConfig $proxy = null,
         ?RetryConfig $retry = new RetryConfig(),
         ?RateLimitConfig $rateLimit = null,
+        ?RateLimitConfig $searchRateLimit = null,
         ?\Closure $onRetry = null,
         ?callable $handler = null,
         int $timeout = 30,
@@ -43,6 +45,7 @@ final class ClientConfig
         $this->proxy = $proxy;
         $this->retry = $retry;
         $this->rateLimit = $rateLimit;
+        $this->searchRateLimit = $searchRateLimit;
         $this->onRetry = $onRetry;
         $this->timeout = $timeout;
         $this->handler = $handler;

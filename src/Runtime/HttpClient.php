@@ -25,10 +25,9 @@ final class HttpClient
         $this->retryConfig = $config->retry;
         $this->onRetry = $config->onRetry;
 
-        $rateLimit = $config->rateLimit;
-        $this->rateLimiter = new RateLimiter($rateLimit?->requestsPerMinute ?? 300);
-        $this->searchRateLimiter = $rateLimit?->searchRequestsPerMinute !== null
-            ? new RateLimiter($rateLimit->searchRequestsPerMinute)
+        $this->rateLimiter = new RateLimiter($config->rateLimit?->requestsPerMinute ?? 300);
+        $this->searchRateLimiter = $config->searchRateLimit !== null
+            ? new RateLimiter($config->searchRateLimit->requestsPerMinute)
             : null;
 
         /** @var array<string, mixed> $guzzleConfig */
@@ -108,6 +107,9 @@ final class HttpClient
             $options[RequestOptions::QUERY] = self::resolveEnumValues($query);
         }
 
+        /** @var resource[] $openedStreams */
+        $openedStreams = [];
+
         if ($body !== null) {
             $resolvedBody = self::resolveEnumValues($body);
             switch ($bodyEncoding) {
@@ -121,6 +123,7 @@ final class HttpClient
                             $stream = fopen('php://memory', 'r+');
                             fwrite($stream, $value);
                             rewind($stream);
+                            $openedStreams[] = $stream;
                             $contents = $stream;
                         } else {
                             $contents = $value;
@@ -141,6 +144,10 @@ final class HttpClient
             $response = $this->guzzle->request($method, ltrim($path, '/'), $options);
         } catch (ConnectException $e) {
             throw new NetworkException($e->getMessage(), 0, $e);
+        } finally {
+            foreach ($openedStreams as $stream) {
+                fclose($stream);
+            }
         }
 
         $statusCode = $response->getStatusCode();

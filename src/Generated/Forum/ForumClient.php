@@ -2194,14 +2194,15 @@ final class ForumClient
         }
         $defaultRateLimit = new RateLimitConfig(
             requestsPerMinute: $config->rateLimit?->requestsPerMinute ?? 300,
-            searchRequestsPerMinute: $config->rateLimit?->searchRequestsPerMinute,
         );
+        $defaultSearchRateLimit = $config->searchRateLimit;
         $resolvedConfig = new ClientConfig(
             token: $config->token,
             baseUrl: $config->baseUrl !== '' ? $config->baseUrl : 'https://prod-api.lolz.live',
             proxy: $config->proxy,
             retry: $config->retry ?? new RetryConfig(),
             rateLimit: $defaultRateLimit,
+            searchRateLimit: $defaultSearchRateLimit,
             onRetry: $config->onRetry,
             timeout: $config->timeout,
         );
