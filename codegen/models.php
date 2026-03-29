@@ -120,6 +120,11 @@ function collectModels(array $schema, array $spec, string $className, array $com
         return [];
     }
 
+    // Schemas with all-numeric property keys are dynamic maps, not structured objects
+    if (hasAllNumericKeys($resolved)) {
+        return [];
+    }
+
     // Use the schema with __component_ref markers for property traversal
     $markedProps = $schema['properties'] ?? $props;
     if (!is_array($markedProps)) {
@@ -334,8 +339,8 @@ function buildPropertyDef(
         $items = $schema['items'] ?? null;
         if (is_array($items)) {
             $itemResolved = resolveSchemaFully($items, $spec);
-            // If items are objects, create nested model
-            if ($itemResolved !== null && hasObjectProperties($itemResolved)) {
+            // If items are objects, create nested model (skip dynamic maps with numeric keys)
+            if ($itemResolved !== null && hasObjectProperties($itemResolved) && !hasAllNumericKeys($itemResolved)) {
                 $nestedName = $parentClassName . propertyToClassName($propName);
                 $nestedModels = collectModels($itemResolved, $spec, $nestedName, $componentSchemas);
                 foreach ($nestedModels as $nm) {
@@ -371,9 +376,9 @@ function buildPropertyDef(
         ];
     }
 
-    // Object with properties -> nested model
+    // Object with properties -> nested model (unless all keys are numeric = dynamic map)
     if ($type === 'object' || hasObjectProperties($schema)) {
-        if (hasObjectProperties($schema)) {
+        if (hasObjectProperties($schema) && !hasAllNumericKeys($schema)) {
             $nestedName = $parentClassName . propertyToClassName($propName);
             $nestedModels = collectModels($schema, $spec, $nestedName, $componentSchemas);
             foreach ($nestedModels as $nm) {
@@ -433,6 +438,7 @@ function hasObjectProperties(array $schema): bool
 {
     return isset($schema['properties']) && is_array($schema['properties']) && count($schema['properties']) > 0;
 }
+
 
 /**
  * Convert a property name to a class name segment.
@@ -523,7 +529,9 @@ function emitSingleModelClass(array $model, string $namespace): string
 
         // Build nullable type hint: use ?Type for simple types, Type|null for unions
         if ($prop['isNullable']) {
-            if (str_contains($typeHint, '|')) {
+            if ($typeHint === 'mixed') {
+                // mixed already includes null in PHP 8
+            } elseif (str_contains($typeHint, '|')) {
                 $typeHint = $typeHint . '|null';
             } else {
                 $typeHint = '?' . $typeHint;
@@ -605,28 +613,46 @@ function emitFromArrayArg(array $prop, string $key, string $namespace): string
     $access = "\$data['{$key}']";
     $nullAccess = "\$data['{$key}'] ?? null";
 
-    // Nested model (not array)
+    // Nested model (not array) — always guard with isset for safety
     if ($prop['nestedModel'] !== null && !$prop['isArray']) {
         if ($prop['isNullable']) {
             return "isset({$access}) && is_array({$access}) ? {$prop['nestedModel']}::fromArray({$access}) : null";
         }
-        return "{$prop['nestedModel']}::fromArray({$access})";
+        return "isset({$access}) && is_array({$access}) ? {$prop['nestedModel']}::fromArray({$access}) : {$prop['nestedModel']}::fromArray([])";
     }
 
-    // Array of nested models
+    // Array of nested models — always guard with isset
     if ($prop['isArray'] && $prop['nestedModel'] !== null) {
         if ($prop['isNullable']) {
             return "isset({$access}) && is_array({$access}) ? array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access}) : null";
         }
-        return "array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access})";
+        return "isset({$access}) && is_array({$access}) ? array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access}) : []";
     }
 
-    // Simple nullable
+    // Nullable primitive fields: coerce to the expected type or null on mismatch
     if ($prop['isNullable']) {
-        return $nullAccess;
+        $phpType = $prop['phpType'];
+        return match ($phpType) {
+            'int' => "isset({$access}) && is_scalar({$access}) ? (int) {$access} : null",
+            'float' => "isset({$access}) && is_scalar({$access}) ? (float) {$access} : null",
+            'string' => "isset({$access}) ? (is_scalar({$access}) ? (string) {$access} : (is_array({$access}) ? json_encode({$access}, JSON_UNESCAPED_UNICODE) : null)) : null",
+            'bool' => "isset({$access}) && is_scalar({$access}) ? (bool) {$access} : null",
+            'array' => "isset({$access}) && is_array({$access}) ? {$access} : null",
+            default => $nullAccess,
+        };
     }
 
-    return $access;
+    // Provide zero-value defaults for required primitive types, with safe coercion
+    $phpType = $prop['phpType'];
+    $val = "({$nullAccess})";
+    return match ($phpType) {
+        'int' => "(is_scalar({$val}) ? (int) {$val} : 0)",
+        'float' => "(is_scalar({$val}) ? (float) {$val} : 0.0)",
+        'string' => "(is_scalar({$val}) ? (string) {$val} : (is_array({$val}) ? json_encode({$val}, JSON_UNESCAPED_UNICODE) : ''))",
+        'bool' => "(is_scalar({$val}) ? (bool) {$val} : false)",
+        'array' => "{$access} ?? []",
+        default => $nullAccess,
+    };
 }
 
 // ─── Full Models File Emission ──────────────────────────────────────────────

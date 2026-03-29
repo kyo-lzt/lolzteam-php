@@ -47,6 +47,12 @@ function extractParameters(array $operation, array $spec): array
             'required' => (bool) ($param['required'] ?? false),
         ];
 
+        // Carry parameter description
+        $paramDesc = $param['description'] ?? null;
+        if (is_string($paramDesc) && $paramDesc !== '') {
+            $parsed['description'] = $paramDesc;
+        }
+
         // Carry enum values through for enum generation
         if ($paramSchema !== null && isset($paramSchema['enum']) && is_array($paramSchema['enum'])) {
             $parsed['enum'] = $paramSchema['enum'];
@@ -192,6 +198,13 @@ function extractBodyProperties(array $operation, array $spec): array
             if (array_key_exists('default', $mergedSchema)) {
                 $bodyProp['default'] = $mergedSchema['default'];
             }
+            // Use description from first variant schema that has one
+            foreach ($propSchemas as $ps) {
+                if (isset($ps['description']) && is_string($ps['description']) && $ps['description'] !== '') {
+                    $bodyProp['description'] = $ps['description'];
+                    break;
+                }
+            }
             $bodyProperties[] = $bodyProp;
         }
     } elseif (isset($schema['properties']) && is_array($schema['properties'])) {
@@ -212,6 +225,9 @@ function extractBodyProperties(array $operation, array $spec): array
             }
             if (is_array($propSchema) && array_key_exists('default', $propSchema)) {
                 $bodyProp['default'] = $propSchema['default'];
+            }
+            if (is_array($propSchema) && isset($propSchema['description']) && is_string($propSchema['description']) && $propSchema['description'] !== '') {
+                $bodyProp['description'] = $propSchema['description'];
             }
             $bodyProperties[] = $bodyProp;
         }
@@ -556,7 +572,7 @@ function parseSpec(array $rawSpec): array
                 continue;
             }
             $resolved = resolveSchemaFully(deref($schema, $rawSpec), $specFullTemp);
-            if ($resolved !== null && hasObjectProperties($resolved)) {
+            if ($resolved !== null && hasObjectProperties($resolved) && !hasAllNumericKeys($resolved)) {
                 $componentSchemas[(string) $name] = $resolved;
                 // Also resolve with markers preserved
                 $marked = derefPreservingComponents($schema, $rawSpec);
@@ -643,6 +659,9 @@ function parseSpec(array $rawSpec): array
                     if (array_key_exists('default', $bodyProp)) {
                         $qp['default'] = $bodyProp['default'];
                     }
+                    if (isset($bodyProp['description'])) {
+                        $qp['description'] = $bodyProp['description'];
+                    }
                     $params['queryParams'][] = $qp;
                 }
                 $bodyProperties = [];
@@ -670,6 +689,12 @@ function parseSpec(array $rawSpec): array
                 }
             }
 
+            // Extract operation summary and description
+            $opSummary = isset($operation['summary']) && is_string($operation['summary']) && $operation['summary'] !== ''
+                ? $operation['summary'] : null;
+            $opDescription = isset($operation['description']) && is_string($operation['description']) && $operation['description'] !== ''
+                ? $operation['description'] : null;
+
             $methodDef = [
                 'operationId' => $operationId,
                 'methodName' => $methodName,
@@ -688,6 +713,8 @@ function parseSpec(array $rawSpec): array
                 'responseModelClass' => $responseModelClass,
                 'responseModels' => $responseModels,
                 'oneOfVariants' => $oneOfVariants,
+                'summary' => $opSummary,
+                'description' => $opDescription,
             ];
 
             $groupMap[$group][] = $methodDef;

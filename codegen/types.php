@@ -9,6 +9,31 @@ declare(strict_types=1);
 require_once __DIR__ . '/deref.php';
 
 /**
+ * Check if ALL property names in a schema are numeric (e.g. "97491", "206").
+ * Such schemas represent dynamic maps, not structured objects — emit as mixed.
+ *
+ * @param array<string, mixed> $schema
+ */
+function hasAllNumericKeys(array $schema): bool
+{
+    $props = $schema['properties'] ?? null;
+    if (!is_array($props) || count($props) === 0) {
+        return false;
+    }
+    foreach (array_keys($props) as $key) {
+        // PHP coerces numeric string keys to int, so check for both int and numeric string
+        if (is_int($key)) {
+            continue;
+        }
+        if (is_string($key) && preg_match('/^\d+$/', $key) === 1) {
+            continue;
+        }
+        return false;
+    }
+    return true;
+}
+
+/**
  * Map a single OpenAPI type string to a PHP type.
  */
 function primitivePhpType(string $type): string
@@ -146,6 +171,11 @@ function objectPhpType(array $schema, array $spec, int $indent): string
             $valType = schemaToPhpType($additionalProps, $spec, $indent);
             return "array<string, {$valType}>";
         }
+        return 'array<string, mixed>';
+    }
+
+    // All-numeric property keys → dynamic map, not a structured shape
+    if (hasAllNumericKeys($schema)) {
         return 'array<string, mixed>';
     }
 

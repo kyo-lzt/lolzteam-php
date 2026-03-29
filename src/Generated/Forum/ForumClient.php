@@ -160,6 +160,16 @@ final class OAuthApi
     }
 
     /**
+     * Get Access Token
+     *
+     * Obtain an access token using various grant types.
+     *
+     * Supports the following grant types:
+     * - Client Credentials
+     * - Authorization Code
+     * - Refresh Token
+     * - Password
+     *
      * @param OAuthTokenClientCredentials|OAuthTokenAuthorizationCode|OAuthTokenRefreshToken|OAuthTokenPassword $body
      * @return Models\OAuthTokenResponse
      */
@@ -180,6 +190,12 @@ final class AssetsApi
     }
 
     /**
+     * Get CSS
+     *
+     * Gets css rulesets for requested selectors.
+     *
+     * - **css**: The names or identifiers of the CSS selectors to retrieve.
+     *
      * @param array{css?: list<string>} $params
      * @return Models\AssetsCssResponse
      */
@@ -200,6 +216,17 @@ final class CategoriesApi
     }
 
     /**
+     * Get Categories
+     *
+     * List of all categories in the system.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **parent_category_id**: Id of parent category. If exists, filter categories that are direct children of that category.
+     * - **parent_forum_id**: Id of parent forum. If exists, filter categories that are direct children of that forum.
+     * - **order**: Ordering of categories.
+     *
      * @param array{parent_category_id?: int, parent_forum_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\CategoriesListResponse
      */
@@ -212,7 +239,14 @@ final class CategoriesApi
     }
 
     /**
-     * @param int $category_id
+     * Get Category
+     *
+     * Detail information of a category.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $category_id Id of category.
      * @return Models\CategoriesGetResponse
      */
     public function get(int $category_id): Models\CategoriesGetResponse
@@ -232,6 +266,17 @@ final class ForumsApi
     }
 
     /**
+     * Get Forums
+     *
+     * List of all forums in the system.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **parent_category_id**: Id of parent category. If exists, filter forums that are direct children of that category.
+     * - **parent_forum_id**: Id of parent forum. If exists, filter forums that are direct children of that forum.
+     * - **order**: Ordering of forums.
+     *
      * @param array{parent_category_id?: int, parent_forum_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\ForumsListResponse
      */
@@ -244,6 +289,13 @@ final class ForumsApi
     }
 
     /**
+     * Get Forums Tree
+     *
+     * Returns grouped forums.
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\ForumsGroupedResponse
      */
     public function grouped(): Models\ForumsGroupedResponse
@@ -255,7 +307,14 @@ final class ForumsApi
     }
 
     /**
-     * @param int $forum_id
+     * Get Forum
+     *
+     * Detail information of a forum.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $forum_id Id of forum.
      * @return Models\ForumsGetResponse
      */
     public function get(int $forum_id): Models\ForumsGetResponse
@@ -267,7 +326,14 @@ final class ForumsApi
     }
 
     /**
-     * @param int $forum_id
+     * Get Followers
+     *
+     * List of a forum's followers. For privacy reason, only the current user will be included in the list (if the user follows the specified forum).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $forum_id Id of forum.
      * @return Models\ForumsFollowersResponse
      */
     public function followers(int $forum_id): Models\ForumsFollowersResponse
@@ -279,7 +345,20 @@ final class ForumsApi
     }
 
     /**
-     * @param int $forum_id
+     * Follow Forum
+     *
+     * Follow a forum.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post**: Whether to receive notification for post.
+     * - **alert**: Whether to receive notification as alert.
+     * - **email**: Whether to receive notification as email.
+     * - **prefix_ids**: Prefix ids.
+     * - **minimal_contest_amount**: Minimal contest amount. (Only for 766 forumId)
+     *
+     * @param int $forum_id Id of forum.
      * @param array{post?: bool, alert?: bool, email?: bool, prefix_ids?: list<int>, minimal_contest_amount?: int} $body
      * @return Models\ForumsFollowResponse
      */
@@ -292,7 +371,14 @@ final class ForumsApi
     }
 
     /**
-     * @param int $forum_id
+     * Unfollow Forum
+     *
+     * Unfollow a forum.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $forum_id Id of forum.
      * @return Models\ForumsUnfollowResponse
      */
     public function unfollow(int $forum_id): Models\ForumsUnfollowResponse
@@ -304,6 +390,15 @@ final class ForumsApi
     }
 
     /**
+     * Get Followed Forums
+     *
+     * List of followed forums by current user.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **total**: If included in the request, only the forum count is returned as **forums_total**.
+     *
      * @param array{total?: bool} $params
      * @return Models\ForumsFollowedResponse
      */
@@ -316,6 +411,13 @@ final class ForumsApi
     }
 
     /**
+     * Get Feed Options
+     *
+     * Returns available options for the forums feed.
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\ForumsGetFeedOptionsResponse
      */
     public function getFeedOptions(): Models\ForumsGetFeedOptionsResponse
@@ -327,6 +429,16 @@ final class ForumsApi
     }
 
     /**
+     * Edit Feed Options
+     *
+     * Edit feed options.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **node_ids**: Array of forum ids to exclude from the feed.
+     * - **keywords**: List of keywords to exclude specific threads from the feed.
+     *
      * @param array{node_ids?: list<int>, keywords?: list<string>} $body
      * @return Models\ForumsEditFeedOptionsResponse
      */
@@ -347,6 +459,13 @@ final class LinksApi
     }
 
     /**
+     * Get Links Forum
+     *
+     * List of all link forums.
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\LinksListResponse
      */
     public function getList(): Models\LinksListResponse
@@ -358,7 +477,14 @@ final class LinksApi
     }
 
     /**
-     * @param int $link_id
+     * Get Link Forum
+     *
+     * Detail information of a link forum.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $link_id Id of link forum.
      * @return Models\LinksGetResponse
      */
     public function get(int $link_id): Models\LinksGetResponse
@@ -378,6 +504,16 @@ final class PagesApi
     }
 
     /**
+     * Get Pages
+     *
+     * List of all pages in the system.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **parent_page_id**: Id of parent page. If exists, filter pages that are direct children of that page.
+     * - **order**: Ordering of pages.
+     *
      * @param array{parent_page_id?: int, order?: Enums\CategoriesOrder} $params
      * @return Models\PagesListResponse
      */
@@ -390,7 +526,14 @@ final class PagesApi
     }
 
     /**
-     * @param int $page_id
+     * Get Page
+     *
+     * Detail information of a page.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $page_id Id of page.
      * @return Models\PagesGetResponse
      */
     public function get(int $page_id): Models\PagesGetResponse
@@ -410,6 +553,15 @@ final class NavigationApi
     }
 
     /**
+     * Get Navigation
+     *
+     * List of navigation elements within the system.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **parent**: Id of parent element. If exists, filter elements that are direct children of that element.
+     *
      * @param array{parent?: int} $params
      * @return Models\NavigationListResponse
      */
@@ -430,6 +582,32 @@ final class ThreadsApi
     }
 
     /**
+     * Get Threads
+     *
+     * List of threads in a forum (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **forum_id**: Id of the containing forum.
+     * - **tab**: Tab to get threads from.
+     * - **state**: Thread state. Works only if **forum_id** is set.
+     * - **period**: Filter to get only threads created within the selected period. Works only if **forum_id** is set.
+     * - **title**: Thread title.
+     * - **title_only**: Search only in titles.
+     * - **creator_user_id**: Filter to get only threads created by the specified user.
+     * - **sticky**: Filter to get only sticky or non-sticky threads. By default, all threads will be included and sticky ones will be at the top of the result on the first page. In mixed mode, sticky threads are not counted towards **threads_total** and does not affect pagination.
+     * - **prefix_ids[]**: Filter to get only threads with the specified prefix.
+     * - **prefix_ids_not[]**: Filter to get only threads without the specified prefix.
+     * - **thread_tag_id**: Filter to get only threads with the specified tag.
+     * - **page**: Page number of threads.
+     * - **limit**: Number of threads in a page.
+     * - **order**: Ordering of threads.
+     * - **direction**: Direction of threads ordering.
+     * - **thread_create_date**: Filter threads by creation date. Only works with 'thread_create_date' and 'thread_create_date_reverse' ordering.
+     * - **thread_update_date**: Filter threads by update date. Only works with 'thread_update_date' and 'thread_update_date_reverse' ordering.
+     * - **fields_include**: List of fields to include.
+     *
      * @param array{forum_id?: int, tab?: string, state?: Enums\State, period?: Enums\Period, title?: string, title_only?: bool, creator_user_id?: int, sticky?: bool, prefix_ids[]?: list<int>, prefix_ids_not[]?: list<int>, thread_tag_id?: int, page?: int, limit?: int, order?: Enums\ThreadsOrder, direction?: Enums\Direction, thread_create_date?: int, thread_update_date?: int, fields_include?: list<'*'|'latest_posts'>} $params
      * @return Models\ThreadsListResponse
      */
@@ -442,6 +620,30 @@ final class ThreadsApi
     }
 
     /**
+     * Create Thread
+     *
+     * Create a new thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: Content of the new thread.
+     * - **forum_id**: Id of the target forum.
+     * - **title**: Thread title. Can be skipped if **title_en** set.
+     * - **title_en**: Thread english title. Can be skipped if **title** set.
+     * - **prefix_id**: Prefix ids.
+     * - **tags**: Thread tags.
+     * - **hide_contacts**: Hide contacts.
+     * - **allow_ask_hidden_content**: Allow ask hidden content.
+     * - **reply_group**: Allow to reply only users with chosen or higher group.
+     * - **comment_ignore_group**: Allow commenting if user can't post in thread.
+     * - **dont_alert_followers**: Don't alert followers about thread creation.
+     * - **schedule_date**: Date to schedule thread creation (format: `DD-MM-YYYY`).
+     * - **schedule_time**: Time to schedule thread creation (format: `HH:MM`).
+     * - **watch_thread_state**: Watch thread state.
+     * - **watch_thread**: Receive forum notifications of new posts in this thread.
+     * - **watch_thread_email**: Receive email notifications of new posts in this thread.
+     *
      * @param array{post_body: string, forum_id: int, title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
      * @return Models\ThreadsCreateResponse
      */
@@ -455,6 +657,40 @@ final class ThreadsApi
     }
 
     /**
+     * Create Contest
+     *
+     * Create a new contest.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: Content of the new contest.
+     * - **title**: Thread title. Can be skipped if **title_en** set.
+     * - **title_en**: Thread english title. Can be skipped if **title** set.
+     * - **contest_type**: Contest type.
+     * - **length_value**: Giveaway duration value. The maximum duration is 3 days. Required if **contest_type** is **by_finish_date**.
+     * - **length_option**: Giveaway duration type. The maximum duration is 3 days. Required if **contest_type** is **by_finish_date**.
+     * - **prize_type**: Prize type.
+     * - **count_winners**: Winner count (prize count). Optional if **prize_type** is **money**.
+     * - **prize_data_money**: How much money will each winner receive. Optional if **prize_type** is **money**.
+     * - **is_money_places**: Enable the distribution of money prizes by places. Optional if **prize_type** is **money**.
+     * - **prize_data_places**: How much money will receive each place. Required if **is_money_places** is **1**.
+     * - **prize_data_upgrade**: Which upgrade will each winner receive. Required if **prize_type** is **upgrades**.
+     * - **require_like_count**: Sympathies for this week.
+     * - **require_total_like_count**: Sympathies for all time.
+     * - **secret_answer**: Secret answer of your account.
+     * - **tags**: Thread tags.
+     * - **reply_group**: Allow to reply only users with chosen or higher group.
+     * - **comment_ignore_group**: Allow commenting if user can't post in thread.
+     * - **dont_alert_followers**: Don't alert followers about thread creation.
+     * - **hide_contacts**: Hide contacts.
+     * - **allow_ask_hidden_content**: Allow ask hidden content.
+     * - **schedule_date**: Date to schedule thread creation (format: `DD-MM-YYYY`).
+     * - **schedule_time**: Time to schedule thread creation (format: `HH:MM`).
+     * - **watch_thread_state**: Watch thread state.
+     * - **watch_thread**: Receive forum notifications of new posts in this thread.
+     * - **watch_thread_email**: Receive email notifications of new posts in this thread.
+     *
      * @param array{post_body: string, title?: string, title_en?: string, contest_type: Enums\ContestType (Default: "by_finish_date"), length_value?: int, length_option?: Enums\LengthOption, prize_type: Enums\PrizeType, count_winners?: int, prize_data_money?: float, is_money_places?: bool, prize_data_places?: list<float>, prize_data_upgrade?: Enums\PrizeDataUpgrade, require_like_count: int, require_total_like_count: int, secret_answer?: string, tags?: list<string>, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool} $body
      * @return Models\ThreadsCreateContestResponse
      */
@@ -468,6 +704,48 @@ final class ThreadsApi
     }
 
     /**
+     * Create Claim
+     *
+     * Create a Claim.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **as_responder**: To whom the complaint is filed. Specify a nickname or a link to the profile.
+     * - **as_is_market_deal**: Did you buy account on the market?
+     * - **as_market_item_id**: Market item id.
+Required if **as_is_market_deal** is 1.
+     * - **as_data**: Contacts and wallets of the responder. Specify the known data about the responder, if any.
+Optional if **as_is_market_deal** is 0.
+     * - **as_amount**: Indicate the amount by which the responder deceived you.
+     * - **currency**: Currency of Claim.
+     * - **transfer_type**: The transaction took place through a guarantor or there was a transfer to the market with a hold?
+Required if **as_is_market_deal** is 0.
+     * - **pay_claim**: Pay claim fee now or later. (Only for **transfer_type** = **notsafe**)
+     * - **as_funds_receipt**: Funds transfer receipt.
+Upload a receipt for the transfer of funds, use the "View receipt" button in your wallet. May be uploaded to [Imgur](https://imgur.com/upload). Write "no" if you have not paid.
+Required if **as_is_market_deal** is 0.
+     * - **as_tg_login_screenshot**: Screenshot showing the respondent's Telegram login.
+If the correspondence was conducted in Telegram, upload a screenshot that will display the respondent's Telegram login against the background of your dialogue. The screenshot may be uploaded to [Imgur](https://imgur.com/upload). If the correspondence was conducted elsewhere, write "no".
+     * - **tags**: Thread tags.
+     * - **hide_contacts**: Hide contacts.
+     * - **allow_ask_hidden_content**: Allow ask hidden content.
+     * - **reply_group**: Allow to reply only users with chosen or higher group.
+     * - **comment_ignore_group**: Allow commenting if user can't post in thread.
+     * - **dont_alert_followers**: Don't alert followers about thread creation.
+     * - **schedule_date**: Date to schedule thread creation (format: `DD-MM-YYYY`).
+     * - **schedule_time**: Time to schedule thread creation (format: `HH:MM`).
+     * - **watch_thread_state**: Watch thread state.
+     * - **watch_thread**: Receive forum notifications of new posts in this thread.
+     * - **watch_thread_email**: Receive email notifications of new posts in this thread.
+     * - **post_body**: You should describe what's happened.
+- describe the situation in a nutshell. If you wish, you can describe the situation in more detail using the "Spoiler" function.
+- attach screenshots of correspondence. You may upload to the site [Imgur](https://imgur.com/upload) - for convenience, use Ctrl + V when uploading screenshots to the album.
+- other evidence;
+- notify the respondent about the complaint you created, familiarize him with hidden content
+
+Describe the situation in as much detail as possible.
+     *
      * @param array{as_responder: string, as_is_market_deal: bool, as_market_item_id?: int, as_data?: string, as_amount: float, currency?: Enums\Currency, transfer_type: Enums\TransferType, pay_claim?: Enums\PayClaim, as_funds_receipt?: string, as_tg_login_screenshot?: string, tags?: list<string>, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup (Default: 2), comment_ignore_group?: bool, dont_alert_followers?: bool, schedule_date?: string, schedule_time?: string, watch_thread_state?: bool, watch_thread?: bool, watch_thread_email?: bool, post_body: string} $body
      * @return Models\ThreadsClaimResponse
      */
@@ -481,7 +759,16 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Get Thread
+     *
+     * Detail information of a thread.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **fields_include**: List of fields to include.
+     *
+     * @param int $thread_id Id of thread.
      * @param array{fields_include?: list<'*'|'latest_posts'>} $params
      * @return Models\ThreadsGetResponse
      */
@@ -494,7 +781,24 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Edit thread
+     *
+     * Edit a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **title**: Thread title.
+     * - **title_en**: Thread title english.
+     * - **prefix_id**: Prefix ids. Set "0" to remove all thread prefixes.
+     * - **tags**: Thread tags.
+     * - **discussion_open**: Discussion state.
+     * - **hide_contacts**: Hide contacts.
+     * - **allow_ask_hidden_content**: Allow ask hidden content.
+     * - **reply_group**: Allow to reply only users with chosen or higher group.
+     * - **comment_ignore_group**: Allow commenting if user can't post in thread.
+     *
+     * @param int $thread_id Id of thread.
      * @param array{title?: string, title_en?: string, prefix_id?: list<int>, tags?: list<string>, discussion_open?: bool, hide_contacts?: bool, allow_ask_hidden_content?: bool, reply_group?: Enums\ReplyGroup, comment_ignore_group?: bool} $body
      * @return Models\ThreadsEditResponse
      */
@@ -507,7 +811,16 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Delete Thread
+     *
+     * Delete a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **reason**: Reason of the thread removal.
+     *
+     * @param int $thread_id Id of thread.
      * @param array{reason?: string} $body
      * @return Models\ThreadsDeleteResponse
      */
@@ -520,7 +833,21 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Move Thread
+     *
+     * Move a thread to another forum.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **node_id**: Forum id.
+     * - **title**: Thread title.
+     * - **title_en**: Thread title english.
+     * - **prefix_id**: Prefix ids. Set "0" to remove all thread prefixes.
+     * - **apply_thread_prefix**: Apply thread prefix.
+     * - **send_alert**: Send a notification to users who are followed to target node.
+     *
+     * @param int $thread_id Id of thread.
      * @param array{node_id: string, title?: string, title_en?: string, prefix_id?: list<int>, apply_thread_prefix?: bool, send_alert?: bool} $body
      * @return Models\ThreadsMoveResponse
      */
@@ -533,7 +860,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Bump Thread
+     *
+     * Bump a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsBumpResponse
      */
     public function bump(int $thread_id): Models\ThreadsBumpResponse
@@ -545,7 +879,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Hide Thread
+     *
+     * Hide a thread from your feed.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsHideResponse
      */
     public function hide(int $thread_id): Models\ThreadsHideResponse
@@ -557,7 +898,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Bookmark Thread
+     *
+     * Bookmark a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsStarResponse
      */
     public function star(int $thread_id): Models\ThreadsStarResponse
@@ -569,7 +917,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Unbookmark Thread
+     *
+     * Unbookmark a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsUnstarResponse
      */
     public function unstar(int $thread_id): Models\ThreadsUnstarResponse
@@ -581,7 +936,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Get Thread Followers
+     *
+     * List of a thread's followers. For privacy reason, only the current user will be included in the list.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsFollowersResponse
      */
     public function followers(int $thread_id): Models\ThreadsFollowersResponse
@@ -593,7 +955,16 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Follow Thread
+     *
+     * Follow a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **email**: Whether to receive notification as email.
+     *
+     * @param int $thread_id Id of thread.
      * @param array{email?: bool} $body
      * @return Models\ThreadsFollowResponse
      */
@@ -606,7 +977,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Unfollow Thread
+     *
+     * Unfollow a thread.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsUnfollowResponse
      */
     public function unfollow(int $thread_id): Models\ThreadsUnfollowResponse
@@ -618,6 +996,16 @@ final class ThreadsApi
     }
 
     /**
+     * Get Followed Threads
+     *
+     * List of followed threads by current user.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **total**: If included in the request, only the thread count is returned as **threads_total**.
+     * - **fields_include**: List of fields to include.
+     *
      * @param array{total?: bool, fields_include?: list<'*'|'latest_posts'>} $params
      * @return Models\ThreadsFollowedResponse
      */
@@ -630,7 +1018,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Get Navigation Elements
+     *
+     * List of navigation elements to reach the specified thread.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsNavigationResponse
      */
     public function navigation(int $thread_id): Models\ThreadsNavigationResponse
@@ -642,7 +1037,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Get Poll
+     *
+     * Detail information of a poll.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsPollGetResponse
      */
     public function pollGet(int $thread_id): Models\ThreadsPollGetResponse
@@ -654,7 +1056,17 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Vote Poll
+     *
+     * Vote on a thread poll.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **response_id**: The id of the response to vote for. Can be skipped if **response_ids** set.
+     * - **response_ids**: An array of ids of responses (if the poll allows multiple choices).
+     *
+     * @param int $thread_id Id of thread.
      * @param array{response_id?: int, response_ids?: list<int>} $body
      * @return Models\ThreadsPollVoteResponse
      */
@@ -667,6 +1079,17 @@ final class ThreadsApi
     }
 
     /**
+     * Get Unread Threads
+     *
+     * List of unread threads (must be logged in).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **limit**: Maximum number of result threads. The limit may get decreased if the value is too large (depending on the system configuration).
+     * - **forum_id**: Id of the container forum to search for threads. Child forums of the specified forum will be included in the search.
+     * - **data_limit**: Number of thread data to be returned. Default value is 20.
+     *
      * @param array{limit?: int, forum_id?: int, data_limit?: int} $params
      * @return Models\ThreadsUnreadResponse
      */
@@ -679,6 +1102,18 @@ final class ThreadsApi
     }
 
     /**
+     * Get Recent Threads
+     *
+     * List of recent threads.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **days**: Maximum number of days to search for threads.
+     * - **limit**: Maximum number of result threads. The limit may get decreased if the value is too large.
+     * - **forum_id**: Id of the container forum to search for threads. Child forums of the specified forum will be included in the search.
+     * - **data_limit**: Number of thread data to be returned. Default value is 20.
+     *
      * @param array{days?: int, limit?: int, forum_id?: int, data_limit?: int} $params
      * @return Models\ThreadsRecentResponse
      */
@@ -691,7 +1126,14 @@ final class ThreadsApi
     }
 
     /**
-     * @param int $thread_id
+     * Finish Contest
+     *
+     * Finishes a contest.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $thread_id Id of thread.
      * @return Models\ThreadsFinishResponse
      */
     public function finish(int $thread_id): Models\ThreadsFinishResponse
@@ -711,6 +1153,19 @@ final class PostsApi
     }
 
     /**
+     * Get Posts
+     *
+     * List of posts in a thread (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **thread_id**: Id of the containing thread.
+     * - **page_of_post_id**: Id of a post, posts that are in the same page with the specified post will be returned. **thread_id** may be skipped.
+     * - **page**: Page number of posts.
+     * - **limit**: Number of posts in a page.
+     * - **order**: Ordering of posts.
+     *
      * @param array{thread_id?: int, page_of_post_id?: int, page?: int, limit?: int, order?: Enums\PostsOrder} $params
      * @return Models\PostsListResponse
      */
@@ -723,6 +1178,17 @@ final class PostsApi
     }
 
     /**
+     * Create Post
+     *
+     * Create a new post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: Content of the new post.
+     * - **thread_id**: Id of the target thread. **quote_post_id** can be skipped if this parameter is provided.
+     * - **quote_post_id**: Id of the quote post. **thread_id** can be skipped if this parameter is provided.
+     *
      * @param array{post_body: string, thread_id?: int, quote_post_id?: int} $body
      * @return Models\PostsCreateResponse
      */
@@ -735,7 +1201,14 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Get Post
+     *
+     * Detail information of a post.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $post_id Id of post.
      * @return Models\PostsGetResponse
      */
     public function get(int $post_id): Models\PostsGetResponse
@@ -747,7 +1220,16 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Edit Post
+     *
+     * Edit a post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: Content of the post.
+     *
+     * @param int $post_id Id of post.
      * @param array{post_body?: string} $body
      * @return Models\PostsEditResponse
      */
@@ -760,7 +1242,16 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Delete Post
+     *
+     * Delete a post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **reason**: Reason of the post removal.
+     *
+     * @param int $post_id Id of post.
      * @param array{reason?: string} $body
      * @return Models\PostsDeleteResponse
      */
@@ -773,7 +1264,17 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Get Post Likes
+     *
+     * List of users who liked a post.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **page**: Page number of users.
+     * - **limit**: Number of users in a page.
+     *
+     * @param int $post_id Id of post.
      * @param array{page?: int, limit?: int} $params
      * @return Models\PostsLikesResponse
      */
@@ -786,7 +1287,14 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Like Post
+     *
+     * Like a post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $post_id Id of post.
      * @return Models\PostsLikeResponse
      */
     public function like(int $post_id): Models\PostsLikeResponse
@@ -798,7 +1306,14 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Unlike Post
+     *
+     * Unlike a post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $post_id Id of post.
      * @return Models\PostsUnlikeResponse
      */
     public function unlike(int $post_id): Models\PostsUnlikeResponse
@@ -810,7 +1325,14 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Get Post Report Reasons
+     *
+     * Get post report reasons.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $post_id Id of post.
      * @return Models\PostsReportReasonsResponse
      */
     public function reportReasons(int $post_id): Models\PostsReportReasonsResponse
@@ -822,7 +1344,16 @@ final class PostsApi
     }
 
     /**
-     * @param int $post_id
+     * Report Post
+     *
+     * Report a post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **message**: Reason of the report.
+     *
+     * @param int $post_id Id of post.
      * @param array{message: string} $body
      * @return Models\PostsReportResponse
      */
@@ -835,6 +1366,17 @@ final class PostsApi
     }
 
     /**
+     * Get Post Comments
+     *
+     * List of post comments in a thread.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **post_id**: Id of post.
+     * - **before**: The time in milliseconds (e.g. 1652177794083) before last comment date.
+     * - **before_comment**: Comment id to get older comments.
+     *
      * @param array{post_id: int, before?: int, before_comment?: int} $params
      * @return Models\PostsCommentsGetResponse
      */
@@ -847,6 +1389,16 @@ final class PostsApi
     }
 
     /**
+     * Create Post Comment
+     *
+     * Create a post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_id**: Id of post.
+     * - **comment_body**: Content of the a post comment.
+     *
      * @param array{post_id: int, comment_body: string} $body
      * @return Models\PostsCommentsCreateResponse
      */
@@ -859,6 +1411,16 @@ final class PostsApi
     }
 
     /**
+     * Edit Post Comment
+     *
+     * Edit a post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_comment_id**: Id of post.
+     * - **comment_body**: Content of the new post comment.
+     *
      * @param array{post_comment_id: int, comment_body: string} $body
      * @return Models\PostsCommentsEditResponse
      */
@@ -871,6 +1433,16 @@ final class PostsApi
     }
 
     /**
+     * Delete Post Comment
+     *
+     * Delete a post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_comment_id**: Id of post comment.
+     * - **reason**: Reason of a post comment removal.
+     *
      * @param array{post_comment_id: int, reason?: string} $body
      * @return Models\PostsCommentsDeleteResponse
      */
@@ -883,6 +1455,16 @@ final class PostsApi
     }
 
     /**
+     * Report Post Comment
+     *
+     * Report a post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_comment_id**: Id of post comment.
+     * - **message**: Reason of the report.
+     *
      * @param array{post_comment_id: int, message: string} $body
      * @return Models\PostsCommentsReportResponse
      */
@@ -903,6 +1485,17 @@ final class UsersApi
     }
 
     /**
+     * Get Users
+     *
+     * List of users (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **page**: Page number of users.
+     * - **limit**: Number of users in a page.
+     * - **fields_include**: List of fields to include.
+     *
      * @param array{page?: int, limit?: int, fields_include?: list<'*'|'alerts'>} $params
      * @return Models\UsersListResponse
      */
@@ -915,6 +1508,13 @@ final class UsersApi
     }
 
     /**
+     * Get User Fields
+     *
+     * List of user fields.
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\UsersFieldsResponse
      */
     public function fields(): Models\UsersFieldsResponse
@@ -926,6 +1526,17 @@ final class UsersApi
     }
 
     /**
+     * Find Users
+     *
+     * List of users filtered by username, email or custom fields.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **username**: Username to filter. Usernames start with the query will be returned.
+     * - **custom_fields**: Custom fields to filter. Example: **custom_fields[telegram]=telegramLogin**.
+     * - **fields_include**: List of fields to include.
+     *
      * @param array{username?: string, custom_fields?: array<string, string>, fields_include?: list<'*'|'alerts'>} $params
      * @return Models\UsersFindResponse
      */
@@ -938,7 +1549,18 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get User
+     *
+     * Detail information of a user.
+     *
+     * Required scopes:
+     * + **read**
+     * + **basic**
+     *
+     * - **fields_include**: List of fields to include.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{fields_include?: list<'*'|'alerts'>} $params
      * @return Models\UsersGetResponse
      */
@@ -951,7 +1573,43 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Edit User
+     *
+     * Edit a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **username**: New username.
+     * - **user_title**: New custom title of the user.
+     * - **display_group_id**: Id of the group you want to display.
+     * - **display_icon_group_id**: Id of the icon group you want to display.
+     * - **display_banner_id**: Id of the banner you want to display.
+     * - **conv_welcome_message**: This message is shown when someone wants to write to you.
+     * - **user_dob_day**: Your date of birth (day).
+     * - **user_dob_month**: Your date of birth (month).
+     * - **user_dob_year**: Your date of birth (year).
+     * - **secret_answer**: Secret answer.
+     * - **secret_answer_type**: Secret answer type.
+     * - **short_link**: Profile short link.
+     * - **language_id**: User interface language ID.
+     * - **gender**: User gender.
+     * - **timezone**: User timezone.
+     * - **receive_admin_email**: Whether to receive admin emails.
+     * - **activity_visible**: Whether user activity is visible.
+     * - **show_dob_date**: Show date of birth (day and month).
+     * - **show_dob_year**: Show year of birth.
+     * - **hide_username_change_logs**: Hide username change logs.
+     * - **allow_view_profile**: Who can view your profile.
+     * - **allow_post_profile**: Who can post on your profile.
+     * - **allow_send_personal_conversation**: Who can send you personal conversations.
+     * - **allow_invite_group**: Who can invite you to groups.
+     * - **allow_receive_news_feed**: Who can see your news feed.
+     * - **alert**: Alert settings.
+     * - **fields**: Custom user profile fields.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{username?: string, user_title?: string, display_group_id?: int, display_icon_group_id?: int, display_banner_id?: int, conv_welcome_message?: string, user_dob_day?: int, user_dob_month?: int, user_dob_year?: int, secret_answer?: string, secret_answer_type?: int, short_link?: string, language_id?: Enums\LanguageId, gender?: Enums\Gender, timezone?: Enums\Timezone, receive_admin_email?: bool, activity_visible?: bool, show_dob_date?: bool, show_dob_year?: bool, hide_username_change_logs?: bool, allow_view_profile?: Enums\AllowViewProfile, allow_post_profile?: Enums\AllowPostProfile, allow_send_personal_conversation?: Enums\AllowSendPersonalConversation, allow_invite_group?: Enums\AllowInviteGroup, allow_receive_news_feed?: Enums\AllowReceiveNewsFeed, alert?: array<string, bool>, fields?: array{
     location?: string,
     occupation?: string,
@@ -979,7 +1637,18 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get User Claims
+     *
+     * Get user claims.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **type**: Filter claims by their type.
+     * - **claim_state**: Filter claims by their state.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{type?: Enums\UsersType, claim_state?: Enums\ClaimState} $params
      * @return Models\UsersClaimsResponse
      */
@@ -992,7 +1661,20 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Upload Avatar
+     *
+     * Upload avatar for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **avatar**: Binary data of the avatar.
+     * - **x**: The starting point of the selection by width. Default value - 0
+     * - **y**: The starting point of the selection by height. Default value - 0
+     * - **crop**: Selection size.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{avatar: resource|string, x?: int, y?: int, crop?: int} $body
      * @return Models\UsersAvatarUploadResponse
      */
@@ -1005,7 +1687,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Delete Avatar
+     *
+     * Delete avatar for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersAvatarDeleteResponse
      */
     public function avatarDelete(string|int $user_id): Models\UsersAvatarDeleteResponse
@@ -1017,7 +1707,19 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Crop Avatar
+     *
+     * Crop avatar for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **x**: The starting point of the selection by width. Default value - 0
+     * - **y**: The starting point of the selection by height. Default value - 0
+     * - **crop**: Selection size.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{x?: int, y?: int, crop?: int} $body
      * @return Models\UsersAvatarCropResponse
      */
@@ -1030,7 +1732,20 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Upload Background
+     *
+     * Upload background for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **background**: Binary data of the background. Background image must be 1920x1080 pixels
+     * - **x**: The starting point of the selection by width. Default value - 0
+     * - **y**: The starting point of the selection by height. Default value - 0
+     * - **crop**: Selection size.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{background: resource|string, x?: int, y?: int, crop?: int} $body
      * @return Models\UsersBackgroundUploadResponse
      */
@@ -1043,7 +1758,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Delete Background
+     *
+     * Delete background for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersBackgroundDeleteResponse
      */
     public function backgroundDelete(string|int $user_id): Models\UsersBackgroundDeleteResponse
@@ -1055,7 +1778,19 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Crop Background
+     *
+     * Crop background for a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **x**: The starting point of the selection by width. Default value - 0
+     * - **y**: The starting point of the selection by height. Default value - 0
+     * - **crop**: Selection size.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{x?: int, y?: int, crop?: int} $body
      * @return Models\UsersBackgroundCropResponse
      */
@@ -1068,7 +1803,19 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get User Followers
+     *
+     * List of a user's followers.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **order**: Ordering of followers.
+     * - **page**: Page number of followers.
+     * - **limit**: Number of followers in a page.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{order?: Enums\UsersOrder, page?: int, limit?: int} $params
      * @return Models\UsersFollowersResponse
      */
@@ -1081,7 +1828,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Follow User
+     *
+     * Follow a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersFollowResponse
      */
     public function follow(string|int $user_id): Models\UsersFollowResponse
@@ -1093,7 +1848,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Unfollow User
+     *
+     * Unfollow a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersUnfollowResponse
      */
     public function unfollow(string|int $user_id): Models\UsersUnfollowResponse
@@ -1105,7 +1868,19 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get Followed Users By User
+     *
+     * List of users whom are followed by a user.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **order**: Ordering of users.
+     * - **page**: Page number of users.
+     * - **limit**: Number of users in a page.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{order?: Enums\UsersOrder, page?: int, limit?: int} $params
      * @return Models\UsersFollowingsResponse
      */
@@ -1118,7 +1893,23 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get User Likes
+     *
+     * Get information about user likes.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **node_id**: Filter by forum section.
+     * - **like_type**: Like type.
+     * - **type**: Likes type.
+     * - **page**: Page number.
+     * - **content_type**: Content type.
+     * - **search_user_id**: Get only likes from specified user.
+     * - **stats**: Show weekly statistics.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{node_id?: int, like_type?: Enums\LikeType, type?: Enums\UsersType2 (Default: "gotten"), page?: int, content_type?: Enums\ContentType (Default: "post"), search_user_id?: int, stats?: bool} $params
      * @return Models\UsersLikesResponse
      */
@@ -1132,6 +1923,15 @@ final class UsersApi
     }
 
     /**
+     * Get Ignored Users
+     *
+     * List of ignored users of current user.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **total**: If included in the request, only the user count is returned as **users_total**.
+     *
      * @param array{total?: bool} $params
      * @return Models\UsersIgnoredResponse
      */
@@ -1144,7 +1944,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Ignore User
+     *
+     * Ignore a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersIgnoreResponse
      */
     public function ignore(string|int $user_id): Models\UsersIgnoreResponse
@@ -1156,7 +1964,19 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Edit Ignoring Options
+     *
+     * Edit ignoring options.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **ignore_conversations**: Ignore user's conversations.
+     * - **ignore_content**: Ignore user's content.
+     * - **restrict_view_profile**: Restrict user from viewing your profile.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{ignore_conversations?: bool, ignore_content?: bool, restrict_view_profile?: bool} $params
      * @return Models\UsersIgnoreEditResponse
      */
@@ -1169,7 +1989,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Unignore User
+     *
+     * Stop ignoring a user.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersUnignoreResponse
      */
     public function unignore(string|int $user_id): Models\UsersUnignoreResponse
@@ -1181,7 +2009,18 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get Contents
+     *
+     * List of contents created by user (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **page**: Page number of contents.
+     * - **limit**: Number of contents in a page.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{page?: int, limit?: int} $params
      * @return Models\UsersContentsResponse
      */
@@ -1194,7 +2033,15 @@ final class UsersApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get Trophies
+     *
+     * List of user trophies.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @return Models\UsersTrophiesResponse
      */
     public function trophies(string|int $user_id): Models\UsersTrophiesResponse
@@ -1206,6 +2053,13 @@ final class UsersApi
     }
 
     /**
+     * Get Secret Answer Types
+     *
+     * Get available secret answer types for user account security.
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\UsersSecretAnswerTypesResponse
      */
     public function secretAnswerTypes(): Models\UsersSecretAnswerTypesResponse
@@ -1217,6 +2071,13 @@ final class UsersApi
     }
 
     /**
+     * Reset Secret Answer
+     *
+     * Request a reset of the secret answer for the account.
+     *
+     * Required scopes:
+     * + **post**
+     *
      * @return Models\UsersSAResetResponse
      */
     public function sAReset(): Models\UsersSAResetResponse
@@ -1228,6 +2089,13 @@ final class UsersApi
     }
 
     /**
+     * Cancel Secret Answer Reset
+     *
+     * Cancel a pending secret answer reset request for the account.
+     *
+     * Required scopes:
+     * + **post**
+     *
      * @return Models\UsersSACancelResetResponse
      */
     public function sACancelReset(): Models\UsersSACancelResetResponse
@@ -1247,7 +2115,20 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param string|int $user_id
+     * Get Profile Posts
+     *
+     * List of profile posts (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **posts_user_id**: Filter to get only posts from the specified user.
+     * - **page**: Page number of contents.
+     * - **limit**: Number of contents in a page.
+     * - **fields_include**: List of fields to include.
+     *
+     * @param string|int $user_id User ID.
+> You can use shortlink `me` to interact with your profile.
      * @param array{posts_user_id?: int, page?: int, limit?: int, fields_include?: list<'*'|'latest_comments'>} $params
      * @return Models\ProfilePostsListResponse
      */
@@ -1260,7 +2141,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Get Profile Post
+     *
+     * Detail information of a profile post.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsGetResponse
      */
     public function get(int $profile_post_id): Models\ProfilePostsGetResponse
@@ -1272,7 +2160,17 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Edit Profile Post
+     *
+     * Edit a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: New content of the profile post.
+     * - **disable_comments**: Disable comments.
+     *
+     * @param int $profile_post_id Id of profile post.
      * @param array{post_body?: string, disable_comments?: bool} $body
      * @return Models\ProfilePostsEditResponse
      */
@@ -1285,7 +2183,16 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Delete Profile Post
+     *
+     * Delete a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **reason**: Reason of the profile post removal.
+     *
+     * @param int $profile_post_id Id of profile post.
      * @param array{reason?: string} $params
      * @return Models\ProfilePostsDeleteResponse
      */
@@ -1298,7 +2205,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Get Profile Post Report Reasons
+     *
+     * Get Profile Post Report Reasons.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsReportReasonsResponse
      */
     public function reportReasons(int $profile_post_id): Models\ProfilePostsReportReasonsResponse
@@ -1310,7 +2224,16 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Report a Profile Post
+     *
+     * Report a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **message**: Reason of the report.
+     *
+     * @param int $profile_post_id Id of profile post.
      * @param array{message: string} $body
      * @return Models\ProfilePostsReportResponse
      */
@@ -1323,6 +2246,15 @@ final class ProfilePostsApi
     }
 
     /**
+     * Create Profile Post
+     *
+     * Create a profile post on a user profile.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **post_body**: Content of a profile post.
+     *
      * @param array{user_id: string|int, post_body: string} $body
      * @return Models\ProfilePostsCreateResponse
      */
@@ -1335,7 +2267,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Stick Profile Post
+     *
+     * Stick a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsStickResponse
      */
     public function stick(int $profile_post_id): Models\ProfilePostsStickResponse
@@ -1347,7 +2286,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Unstick Profile Post
+     *
+     * Unstick a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsUnstickResponse
      */
     public function unstick(int $profile_post_id): Models\ProfilePostsUnstickResponse
@@ -1359,7 +2305,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Get Profile Post Likes
+     *
+     * List of users who liked a profile post.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsLikesResponse
      */
     public function likes(int $profile_post_id): Models\ProfilePostsLikesResponse
@@ -1371,7 +2324,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Like Profile Post
+     *
+     * Like a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsLikeResponse
      */
     public function like(int $profile_post_id): Models\ProfilePostsLikeResponse
@@ -1383,7 +2343,14 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
+     * Unlike Profile Post
+     *
+     * Unlike a profile post.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * @param int $profile_post_id Id of profile post.
      * @return Models\ProfilePostsUnlikeResponse
      */
     public function unlike(int $profile_post_id): Models\ProfilePostsUnlikeResponse
@@ -1395,6 +2362,17 @@ final class ProfilePostsApi
     }
 
     /**
+     * Get Profile Post Comments
+     *
+     * List of comments of a profile post.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **profile_post_id**: Id of profile post.
+     * - **before**: Date to get older comments. Please note that this entry point does not support the page parameter but it still does support **limit**.
+     * - **limit**: Number of profile posts in a page.
+     *
      * @param array{profile_post_id: int, before?: int, limit?: int} $params
      * @return Models\ProfilePostsCommentsListResponse
      */
@@ -1407,6 +2385,16 @@ final class ProfilePostsApi
     }
 
     /**
+     * Create Profile Post Comment
+     *
+     * Create a new profile post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **profile_post_id**: Id of profile post.
+     * - **comment_body**: Content of the new profile post comment.
+     *
      * @param array{profile_post_id: int, comment_body: string} $body
      * @return Models\ProfilePostsCommentsCreateResponse
      */
@@ -1419,6 +2407,16 @@ final class ProfilePostsApi
     }
 
     /**
+     * Edit Profile Post Comment
+     *
+     * Edit a profile post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **comment_id**: Id of profile post comment.
+     * - **comment_body**: New content for the profile post comment.
+     *
      * @param array{comment_id: int, comment_body: string} $body
      * @return Models\ProfilePostsCommentsEditResponse
      */
@@ -1431,6 +2429,15 @@ final class ProfilePostsApi
     }
 
     /**
+     * Delete Profile Post Comment
+     *
+     * Delete a profile post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **comment_id**: Id of profile post comment.
+     *
      * @param array{comment_id: int} $body
      * @return Models\ProfilePostsCommentsDeleteResponse
      */
@@ -1443,8 +2450,15 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $profile_post_id
-     * @param int $comment_id
+     * Get Profile Post Comment
+     *
+     * Detail information of a profile post comment.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $profile_post_id Id of profile post.
+     * @param int $comment_id Id of profile post comment.
      * @return Models\ProfilePostsCommentsGetResponse
      */
     public function commentsGet(int $profile_post_id, int $comment_id): Models\ProfilePostsCommentsGetResponse
@@ -1456,7 +2470,16 @@ final class ProfilePostsApi
     }
 
     /**
-     * @param int $comment_id
+     * Report a Profile Post Comment
+     *
+     * Report a profile post comment.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **message**: Reason of the report.
+     *
+     * @param int $comment_id Id of profile post comment.
      * @param array{message: string} $body
      * @return Models\ProfilePostsCommentsReportResponse
      */
@@ -1477,6 +2500,18 @@ final class ConversationsApi
     }
 
     /**
+     * Get Conversations
+     *
+     * List of conversations (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
+     * - **folder**: Filter conversations by folder.
+     * - **page**: Page number of conversations.
+     * - **limit**: Number of conversations in a page.
+     *
      * @param array{folder?: Enums\Folder, page?: int, limit?: int} $params
      * @return Models\ConversationsListResponse
      */
@@ -1489,6 +2524,24 @@ final class ConversationsApi
     }
 
     /**
+     * Create Conversation
+     *
+     * Create a new conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * - **recipient_id**: Id of recipient. Required if **is_group=false**.
+     * - **recipients**: List of recipients username's. Max recipients count is 10. Required if **is_group=true**.
+     * - **is_group**: Is group. Set **false** if personal conversation, or set **true** if group.
+     * - **title**: The title of new conversation. Required if **is_group=1**.
+     * - **open_invite**: Open invite.
+     * - **allow_edit_messages**: Allow edit messages.
+     * - **allow_sticky_messages**: Allow members to stick messages.
+     * - **allow_delete_own_messages**: Allow members to delete their own messages.
+     * - **message_body**: First message. Required if **is_group**=false
+     *
      * @param array{recipient_id?: int, recipients?: list<string>, is_group?: bool (Default: false), title?: string, open_invite?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool, message_body?: string} $body
      * @return Models\ConversationsCreateResponse
      */
@@ -1502,6 +2555,21 @@ final class ConversationsApi
     }
 
     /**
+     * Edit Conversation
+     *
+     * Edit conversation.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
+     * - **conversation_id**: Id of conversation.
+     * - **title**: New conversation title.
+     * - **open_invite**: Allow members to invite others.
+     * - **history_open**: Make conversation history visible to new members.
+     * - **allow_edit_messages**: Allow members to edit their own messages.
+     * - **allow_sticky_messages**: Allow members to stick messages.
+     * - **allow_delete_own_messages**: Allow members to delete their own messages.
+     *
      * @param array{conversation_id: int, title?: string, open_invite?: bool, history_open?: bool, allow_edit_messages?: bool, allow_sticky_messages?: bool, allow_delete_own_messages?: bool} $body
      * @return Models\ConversationsUpdateResponse
      */
@@ -1514,6 +2582,17 @@ final class ConversationsApi
     }
 
     /**
+     * Leave Conversation
+     *
+     * Leave the conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * - **conversation_id**: Id of conversation.
+     * - **delete_type**: Deletion type.
+     *
      * @param array{conversation_id: int, delete_type: Enums\DeleteType} $body
      * @return Models\ConversationsDeleteResponse
      */
@@ -1526,6 +2605,13 @@ final class ConversationsApi
     }
 
     /**
+     * Start Conversation
+     *
+     * Start a new conversation with a user.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
      * @param array{user_id: string|int} $body
      * @return Models\ConversationsStartResponse
      */
@@ -1538,6 +2624,15 @@ final class ConversationsApi
     }
 
     /**
+     * Send Content To Saved Messages
+     *
+     * Send content to Saved Messages.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
+     * - **link**: Content url.
+     *
      * @param array{link: string} $body
      * @return Models\ConversationsSaveResponse
      */
@@ -1550,7 +2645,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Get Conversation
+     *
+     * Detail information of a conversation.
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsGetResponse
      */
     public function get(int $conversation_id): Models\ConversationsGetResponse
@@ -1562,7 +2665,21 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Get Conversation Messages
+     *
+     * List of messages in a conversation (with pagination).
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
+     * - **page**: Page number of messages.
+     * - **limit**: Number of messages in a page.
+     * - **order**: Ordering of messages.
+     * - **before**: Date to get older messages.
+     * - **after**: Date to get newer messages.
+     *
+     * @param int $conversation_id Id of conversation.
      * @param array{page?: int, limit?: int, order?: Enums\ConversationsOrder, before?: int, after?: int} $params
      * @return Models\ConversationsMessagesListResponse
      */
@@ -1575,7 +2692,18 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Create Conversation Message
+     *
+     * Create a new conversation message.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * - **reply_message_id**: ID of the message being replied to.
+     * - **message_body**: Content of the new message.
+     *
+     * @param int $conversation_id Id of conversation.
      * @param array{reply_message_id?: int, message_body: string} $body
      * @return Models\ConversationsMessagesCreateResponse
      */
@@ -1588,6 +2716,18 @@ final class ConversationsApi
     }
 
     /**
+     * Search Conversations Messages
+     *
+     * Search for conversations messages or recipients.
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
+     * - **q**: Search query string.
+     * - **conversation_id**: Id of conversation.
+     * - **search_recipients**: Search for recipients.
+     *
      * @param array{q?: string, conversation_id?: int, search_recipients?: bool} $body
      * @return Models\ConversationsSearchResponse
      */
@@ -1600,7 +2740,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $message_id
+     * Get Conversation Message
+     *
+     * Detail information of a message.
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
+     * @param int $message_id Id of message.
      * @return Models\ConversationsMessagesGetResponse
      */
     public function messagesGet(int $message_id): Models\ConversationsMessagesGetResponse
@@ -1612,8 +2760,18 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
-     * @param int $message_id
+     * Edit Conversation Message
+     *
+     * Edit a message.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * - **message_body**: New content of the message.
+     *
+     * @param int $conversation_id Id of conversation.
+     * @param int $message_id Id of message.
      * @param array{message_body: string} $body
      * @return Models\ConversationsMessagesEditResponse
      */
@@ -1626,8 +2784,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
-     * @param int $message_id
+     * Delete Conversation Message
+     *
+     * Deletes a message from a conversation.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
+     * @param int $message_id Id of message.
      * @return Models\ConversationsMessagesDeleteResponse
      */
     public function messagesDelete(int $conversation_id, int $message_id): Models\ConversationsMessagesDeleteResponse
@@ -1639,7 +2804,17 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Invite Users to Conversation
+     *
+     * Invite one or more users to an existing conversation.
+     *
+     * Required scopes:
+     * + **conversate**
+     * + **post**
+     *
+     * - **recipients**: List of recipients username's.
+     *
+     * @param int $conversation_id Id of conversation.
      * @param array{recipients: list<string>} $body
      * @return Models\ConversationsInviteResponse
      */
@@ -1652,7 +2827,16 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Kick User from Conversation
+     *
+     * Kicks a user from a conversation.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
+     * - **user_id**: Id of user to kick from conversation.
+     *
+     * @param int $conversation_id Id of conversation.
      * @param array{user_id: int} $body
      * @return Models\ConversationsKickResponse
      */
@@ -1665,7 +2849,14 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Read a Conversation
+     *
+     * Read a specific conversation.
+     *
+     * Required scopes:
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsReadResponse
      */
     public function read(int $conversation_id): Models\ConversationsReadResponse
@@ -1677,6 +2868,14 @@ final class ConversationsApi
     }
 
     /**
+     * Read All Conversations
+     *
+     * Mark all conversations as read.
+     *
+     * Required scopes:
+     * + **read**
+     * + **conversate**
+     *
      * @return Models\ConversationsReadAllResponse
      */
     public function readAll(): Models\ConversationsReadAllResponse
@@ -1688,8 +2887,16 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
-     * @param int $message_id
+     * Stick Conversation Message
+     *
+     * Stick a message in a conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
+     * @param int $message_id Id of message.
      * @return Models\ConversationsMessagesStickResponse
      */
     public function messagesStick(int $conversation_id, int $message_id): Models\ConversationsMessagesStickResponse
@@ -1701,8 +2908,16 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
-     * @param int $message_id
+     * Unstick Conversation Message
+     *
+     * Unstick a message in a conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
+     * @param int $message_id Id of message.
      * @return Models\ConversationsMessagesUnstickResponse
      */
     public function messagesUnstick(int $conversation_id, int $message_id): Models\ConversationsMessagesUnstickResponse
@@ -1714,7 +2929,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Star Conversation
+     *
+     * Star conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsStarResponse
      */
     public function star(int $conversation_id): Models\ConversationsStarResponse
@@ -1726,7 +2949,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Unstar Conversation
+     *
+     * Unstar conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsUnstarResponse
      */
     public function unstar(int $conversation_id): Models\ConversationsUnstarResponse
@@ -1738,7 +2969,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Enable Conversation Alerts
+     *
+     * Enable alerts for conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsAlertsEnableResponse
      */
     public function alertsEnable(int $conversation_id): Models\ConversationsAlertsEnableResponse
@@ -1750,7 +2989,15 @@ final class ConversationsApi
     }
 
     /**
-     * @param int $conversation_id
+     * Disable Conversation Alerts
+     *
+     * Disable alerts for conversation.
+     *
+     * Required scopes:
+     * + **post**
+     * + **conversate**
+     *
+     * @param int $conversation_id Id of conversation.
      * @return Models\ConversationsAlertsDisableResponse
      */
     public function alertsDisable(int $conversation_id): Models\ConversationsAlertsDisableResponse
@@ -1770,6 +3017,17 @@ final class NotificationsApi
     }
 
     /**
+     * Get Notifications
+     *
+     * List of notifications (both read and unread).
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **type**: Filter notifications by their type.
+     * - **page**: Page number of notifications.
+     * - **limit**: Number of notifications in a page.
+     *
      * @param array{type?: Enums\UsersType, page?: int, limit?: int} $params
      * @return Models\NotificationsListResponse
      */
@@ -1782,7 +3040,14 @@ final class NotificationsApi
     }
 
     /**
-     * @param int $notification_id
+     * Get Notification
+     *
+     * Get associated content of notification. The response depends on the content type.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * @param int $notification_id Id of notification.
      * @return Models\NotificationsGetResponse
      */
     public function get(int $notification_id): Models\NotificationsGetResponse
@@ -1794,6 +3059,15 @@ final class NotificationsApi
     }
 
     /**
+     * Mark Notification Read
+     *
+     * Mark single notification or all existing notifications read.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **notification_id**: If notification_id is omitted, it's mark all existing notifications as read.
+     *
      * @param array{notification_id?: int} $body
      * @return Models\NotificationsReadResponse
      */
@@ -1814,6 +3088,13 @@ final class TagsApi
     }
 
     /**
+     * Get Popular Tags
+     *
+     * List of popular tags (no pagination).
+     *
+     * Required scopes:
+     * + **read**
+     *
      * @return Models\TagsPopularResponse
      */
     public function popular(): Models\TagsPopularResponse
@@ -1825,6 +3106,16 @@ final class TagsApi
     }
 
     /**
+     * Get Tags
+     *
+     * List of tags.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **page**: Page number of tags list.
+     * - **limit**: Number of results in a page.
+     *
      * @param array{page?: int, limit?: int} $params
      * @return Models\TagsListResponse
      */
@@ -1837,7 +3128,17 @@ final class TagsApi
     }
 
     /**
-     * @param int $tag_id
+     * Get Tagged Content
+     *
+     * List of tagged contents.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **page**: Page number of tagged contents.
+     * - **limit**: Number of tagged contents in a page.
+     *
+     * @param int $tag_id Id of tag.
      * @param array{page?: int, limit?: int} $params
      * @return Models\TagsGetResponse
      */
@@ -1850,6 +3151,15 @@ final class TagsApi
     }
 
     /**
+     * Get Filtered Content
+     *
+     * Filtered list of tags.
+     *
+     * Required scopes:
+     * + **read**
+     *
+     * - **tag**: tag to filter. Tags start with the query will be returned.
+     *
      * @param array{tag: string} $params
      * @return Models\TagsFindResponse
      */
@@ -1870,7 +3180,21 @@ final class SearchApi
     }
 
     /**
-     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int} $body
+     * Search
+     *
+     * Search for all supported contents.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **q**: Search query. Can be skipped if **user_id** is set.
+     * - **tag**: Tag to search for tagged contents.
+     * - **forum_id**: Id of the container forum to search for contents. Child forums of the specified forum will be included in the search.
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     * - **before**: The time in milliseconds (e.g. 1767214800) before last content date.
+     *
+     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, before?: int} $body
      * @return Models\SearchAllResponse
      */
     public function all(array $body = []): Models\SearchAllResponse
@@ -1882,7 +3206,22 @@ final class SearchApi
     }
 
     /**
-     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int} $body
+     * Search Thread
+     *
+     * Search for threads.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **q**: Search query. Can be skipped if **user_id** is set.
+     * - **tag**: Tag to search for tagged contents.
+     * - **forum_id**: Id of the container forum to search for contents. Child forums of the specified forum will be included in the search.
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     * - **data_limit**: Number of thread data to be returned.
+     * - **before**: The time in milliseconds (e.g. 1767214800) before last content date.
+     *
+     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int, before?: int} $body
      * @return Models\SearchThreadsResponse
      */
     public function threads(array $body = []): Models\SearchThreadsResponse
@@ -1894,7 +3233,22 @@ final class SearchApi
     }
 
     /**
-     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int} $body
+     * Search Post
+     *
+     * Search for posts.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **q**: Search query. Can be skipped if **user_id** is set.
+     * - **tag**: Tag to search for tagged contents.
+     * - **forum_id**: Id of the container forum to search for contents. Child forums of the specified forum will be included in the search.
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     * - **data_limit**: Number of post data to be returned.
+     * - **before**: The time in milliseconds (e.g. 1767214800) before last content date.
+     *
+     * @param array{q?: string, tag?: string, forum_id?: int, user_id?: string|int, page?: int, limit?: int, data_limit?: int, before?: int} $body
      * @return Models\SearchPostsResponse
      */
     public function posts(array $body = []): Models\SearchPostsResponse
@@ -1906,6 +3260,15 @@ final class SearchApi
     }
 
     /**
+     * Search Users
+     *
+     * Search for users.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **q**: Search query.
+     *
      * @param array{q?: string} $body
      * @return Models\SearchUsersResponse
      */
@@ -1918,7 +3281,20 @@ final class SearchApi
     }
 
     /**
-     * @param array{q?: string, user_id?: int, page?: int, limit?: int} $body
+     * Search Profile Posts
+     *
+     * Search for profile posts.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **q**: Search query. Can be skipped if **user_id** is set.
+     * - **user_id**: User ID to filter profile posts.
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     * - **before**: The time in milliseconds (e.g. 1767214800) before last content date.
+     *
+     * @param array{q?: string, user_id?: int, page?: int, limit?: int, before?: int} $body
      * @return Models\SearchProfilePostsResponse
      */
     public function profilePosts(array $body = []): Models\SearchProfilePostsResponse
@@ -1930,6 +3306,18 @@ final class SearchApi
     }
 
     /**
+     * Search Tagged
+     *
+     * Search for tagged contents.
+     *
+     * Required scopes:
+     * + **post**
+     *
+     * - **tag**: Tag to search for tagged contents.
+     * - **tags**: Array of tags to search for tagged contents.
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     *
      * @param array{tag?: string, tags?: list<string>, page?: int, limit?: int} $body
      * @return Models\SearchTaggedResponse
      */
@@ -1942,7 +3330,17 @@ final class SearchApi
     }
 
     /**
-     * @param string|int $search_id
+     * Get Search Results
+     *
+     * List of search results (with pagination).
+     *
+     * Required scopes:
+     * + **get**
+     *
+     * - **page**: Page number of results.
+     * - **limit**: Number of results in a page.
+     *
+     * @param string|int $search_id Search ID.
      * @param array{page?: int, limit?: int} $params
      * @return Models\SearchResultsResponse
      */
@@ -1963,6 +3361,13 @@ final class BatchApi
     }
 
     /**
+     * Batch
+     *
+     * Execute multiple API requests at once (Separated by comma). Maximum batch jobs is 10.
+     *
+     * Required scopes:
+     * + Same as called API requests.
+     *
      * @param list<array{
     id?: string,
     uri: string,
@@ -1988,6 +3393,15 @@ final class ChatboxApi
     }
 
     /**
+     * Get Chats
+     *
+     * Get chat rooms.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **room_id**: Room id.
+     *
      * @param array{room_id?: Enums\RoomId} $params
      * @return Models\ChatboxIndexResponse
      */
@@ -2000,6 +3414,16 @@ final class ChatboxApi
     }
 
     /**
+     * Get Chat Messages
+     *
+     * Get chat messages.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **room_id**: Room id.
+     * - **before_message_id**: Message id to get older chat messages.
+     *
      * @param array{room_id: Enums\RoomId, before_message_id?: int} $params
      * @return Models\ChatboxGetMessagesResponse
      */
@@ -2012,6 +3436,17 @@ final class ChatboxApi
     }
 
     /**
+     * Create Chat Message
+     *
+     * Create chat message.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **room_id**: Room ID.
+     * - **reply_message_id**: ID of the message being replied to.
+     * - **message**: Content of the chat message.
+     *
      * @param array{room_id: Enums\RoomId, reply_message_id?: int, message: string} $body
      * @return Models\ChatboxPostMessageResponse
      */
@@ -2024,6 +3459,16 @@ final class ChatboxApi
     }
 
     /**
+     * Edit Chat Message
+     *
+     * Edit chat message.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **message_id**: Message id.
+     * - **message**: New content of the chat message.
+     *
      * @param array{message_id: int, message: string} $body
      * @return Models\ChatboxEditMessageResponse
      */
@@ -2036,6 +3481,15 @@ final class ChatboxApi
     }
 
     /**
+     * Delete Chat Message
+     *
+     * Delete chat message.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **message_id**: Message id.
+     *
      * @param array{message_id: int} $body
      * @return Models\ChatboxDeleteMessageResponse
      */
@@ -2048,6 +3502,15 @@ final class ChatboxApi
     }
 
     /**
+     * Get Chat Online
+     *
+     * Get chat Online Users.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **room_id**: Room id.
+     *
      * @param array{room_id: Enums\RoomId} $params
      * @return Models\ChatboxOnlineResponse
      */
@@ -2060,6 +3523,15 @@ final class ChatboxApi
     }
 
     /**
+     * Get Chat Message Report Reasons
+     *
+     * Report chat message.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **message_id**: Message id.
+     *
      * @param array{message_id: int} $params
      * @return Models\ChatboxReportReasonsResponse
      */
@@ -2072,6 +3544,16 @@ final class ChatboxApi
     }
 
     /**
+     * Report Chat Message
+     *
+     * Report chat message.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **message_id**: Message id.
+     * - **reason**: Report reason.
+     *
      * @param array{message_id: int, reason: string} $body
      * @return Models\ChatboxReportResponse
      */
@@ -2084,6 +3566,15 @@ final class ChatboxApi
     }
 
     /**
+     * Get Chat Leaderboard
+     *
+     * Get chat leaderboard.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
+     * - **duration**: Duration.
+     *
      * @param array{duration?: Enums\Duration} $params
      * @return Models\ChatboxGetLeaderboardResponse
      */
@@ -2096,6 +3587,13 @@ final class ChatboxApi
     }
 
     /**
+     * Get Ignored Chat Users
+     *
+     * Get list of ignored chat users.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
      * @return Models\ChatboxGetIgnoreResponse
      */
     public function getIgnore(): Models\ChatboxGetIgnoreResponse
@@ -2107,6 +3605,13 @@ final class ChatboxApi
     }
 
     /**
+     * Ignore Chat User
+     *
+     * Ignore chat user.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
      * @param array{user_id: string|int} $body
      * @return Models\ChatboxPostIgnoreResponse
      */
@@ -2119,6 +3624,13 @@ final class ChatboxApi
     }
 
     /**
+     * Unignore Chat User
+     *
+     * Unignore chat user.
+     *
+     * Required scopes:
+     * + **chatbox**
+     *
      * @param array{user_id: string|int} $body
      * @return Models\ChatboxDeleteIgnoreResponse
      */
@@ -2139,6 +3651,12 @@ final class FormsApi
     }
 
     /**
+     * Get Forms List
+     *
+     * Get Forms List
+     *
+     * - **page**: Page number of forms.
+     *
      * @param array{page?: int} $params
      * @return Models\FormsListResponse
      */
@@ -2151,6 +3669,10 @@ final class FormsApi
     }
 
     /**
+     * Create Form
+     *
+     * Create Form.
+     *
      * @param FormsCreateP2PTrade|FormsCreateComplaint $body
      * @return Models\FormsCreateResponse
      */

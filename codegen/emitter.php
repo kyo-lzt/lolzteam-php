@@ -121,6 +121,44 @@ function buildQueryParamsDoc(array $queryParams, string $operationId = '', array
 }
 
 /**
+ * Build per-field description lines for query params.
+ *
+ * @param list<array{name: string, type: string, phpType: string, required: bool}> $queryParams
+ * @return list<string>
+ */
+function buildQueryParamDescriptions(array $queryParams): array
+{
+    $lines = [];
+    foreach ($queryParams as $param) {
+        $desc = $param['description'] ?? null;
+        if (!is_string($desc) || $desc === '') {
+            continue;
+        }
+        $lines[] = " - **{$param['name']}**: {$desc}";
+    }
+    return $lines;
+}
+
+/**
+ * Build per-field description lines for body properties.
+ *
+ * @param list<array{name: string, type: string, phpType: string, required: bool}> $bodyProperties
+ * @return list<string>
+ */
+function buildBodyPropDescriptions(array $bodyProperties): array
+{
+    $lines = [];
+    foreach ($bodyProperties as $prop) {
+        $desc = $prop['description'] ?? null;
+        if (!is_string($desc) || $desc === '') {
+            continue;
+        }
+        $lines[] = " - **{$prop['name']}**: {$desc}";
+    }
+    return $lines;
+}
+
+/**
  * Generate PHPDoc @param for body as an array shape.
  *
  * @param list<array{name: string, type: string, phpType: string, required: bool}> $bodyProperties
@@ -202,39 +240,96 @@ function emitMethod(array $method, bool $isSearch = false, array $paramEnumMap =
     $hasRawBody = $hasBody && $isRawBody && !$hasBodyProps;
 
     // Build PHPDoc
-    $docLines = [];
-    foreach ($pathParams as $param) {
-        $docLines[] = "     * @param {$param['type']} \${$param['name']}";
-    }
     /** @var string $operationId */
     $operationId = $method['operationId'];
+    /** @var string|null $summary */
+    $summary = $method['summary'] ?? null;
+    /** @var string|null $description */
+    $description = $method['description'] ?? null;
+
+    $lines[] = '    /**';
+
+    // Summary line
+    if (is_string($summary) && $summary !== '') {
+        $lines[] = "     * {$summary}";
+    }
+
+    // Description (after blank line separator)
+    if (is_string($description) && $description !== '') {
+        if (is_string($summary) && $summary !== '') {
+            $lines[] = '     *';
+        }
+        $descriptionLines = explode("\n", $description);
+        foreach ($descriptionLines as $descLine) {
+            $trimmed = rtrim($descLine);
+            if ($trimmed === '') {
+                $lines[] = '     *';
+            } else {
+                $lines[] = "     * {$trimmed}";
+            }
+        }
+    }
+
+    // Collect field-level descriptions
+    $fieldDescLines = [];
+    if ($hasQueryParams) {
+        $fieldDescLines = array_merge($fieldDescLines, buildQueryParamDescriptions($queryParams));
+    }
+    if ($hasBodyProps && !$hasOneOf) {
+        $fieldDescLines = array_merge($fieldDescLines, buildBodyPropDescriptions($bodyProperties));
+    }
+
+    // Emit field descriptions if any
+    if (count($fieldDescLines) > 0) {
+        $hasPrecedingContent = (is_string($summary) && $summary !== '') || (is_string($description) && $description !== '');
+        if ($hasPrecedingContent) {
+            $lines[] = '     *';
+        }
+        foreach ($fieldDescLines as $fdl) {
+            $lines[] = "     *{$fdl}";
+        }
+    }
+
+    // Separator before @param/@return tags
+    $hasPrecedingContent = (is_string($summary) && $summary !== '')
+        || (is_string($description) && $description !== '')
+        || count($fieldDescLines) > 0;
+    if ($hasPrecedingContent) {
+        $lines[] = '     *';
+    }
+
+    $tagLines = [];
+    foreach ($pathParams as $param) {
+        $paramDesc = isset($param['description']) && is_string($param['description']) && $param['description'] !== ''
+            ? " {$param['description']}" : '';
+        $tagLines[] = "     * @param {$param['type']} \${$param['name']}{$paramDesc}";
+    }
 
     if ($hasOneOf) {
         $unionType = buildVariantUnionType($operationId, $oneOfVariants);
-        $docLines[] = "     * @param {$unionType} \$body";
+        $tagLines[] = "     * @param {$unionType} \$body";
     } elseif ($hasBodyProps) {
         $bodyDoc = buildBodyDoc($bodyProperties, $operationId, $paramEnumMap);
         if ($bodyDoc !== '') {
-            $docLines[] = "     * {$bodyDoc}";
+            $tagLines[] = "     * {$bodyDoc}";
         }
     } elseif ($hasRawBody) {
-        $docLines[] = "     * @param {$rawBodyType} \$body";
+        $tagLines[] = "     * @param {$rawBodyType} \$body";
     }
     if ($hasQueryParams) {
         $paramsDoc = buildQueryParamsDoc($queryParams, $operationId, $paramEnumMap);
         if ($paramsDoc !== '') {
-            $docLines[] = "     * {$paramsDoc}";
+            $tagLines[] = "     * {$paramsDoc}";
         }
     }
     if ($responseModelClass !== null) {
-        $docLines[] = "     * @return {$responseModelClass}";
+        $tagLines[] = "     * @return {$responseModelClass}";
     } else {
-        $docLines[] = "     * @return {$responseType}";
+        $tagLines[] = "     * @return {$responseType}";
     }
 
-    $lines[] = '    /**';
-    foreach ($docLines as $dl) {
-        $lines[] = $dl;
+    foreach ($tagLines as $tl) {
+        $lines[] = $tl;
     }
     $lines[] = '     */';
 
@@ -437,7 +532,9 @@ function emitVariantBodyClasses(string $operationId, array $variants, array $par
             $phpName = propertyToPhpName($prop['name']);
             $typeHint = $prop['phpType'];
             $nullable = $prop['required'] ? '' : '?';
-            if ($nullable !== '' && !str_contains($typeHint, '|')) {
+            if ($nullable !== '' && $typeHint === 'mixed') {
+                // mixed already includes null
+            } elseif ($nullable !== '' && !str_contains($typeHint, '|')) {
                 $typeHint = '?' . $typeHint;
             } elseif ($nullable !== '' && str_contains($typeHint, '|')) {
                 $typeHint = $typeHint . '|null';
