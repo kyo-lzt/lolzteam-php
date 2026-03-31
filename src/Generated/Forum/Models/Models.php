@@ -839,6 +839,7 @@ final class RespThreadModel
         public readonly bool $thread_is_starred,
         /** @var RespThreadModelFirstPost */
         public readonly RespThreadModelFirstPost $first_post,
+        /** @var list<RespThreadModelThreadPrefixes> */
         public readonly array $thread_prefixes,
         public readonly array $thread_tags,
         /** @var RespThreadModelLinks */
@@ -846,12 +847,12 @@ final class RespThreadModel
         /** @var RespThreadModelPermissions */
         public readonly RespThreadModelPermissions $permissions,
         public readonly string $node_title,
-        /** @var RespThreadModelRestrictions */
-        public readonly RespThreadModelRestrictions $restrictions,
-        /** @var RespThreadModelLastPost */
-        public readonly RespThreadModelLastPost $last_post,
-        /** @var RespThreadModelContest */
-        public readonly RespThreadModelContest $contest,
+        /** @var RespForumModel|null */
+        public readonly ?RespForumModel $forum,
+        /** @var RespThreadModelRestrictions|null */
+        public readonly ?RespThreadModelRestrictions $restrictions,
+        /** @var RespThreadModelContest|null */
+        public readonly ?RespThreadModelContest $contest,
     ) {
     }
 
@@ -879,14 +880,14 @@ final class RespThreadModel
             (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
             (is_scalar(($data['thread_is_starred'] ?? null)) ? (bool) ($data['thread_is_starred'] ?? null) : false),
             isset($data['first_post']) && is_array($data['first_post']) ? RespThreadModelFirstPost::fromArray($data['first_post']) : RespThreadModelFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
+            isset($data['thread_prefixes']) && is_array($data['thread_prefixes']) ? array_map(static fn(array $item): RespThreadModelThreadPrefixes => RespThreadModelThreadPrefixes::fromArray($item), $data['thread_prefixes']) : [],
             $data['thread_tags'] ?? [],
             isset($data['links']) && is_array($data['links']) ? RespThreadModelLinks::fromArray($data['links']) : RespThreadModelLinks::fromArray([]),
             isset($data['permissions']) && is_array($data['permissions']) ? RespThreadModelPermissions::fromArray($data['permissions']) : RespThreadModelPermissions::fromArray([]),
             (is_scalar(($data['node_title'] ?? null)) ? (string) ($data['node_title'] ?? null) : (is_array(($data['node_title'] ?? null)) ? json_encode(($data['node_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['restrictions']) && is_array($data['restrictions']) ? RespThreadModelRestrictions::fromArray($data['restrictions']) : RespThreadModelRestrictions::fromArray([]),
-            isset($data['last_post']) && is_array($data['last_post']) ? RespThreadModelLastPost::fromArray($data['last_post']) : RespThreadModelLastPost::fromArray([]),
-            isset($data['contest']) && is_array($data['contest']) ? RespThreadModelContest::fromArray($data['contest']) : RespThreadModelContest::fromArray([]),
+            isset($data['forum']) && is_array($data['forum']) ? RespForumModel::fromArray($data['forum']) : null,
+            isset($data['restrictions']) && is_array($data['restrictions']) ? RespThreadModelRestrictions::fromArray($data['restrictions']) : null,
+            isset($data['contest']) && is_array($data['contest']) ? RespThreadModelContest::fromArray($data['contest']) : null,
         );
     }
 }
@@ -1011,6 +1012,26 @@ final class RespThreadModelFirstPostPermissions
     }
 }
 
+final class RespThreadModelThreadPrefixes
+{
+    public function __construct(
+        public readonly int $prefix_id,
+        public readonly string $prefix_title,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
+            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+        );
+    }
+}
+
 final class RespThreadModelLinks
 {
     public function __construct(
@@ -1083,8 +1104,8 @@ final class RespThreadModelPermissionsBump
     public function __construct(
         public readonly bool $can,
         public readonly int $available_count,
-        public readonly mixed $error,
-        public readonly mixed $next_available_time,
+        public readonly string $error,
+        public readonly int $next_available_time,
     ) {
     }
 
@@ -1096,8 +1117,8 @@ final class RespThreadModelPermissionsBump
         return new self(
             (is_scalar(($data['can'] ?? null)) ? (bool) ($data['can'] ?? null) : false),
             (is_scalar(($data['available_count'] ?? null)) ? (int) ($data['available_count'] ?? null) : 0),
-            $data['error'] ?? null,
-            $data['next_available_time'] ?? null,
+            (is_scalar(($data['error'] ?? null)) ? (string) ($data['error'] ?? null) : (is_array(($data['error'] ?? null)) ? json_encode(($data['error'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['next_available_time'] ?? null)) ? (int) ($data['next_available_time'] ?? null) : 0),
         );
     }
 }
@@ -1122,126 +1143,6 @@ final class RespThreadModelRestrictions
     }
 }
 
-final class RespThreadModelLastPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        public readonly bool $post_is_liked,
-        /** @var RespThreadModelLastPostLinks */
-        public readonly RespThreadModelLastPostLinks $links,
-        /** @var RespThreadModelLastPostPermissions */
-        public readonly RespThreadModelLastPostPermissions $permissions,
-        public readonly bool $thread_is_deleted,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            (is_scalar(($data['post_is_liked'] ?? null)) ? (bool) ($data['post_is_liked'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? RespThreadModelLastPostLinks::fromArray($data['links']) : RespThreadModelLastPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? RespThreadModelLastPostPermissions::fromArray($data['permissions']) : RespThreadModelLastPostPermissions::fromArray([]),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-        );
-    }
-}
-
-final class RespThreadModelLastPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class RespThreadModelLastPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-        );
-    }
-}
-
 final class RespThreadModelContest
 {
     public function __construct(
@@ -1258,8 +1159,8 @@ final class RespThreadModelContest
         public readonly int $prize_data,
         public readonly int $is_money_places,
         public readonly float $chance_to_win,
-        /** @var list<int> */
-        public readonly array $winners,
+        /** @var list<int>|null */
+        public readonly ?array $winners,
         public readonly bool $already_participate,
         /** @var RespThreadModelContestPermissions */
         public readonly RespThreadModelContestPermissions $permissions,
@@ -1285,7 +1186,7 @@ final class RespThreadModelContest
             (is_scalar(($data['prize_data'] ?? null)) ? (int) ($data['prize_data'] ?? null) : 0),
             (is_scalar(($data['is_money_places'] ?? null)) ? (int) ($data['is_money_places'] ?? null) : 0),
             (is_scalar(($data['chance_to_win'] ?? null)) ? (float) ($data['chance_to_win'] ?? null) : 0.0),
-            $data['winners'] ?? [],
+            isset($data['winners']) && is_array($data['winners']) ? $data['winners'] : null,
             (is_scalar(($data['already_participate'] ?? null)) ? (bool) ($data['already_participate'] ?? null) : false),
             isset($data['permissions']) && is_array($data['permissions']) ? RespThreadModelContestPermissions::fromArray($data['permissions']) : RespThreadModelContestPermissions::fromArray([]),
         );
@@ -2041,6 +1942,156 @@ final class RespConversationMessageModelPermissions
     }
 }
 
+final class RespForumModel
+{
+    public function __construct(
+        public readonly int $forum_id,
+        public readonly string $forum_title,
+        public readonly string $forum_description,
+        public readonly int $forum_thread_count,
+        public readonly int $forum_post_count,
+        public readonly int $parent_node_id,
+        public readonly string $node_type_id,
+        public readonly string $icon_content,
+        public readonly string $active_icon_content,
+        public readonly int $forum_rules_thread_id,
+        /** @var list<RespForumModelForumPrefixes> */
+        public readonly array $forum_prefixes,
+        public readonly int $thread_default_prefix_id,
+        public readonly bool $thread_prefix_is_required,
+        /** @var RespForumModelLinks */
+        public readonly RespForumModelLinks $links,
+        /** @var RespForumModelPermissions */
+        public readonly RespForumModelPermissions $permissions,
+        public readonly bool $forum_is_followed,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
+            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
+            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
+            (is_scalar(($data['parent_node_id'] ?? null)) ? (int) ($data['parent_node_id'] ?? null) : 0),
+            (is_scalar(($data['node_type_id'] ?? null)) ? (string) ($data['node_type_id'] ?? null) : (is_array(($data['node_type_id'] ?? null)) ? json_encode(($data['node_type_id'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['icon_content'] ?? null)) ? (string) ($data['icon_content'] ?? null) : (is_array(($data['icon_content'] ?? null)) ? json_encode(($data['icon_content'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['active_icon_content'] ?? null)) ? (string) ($data['active_icon_content'] ?? null) : (is_array(($data['active_icon_content'] ?? null)) ? json_encode(($data['active_icon_content'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['forum_rules_thread_id'] ?? null)) ? (int) ($data['forum_rules_thread_id'] ?? null) : 0),
+            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): RespForumModelForumPrefixes => RespForumModelForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
+            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
+            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
+            isset($data['links']) && is_array($data['links']) ? RespForumModelLinks::fromArray($data['links']) : RespForumModelLinks::fromArray([]),
+            isset($data['permissions']) && is_array($data['permissions']) ? RespForumModelPermissions::fromArray($data['permissions']) : RespForumModelPermissions::fromArray([]),
+            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
+        );
+    }
+}
+
+final class RespForumModelForumPrefixes
+{
+    public function __construct(
+        public readonly string $group_title,
+        /** @var list<RespForumModelForumPrefixesGroupPrefixes> */
+        public readonly array $group_prefixes,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): RespForumModelForumPrefixesGroupPrefixes => RespForumModelForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
+        );
+    }
+}
+
+final class RespForumModelForumPrefixesGroupPrefixes
+{
+    public function __construct(
+        public readonly int $prefix_id,
+        public readonly string $css_class,
+        public readonly string $prefix_title,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
+            (is_scalar(($data['css_class'] ?? null)) ? (string) ($data['css_class'] ?? null) : (is_array(($data['css_class'] ?? null)) ? json_encode(($data['css_class'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+        );
+    }
+}
+
+final class RespForumModelLinks
+{
+    public function __construct(
+        public readonly string $permalink,
+        public readonly string $detail,
+        public readonly string $sub_categories,
+        public readonly string $sub_forums,
+        public readonly string $threads,
+        public readonly string $followers,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+        );
+    }
+}
+
+final class RespForumModelPermissions
+{
+    public function __construct(
+        public readonly bool $view,
+        public readonly bool $edit,
+        public readonly bool $delete,
+        public readonly bool $create_thread,
+        public readonly bool $tag_thread,
+        public readonly bool $follow,
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
+            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
+            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
+            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
+            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
+            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
+        );
+    }
+}
+
 final class RespSystemInfo
 {
     public function __construct(
@@ -2307,7 +2358,7 @@ final class CategoriesGetResponseCategoryPermissions
 final class ForumsListResponse
 {
     public function __construct(
-        /** @var list<ForumsListResponseForums> */
+        /** @var list<RespForumModel> */
         public readonly array $forums,
         public readonly int $forums_total,
         /** @var list<ForumsListResponseTabs> */
@@ -2323,148 +2374,10 @@ final class ForumsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): ForumsListResponseForums => ForumsListResponseForums::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
             (is_scalar(($data['forums_total'] ?? null)) ? (int) ($data['forums_total'] ?? null) : 0),
             isset($data['tabs']) && is_array($data['tabs']) ? array_map(static fn(array $item): ForumsListResponseTabs => ForumsListResponseTabs::fromArray($item), $data['tabs']) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class ForumsListResponseForums
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<ForumsListResponseForumsForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ForumsListResponseForumsLinks */
-        public readonly ForumsListResponseForumsLinks $links,
-        /** @var ForumsListResponseForumsPermissions */
-        public readonly ForumsListResponseForumsPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): ForumsListResponseForumsForumPrefixes => ForumsListResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ForumsListResponseForumsLinks::fromArray($data['links']) : ForumsListResponseForumsLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ForumsListResponseForumsPermissions::fromArray($data['permissions']) : ForumsListResponseForumsPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class ForumsListResponseForumsForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<ForumsListResponseForumsForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): ForumsListResponseForumsForumPrefixesGroupPrefixes => ForumsListResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class ForumsListResponseForumsForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsListResponseForumsLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsListResponseForumsPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -2496,6 +2409,45 @@ final class ForumsListResponseTabs
 final class ForumsGroupedResponse
 {
     public function __construct(
+        /** @var list<list<array{
+    forum_id: int,
+    forum_title: string,
+    forum_description: string,
+    forum_thread_count: int,
+    forum_post_count: int,
+    parent_node_id: int,
+    node_type_id: string,
+    icon_content: string,
+    active_icon_content: string,
+    forum_rules_thread_id: int,
+    forum_prefixes: list<array{
+        group_title: string,
+        group_prefixes: list<array{
+            prefix_id: int,
+            css_class: string,
+            prefix_title: string,
+        }>,
+    }>,
+    thread_default_prefix_id: int,
+    thread_prefix_is_required: bool,
+    links: array{
+        permalink: string,
+        detail: string,
+        sub-categories: string,
+        sub-forums: string,
+        threads: string,
+        followers: string,
+    },
+    permissions: array{
+        view: bool,
+        edit: bool,
+        delete: bool,
+        create_thread: bool,
+        tag_thread: bool,
+        follow: bool,
+    },
+    forum_is_followed: bool,
+}>> */
         public readonly array $data,
         /** @var list<ForumsGroupedResponseTabs> */
         public readonly array $tabs,
@@ -2520,10 +2472,18 @@ final class ForumsGroupedResponse
 final class ForumsGroupedResponseTabs
 {
     public function __construct(
-        public readonly string $link_title,
-        public readonly bool $isDefault,
+        public readonly string $node_ids,
         public readonly string $title,
-        public readonly bool $isHidden,
+        public readonly string $link_title,
+        public readonly bool $isExtendedTab,
+        public readonly array $prefixes,
+        public readonly array $prefixes_not,
+        public readonly string $order,
+        public readonly string $direction,
+        public readonly string $period,
+        public readonly string $state,
+        public readonly string $q,
+        public readonly string $tabLink,
     ) {
     }
 
@@ -2533,10 +2493,18 @@ final class ForumsGroupedResponseTabs
     public static function fromArray(array $data): self
     {
         return new self(
-            (is_scalar(($data['link_title'] ?? null)) ? (string) ($data['link_title'] ?? null) : (is_array(($data['link_title'] ?? null)) ? json_encode(($data['link_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['isDefault'] ?? null)) ? (bool) ($data['isDefault'] ?? null) : false),
+            (is_scalar(($data['node_ids'] ?? null)) ? (string) ($data['node_ids'] ?? null) : (is_array(($data['node_ids'] ?? null)) ? json_encode(($data['node_ids'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['title'] ?? null)) ? (string) ($data['title'] ?? null) : (is_array(($data['title'] ?? null)) ? json_encode(($data['title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['isHidden'] ?? null)) ? (bool) ($data['isHidden'] ?? null) : false),
+            (is_scalar(($data['link_title'] ?? null)) ? (string) ($data['link_title'] ?? null) : (is_array(($data['link_title'] ?? null)) ? json_encode(($data['link_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['isExtendedTab'] ?? null)) ? (bool) ($data['isExtendedTab'] ?? null) : false),
+            $data['prefixes'] ?? [],
+            $data['prefixes_not'] ?? [],
+            (is_scalar(($data['order'] ?? null)) ? (string) ($data['order'] ?? null) : (is_array(($data['order'] ?? null)) ? json_encode(($data['order'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['direction'] ?? null)) ? (string) ($data['direction'] ?? null) : (is_array(($data['direction'] ?? null)) ? json_encode(($data['direction'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['period'] ?? null)) ? (string) ($data['period'] ?? null) : (is_array(($data['period'] ?? null)) ? json_encode(($data['period'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['state'] ?? null)) ? (string) ($data['state'] ?? null) : (is_array(($data['state'] ?? null)) ? json_encode(($data['state'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['q'] ?? null)) ? (string) ($data['q'] ?? null) : (is_array(($data['q'] ?? null)) ? json_encode(($data['q'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
+            (is_scalar(($data['tabLink'] ?? null)) ? (string) ($data['tabLink'] ?? null) : (is_array(($data['tabLink'] ?? null)) ? json_encode(($data['tabLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
         );
     }
 }
@@ -2544,8 +2512,8 @@ final class ForumsGroupedResponseTabs
 final class ForumsGetResponse
 {
     public function __construct(
-        /** @var ForumsGetResponseForum */
-        public readonly ForumsGetResponseForum $forum,
+        /** @var RespForumModel */
+        public readonly RespForumModel $forum,
         /** @var RespSystemInfo */
         public readonly RespSystemInfo $system_info,
     ) {
@@ -2557,148 +2525,8 @@ final class ForumsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forum']) && is_array($data['forum']) ? ForumsGetResponseForum::fromArray($data['forum']) : ForumsGetResponseForum::fromArray([]),
+            isset($data['forum']) && is_array($data['forum']) ? RespForumModel::fromArray($data['forum']) : RespForumModel::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class ForumsGetResponseForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<ForumsGetResponseForumForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ForumsGetResponseForumLinks */
-        public readonly ForumsGetResponseForumLinks $links,
-        /** @var ForumsGetResponseForumPermissions */
-        public readonly ForumsGetResponseForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): ForumsGetResponseForumForumPrefixes => ForumsGetResponseForumForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ForumsGetResponseForumLinks::fromArray($data['links']) : ForumsGetResponseForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ForumsGetResponseForumPermissions::fromArray($data['permissions']) : ForumsGetResponseForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class ForumsGetResponseForumForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<ForumsGetResponseForumForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): ForumsGetResponseForumForumPrefixesGroupPrefixes => ForumsGetResponseForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class ForumsGetResponseForumForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsGetResponseForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsGetResponseForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -2819,7 +2647,7 @@ final class ForumsUnfollowResponse
 final class ForumsFollowedResponse
 {
     public function __construct(
-        /** @var list<ForumsFollowedResponseForums> */
+        /** @var list<RespForumModel> */
         public readonly array $forums,
         /** @var RespSystemInfo */
         public readonly RespSystemInfo $system_info,
@@ -2832,173 +2660,8 @@ final class ForumsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): ForumsFollowedResponseForums => ForumsFollowedResponseForums::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class ForumsFollowedResponseForums
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<ForumsFollowedResponseForumsForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ForumsFollowedResponseForumsLinks */
-        public readonly ForumsFollowedResponseForumsLinks $links,
-        /** @var ForumsFollowedResponseForumsPermissions */
-        public readonly ForumsFollowedResponseForumsPermissions $permissions,
-        public readonly bool $forum_is_followed,
-        /** @var ForumsFollowedResponseForumsFollow */
-        public readonly ForumsFollowedResponseForumsFollow $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): ForumsFollowedResponseForumsForumPrefixes => ForumsFollowedResponseForumsForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ForumsFollowedResponseForumsLinks::fromArray($data['links']) : ForumsFollowedResponseForumsLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ForumsFollowedResponseForumsPermissions::fromArray($data['permissions']) : ForumsFollowedResponseForumsPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-            isset($data['follow']) && is_array($data['follow']) ? ForumsFollowedResponseForumsFollow::fromArray($data['follow']) : ForumsFollowedResponseForumsFollow::fromArray([]),
-        );
-    }
-}
-
-final class ForumsFollowedResponseForumsForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<ForumsFollowedResponseForumsForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): ForumsFollowedResponseForumsForumPrefixesGroupPrefixes => ForumsFollowedResponseForumsForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class ForumsFollowedResponseForumsForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsFollowedResponseForumsLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsFollowedResponseForumsPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-        );
-    }
-}
-
-final class ForumsFollowedResponseForumsFollow
-{
-    public function __construct(
-        public readonly bool $post,
-        public readonly bool $alert,
-        public readonly bool $email,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['alert'] ?? null)) ? (bool) ($data['alert'] ?? null) : false),
-            (is_scalar(($data['email'] ?? null)) ? (bool) ($data['email'] ?? null) : false),
         );
     }
 }
@@ -3006,7 +2669,7 @@ final class ForumsFollowedResponseForumsFollow
 final class ForumsGetFeedOptionsResponse
 {
     public function __construct(
-        /** @var list<ForumsGetFeedOptionsResponseForums> */
+        /** @var list<RespForumModel> */
         public readonly array $forums,
         /** @var list<int> */
         public readonly array $excluded_forums_ids,
@@ -3024,101 +2687,11 @@ final class ForumsGetFeedOptionsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): ForumsGetFeedOptionsResponseForums => ForumsGetFeedOptionsResponseForums::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
             $data['excluded_forums_ids'] ?? [],
             $data['default_excluded_forums_ids'] ?? [],
             (is_scalar(($data['keywords'] ?? null)) ? (string) ($data['keywords'] ?? null) : (is_array(($data['keywords'] ?? null)) ? json_encode(($data['keywords'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class ForumsGetFeedOptionsResponseForums
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $parent_node_id,
-        /** @var ForumsGetFeedOptionsResponseForumsLinks */
-        public readonly ForumsGetFeedOptionsResponseForumsLinks $links,
-        /** @var ForumsGetFeedOptionsResponseForumsPermissions */
-        public readonly ForumsGetFeedOptionsResponseForumsPermissions $permissions,
-        public readonly bool $forum_is_followed,
-        public readonly bool $has_children,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['parent_node_id'] ?? null)) ? (int) ($data['parent_node_id'] ?? null) : 0),
-            isset($data['links']) && is_array($data['links']) ? ForumsGetFeedOptionsResponseForumsLinks::fromArray($data['links']) : ForumsGetFeedOptionsResponseForumsLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ForumsGetFeedOptionsResponseForumsPermissions::fromArray($data['permissions']) : ForumsGetFeedOptionsResponseForumsPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-            (is_scalar(($data['has_children'] ?? null)) ? (bool) ($data['has_children'] ?? null) : false),
-        );
-    }
-}
-
-final class ForumsGetFeedOptionsResponseForumsLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ForumsGetFeedOptionsResponseForumsPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -4006,7 +3579,7 @@ final class ThreadsUnfollowResponse
 final class ThreadsFollowedResponse
 {
     public function __construct(
-        /** @var list<ThreadsFollowedResponseThreads> */
+        /** @var list<RespThreadModel> */
         public readonly array $threads,
         public readonly int $threads_total,
         /** @var RespSystemInfo */
@@ -4020,409 +3593,9 @@ final class ThreadsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): ThreadsFollowedResponseThreads => ThreadsFollowedResponseThreads::fromArray($item), $data['threads']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['threads']) : [],
             (is_scalar(($data['threads_total'] ?? null)) ? (int) ($data['threads_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreads
-{
-    public function __construct(
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var ThreadsFollowedResponseThreadsFirstPost */
-        public readonly ThreadsFollowedResponseThreadsFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var ThreadsFollowedResponseThreadsLinks */
-        public readonly ThreadsFollowedResponseThreadsLinks $links,
-        /** @var ThreadsFollowedResponseThreadsPermissions */
-        public readonly ThreadsFollowedResponseThreadsPermissions $permissions,
-        /** @var ThreadsFollowedResponseThreadsForum */
-        public readonly ThreadsFollowedResponseThreadsForum $forum,
-        /** @var ThreadsFollowedResponseThreadsFollow */
-        public readonly ThreadsFollowedResponseThreadsFollow $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? ThreadsFollowedResponseThreadsFirstPost::fromArray($data['first_post']) : ThreadsFollowedResponseThreadsFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? ThreadsFollowedResponseThreadsLinks::fromArray($data['links']) : ThreadsFollowedResponseThreadsLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsFollowedResponseThreadsPermissions::fromArray($data['permissions']) : ThreadsFollowedResponseThreadsPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? ThreadsFollowedResponseThreadsForum::fromArray($data['forum']) : ThreadsFollowedResponseThreadsForum::fromArray([]),
-            isset($data['follow']) && is_array($data['follow']) ? ThreadsFollowedResponseThreadsFollow::fromArray($data['follow']) : ThreadsFollowedResponseThreadsFollow::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        /** @var list<ThreadsFollowedResponseThreadsFirstPostLikeUsers> */
-        public readonly array $like_users,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var ThreadsFollowedResponseThreadsFirstPostLinks */
-        public readonly ThreadsFollowedResponseThreadsFirstPostLinks $links,
-        /** @var ThreadsFollowedResponseThreadsFirstPostPermissions */
-        public readonly ThreadsFollowedResponseThreadsFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            isset($data['like_users']) && is_array($data['like_users']) ? array_map(static fn(array $item): ThreadsFollowedResponseThreadsFirstPostLikeUsers => ThreadsFollowedResponseThreadsFirstPostLikeUsers::fromArray($item), $data['like_users']) : [],
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsFollowedResponseThreadsFirstPostLinks::fromArray($data['links']) : ThreadsFollowedResponseThreadsFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsFollowedResponseThreadsFirstPostPermissions::fromArray($data['permissions']) : ThreadsFollowedResponseThreadsFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsFirstPostLikeUsers
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $display_style_group_id,
-        public readonly int $is_banned,
-        public readonly string $uniq_username_css,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['user_id'] ?? null)) ? (int) ($data['user_id'] ?? null) : 0),
-            (is_scalar(($data['username'] ?? null)) ? (string) ($data['username'] ?? null) : (is_array(($data['username'] ?? null)) ? json_encode(($data['username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['display_style_group_id'] ?? null)) ? (int) ($data['display_style_group_id'] ?? null) : 0),
-            (is_scalar(($data['is_banned'] ?? null)) ? (int) ($data['is_banned'] ?? null) : 0),
-            (is_scalar(($data['uniq_username_css'] ?? null)) ? (string) ($data['uniq_username_css'] ?? null) : (is_array(($data['uniq_username_css'] ?? null)) ? json_encode(($data['uniq_username_css'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-        public readonly bool $edit_title,
-        public readonly bool $edit_tags,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['edit_title'] ?? null)) ? (bool) ($data['edit_title'] ?? null) : false),
-            (is_scalar(($data['edit_tags'] ?? null)) ? (bool) ($data['edit_tags'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ThreadsFollowedResponseThreadsForumLinks */
-        public readonly ThreadsFollowedResponseThreadsForumLinks $links,
-        /** @var ThreadsFollowedResponseThreadsForumPermissions */
-        public readonly ThreadsFollowedResponseThreadsForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsFollowedResponseThreadsForumLinks::fromArray($data['links']) : ThreadsFollowedResponseThreadsForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsFollowedResponseThreadsForumPermissions::fromArray($data['permissions']) : ThreadsFollowedResponseThreadsForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsFollowedResponseThreadsFollow
-{
-    public function __construct(
-        public readonly bool $alert,
-        public readonly bool $email,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['alert'] ?? null)) ? (bool) ($data['alert'] ?? null) : false),
-            (is_scalar(($data['email'] ?? null)) ? (bool) ($data['email'] ?? null) : false),
         );
     }
 }
@@ -4682,9 +3855,9 @@ final class ThreadsPollVoteResponse
 final class ThreadsUnreadResponse
 {
     public function __construct(
-        /** @var list<RespThreadModel> */
+        /** @var list<ThreadsUnreadResponseThreads> */
         public readonly array $threads,
-        /** @var list<ThreadsUnreadResponseData> */
+        /** @var list<RespThreadModel> */
         public readonly array $data,
         /** @var RespSystemInfo */
         public readonly RespSystemInfo $system_info,
@@ -4697,43 +3870,17 @@ final class ThreadsUnreadResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['threads']) : [],
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): ThreadsUnreadResponseData => ThreadsUnreadResponseData::fromArray($item), $data['data']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): ThreadsUnreadResponseThreads => ThreadsUnreadResponseThreads::fromArray($item), $data['threads']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
 }
 
-final class ThreadsUnreadResponseData
+final class ThreadsUnreadResponseThreads
 {
     public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
         public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var ThreadsUnreadResponseDataFirstPost */
-        public readonly ThreadsUnreadResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var ThreadsUnreadResponseDataLinks */
-        public readonly ThreadsUnreadResponseDataLinks $links,
-        /** @var ThreadsUnreadResponseDataPermissions */
-        public readonly ThreadsUnreadResponseDataPermissions $permissions,
-        /** @var ThreadsUnreadResponseDataForum */
-        public readonly ThreadsUnreadResponseDataForum $forum,
     ) {
     }
 
@@ -4743,342 +3890,7 @@ final class ThreadsUnreadResponseData
     public static function fromArray(array $data): self
     {
         return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
             (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? ThreadsUnreadResponseDataFirstPost::fromArray($data['first_post']) : ThreadsUnreadResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? ThreadsUnreadResponseDataLinks::fromArray($data['links']) : ThreadsUnreadResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsUnreadResponseDataPermissions::fromArray($data['permissions']) : ThreadsUnreadResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? ThreadsUnreadResponseDataForum::fromArray($data['forum']) : ThreadsUnreadResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        /** @var list<ThreadsUnreadResponseDataFirstPostLikeUsers> */
-        public readonly array $like_users,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var ThreadsUnreadResponseDataFirstPostLinks */
-        public readonly ThreadsUnreadResponseDataFirstPostLinks $links,
-        /** @var ThreadsUnreadResponseDataFirstPostPermissions */
-        public readonly ThreadsUnreadResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            isset($data['like_users']) && is_array($data['like_users']) ? array_map(static fn(array $item): ThreadsUnreadResponseDataFirstPostLikeUsers => ThreadsUnreadResponseDataFirstPostLikeUsers::fromArray($item), $data['like_users']) : [],
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsUnreadResponseDataFirstPostLinks::fromArray($data['links']) : ThreadsUnreadResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsUnreadResponseDataFirstPostPermissions::fromArray($data['permissions']) : ThreadsUnreadResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataFirstPostLikeUsers
-{
-    public function __construct(
-        public readonly int $user_id,
-        public readonly string $username,
-        public readonly int $display_style_group_id,
-        public readonly int $is_banned,
-        public readonly string $uniq_username_css,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['user_id'] ?? null)) ? (int) ($data['user_id'] ?? null) : 0),
-            (is_scalar(($data['username'] ?? null)) ? (string) ($data['username'] ?? null) : (is_array(($data['username'] ?? null)) ? json_encode(($data['username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['display_style_group_id'] ?? null)) ? (int) ($data['display_style_group_id'] ?? null) : 0),
-            (is_scalar(($data['is_banned'] ?? null)) ? (int) ($data['is_banned'] ?? null) : 0),
-            (is_scalar(($data['uniq_username_css'] ?? null)) ? (string) ($data['uniq_username_css'] ?? null) : (is_array(($data['uniq_username_css'] ?? null)) ? json_encode(($data['uniq_username_css'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_poster,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_poster'] ?? null)) ? (string) ($data['last_poster'] ?? null) : (is_array(($data['last_poster'] ?? null)) ? json_encode(($data['last_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ThreadsUnreadResponseDataForumLinks */
-        public readonly ThreadsUnreadResponseDataForumLinks $links,
-        /** @var ThreadsUnreadResponseDataForumPermissions */
-        public readonly ThreadsUnreadResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsUnreadResponseDataForumLinks::fromArray($data['links']) : ThreadsUnreadResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsUnreadResponseDataForumPermissions::fromArray($data['permissions']) : ThreadsUnreadResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsUnreadResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -5086,9 +3898,9 @@ final class ThreadsUnreadResponseDataForumPermissions
 final class ThreadsRecentResponse
 {
     public function __construct(
-        /** @var list<RespThreadModel> */
+        /** @var list<ThreadsRecentResponseThreads> */
         public readonly array $threads,
-        /** @var list<ThreadsRecentResponseData> */
+        /** @var list<RespThreadModel> */
         public readonly array $data,
         /** @var RespSystemInfo */
         public readonly RespSystemInfo $system_info,
@@ -5101,43 +3913,17 @@ final class ThreadsRecentResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['threads']) : [],
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): ThreadsRecentResponseData => ThreadsRecentResponseData::fromArray($item), $data['data']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): ThreadsRecentResponseThreads => ThreadsRecentResponseThreads::fromArray($item), $data['threads']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
 }
 
-final class ThreadsRecentResponseData
+final class ThreadsRecentResponseThreads
 {
     public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
         public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var ThreadsRecentResponseDataFirstPost */
-        public readonly ThreadsRecentResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var ThreadsRecentResponseDataLinks */
-        public readonly ThreadsRecentResponseDataLinks $links,
-        /** @var ThreadsRecentResponseDataPermissions */
-        public readonly ThreadsRecentResponseDataPermissions $permissions,
-        /** @var ThreadsRecentResponseDataForum */
-        public readonly ThreadsRecentResponseDataForum $forum,
     ) {
     }
 
@@ -5147,313 +3933,7 @@ final class ThreadsRecentResponseData
     public static function fromArray(array $data): self
     {
         return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
             (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? ThreadsRecentResponseDataFirstPost::fromArray($data['first_post']) : ThreadsRecentResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? ThreadsRecentResponseDataLinks::fromArray($data['links']) : ThreadsRecentResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsRecentResponseDataPermissions::fromArray($data['permissions']) : ThreadsRecentResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? ThreadsRecentResponseDataForum::fromArray($data['forum']) : ThreadsRecentResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var ThreadsRecentResponseDataFirstPostLinks */
-        public readonly ThreadsRecentResponseDataFirstPostLinks $links,
-        /** @var ThreadsRecentResponseDataFirstPostPermissions */
-        public readonly ThreadsRecentResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsRecentResponseDataFirstPostLinks::fromArray($data['links']) : ThreadsRecentResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsRecentResponseDataFirstPostPermissions::fromArray($data['permissions']) : ThreadsRecentResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_poster,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_poster'] ?? null)) ? (string) ($data['last_poster'] ?? null) : (is_array(($data['last_poster'] ?? null)) ? json_encode(($data['last_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var ThreadsRecentResponseDataForumLinks */
-        public readonly ThreadsRecentResponseDataForumLinks $links,
-        /** @var ThreadsRecentResponseDataForumPermissions */
-        public readonly ThreadsRecentResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? ThreadsRecentResponseDataForumLinks::fromArray($data['links']) : ThreadsRecentResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? ThreadsRecentResponseDataForumPermissions::fromArray($data['permissions']) : ThreadsRecentResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class ThreadsRecentResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -7337,8 +5817,8 @@ final class UsersContentsResponseData
         public readonly UsersContentsResponseDataLinks $links,
         /** @var UsersContentsResponseDataPermissions */
         public readonly UsersContentsResponseDataPermissions $permissions,
-        /** @var UsersContentsResponseDataThread */
-        public readonly UsersContentsResponseDataThread $thread,
+        /** @var RespThreadModel */
+        public readonly RespThreadModel $thread,
     ) {
     }
 
@@ -7372,7 +5852,7 @@ final class UsersContentsResponseData
             (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
             isset($data['links']) && is_array($data['links']) ? UsersContentsResponseDataLinks::fromArray($data['links']) : UsersContentsResponseDataLinks::fromArray([]),
             isset($data['permissions']) && is_array($data['permissions']) ? UsersContentsResponseDataPermissions::fromArray($data['permissions']) : UsersContentsResponseDataPermissions::fromArray([]),
-            isset($data['thread']) && is_array($data['thread']) ? UsersContentsResponseDataThread::fromArray($data['thread']) : UsersContentsResponseDataThread::fromArray([]),
+            isset($data['thread']) && is_array($data['thread']) ? RespThreadModel::fromArray($data['thread']) : RespThreadModel::fromArray([]),
         );
     }
 }
@@ -7460,124 +5940,6 @@ final class UsersContentsResponseDataPermissions
             (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
             (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
             (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class UsersContentsResponseDataThread
-{
-    public function __construct(
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var UsersContentsResponseDataThreadLinks */
-        public readonly UsersContentsResponseDataThreadLinks $links,
-        /** @var UsersContentsResponseDataThreadPermissions */
-        public readonly UsersContentsResponseDataThreadPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? UsersContentsResponseDataThreadLinks::fromArray($data['links']) : UsersContentsResponseDataThreadLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? UsersContentsResponseDataThreadPermissions::fromArray($data['permissions']) : UsersContentsResponseDataThreadPermissions::fromArray([]),
-        );
-    }
-}
-
-final class UsersContentsResponseDataThreadLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_poster,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_poster'] ?? null)) ? (string) ($data['last_poster'] ?? null) : (is_array(($data['last_poster'] ?? null)) ? json_encode(($data['last_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class UsersContentsResponseDataThreadPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
             (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
         );
     }
@@ -9478,7 +7840,7 @@ final class TagsGetResponse
     public function __construct(
         /** @var TagsGetResponseTag */
         public readonly TagsGetResponseTag $tag,
-        /** @var list<TagsGetResponseTagged> */
+        /** @var list<RespThreadModel> */
         public readonly array $tagged,
         public readonly int $tagged_total,
         /** @var TagsGetResponseLinks */
@@ -9495,7 +7857,7 @@ final class TagsGetResponse
     {
         return new self(
             isset($data['tag']) && is_array($data['tag']) ? TagsGetResponseTag::fromArray($data['tag']) : TagsGetResponseTag::fromArray([]),
-            isset($data['tagged']) && is_array($data['tagged']) ? array_map(static fn(array $item): TagsGetResponseTagged => TagsGetResponseTagged::fromArray($item), $data['tagged']) : [],
+            isset($data['tagged']) && is_array($data['tagged']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['tagged']) : [],
             (is_scalar(($data['tagged_total'] ?? null)) ? (int) ($data['tagged_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? TagsGetResponseLinks::fromArray($data['links']) : TagsGetResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -9544,419 +7906,6 @@ final class TagsGetResponseTagLinks
         return new self(
             (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTagged
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var TagsGetResponseTaggedFirstPost */
-        public readonly TagsGetResponseTaggedFirstPost $first_post,
-        /** @var list<TagsGetResponseTaggedThreadPrefixes> */
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var TagsGetResponseTaggedLinks */
-        public readonly TagsGetResponseTaggedLinks $links,
-        /** @var TagsGetResponseTaggedPermissions */
-        public readonly TagsGetResponseTaggedPermissions $permissions,
-        /** @var TagsGetResponseTaggedForum */
-        public readonly TagsGetResponseTaggedForum $forum,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? TagsGetResponseTaggedFirstPost::fromArray($data['first_post']) : TagsGetResponseTaggedFirstPost::fromArray([]),
-            isset($data['thread_prefixes']) && is_array($data['thread_prefixes']) ? array_map(static fn(array $item): TagsGetResponseTaggedThreadPrefixes => TagsGetResponseTaggedThreadPrefixes::fromArray($item), $data['thread_prefixes']) : [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? TagsGetResponseTaggedLinks::fromArray($data['links']) : TagsGetResponseTaggedLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? TagsGetResponseTaggedPermissions::fromArray($data['permissions']) : TagsGetResponseTaggedPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? TagsGetResponseTaggedForum::fromArray($data['forum']) : TagsGetResponseTaggedForum::fromArray([]),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var TagsGetResponseTaggedFirstPostLinks */
-        public readonly TagsGetResponseTaggedFirstPostLinks $links,
-        /** @var TagsGetResponseTaggedFirstPostPermissions */
-        public readonly TagsGetResponseTaggedFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? TagsGetResponseTaggedFirstPostLinks::fromArray($data['links']) : TagsGetResponseTaggedFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? TagsGetResponseTaggedFirstPostPermissions::fromArray($data['permissions']) : TagsGetResponseTaggedFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedThreadPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_poster,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_poster'] ?? null)) ? (string) ($data['last_poster'] ?? null) : (is_array(($data['last_poster'] ?? null)) ? json_encode(($data['last_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<TagsGetResponseTaggedForumForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var TagsGetResponseTaggedForumLinks */
-        public readonly TagsGetResponseTaggedForumLinks $links,
-        /** @var TagsGetResponseTaggedForumPermissions */
-        public readonly TagsGetResponseTaggedForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): TagsGetResponseTaggedForumForumPrefixes => TagsGetResponseTaggedForumForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? TagsGetResponseTaggedForumLinks::fromArray($data['links']) : TagsGetResponseTaggedForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? TagsGetResponseTaggedForumPermissions::fromArray($data['permissions']) : TagsGetResponseTaggedForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedForumForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<TagsGetResponseTaggedForumForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): TagsGetResponseTaggedForumForumPrefixesGroupPrefixes => TagsGetResponseTaggedForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class TagsGetResponseTaggedForumForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class TagsGetResponseTaggedForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -10011,7 +7960,7 @@ final class TagsFindResponse
 final class SearchAllResponse
 {
     public function __construct(
-        /** @var list<SearchAllResponseData> */
+        /** @var list<RespForumModel> */
         public readonly array $data,
         public readonly int $data_total,
         /** @var list<RespUserModel> */
@@ -10029,513 +7978,11 @@ final class SearchAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchAllResponseData => SearchAllResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['data']) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), $data['users']) : [],
             isset($data['links']) && is_array($data['links']) ? SearchAllResponseLinks::fromArray($data['links']) : SearchAllResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class SearchAllResponseData
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly string $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_closed,
-        public readonly bool $thread_is_followed,
-        public readonly bool $thread_is_starred,
-        /** @var SearchAllResponseDataFirstPost */
-        public readonly SearchAllResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var SearchAllResponseDataLinks */
-        public readonly SearchAllResponseDataLinks $links,
-        /** @var SearchAllResponseDataPermissions */
-        public readonly SearchAllResponseDataPermissions $permissions,
-        public readonly string $node_title,
-        /** @var SearchAllResponseDataForum */
-        public readonly SearchAllResponseDataForum $forum,
-        /** @var SearchAllResponseDataLastPost */
-        public readonly SearchAllResponseDataLastPost $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (string) ($data['content_id'] ?? null) : (is_array(($data['content_id'] ?? null)) ? json_encode(($data['content_id'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_closed'] ?? null)) ? (bool) ($data['thread_is_closed'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            (is_scalar(($data['thread_is_starred'] ?? null)) ? (bool) ($data['thread_is_starred'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? SearchAllResponseDataFirstPost::fromArray($data['first_post']) : SearchAllResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? SearchAllResponseDataLinks::fromArray($data['links']) : SearchAllResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchAllResponseDataPermissions::fromArray($data['permissions']) : SearchAllResponseDataPermissions::fromArray([]),
-            (is_scalar(($data['node_title'] ?? null)) ? (string) ($data['node_title'] ?? null) : (is_array(($data['node_title'] ?? null)) ? json_encode(($data['node_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['forum']) && is_array($data['forum']) ? SearchAllResponseDataForum::fromArray($data['forum']) : SearchAllResponseDataForum::fromArray([]),
-            isset($data['last_post']) && is_array($data['last_post']) ? SearchAllResponseDataLastPost::fromArray($data['last_post']) : SearchAllResponseDataLastPost::fromArray([]),
-        );
-    }
-}
-
-final class SearchAllResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        public readonly bool $post_is_liked,
-        /** @var SearchAllResponseDataFirstPostLinks */
-        public readonly SearchAllResponseDataFirstPostLinks $links,
-        /** @var SearchAllResponseDataFirstPostPermissions */
-        public readonly SearchAllResponseDataFirstPostPermissions $permissions,
-        public readonly bool $thread_is_deleted,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            (is_scalar(($data['post_is_liked'] ?? null)) ? (bool) ($data['post_is_liked'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchAllResponseDataFirstPostLinks::fromArray($data['links']) : SearchAllResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchAllResponseDataFirstPostPermissions::fromArray($data['permissions']) : SearchAllResponseDataFirstPostPermissions::fromArray([]),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchAllResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchAllResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchAllResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_poster,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_poster'] ?? null)) ? (string) ($data['last_poster'] ?? null) : (is_array(($data['last_poster'] ?? null)) ? json_encode(($data['last_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchAllResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $edit,
-        /** @var SearchAllResponseDataPermissionsBump */
-        public readonly SearchAllResponseDataPermissionsBump $bump,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            isset($data['bump']) && is_array($data['bump']) ? SearchAllResponseDataPermissionsBump::fromArray($data['bump']) : SearchAllResponseDataPermissionsBump::fromArray([]),
-        );
-    }
-}
-
-final class SearchAllResponseDataPermissionsBump
-{
-    public function __construct(
-        public readonly bool $can,
-        public readonly int $available_count,
-        public readonly mixed $error,
-        public readonly mixed $next_available_time,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['can'] ?? null)) ? (bool) ($data['can'] ?? null) : false),
-            (is_scalar(($data['available_count'] ?? null)) ? (int) ($data['available_count'] ?? null) : 0),
-            $data['error'] ?? null,
-            $data['next_available_time'] ?? null,
-        );
-    }
-}
-
-final class SearchAllResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly int $parent_node_id,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var SearchAllResponseDataForumLinks */
-        public readonly SearchAllResponseDataForumLinks $links,
-        /** @var SearchAllResponseDataForumPermissions */
-        public readonly SearchAllResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            (is_scalar(($data['parent_node_id'] ?? null)) ? (int) ($data['parent_node_id'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchAllResponseDataForumLinks::fromArray($data['links']) : SearchAllResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchAllResponseDataForumPermissions::fromArray($data['permissions']) : SearchAllResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchAllResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchAllResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchAllResponseDataLastPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        public readonly bool $post_is_liked,
-        /** @var SearchAllResponseDataLastPostLinks */
-        public readonly SearchAllResponseDataLastPostLinks $links,
-        /** @var SearchAllResponseDataLastPostPermissions */
-        public readonly SearchAllResponseDataLastPostPermissions $permissions,
-        public readonly bool $thread_is_deleted,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            (is_scalar(($data['post_is_liked'] ?? null)) ? (bool) ($data['post_is_liked'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchAllResponseDataLastPostLinks::fromArray($data['links']) : SearchAllResponseDataLastPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchAllResponseDataLastPostPermissions::fromArray($data['permissions']) : SearchAllResponseDataLastPostPermissions::fromArray([]),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchAllResponseDataLastPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchAllResponseDataLastPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
         );
     }
 }
@@ -10565,7 +8012,7 @@ final class SearchAllResponseLinks
 final class SearchThreadsResponse
 {
     public function __construct(
-        /** @var list<SearchThreadsResponseData> */
+        /** @var list<RespForumModel> */
         public readonly array $data,
         public readonly int $data_total,
         /** @var SearchThreadsResponseLinks */
@@ -10581,358 +8028,10 @@ final class SearchThreadsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchThreadsResponseData => SearchThreadsResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['data']) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? SearchThreadsResponseLinks::fromArray($data['links']) : SearchThreadsResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class SearchThreadsResponseData
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var SearchThreadsResponseDataFirstPost */
-        public readonly SearchThreadsResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var SearchThreadsResponseDataLinks */
-        public readonly SearchThreadsResponseDataLinks $links,
-        /** @var SearchThreadsResponseDataPermissions */
-        public readonly SearchThreadsResponseDataPermissions $permissions,
-        /** @var SearchThreadsResponseDataForum */
-        public readonly SearchThreadsResponseDataForum $forum,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? SearchThreadsResponseDataFirstPost::fromArray($data['first_post']) : SearchThreadsResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? SearchThreadsResponseDataLinks::fromArray($data['links']) : SearchThreadsResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchThreadsResponseDataPermissions::fromArray($data['permissions']) : SearchThreadsResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? SearchThreadsResponseDataForum::fromArray($data['forum']) : SearchThreadsResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var SearchThreadsResponseDataFirstPostLinks */
-        public readonly SearchThreadsResponseDataFirstPostLinks $links,
-        /** @var SearchThreadsResponseDataFirstPostPermissions */
-        public readonly SearchThreadsResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchThreadsResponseDataFirstPostLinks::fromArray($data['links']) : SearchThreadsResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchThreadsResponseDataFirstPostPermissions::fromArray($data['permissions']) : SearchThreadsResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var SearchThreadsResponseDataForumLinks */
-        public readonly SearchThreadsResponseDataForumLinks $links,
-        /** @var SearchThreadsResponseDataForumPermissions */
-        public readonly SearchThreadsResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchThreadsResponseDataForumLinks::fromArray($data['links']) : SearchThreadsResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchThreadsResponseDataForumPermissions::fromArray($data['permissions']) : SearchThreadsResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchThreadsResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -10962,7 +8061,7 @@ final class SearchThreadsResponseLinks
 final class SearchPostsResponse
 {
     public function __construct(
-        /** @var list<SearchPostsResponseData> */
+        /** @var list<RespPostModel> */
         public readonly array $data,
         public readonly int $data_total,
         /** @var SearchPostsResponseLinks */
@@ -10978,358 +8077,10 @@ final class SearchPostsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchPostsResponseData => SearchPostsResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespPostModel => RespPostModel::fromArray($item), $data['data']) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? SearchPostsResponseLinks::fromArray($data['links']) : SearchPostsResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class SearchPostsResponseData
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var SearchPostsResponseDataFirstPost */
-        public readonly SearchPostsResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var SearchPostsResponseDataLinks */
-        public readonly SearchPostsResponseDataLinks $links,
-        /** @var SearchPostsResponseDataPermissions */
-        public readonly SearchPostsResponseDataPermissions $permissions,
-        /** @var SearchPostsResponseDataForum */
-        public readonly SearchPostsResponseDataForum $forum,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? SearchPostsResponseDataFirstPost::fromArray($data['first_post']) : SearchPostsResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? SearchPostsResponseDataLinks::fromArray($data['links']) : SearchPostsResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchPostsResponseDataPermissions::fromArray($data['permissions']) : SearchPostsResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? SearchPostsResponseDataForum::fromArray($data['forum']) : SearchPostsResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class SearchPostsResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var SearchPostsResponseDataFirstPostLinks */
-        public readonly SearchPostsResponseDataFirstPostLinks $links,
-        /** @var SearchPostsResponseDataFirstPostPermissions */
-        public readonly SearchPostsResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchPostsResponseDataFirstPostLinks::fromArray($data['links']) : SearchPostsResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchPostsResponseDataFirstPostPermissions::fromArray($data['permissions']) : SearchPostsResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class SearchPostsResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchPostsResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchPostsResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchPostsResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchPostsResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var SearchPostsResponseDataForumLinks */
-        public readonly SearchPostsResponseDataForumLinks $links,
-        /** @var SearchPostsResponseDataForumPermissions */
-        public readonly SearchPostsResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            $data['forum_prefixes'] ?? [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchPostsResponseDataForumLinks::fromArray($data['links']) : SearchPostsResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchPostsResponseDataForumPermissions::fromArray($data['permissions']) : SearchPostsResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchPostsResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchPostsResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -11547,7 +8298,7 @@ final class SearchProfilePostsResponseLinks
 final class SearchTaggedResponse
 {
     public function __construct(
-        /** @var list<SearchTaggedResponseData> */
+        /** @var list<RespThreadModel> */
         public readonly array $data,
         public readonly int $data_total,
         public readonly array $search_tags,
@@ -11562,404 +8313,10 @@ final class SearchTaggedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchTaggedResponseData => SearchTaggedResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             $data['search_tags'] ?? [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class SearchTaggedResponseData
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var SearchTaggedResponseDataFirstPost */
-        public readonly SearchTaggedResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var SearchTaggedResponseDataLinks */
-        public readonly SearchTaggedResponseDataLinks $links,
-        /** @var SearchTaggedResponseDataPermissions */
-        public readonly SearchTaggedResponseDataPermissions $permissions,
-        /** @var SearchTaggedResponseDataForum */
-        public readonly SearchTaggedResponseDataForum $forum,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? SearchTaggedResponseDataFirstPost::fromArray($data['first_post']) : SearchTaggedResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? SearchTaggedResponseDataLinks::fromArray($data['links']) : SearchTaggedResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchTaggedResponseDataPermissions::fromArray($data['permissions']) : SearchTaggedResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? SearchTaggedResponseDataForum::fromArray($data['forum']) : SearchTaggedResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var SearchTaggedResponseDataFirstPostLinks */
-        public readonly SearchTaggedResponseDataFirstPostLinks $links,
-        /** @var SearchTaggedResponseDataFirstPostPermissions */
-        public readonly SearchTaggedResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchTaggedResponseDataFirstPostLinks::fromArray($data['links']) : SearchTaggedResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchTaggedResponseDataFirstPostPermissions::fromArray($data['permissions']) : SearchTaggedResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-        public readonly bool $edit_title,
-        public readonly bool $edit_tags,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['edit_title'] ?? null)) ? (bool) ($data['edit_title'] ?? null) : false),
-            (is_scalar(($data['edit_tags'] ?? null)) ? (bool) ($data['edit_tags'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<SearchTaggedResponseDataForumForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var SearchTaggedResponseDataForumLinks */
-        public readonly SearchTaggedResponseDataForumLinks $links,
-        /** @var SearchTaggedResponseDataForumPermissions */
-        public readonly SearchTaggedResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): SearchTaggedResponseDataForumForumPrefixes => SearchTaggedResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchTaggedResponseDataForumLinks::fromArray($data['links']) : SearchTaggedResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchTaggedResponseDataForumPermissions::fromArray($data['permissions']) : SearchTaggedResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataForumForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<SearchTaggedResponseDataForumForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): SearchTaggedResponseDataForumForumPrefixesGroupPrefixes => SearchTaggedResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class SearchTaggedResponseDataForumForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchTaggedResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -11967,7 +8324,7 @@ final class SearchTaggedResponseDataForumPermissions
 final class SearchResultsResponse
 {
     public function __construct(
-        /** @var list<SearchResultsResponseData> */
+        /** @var list<RespThreadModel> */
         public readonly array $data,
         public readonly int $data_total,
         public readonly array $search_tags,
@@ -11982,404 +8339,10 @@ final class SearchResultsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchResultsResponseData => SearchResultsResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             $data['search_tags'] ?? [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class SearchResultsResponseData
-{
-    public function __construct(
-        public readonly string $content_type,
-        public readonly int $content_id,
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_followed,
-        /** @var SearchResultsResponseDataFirstPost */
-        public readonly SearchResultsResponseDataFirstPost $first_post,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var SearchResultsResponseDataLinks */
-        public readonly SearchResultsResponseDataLinks $links,
-        /** @var SearchResultsResponseDataPermissions */
-        public readonly SearchResultsResponseDataPermissions $permissions,
-        /** @var SearchResultsResponseDataForum */
-        public readonly SearchResultsResponseDataForum $forum,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['content_type'] ?? null)) ? (string) ($data['content_type'] ?? null) : (is_array(($data['content_type'] ?? null)) ? json_encode(($data['content_type'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['content_id'] ?? null)) ? (int) ($data['content_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            isset($data['first_post']) && is_array($data['first_post']) ? SearchResultsResponseDataFirstPost::fromArray($data['first_post']) : SearchResultsResponseDataFirstPost::fromArray([]),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? SearchResultsResponseDataLinks::fromArray($data['links']) : SearchResultsResponseDataLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchResultsResponseDataPermissions::fromArray($data['permissions']) : SearchResultsResponseDataPermissions::fromArray([]),
-            isset($data['forum']) && is_array($data['forum']) ? SearchResultsResponseDataForum::fromArray($data['forum']) : SearchResultsResponseDataForum::fromArray([]),
-        );
-    }
-}
-
-final class SearchResultsResponseDataFirstPost
-{
-    public function __construct(
-        public readonly int $post_id,
-        public readonly int $thread_id,
-        public readonly int $poster_user_id,
-        public readonly string $poster_username,
-        public readonly string $poster_username_html,
-        public readonly int $post_create_date,
-        public readonly string $post_body,
-        public readonly string $post_body_html,
-        public readonly string $post_body_plain_text,
-        public readonly string $signature,
-        public readonly string $signature_html,
-        public readonly string $signature_plain_text,
-        public readonly int $post_like_count,
-        public readonly int $post_attachment_count,
-        public readonly bool $user_is_ignored,
-        public readonly bool $post_is_published,
-        public readonly bool $post_is_deleted,
-        public readonly int $post_update_date,
-        public readonly bool $post_is_first_post,
-        /** @var SearchResultsResponseDataFirstPostLinks */
-        public readonly SearchResultsResponseDataFirstPostLinks $links,
-        /** @var SearchResultsResponseDataFirstPostPermissions */
-        public readonly SearchResultsResponseDataFirstPostPermissions $permissions,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['post_id'] ?? null)) ? (int) ($data['post_id'] ?? null) : 0),
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['poster_user_id'] ?? null)) ? (int) ($data['poster_user_id'] ?? null) : 0),
-            (is_scalar(($data['poster_username'] ?? null)) ? (string) ($data['poster_username'] ?? null) : (is_array(($data['poster_username'] ?? null)) ? json_encode(($data['poster_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_username_html'] ?? null)) ? (string) ($data['poster_username_html'] ?? null) : (is_array(($data['poster_username_html'] ?? null)) ? json_encode(($data['poster_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_create_date'] ?? null)) ? (int) ($data['post_create_date'] ?? null) : 0),
-            (is_scalar(($data['post_body'] ?? null)) ? (string) ($data['post_body'] ?? null) : (is_array(($data['post_body'] ?? null)) ? json_encode(($data['post_body'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_html'] ?? null)) ? (string) ($data['post_body_html'] ?? null) : (is_array(($data['post_body_html'] ?? null)) ? json_encode(($data['post_body_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_body_plain_text'] ?? null)) ? (string) ($data['post_body_plain_text'] ?? null) : (is_array(($data['post_body_plain_text'] ?? null)) ? json_encode(($data['post_body_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature'] ?? null)) ? (string) ($data['signature'] ?? null) : (is_array(($data['signature'] ?? null)) ? json_encode(($data['signature'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_html'] ?? null)) ? (string) ($data['signature_html'] ?? null) : (is_array(($data['signature_html'] ?? null)) ? json_encode(($data['signature_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
-            (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
-            (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
-            (is_scalar(($data['post_update_date'] ?? null)) ? (int) ($data['post_update_date'] ?? null) : 0),
-            (is_scalar(($data['post_is_first_post'] ?? null)) ? (bool) ($data['post_is_first_post'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchResultsResponseDataFirstPostLinks::fromArray($data['links']) : SearchResultsResponseDataFirstPostLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchResultsResponseDataFirstPostPermissions::fromArray($data['permissions']) : SearchResultsResponseDataFirstPostPermissions::fromArray([]),
-        );
-    }
-}
-
-final class SearchResultsResponseDataFirstPostLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $thread,
-        public readonly string $poster,
-        public readonly string $likes,
-        public readonly string $report,
-        public readonly string $attachments,
-        public readonly string $poster_avatar,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread'] ?? null)) ? (string) ($data['thread'] ?? null) : (is_array(($data['thread'] ?? null)) ? json_encode(($data['thread'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster'] ?? null)) ? (string) ($data['poster'] ?? null) : (is_array(($data['poster'] ?? null)) ? json_encode(($data['poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['likes'] ?? null)) ? (string) ($data['likes'] ?? null) : (is_array(($data['likes'] ?? null)) ? json_encode(($data['likes'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['report'] ?? null)) ? (string) ($data['report'] ?? null) : (is_array(($data['report'] ?? null)) ? json_encode(($data['report'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['attachments'] ?? null)) ? (string) ($data['attachments'] ?? null) : (is_array(($data['attachments'] ?? null)) ? json_encode(($data['attachments'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['poster_avatar'] ?? null)) ? (string) ($data['poster_avatar'] ?? null) : (is_array(($data['poster_avatar'] ?? null)) ? json_encode(($data['poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchResultsResponseDataFirstPostPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $reply,
-        public readonly bool $like,
-        public readonly bool $report,
-        public readonly bool $upload_attachment,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['reply'] ?? null)) ? (bool) ($data['reply'] ?? null) : false),
-            (is_scalar(($data['like'] ?? null)) ? (bool) ($data['like'] ?? null) : false),
-            (is_scalar(($data['report'] ?? null)) ? (bool) ($data['report'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchResultsResponseDataLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-        public readonly string $last_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['last_post'] ?? null)) ? (string) ($data['last_post'] ?? null) : (is_array(($data['last_post'] ?? null)) ? json_encode(($data['last_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchResultsResponseDataPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-        public readonly bool $upload_attachment,
-        public readonly bool $edit,
-        public readonly bool $edit_title,
-        public readonly bool $edit_tags,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['edit_title'] ?? null)) ? (bool) ($data['edit_title'] ?? null) : false),
-            (is_scalar(($data['edit_tags'] ?? null)) ? (bool) ($data['edit_tags'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchResultsResponseDataForum
-{
-    public function __construct(
-        public readonly int $forum_id,
-        public readonly string $forum_title,
-        public readonly string $forum_description,
-        public readonly int $forum_thread_count,
-        public readonly int $forum_post_count,
-        /** @var list<SearchResultsResponseDataForumForumPrefixes> */
-        public readonly array $forum_prefixes,
-        public readonly int $thread_default_prefix_id,
-        public readonly bool $thread_prefix_is_required,
-        /** @var SearchResultsResponseDataForumLinks */
-        public readonly SearchResultsResponseDataForumLinks $links,
-        /** @var SearchResultsResponseDataForumPermissions */
-        public readonly SearchResultsResponseDataForumPermissions $permissions,
-        public readonly bool $forum_is_followed,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['forum_title'] ?? null)) ? (string) ($data['forum_title'] ?? null) : (is_array(($data['forum_title'] ?? null)) ? json_encode(($data['forum_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
-            (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): SearchResultsResponseDataForumForumPrefixes => SearchResultsResponseDataForumForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
-            (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
-            (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
-            isset($data['links']) && is_array($data['links']) ? SearchResultsResponseDataForumLinks::fromArray($data['links']) : SearchResultsResponseDataForumLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? SearchResultsResponseDataForumPermissions::fromArray($data['permissions']) : SearchResultsResponseDataForumPermissions::fromArray([]),
-            (is_scalar(($data['forum_is_followed'] ?? null)) ? (bool) ($data['forum_is_followed'] ?? null) : false),
-        );
-    }
-}
-
-final class SearchResultsResponseDataForumForumPrefixes
-{
-    public function __construct(
-        public readonly string $group_title,
-        /** @var list<SearchResultsResponseDataForumForumPrefixesGroupPrefixes> */
-        public readonly array $group_prefixes,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): SearchResultsResponseDataForumForumPrefixesGroupPrefixes => SearchResultsResponseDataForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
-        );
-    }
-}
-
-final class SearchResultsResponseDataForumForumPrefixesGroupPrefixes
-{
-    public function __construct(
-        public readonly int $prefix_id,
-        public readonly string $prefix_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['prefix_id'] ?? null)) ? (int) ($data['prefix_id'] ?? null) : 0),
-            (is_scalar(($data['prefix_title'] ?? null)) ? (string) ($data['prefix_title'] ?? null) : (is_array(($data['prefix_title'] ?? null)) ? json_encode(($data['prefix_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchResultsResponseDataForumLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $sub_categories,
-        public readonly string $sub_forums,
-        public readonly string $threads,
-        public readonly string $followers,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-categories'] ?? null)) ? (string) ($data['sub-categories'] ?? null) : (is_array(($data['sub-categories'] ?? null)) ? json_encode(($data['sub-categories'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['sub-forums'] ?? null)) ? (string) ($data['sub-forums'] ?? null) : (is_array(($data['sub-forums'] ?? null)) ? json_encode(($data['sub-forums'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['threads'] ?? null)) ? (string) ($data['threads'] ?? null) : (is_array(($data['threads'] ?? null)) ? json_encode(($data['threads'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class SearchResultsResponseDataForumPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $edit,
-        public readonly bool $delete,
-        public readonly bool $create_thread,
-        public readonly bool $upload_attachment,
-        public readonly bool $tag_thread,
-        public readonly bool $follow,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['edit'] ?? null)) ? (bool) ($data['edit'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['create_thread'] ?? null)) ? (bool) ($data['create_thread'] ?? null) : false),
-            (is_scalar(($data['upload_attachment'] ?? null)) ? (bool) ($data['upload_attachment'] ?? null) : false),
-            (is_scalar(($data['tag_thread'] ?? null)) ? (bool) ($data['tag_thread'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
         );
     }
 }
@@ -13351,8 +9314,8 @@ final class FormsCreateResponse
 {
     public function __construct(
         public readonly string $message,
-        /** @var FormsCreateResponseContent */
-        public readonly FormsCreateResponseContent $content,
+        /** @var RespThreadModel */
+        public readonly RespThreadModel $content,
         /** @var RespSystemInfo */
         public readonly RespSystemInfo $system_info,
     ) {
@@ -13365,124 +9328,8 @@ final class FormsCreateResponse
     {
         return new self(
             (is_scalar(($data['message'] ?? null)) ? (string) ($data['message'] ?? null) : (is_array(($data['message'] ?? null)) ? json_encode(($data['message'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['content']) && is_array($data['content']) ? FormsCreateResponseContent::fromArray($data['content']) : FormsCreateResponseContent::fromArray([]),
+            isset($data['content']) && is_array($data['content']) ? RespThreadModel::fromArray($data['content']) : RespThreadModel::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
-        );
-    }
-}
-
-final class FormsCreateResponseContent
-{
-    public function __construct(
-        public readonly int $thread_id,
-        public readonly int $forum_id,
-        public readonly string $thread_title,
-        public readonly int $thread_view_count,
-        public readonly int $creator_user_id,
-        public readonly string $creator_username,
-        public readonly string $creator_username_html,
-        public readonly int $thread_create_date,
-        public readonly int $thread_update_date,
-        public readonly bool $user_is_ignored,
-        public readonly int $thread_post_count,
-        public readonly bool $thread_is_published,
-        public readonly bool $thread_is_deleted,
-        public readonly bool $thread_is_sticky,
-        public readonly bool $thread_is_closed,
-        public readonly bool $thread_is_followed,
-        public readonly array $thread_prefixes,
-        public readonly array $thread_tags,
-        /** @var FormsCreateResponseContentLinks */
-        public readonly FormsCreateResponseContentLinks $links,
-        /** @var FormsCreateResponseContentPermissions */
-        public readonly FormsCreateResponseContentPermissions $permissions,
-        public readonly string $node_title,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['thread_id'] ?? null)) ? (int) ($data['thread_id'] ?? null) : 0),
-            (is_scalar(($data['forum_id'] ?? null)) ? (int) ($data['forum_id'] ?? null) : 0),
-            (is_scalar(($data['thread_title'] ?? null)) ? (string) ($data['thread_title'] ?? null) : (is_array(($data['thread_title'] ?? null)) ? json_encode(($data['thread_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_view_count'] ?? null)) ? (int) ($data['thread_view_count'] ?? null) : 0),
-            (is_scalar(($data['creator_user_id'] ?? null)) ? (int) ($data['creator_user_id'] ?? null) : 0),
-            (is_scalar(($data['creator_username'] ?? null)) ? (string) ($data['creator_username'] ?? null) : (is_array(($data['creator_username'] ?? null)) ? json_encode(($data['creator_username'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['creator_username_html'] ?? null)) ? (string) ($data['creator_username_html'] ?? null) : (is_array(($data['creator_username_html'] ?? null)) ? json_encode(($data['creator_username_html'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['thread_create_date'] ?? null)) ? (int) ($data['thread_create_date'] ?? null) : 0),
-            (is_scalar(($data['thread_update_date'] ?? null)) ? (int) ($data['thread_update_date'] ?? null) : 0),
-            (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
-            (is_scalar(($data['thread_post_count'] ?? null)) ? (int) ($data['thread_post_count'] ?? null) : 0),
-            (is_scalar(($data['thread_is_published'] ?? null)) ? (bool) ($data['thread_is_published'] ?? null) : false),
-            (is_scalar(($data['thread_is_deleted'] ?? null)) ? (bool) ($data['thread_is_deleted'] ?? null) : false),
-            (is_scalar(($data['thread_is_sticky'] ?? null)) ? (bool) ($data['thread_is_sticky'] ?? null) : false),
-            (is_scalar(($data['thread_is_closed'] ?? null)) ? (bool) ($data['thread_is_closed'] ?? null) : false),
-            (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
-            $data['thread_prefixes'] ?? [],
-            $data['thread_tags'] ?? [],
-            isset($data['links']) && is_array($data['links']) ? FormsCreateResponseContentLinks::fromArray($data['links']) : FormsCreateResponseContentLinks::fromArray([]),
-            isset($data['permissions']) && is_array($data['permissions']) ? FormsCreateResponseContentPermissions::fromArray($data['permissions']) : FormsCreateResponseContentPermissions::fromArray([]),
-            (is_scalar(($data['node_title'] ?? null)) ? (string) ($data['node_title'] ?? null) : (is_array(($data['node_title'] ?? null)) ? json_encode(($data['node_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class FormsCreateResponseContentLinks
-{
-    public function __construct(
-        public readonly string $permalink,
-        public readonly string $detail,
-        public readonly string $followers,
-        public readonly string $forum,
-        public readonly string $posts,
-        public readonly string $first_poster,
-        public readonly string $first_poster_avatar,
-        public readonly string $first_post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['permalink'] ?? null)) ? (string) ($data['permalink'] ?? null) : (is_array(($data['permalink'] ?? null)) ? json_encode(($data['permalink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['detail'] ?? null)) ? (string) ($data['detail'] ?? null) : (is_array(($data['detail'] ?? null)) ? json_encode(($data['detail'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['followers'] ?? null)) ? (string) ($data['followers'] ?? null) : (is_array(($data['followers'] ?? null)) ? json_encode(($data['followers'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['forum'] ?? null)) ? (string) ($data['forum'] ?? null) : (is_array(($data['forum'] ?? null)) ? json_encode(($data['forum'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['posts'] ?? null)) ? (string) ($data['posts'] ?? null) : (is_array(($data['posts'] ?? null)) ? json_encode(($data['posts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster'] ?? null)) ? (string) ($data['first_poster'] ?? null) : (is_array(($data['first_poster'] ?? null)) ? json_encode(($data['first_poster'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_poster_avatar'] ?? null)) ? (string) ($data['first_poster_avatar'] ?? null) : (is_array(($data['first_poster_avatar'] ?? null)) ? json_encode(($data['first_poster_avatar'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            (is_scalar(($data['first_post'] ?? null)) ? (string) ($data['first_post'] ?? null) : (is_array(($data['first_post'] ?? null)) ? json_encode(($data['first_post'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-        );
-    }
-}
-
-final class FormsCreateResponseContentPermissions
-{
-    public function __construct(
-        public readonly bool $view,
-        public readonly bool $delete,
-        public readonly bool $follow,
-        public readonly bool $post,
-    ) {
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     */
-    public static function fromArray(array $data): self
-    {
-        return new self(
-            (is_scalar(($data['view'] ?? null)) ? (bool) ($data['view'] ?? null) : false),
-            (is_scalar(($data['delete'] ?? null)) ? (bool) ($data['delete'] ?? null) : false),
-            (is_scalar(($data['follow'] ?? null)) ? (bool) ($data['follow'] ?? null) : false),
-            (is_scalar(($data['post'] ?? null)) ? (bool) ($data['post'] ?? null) : false),
         );
     }
 }

@@ -474,6 +474,32 @@ enum HypixelSkyblockApiEnabled: string
     case Nomatter = 'nomatter';
 }
 
+enum ItemOrigin: string
+{
+    case Brute = 'brute';
+    case Phishing = 'phishing';
+    case Stealer = 'stealer';
+    case Autoreg = 'autoreg';
+    case Personal = 'personal';
+    case Resale = 'resale';
+    case Dummy = 'dummy';
+    case SelfRegistration = 'self_registration';
+    case RetrieveViaSupport = 'retrieve_via_support';
+}
+
+enum ItemOriginModel: string
+{
+    case Brute = 'brute';
+    case Phishing = 'phishing';
+    case Stealer = 'stealer';
+    case Autoreg = 'autoreg';
+    case Personal = 'personal';
+    case Resale = 'resale';
+    case Dummy = 'dummy';
+    case SelfRegistration = 'self_registration';
+    case RetrieveViaSupport = 'retrieve_via_support';
+}
+
 enum Java: string
 {
     case Yes = 'yes';
@@ -528,17 +554,6 @@ enum Mafile: string
     case Yes = 'yes';
     case No = 'no';
     case Nomatter = 'nomatter';
-}
-
-enum ManagingItemOrigin: string
-{
-    case Brute = 'brute';
-    case Phishing = 'phishing';
-    case Stealer = 'stealer';
-    case Personal = 'personal';
-    case Resale = 'resale';
-    case Autoreg = 'autoreg';
-    case Dummy = 'dummy';
 }
 
 enum ManagingType: string
@@ -610,6 +625,19 @@ enum OrderBy: string
     case DdateToDown = 'ddate_to_down';
 }
 
+enum Origin: string
+{
+    case Brute = 'brute';
+    case Phishing = 'phishing';
+    case Stealer = 'stealer';
+    case Autoreg = 'autoreg';
+    case Personal = 'personal';
+    case Resale = 'resale';
+    case Dummy = 'dummy';
+    case SelfRegistration = 'self_registration';
+    case RetrieveViaSupport = 'retrieve_via_support';
+}
+
 enum ParentControl: string
 {
     case Yes = 'yes';
@@ -673,18 +701,6 @@ enum PsnLinkable: string
     case Yes = 'yes';
     case No = 'no';
     case Nomatter = 'nomatter';
-}
-
-enum PublishingItemOrigin: string
-{
-    case Brute = 'brute';
-    case Phishing = 'phishing';
-    case Stealer = 'stealer';
-    case Personal = 'personal';
-    case Resale = 'resale';
-    case Autoreg = 'autoreg';
-    case Dummy = 'dummy';
-    case SelfRegistration = 'self_registration';
 }
 
 enum PublishingType: string
