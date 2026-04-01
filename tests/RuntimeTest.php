@@ -9,6 +9,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Lolzteam\Runtime\ClientConfig;
 use Lolzteam\Runtime\Errors\AuthException;
+use Lolzteam\Runtime\Errors\ForbiddenException;
 use Lolzteam\Runtime\Errors\HttpException;
 use Lolzteam\Runtime\Errors\LolzteamException;
 use Lolzteam\Runtime\Errors\NetworkException;
@@ -44,11 +45,11 @@ final class RuntimeTest extends TestCase
         $this->assertSame(401, $e->statusCode);
     }
 
-    public function testFactoryReturnsAuthExceptionFor403(): void
+    public function testFactoryReturnsForbiddenExceptionFor403(): void
     {
         $e = HttpExceptionFactory::create(403, null, []);
 
-        $this->assertInstanceOf(AuthException::class, $e);
+        $this->assertInstanceOf(ForbiddenException::class, $e);
         $this->assertSame(403, $e->statusCode);
     }
 

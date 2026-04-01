@@ -251,6 +251,12 @@ final class ClientTest extends TestCase
         $this->assertSame('socks5://proxy:1080', $proxy->url);
     }
 
+    public function testProxyConfigAcceptsValidSocks5hProxy(): void
+    {
+        $proxy = new ProxyConfig('socks5h://proxy:1080');
+        $this->assertSame('socks5h://proxy:1080', $proxy->url);
+    }
+
     public function testProxyConfigRejectsUnsupportedScheme(): void
     {
         $this->expectException(\InvalidArgumentException::class);

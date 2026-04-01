@@ -431,10 +431,10 @@ final class RespUserModel
             (is_scalar(($data['user_is_visitor'] ?? null)) ? (bool) ($data['user_is_visitor'] ?? null) : false),
             (is_scalar(($data['user_group_id'] ?? null)) ? (int) ($data['user_group_id'] ?? null) : 0),
             $data['curator_titles'] ?? [],
-            isset($data['user_groups']) && is_array($data['user_groups']) ? array_map(static fn(array $item): RespUserModelUserGroups => RespUserModelUserGroups::fromArray($item), $data['user_groups']) : [],
-            isset($data['fields']) && is_array($data['fields']) ? array_map(static fn(array $item): RespUserModelFields => RespUserModelFields::fromArray($item), $data['fields']) : [],
+            isset($data['user_groups']) && is_array($data['user_groups']) ? array_values(array_map(static fn(array $item): RespUserModelUserGroups => RespUserModelUserGroups::fromArray($item), array_filter($data['user_groups'], 'is_array'))) : [],
+            isset($data['fields']) && is_array($data['fields']) ? array_values(array_map(static fn(array $item): RespUserModelFields => RespUserModelFields::fromArray($item), array_filter($data['fields'], 'is_array'))) : [],
             (is_scalar(($data['user_timezone_offset'] ?? null)) ? (int) ($data['user_timezone_offset'] ?? null) : 0),
-            isset($data['user_external_authentications']) && is_array($data['user_external_authentications']) ? array_map(static fn(array $item): RespUserModelUserExternalAuthentications => RespUserModelUserExternalAuthentications::fromArray($item), $data['user_external_authentications']) : [],
+            isset($data['user_external_authentications']) && is_array($data['user_external_authentications']) ? array_values(array_map(static fn(array $item): RespUserModelUserExternalAuthentications => RespUserModelUserExternalAuthentications::fromArray($item), array_filter($data['user_external_authentications'], 'is_array'))) : [],
             isset($data['self_permissions']) && is_array($data['self_permissions']) ? RespUserModelSelfPermissions::fromArray($data['self_permissions']) : RespUserModelSelfPermissions::fromArray([]),
             isset($data['edit_permissions']) && is_array($data['edit_permissions']) ? RespUserModelEditPermissions::fromArray($data['edit_permissions']) : RespUserModelEditPermissions::fromArray([]),
             isset($data['birthday']) && is_array($data['birthday']) ? RespUserModelBirthday::fromArray($data['birthday']) : RespUserModelBirthday::fromArray([]),
@@ -578,7 +578,7 @@ final class RespUserModelFields
             (is_scalar(($data['is_required'] ?? null)) ? (bool) ($data['is_required'] ?? null) : false),
             isset($data['value']) ? (is_scalar($data['value']) ? (string) $data['value'] : (is_array($data['value']) ? json_encode($data['value'], JSON_UNESCAPED_UNICODE) : null)) : null,
             (is_scalar(($data['is_multi_choice'] ?? null)) ? (bool) ($data['is_multi_choice'] ?? null) : false),
-            isset($data['choices']) && is_array($data['choices']) ? array_map(static fn(array $item): RespUserModelFieldsChoices => RespUserModelFieldsChoices::fromArray($item), $data['choices']) : [],
+            isset($data['choices']) && is_array($data['choices']) ? array_values(array_map(static fn(array $item): RespUserModelFieldsChoices => RespUserModelFieldsChoices::fromArray($item), array_filter($data['choices'], 'is_array'))) : [],
             $data['values'] ?? [],
         );
     }
@@ -742,7 +742,7 @@ final class RespUserModelUserFollowing
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModelUserFollowingUsers => RespUserModelUserFollowingUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModelUserFollowingUsers => RespUserModelUserFollowingUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             (is_scalar(($data['count'] ?? null)) ? (int) ($data['count'] ?? null) : 0),
         );
     }
@@ -787,7 +787,7 @@ final class RespUserModelUserFollowers
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModelUserFollowersUsers => RespUserModelUserFollowersUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModelUserFollowersUsers => RespUserModelUserFollowersUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             (is_scalar(($data['count'] ?? null)) ? (int) ($data['count'] ?? null) : 0),
         );
     }
@@ -880,7 +880,7 @@ final class RespThreadModel
             (is_scalar(($data['thread_is_followed'] ?? null)) ? (bool) ($data['thread_is_followed'] ?? null) : false),
             (is_scalar(($data['thread_is_starred'] ?? null)) ? (bool) ($data['thread_is_starred'] ?? null) : false),
             isset($data['first_post']) && is_array($data['first_post']) ? RespThreadModelFirstPost::fromArray($data['first_post']) : RespThreadModelFirstPost::fromArray([]),
-            isset($data['thread_prefixes']) && is_array($data['thread_prefixes']) ? array_map(static fn(array $item): RespThreadModelThreadPrefixes => RespThreadModelThreadPrefixes::fromArray($item), $data['thread_prefixes']) : [],
+            isset($data['thread_prefixes']) && is_array($data['thread_prefixes']) ? array_values(array_map(static fn(array $item): RespThreadModelThreadPrefixes => RespThreadModelThreadPrefixes::fromArray($item), array_filter($data['thread_prefixes'], 'is_array'))) : [],
             $data['thread_tags'] ?? [],
             isset($data['links']) && is_array($data['links']) ? RespThreadModelLinks::fromArray($data['links']) : RespThreadModelLinks::fromArray([]),
             isset($data['permissions']) && is_array($data['permissions']) ? RespThreadModelPermissions::fromArray($data['permissions']) : RespThreadModelPermissions::fromArray([]),
@@ -1722,7 +1722,7 @@ final class RespConversationModel
             (is_scalar(($data['conversation_is_open'] ?? null)) ? (bool) ($data['conversation_is_open'] ?? null) : false),
             (is_scalar(($data['conversation_is_deleted'] ?? null)) ? (bool) ($data['conversation_is_deleted'] ?? null) : false),
             isset($data['recipient']) && is_array($data['recipient']) ? RespConversationModelRecipient::fromArray($data['recipient']) : RespConversationModelRecipient::fromArray([]),
-            isset($data['recipients']) && is_array($data['recipients']) ? array_map(static fn(array $item): RespConversationModelRecipients => RespConversationModelRecipients::fromArray($item), $data['recipients']) : [],
+            isset($data['recipients']) && is_array($data['recipients']) ? array_values(array_map(static fn(array $item): RespConversationModelRecipients => RespConversationModelRecipients::fromArray($item), array_filter($data['recipients'], 'is_array'))) : [],
             isset($data['links']) && is_array($data['links']) ? RespConversationModelLinks::fromArray($data['links']) : RespConversationModelLinks::fromArray([]),
         );
     }
@@ -1983,7 +1983,7 @@ final class RespForumModel
             (is_scalar(($data['icon_content'] ?? null)) ? (string) ($data['icon_content'] ?? null) : (is_array(($data['icon_content'] ?? null)) ? json_encode(($data['icon_content'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['active_icon_content'] ?? null)) ? (string) ($data['active_icon_content'] ?? null) : (is_array(($data['active_icon_content'] ?? null)) ? json_encode(($data['active_icon_content'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['forum_rules_thread_id'] ?? null)) ? (int) ($data['forum_rules_thread_id'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): RespForumModelForumPrefixes => RespForumModelForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
+            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_values(array_map(static fn(array $item): RespForumModelForumPrefixes => RespForumModelForumPrefixes::fromArray($item), array_filter($data['forum_prefixes'], 'is_array'))) : [],
             (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
             (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
             isset($data['links']) && is_array($data['links']) ? RespForumModelLinks::fromArray($data['links']) : RespForumModelLinks::fromArray([]),
@@ -2009,7 +2009,7 @@ final class RespForumModelForumPrefixes
     {
         return new self(
             (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): RespForumModelForumPrefixesGroupPrefixes => RespForumModelForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
+            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_values(array_map(static fn(array $item): RespForumModelForumPrefixesGroupPrefixes => RespForumModelForumPrefixesGroupPrefixes::fromArray($item), array_filter($data['group_prefixes'], 'is_array'))) : [],
         );
     }
 }
@@ -2178,7 +2178,7 @@ final class CategoriesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['categories']) && is_array($data['categories']) ? array_map(static fn(array $item): CategoriesListResponseCategories => CategoriesListResponseCategories::fromArray($item), $data['categories']) : [],
+            isset($data['categories']) && is_array($data['categories']) ? array_values(array_map(static fn(array $item): CategoriesListResponseCategories => CategoriesListResponseCategories::fromArray($item), array_filter($data['categories'], 'is_array'))) : [],
             (is_scalar(($data['categories_total'] ?? null)) ? (int) ($data['categories_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -2374,9 +2374,9 @@ final class ForumsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_values(array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), array_filter($data['forums'], 'is_array'))) : [],
             (is_scalar(($data['forums_total'] ?? null)) ? (int) ($data['forums_total'] ?? null) : 0),
-            isset($data['tabs']) && is_array($data['tabs']) ? array_map(static fn(array $item): ForumsListResponseTabs => ForumsListResponseTabs::fromArray($item), $data['tabs']) : [],
+            isset($data['tabs']) && is_array($data['tabs']) ? array_values(array_map(static fn(array $item): ForumsListResponseTabs => ForumsListResponseTabs::fromArray($item), array_filter($data['tabs'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -2463,7 +2463,7 @@ final class ForumsGroupedResponse
     {
         return new self(
             $data['data'] ?? [],
-            isset($data['tabs']) && is_array($data['tabs']) ? array_map(static fn(array $item): ForumsGroupedResponseTabs => ForumsGroupedResponseTabs::fromArray($item), $data['tabs']) : [],
+            isset($data['tabs']) && is_array($data['tabs']) ? array_values(array_map(static fn(array $item): ForumsGroupedResponseTabs => ForumsGroupedResponseTabs::fromArray($item), array_filter($data['tabs'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -2547,7 +2547,7 @@ final class ForumsFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): ForumsFollowersResponseUsers => ForumsFollowersResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): ForumsFollowersResponseUsers => ForumsFollowersResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -2660,7 +2660,7 @@ final class ForumsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_values(array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), array_filter($data['forums'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -2687,7 +2687,7 @@ final class ForumsGetFeedOptionsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forums']) && is_array($data['forums']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['forums']) : [],
+            isset($data['forums']) && is_array($data['forums']) ? array_values(array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), array_filter($data['forums'], 'is_array'))) : [],
             $data['excluded_forums_ids'] ?? [],
             $data['default_excluded_forums_ids'] ?? [],
             (is_scalar(($data['keywords'] ?? null)) ? (string) ($data['keywords'] ?? null) : (is_array(($data['keywords'] ?? null)) ? json_encode(($data['keywords'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
@@ -2736,7 +2736,7 @@ final class LinksListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['link-forums']) && is_array($data['link-forums']) ? array_map(static fn(array $item): RespLinkModel => RespLinkModel::fromArray($item), $data['link-forums']) : [],
+            isset($data['link-forums']) && is_array($data['link-forums']) ? array_values(array_map(static fn(array $item): RespLinkModel => RespLinkModel::fromArray($item), array_filter($data['link-forums'], 'is_array'))) : [],
             (is_scalar(($data['link-forums_total'] ?? null)) ? (int) ($data['link-forums_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -2782,7 +2782,7 @@ final class PagesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['pages']) && is_array($data['pages']) ? array_map(static fn(array $item): PagesListResponsePages => PagesListResponsePages::fromArray($item), $data['pages']) : [],
+            isset($data['pages']) && is_array($data['pages']) ? array_values(array_map(static fn(array $item): PagesListResponsePages => PagesListResponsePages::fromArray($item), array_filter($data['pages'], 'is_array'))) : [],
             (is_scalar(($data['pages_total'] ?? null)) ? (int) ($data['pages_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -2976,7 +2976,7 @@ final class NavigationListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['elements']) && is_array($data['elements']) ? array_map(static fn(array $item): NavigationListResponseElements => NavigationListResponseElements::fromArray($item), $data['elements']) : [],
+            isset($data['elements']) && is_array($data['elements']) ? array_values(array_map(static fn(array $item): NavigationListResponseElements => NavigationListResponseElements::fromArray($item), array_filter($data['elements'], 'is_array'))) : [],
             (is_scalar(($data['elements_count'] ?? null)) ? (int) ($data['elements_count'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -3088,7 +3088,7 @@ final class ThreadsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['threads']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['threads'], 'is_array'))) : [],
             isset($data['forum']) && is_array($data['forum']) ? ThreadsListResponseForum::fromArray($data['forum']) : ThreadsListResponseForum::fromArray([]),
             (is_scalar(($data['threads_total'] ?? null)) ? (int) ($data['threads_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? ThreadsListResponseLinks::fromArray($data['links']) : ThreadsListResponseLinks::fromArray([]),
@@ -3481,7 +3481,7 @@ final class ThreadsFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): ThreadsFollowersResponseUsers => ThreadsFollowersResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): ThreadsFollowersResponseUsers => ThreadsFollowersResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -3593,7 +3593,7 @@ final class ThreadsFollowedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['threads']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['threads'], 'is_array'))) : [],
             (is_scalar(($data['threads_total'] ?? null)) ? (int) ($data['threads_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -3617,7 +3617,7 @@ final class ThreadsNavigationResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['elements']) && is_array($data['elements']) ? array_map(static fn(array $item): ThreadsNavigationResponseElements => ThreadsNavigationResponseElements::fromArray($item), $data['elements']) : [],
+            isset($data['elements']) && is_array($data['elements']) ? array_values(array_map(static fn(array $item): ThreadsNavigationResponseElements => ThreadsNavigationResponseElements::fromArray($item), array_filter($data['elements'], 'is_array'))) : [],
             (is_scalar(($data['elements_count'] ?? null)) ? (int) ($data['elements_count'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -3762,7 +3762,7 @@ final class ThreadsPollGetResponsePoll
             (is_scalar(($data['poll_max_votes'] ?? null)) ? (int) ($data['poll_max_votes'] ?? null) : 0),
             (is_scalar(($data['poll_is_open'] ?? null)) ? (bool) ($data['poll_is_open'] ?? null) : false),
             (is_scalar(($data['poll_is_voted'] ?? null)) ? (bool) ($data['poll_is_voted'] ?? null) : false),
-            isset($data['responses']) && is_array($data['responses']) ? array_map(static fn(array $item): ThreadsPollGetResponsePollResponses => ThreadsPollGetResponsePollResponses::fromArray($item), $data['responses']) : [],
+            isset($data['responses']) && is_array($data['responses']) ? array_values(array_map(static fn(array $item): ThreadsPollGetResponsePollResponses => ThreadsPollGetResponsePollResponses::fromArray($item), array_filter($data['responses'], 'is_array'))) : [],
             isset($data['permissions']) && is_array($data['permissions']) ? ThreadsPollGetResponsePollPermissions::fromArray($data['permissions']) : ThreadsPollGetResponsePollPermissions::fromArray([]),
             isset($data['links']) && is_array($data['links']) ? ThreadsPollGetResponsePollLinks::fromArray($data['links']) : ThreadsPollGetResponsePollLinks::fromArray([]),
         );
@@ -3870,8 +3870,8 @@ final class ThreadsUnreadResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): ThreadsUnreadResponseThreads => ThreadsUnreadResponseThreads::fromArray($item), $data['threads']) : [],
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_values(array_map(static fn(array $item): ThreadsUnreadResponseThreads => ThreadsUnreadResponseThreads::fromArray($item), array_filter($data['threads'], 'is_array'))) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -3913,8 +3913,8 @@ final class ThreadsRecentResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['threads']) && is_array($data['threads']) ? array_map(static fn(array $item): ThreadsRecentResponseThreads => ThreadsRecentResponseThreads::fromArray($item), $data['threads']) : [],
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
+            isset($data['threads']) && is_array($data['threads']) ? array_values(array_map(static fn(array $item): ThreadsRecentResponseThreads => ThreadsRecentResponseThreads::fromArray($item), array_filter($data['threads'], 'is_array'))) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -3980,7 +3980,7 @@ final class PostsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['posts']) && is_array($data['posts']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['posts']) : [],
+            isset($data['posts']) && is_array($data['posts']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['posts'], 'is_array'))) : [],
             isset($data['thread']) && is_array($data['thread']) ? RespThreadModel::fromArray($data['thread']) : RespThreadModel::fromArray([]),
             (is_scalar(($data['posts_total'] ?? null)) ? (int) ($data['posts_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -4093,7 +4093,7 @@ final class PostsLikesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): PostsLikesResponseUsers => PostsLikesResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): PostsLikesResponseUsers => PostsLikesResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -4226,7 +4226,7 @@ final class PostsCommentsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['comments']) && is_array($data['comments']) ? array_map(static fn(array $item): RespPostCommentModel => RespPostCommentModel::fromArray($item), $data['comments']) : [],
+            isset($data['comments']) && is_array($data['comments']) ? array_values(array_map(static fn(array $item): RespPostCommentModel => RespPostCommentModel::fromArray($item), array_filter($data['comments'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -4561,7 +4561,7 @@ final class UsersListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             (is_scalar(($data['users_total'] ?? null)) ? (int) ($data['users_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? UsersListResponseLinks::fromArray($data['links']) : UsersListResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -4607,7 +4607,7 @@ final class UsersFieldsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['fields']) && is_array($data['fields']) ? array_map(static fn(array $item): UsersFieldsResponseFields => UsersFieldsResponseFields::fromArray($item), $data['fields']) : [],
+            isset($data['fields']) && is_array($data['fields']) ? array_values(array_map(static fn(array $item): UsersFieldsResponseFields => UsersFieldsResponseFields::fromArray($item), array_filter($data['fields'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -4655,7 +4655,7 @@ final class UsersFindResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -4724,7 +4724,7 @@ final class UsersClaimsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['claims']) && is_array($data['claims']) ? array_map(static fn(array $item): UsersClaimsResponseClaims => UsersClaimsResponseClaims::fromArray($item), $data['claims']) : [],
+            isset($data['claims']) && is_array($data['claims']) ? array_values(array_map(static fn(array $item): UsersClaimsResponseClaims => UsersClaimsResponseClaims::fromArray($item), array_filter($data['claims'], 'is_array'))) : [],
             isset($data['stats']) && is_array($data['stats']) ? UsersClaimsResponseStats::fromArray($data['stats']) : UsersClaimsResponseStats::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -4993,7 +4993,7 @@ final class UsersFollowersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): UsersFollowersResponseUsers => UsersFollowersResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): UsersFollowersResponseUsers => UsersFollowersResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             (is_scalar(($data['users_total'] ?? null)) ? (int) ($data['users_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? UsersFollowersResponseLinks::fromArray($data['links']) : UsersFollowersResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -5241,7 +5241,7 @@ final class UsersFollowingsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): UsersFollowingsResponseUsers => UsersFollowingsResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): UsersFollowingsResponseUsers => UsersFollowingsResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             (is_scalar(($data['users_total'] ?? null)) ? (int) ($data['users_total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -5484,7 +5484,7 @@ final class UsersIgnoredResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): UsersIgnoredResponseUsers => UsersIgnoredResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): UsersIgnoredResponseUsers => UsersIgnoredResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -5778,7 +5778,7 @@ final class UsersContentsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): UsersContentsResponseData => UsersContentsResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): UsersContentsResponseData => UsersContentsResponseData::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['user']) && is_array($data['user']) ? RespUserModel::fromArray($data['user']) : RespUserModel::fromArray([]),
             isset($data['links']) && is_array($data['links']) ? UsersContentsResponseLinks::fromArray($data['links']) : UsersContentsResponseLinks::fromArray([]),
@@ -5844,7 +5844,7 @@ final class UsersContentsResponseData
             (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
             (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            isset($data['like_users']) && is_array($data['like_users']) ? array_map(static fn(array $item): UsersContentsResponseDataLikeUsers => UsersContentsResponseDataLikeUsers::fromArray($item), $data['like_users']) : [],
+            isset($data['like_users']) && is_array($data['like_users']) ? array_values(array_map(static fn(array $item): UsersContentsResponseDataLikeUsers => UsersContentsResponseDataLikeUsers::fromArray($item), array_filter($data['like_users'], 'is_array'))) : [],
             (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
             (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
             (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
@@ -5983,7 +5983,7 @@ final class UsersTrophiesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['trophies']) && is_array($data['trophies']) ? array_map(static fn(array $item): UsersTrophiesResponseTrophies => UsersTrophiesResponseTrophies::fromArray($item), $data['trophies']) : [],
+            isset($data['trophies']) && is_array($data['trophies']) ? array_values(array_map(static fn(array $item): UsersTrophiesResponseTrophies => UsersTrophiesResponseTrophies::fromArray($item), array_filter($data['trophies'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -6029,7 +6029,7 @@ final class UsersSecretAnswerTypesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): UsersSecretAnswerTypesResponseData => UsersSecretAnswerTypesResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): UsersSecretAnswerTypesResponseData => UsersSecretAnswerTypesResponseData::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -6121,7 +6121,7 @@ final class ProfilePostsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['profile_posts']) && is_array($data['profile_posts']) ? array_map(static fn(array $item): RespProfilePostModel => RespProfilePostModel::fromArray($item), $data['profile_posts']) : [],
+            isset($data['profile_posts']) && is_array($data['profile_posts']) ? array_values(array_map(static fn(array $item): RespProfilePostModel => RespProfilePostModel::fromArray($item), array_filter($data['profile_posts'], 'is_array'))) : [],
             (is_scalar(($data['totalProfilePosts'] ?? null)) ? (int) ($data['totalProfilePosts'] ?? null) : 0),
             (is_scalar(($data['canPostOnProfile'] ?? null)) ? (bool) ($data['canPostOnProfile'] ?? null) : false),
             isset($data['links']) && is_array($data['links']) ? ProfilePostsListResponseLinks::fromArray($data['links']) : ProfilePostsListResponseLinks::fromArray([]),
@@ -6568,7 +6568,7 @@ final class ProfilePostsLikesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): ProfilePostsLikesResponseUsers => ProfilePostsLikesResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): ProfilePostsLikesResponseUsers => ProfilePostsLikesResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -6661,7 +6661,7 @@ final class ProfilePostsCommentsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['comments']) && is_array($data['comments']) ? array_map(static fn(array $item): RespProfilePostCommentModel => RespProfilePostCommentModel::fromArray($item), $data['comments']) : [],
+            isset($data['comments']) && is_array($data['comments']) ? array_values(array_map(static fn(array $item): RespProfilePostCommentModel => RespProfilePostCommentModel::fromArray($item), array_filter($data['comments'], 'is_array'))) : [],
             (is_scalar(($data['comments_total'] ?? null)) ? (int) ($data['comments_total'] ?? null) : 0),
             isset($data['profile_post']) && is_array($data['profile_post']) ? ProfilePostsCommentsListResponseProfilePost::fromArray($data['profile_post']) : ProfilePostsCommentsListResponseProfilePost::fromArray([]),
             isset($data['timeline_user']) && is_array($data['timeline_user']) ? RespUserModel::fromArray($data['timeline_user']) : RespUserModel::fromArray([]),
@@ -7089,9 +7089,9 @@ final class ConversationsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['conversations']) && is_array($data['conversations']) ? array_map(static fn(array $item): RespConversationModel => RespConversationModel::fromArray($item), $data['conversations']) : [],
+            isset($data['conversations']) && is_array($data['conversations']) ? array_values(array_map(static fn(array $item): RespConversationModel => RespConversationModel::fromArray($item), array_filter($data['conversations'], 'is_array'))) : [],
             (is_scalar(($data['can_start'] ?? null)) ? (bool) ($data['can_start'] ?? null) : false),
-            isset($data['folders']) && is_array($data['folders']) ? array_map(static fn(array $item): ConversationsListResponseFolders => ConversationsListResponseFolders::fromArray($item), $data['folders']) : [],
+            isset($data['folders']) && is_array($data['folders']) ? array_values(array_map(static fn(array $item): ConversationsListResponseFolders => ConversationsListResponseFolders::fromArray($item), array_filter($data['folders'], 'is_array'))) : [],
             isset($data['links']) && is_array($data['links']) ? ConversationsListResponseLinks::fromArray($data['links']) : ConversationsListResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -7295,7 +7295,7 @@ final class ConversationsMessagesListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['messages']) && is_array($data['messages']) ? array_map(static fn(array $item): RespConversationMessageModel => RespConversationMessageModel::fromArray($item), $data['messages']) : [],
+            isset($data['messages']) && is_array($data['messages']) ? array_values(array_map(static fn(array $item): RespConversationMessageModel => RespConversationMessageModel::fromArray($item), array_filter($data['messages'], 'is_array'))) : [],
             (is_scalar(($data['messages_total'] ?? null)) ? (int) ($data['messages_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? ConversationsMessagesListResponseLinks::fromArray($data['links']) : ConversationsMessagesListResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -7364,7 +7364,7 @@ final class ConversationsSearchResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['conversations']) && is_array($data['conversations']) ? array_map(static fn(array $item): RespConversationModel => RespConversationModel::fromArray($item), $data['conversations']) : [],
+            isset($data['conversations']) && is_array($data['conversations']) ? array_values(array_map(static fn(array $item): RespConversationModel => RespConversationModel::fromArray($item), array_filter($data['conversations'], 'is_array'))) : [],
             (is_scalar(($data['recipients'] ?? null)) ? (bool) ($data['recipients'] ?? null) : false),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -7687,7 +7687,7 @@ final class NotificationsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['notifications']) && is_array($data['notifications']) ? array_map(static fn(array $item): RespNotificationModel => RespNotificationModel::fromArray($item), $data['notifications']) : [],
+            isset($data['notifications']) && is_array($data['notifications']) ? array_values(array_map(static fn(array $item): RespNotificationModel => RespNotificationModel::fromArray($item), array_filter($data['notifications'], 'is_array'))) : [],
             (is_scalar(($data['notifications_total'] ?? null)) ? (int) ($data['notifications_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? NotificationsListResponseLinks::fromArray($data['links']) : NotificationsListResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -7857,7 +7857,7 @@ final class TagsGetResponse
     {
         return new self(
             isset($data['tag']) && is_array($data['tag']) ? TagsGetResponseTag::fromArray($data['tag']) : TagsGetResponseTag::fromArray([]),
-            isset($data['tagged']) && is_array($data['tagged']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['tagged']) : [],
+            isset($data['tagged']) && is_array($data['tagged']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['tagged'], 'is_array'))) : [],
             (is_scalar(($data['tagged_total'] ?? null)) ? (int) ($data['tagged_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? TagsGetResponseLinks::fromArray($data['links']) : TagsGetResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -7978,9 +7978,9 @@ final class SearchAllResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['links']) && is_array($data['links']) ? SearchAllResponseLinks::fromArray($data['links']) : SearchAllResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -8028,7 +8028,7 @@ final class SearchThreadsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespForumModel => RespForumModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? SearchThreadsResponseLinks::fromArray($data['links']) : SearchThreadsResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -8077,7 +8077,7 @@ final class SearchPostsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespPostModel => RespPostModel::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespPostModel => RespPostModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? SearchPostsResponseLinks::fromArray($data['links']) : SearchPostsResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -8123,7 +8123,7 @@ final class SearchUsersResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): RespUserModel => RespUserModel::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -8148,7 +8148,7 @@ final class SearchProfilePostsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): SearchProfilePostsResponseData => SearchProfilePostsResponseData::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): SearchProfilePostsResponseData => SearchProfilePostsResponseData::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             isset($data['links']) && is_array($data['links']) ? SearchProfilePostsResponseLinks::fromArray($data['links']) : SearchProfilePostsResponseLinks::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -8313,7 +8313,7 @@ final class SearchTaggedResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             $data['search_tags'] ?? [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -8339,7 +8339,7 @@ final class SearchResultsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['data']) && is_array($data['data']) ? array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), $data['data']) : [],
+            isset($data['data']) && is_array($data['data']) ? array_values(array_map(static fn(array $item): RespThreadModel => RespThreadModel::fromArray($item), array_filter($data['data'], 'is_array'))) : [],
             (is_scalar(($data['data_total'] ?? null)) ? (int) ($data['data_total'] ?? null) : 0),
             $data['search_tags'] ?? [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
@@ -8409,9 +8409,9 @@ final class ChatboxIndexResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['rooms']) && is_array($data['rooms']) ? array_map(static fn(array $item): ChatboxIndexResponseRooms => ChatboxIndexResponseRooms::fromArray($item), $data['rooms']) : [],
+            isset($data['rooms']) && is_array($data['rooms']) ? array_values(array_map(static fn(array $item): ChatboxIndexResponseRooms => ChatboxIndexResponseRooms::fromArray($item), array_filter($data['rooms'], 'is_array'))) : [],
             $data['ban'] ?? null,
-            isset($data['ignore']) && is_array($data['ignore']) ? array_map(static fn(array $item): ChatboxIndexResponseIgnore => ChatboxIndexResponseIgnore::fromArray($item), $data['ignore']) : [],
+            isset($data['ignore']) && is_array($data['ignore']) ? array_values(array_map(static fn(array $item): ChatboxIndexResponseIgnore => ChatboxIndexResponseIgnore::fromArray($item), array_filter($data['ignore'], 'is_array'))) : [],
             isset($data['permissions']) && is_array($data['permissions']) ? ChatboxIndexResponsePermissions::fromArray($data['permissions']) : ChatboxIndexResponsePermissions::fromArray([]),
             $data['commands'] ?? [],
             isset($data['roomsOnline']) && is_array($data['roomsOnline']) ? ChatboxIndexResponseRoomsOnline::fromArray($data['roomsOnline']) : ChatboxIndexResponseRoomsOnline::fromArray([]),
@@ -8616,7 +8616,7 @@ final class ChatboxGetMessagesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['messages']) && is_array($data['messages']) ? array_map(static fn(array $item): RespChatboxMessageModel => RespChatboxMessageModel::fromArray($item), $data['messages']) : [],
+            isset($data['messages']) && is_array($data['messages']) ? array_values(array_map(static fn(array $item): RespChatboxMessageModel => RespChatboxMessageModel::fromArray($item), array_filter($data['messages'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -8705,7 +8705,7 @@ final class ChatboxOnlineResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['users']) && is_array($data['users']) ? array_map(static fn(array $item): ChatboxOnlineResponseUsers => ChatboxOnlineResponseUsers::fromArray($item), $data['users']) : [],
+            isset($data['users']) && is_array($data['users']) ? array_values(array_map(static fn(array $item): ChatboxOnlineResponseUsers => ChatboxOnlineResponseUsers::fromArray($item), array_filter($data['users'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -8905,7 +8905,7 @@ final class ChatboxGetLeaderboardResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['leaderboard']) && is_array($data['leaderboard']) ? array_map(static fn(array $item): ChatboxGetLeaderboardResponseLeaderboard => ChatboxGetLeaderboardResponseLeaderboard::fromArray($item), $data['leaderboard']) : [],
+            isset($data['leaderboard']) && is_array($data['leaderboard']) ? array_values(array_map(static fn(array $item): ChatboxGetLeaderboardResponseLeaderboard => ChatboxGetLeaderboardResponseLeaderboard::fromArray($item), array_filter($data['leaderboard'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -9054,7 +9054,7 @@ final class ChatboxGetIgnoreResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['ignored']) && is_array($data['ignored']) ? array_map(static fn(array $item): ChatboxGetIgnoreResponseIgnored => ChatboxGetIgnoreResponseIgnored::fromArray($item), $data['ignored']) : [],
+            isset($data['ignored']) && is_array($data['ignored']) ? array_values(array_map(static fn(array $item): ChatboxGetIgnoreResponseIgnored => ChatboxGetIgnoreResponseIgnored::fromArray($item), array_filter($data['ignored'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -9227,7 +9227,7 @@ final class FormsListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['forms']) && is_array($data['forms']) ? array_map(static fn(array $item): FormsListResponseForms => FormsListResponseForms::fromArray($item), $data['forms']) : [],
+            isset($data['forms']) && is_array($data['forms']) ? array_values(array_map(static fn(array $item): FormsListResponseForms => FormsListResponseForms::fromArray($item), array_filter($data['forms'], 'is_array'))) : [],
             (is_scalar(($data['formsPerPage'] ?? null)) ? (int) ($data['formsPerPage'] ?? null) : 0),
             (is_scalar(($data['page'] ?? null)) ? (int) ($data['page'] ?? null) : 0),
             (is_scalar(($data['totalForms'] ?? null)) ? (int) ($data['totalForms'] ?? null) : 0),
@@ -9256,7 +9256,7 @@ final class FormsListResponseForms
             (is_scalar(($data['form_id'] ?? null)) ? (int) ($data['form_id'] ?? null) : 0),
             (is_scalar(($data['title'] ?? null)) ? (string) ($data['title'] ?? null) : (is_array(($data['title'] ?? null)) ? json_encode(($data['title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['description'] ?? null)) ? (string) ($data['description'] ?? null) : (is_array(($data['description'] ?? null)) ? json_encode(($data['description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['fields']) && is_array($data['fields']) ? array_map(static fn(array $item): FormsListResponseFormsFields => FormsListResponseFormsFields::fromArray($item), $data['fields']) : [],
+            isset($data['fields']) && is_array($data['fields']) ? array_values(array_map(static fn(array $item): FormsListResponseFormsFields => FormsListResponseFormsFields::fromArray($item), array_filter($data['fields'], 'is_array'))) : [],
         );
     }
 }

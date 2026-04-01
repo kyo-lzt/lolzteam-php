@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lolzteam\Runtime;
 
 use Lolzteam\Runtime\Errors\AuthException;
+use Lolzteam\Runtime\Errors\ForbiddenException;
 use Lolzteam\Runtime\Errors\HttpException;
 use Lolzteam\Runtime\Errors\NotFoundException;
 use Lolzteam\Runtime\Errors\RateLimitException;
@@ -19,7 +20,8 @@ final class HttpExceptionFactory
     {
         return match ($status) {
             429 => new RateLimitException($status, $body, $headers),
-            401, 403 => new AuthException($status, $body, $headers),
+            401 => new AuthException($status, $body, $headers),
+            403 => new ForbiddenException($status, $body, $headers),
             404 => new NotFoundException($status, $body, $headers),
             500, 502, 503, 504 => new ServerException($status, $body, $headers),
             default => new HttpException($status, $body, $headers),

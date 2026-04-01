@@ -621,12 +621,12 @@ function emitFromArrayArg(array $prop, string $key, string $namespace): string
         return "isset({$access}) && is_array({$access}) ? {$prop['nestedModel']}::fromArray({$access}) : {$prop['nestedModel']}::fromArray([])";
     }
 
-    // Array of nested models — always guard with isset
+    // Array of nested models — always guard with isset, filter non-array items
     if ($prop['isArray'] && $prop['nestedModel'] !== null) {
         if ($prop['isNullable']) {
-            return "isset({$access}) && is_array({$access}) ? array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access}) : null";
+            return "isset({$access}) && is_array({$access}) ? array_values(array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), array_filter({$access}, 'is_array'))) : null";
         }
-        return "isset({$access}) && is_array({$access}) ? array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), {$access}) : []";
+        return "isset({$access}) && is_array({$access}) ? array_values(array_map(static fn(array \$item): {$prop['nestedModel']} => {$prop['nestedModel']}::fromArray(\$item), array_filter({$access}, 'is_array'))) : []";
     }
 
     // Nullable primitive fields: coerce to the expected type or null on mismatch

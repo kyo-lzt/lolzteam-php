@@ -16,7 +16,7 @@ final readonly class ProxyConfig
             throw new \InvalidArgumentException('invalid proxy URL');
         }
         $scheme = $parsed['scheme'] ?? null;
-        if ($scheme === null || !in_array($scheme, ['http', 'https', 'socks5'], true)) {
+        if ($scheme === null || !in_array($scheme, ['http', 'https', 'socks5', 'socks5h'], true)) {
             throw new \InvalidArgumentException('unsupported proxy scheme: ' . ($scheme ?? '<none>'));
         }
         if (empty($parsed['host'])) {

@@ -124,7 +124,7 @@ final class UserModel
             (is_scalar(($data['activity_visible'] ?? null)) ? (bool) ($data['activity_visible'] ?? null) : false),
             (is_scalar(($data['age'] ?? null)) ? (int) ($data['age'] ?? null) : 0),
             (is_scalar(($data['balance'] ?? null)) ? (string) ($data['balance'] ?? null) : (is_array(($data['balance'] ?? null)) ? json_encode(($data['balance'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['balances']) && is_array($data['balances']) ? array_map(static fn(array $item): UserModelBalances => UserModelBalances::fromArray($item), $data['balances']) : [],
+            isset($data['balances']) && is_array($data['balances']) ? array_values(array_map(static fn(array $item): UserModelBalances => UserModelBalances::fromArray($item), array_filter($data['balances'], 'is_array'))) : [],
             (is_scalar(($data['bump_item_period'] ?? null)) ? (int) ($data['bump_item_period'] ?? null) : 0),
             (is_scalar(($data['can_edit'] ?? null)) ? (bool) ($data['can_edit'] ?? null) : false),
             (is_scalar(($data['can_follow'] ?? null)) ? (bool) ($data['can_follow'] ?? null) : false),
@@ -165,14 +165,14 @@ final class UserModel
             (is_scalar(($data['max_discount_percent'] ?? null)) ? (int) ($data['max_discount_percent'] ?? null) : 0),
             (is_scalar(($data['message_count'] ?? null)) ? (int) ($data['message_count'] ?? null) : 0),
             (is_scalar(($data['paid_mail_left'] ?? null)) ? (int) ($data['paid_mail_left'] ?? null) : 0),
-            isset($data['public_tags']) && is_array($data['public_tags']) ? array_map(static fn(array $item): UserModelPublicTags => UserModelPublicTags::fromArray($item), $data['public_tags']) : [],
+            isset($data['public_tags']) && is_array($data['public_tags']) ? array_values(array_map(static fn(array $item): UserModelPublicTags => UserModelPublicTags::fromArray($item), array_filter($data['public_tags'], 'is_array'))) : [],
             (is_scalar(($data['register_date'] ?? null)) ? (int) ($data['register_date'] ?? null) : 0),
             isset($data['rendered']) && is_array($data['rendered']) ? UserModelRendered::fromArray($data['rendered']) : UserModelRendered::fromArray([]),
             (is_scalar(($data['restore_count'] ?? null)) ? (int) ($data['restore_count'] ?? null) : 0),
             $data['restore_data'] ?? [],
             (is_scalar(($data['short_link'] ?? null)) ? (string) ($data['short_link'] ?? null) : (is_array(($data['short_link'] ?? null)) ? json_encode(($data['short_link'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['sold_items_count'] ?? null)) ? (int) ($data['sold_items_count'] ?? null) : 0),
-            isset($data['tags']) && is_array($data['tags']) ? array_map(static fn(array $item): UserModelTags => UserModelTags::fromArray($item), $data['tags']) : [],
+            isset($data['tags']) && is_array($data['tags']) ? array_values(array_map(static fn(array $item): UserModelTags => UserModelTags::fromArray($item), array_filter($data['tags'], 'is_array'))) : [],
             isset($data['telegram_client']) && is_array($data['telegram_client']) ? UserModelTelegramClient::fromArray($data['telegram_client']) : UserModelTelegramClient::fromArray([]),
             (is_scalar(($data['trophy_points'] ?? null)) ? (int) ($data['trophy_points'] ?? null) : 0),
             (is_scalar(($data['user_allow_ask_discount'] ?? null)) ? (bool) ($data['user_allow_ask_discount'] ?? null) : false),
@@ -659,14 +659,14 @@ final class ItemListModel
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
             (is_scalar(($data['perPage'] ?? null)) ? (int) ($data['perPage'] ?? null) : 0),
             (is_scalar(($data['page'] ?? null)) ? (int) ($data['page'] ?? null) : 0),
             (is_scalar(($data['searchUrl'] ?? null)) ? (string) ($data['searchUrl'] ?? null) : (is_array(($data['searchUrl'] ?? null)) ? json_encode(($data['searchUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['stickyItems']) && is_array($data['stickyItems']) ? array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), $data['stickyItems']) : [],
+            isset($data['stickyItems']) && is_array($data['stickyItems']) ? array_values(array_map(static fn(array $item): ItemFromListModel => ItemFromListModel::fromArray($item), array_filter($data['stickyItems'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -1028,7 +1028,7 @@ final class ItemModel
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): ItemModelAccountLinks => ItemModelAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): ItemModelAccountLinks => ItemModelAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             $data['imagePreviewLinks'] ?? [],
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -1044,7 +1044,7 @@ final class ItemModel
             (is_scalar(($data['isBirthdayToday'] ?? null)) ? (bool) ($data['isBirthdayToday'] ?? null) : false),
             (is_scalar(($data['isIgnored'] ?? null)) ? (bool) ($data['isIgnored'] ?? null) : false),
             (is_scalar(($data['deposit'] ?? null)) ? (int) ($data['deposit'] ?? null) : 0),
-            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_map(static fn(array $item): ItemModelExtraPrices => ItemModelExtraPrices::fromArray($item), $data['extraPrices']) : [],
+            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_values(array_map(static fn(array $item): ItemModelExtraPrices => ItemModelExtraPrices::fromArray($item), array_filter($data['extraPrices'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLoginAndTempEmail'] ?? null)) ? (bool) ($data['canViewAccountLoginAndTempEmail'] ?? null) : false),
             isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? ItemModelBumpSettings::fromArray($data['bumpSettings']) : ItemModelBumpSettings::fromArray([]),
             (is_scalar(($data['canCheckGuarantee'] ?? null)) ? (bool) ($data['canCheckGuarantee'] ?? null) : false),
@@ -1459,7 +1459,7 @@ final class CategorySteamResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategorySteamResponseItems => CategorySteamResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -1755,14 +1755,14 @@ final class CategorySteamResponseItems
             $data['steamCs2Medals'] ?? [],
             (is_scalar(($data['cs2RankExpired'] ?? null)) ? (bool) ($data['cs2RankExpired'] ?? null) : false),
             (is_scalar(($data['steamDota2WinRate'] ?? null)) ? (int) ($data['steamDota2WinRate'] ?? null) : 0),
-            isset($data['steamTransactions']) && is_array($data['steamTransactions']) ? array_map(static fn(array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), $data['steamTransactions']) : [],
+            isset($data['steamTransactions']) && is_array($data['steamTransactions']) ? array_values(array_map(static fn(array $item): CategorySteamResponseItemsSteamTransactions => CategorySteamResponseItemsSteamTransactions::fromArray($item), array_filter($data['steamTransactions'], 'is_array'))) : [],
             (is_scalar(($data['hasPossibleBanInDota2'] ?? null)) ? (bool) ($data['hasPossibleBanInDota2'] ?? null) : false),
             (is_scalar(($data['chineseAccount'] ?? null)) ? (bool) ($data['chineseAccount'] ?? null) : false),
             $data['cs2MapsRanks'] ?? [],
             $data['cs2PremierElo'] ?? [],
             (is_scalar(($data['steamLifetimeTradeBan'] ?? null)) ? (bool) ($data['steamLifetimeTradeBan'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategorySteamResponseItemsAccountLinks => CategorySteamResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -1982,7 +1982,7 @@ final class CategoryFortniteResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItems => CategoryFortniteResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -2178,17 +2178,17 @@ final class CategoryFortniteResponseItems
             (is_scalar(($data['price_currency'] ?? null)) ? (string) ($data['price_currency'] ?? null) : (is_array(($data['price_currency'] ?? null)) ? json_encode(($data['price_currency'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canValidateAccount'] ?? null)) ? (bool) ($data['canValidateAccount'] ?? null) : false),
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
-            isset($data['fortniteSkins']) && is_array($data['fortniteSkins']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), $data['fortniteSkins']) : [],
-            isset($data['fortnitePickaxe']) && is_array($data['fortnitePickaxe']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), $data['fortnitePickaxe']) : [],
-            isset($data['fortniteDance']) && is_array($data['fortniteDance']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), $data['fortniteDance']) : [],
-            isset($data['fortniteGliders']) && is_array($data['fortniteGliders']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), $data['fortniteGliders']) : [],
+            isset($data['fortniteSkins']) && is_array($data['fortniteSkins']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteSkins => CategoryFortniteResponseItemsFortniteSkins::fromArray($item), array_filter($data['fortniteSkins'], 'is_array'))) : [],
+            isset($data['fortnitePickaxe']) && is_array($data['fortnitePickaxe']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePickaxe => CategoryFortniteResponseItemsFortnitePickaxe::fromArray($item), array_filter($data['fortnitePickaxe'], 'is_array'))) : [],
+            isset($data['fortniteDance']) && is_array($data['fortniteDance']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteDance => CategoryFortniteResponseItemsFortniteDance::fromArray($item), array_filter($data['fortniteDance'], 'is_array'))) : [],
+            isset($data['fortniteGliders']) && is_array($data['fortniteGliders']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteGliders => CategoryFortniteResponseItemsFortniteGliders::fromArray($item), array_filter($data['fortniteGliders'], 'is_array'))) : [],
             (is_scalar(($data['fortnite_pickaxe_count'] ?? null)) ? (int) ($data['fortnite_pickaxe_count'] ?? null) : 0),
             (is_scalar(($data['fortnite_dance_count'] ?? null)) ? (int) ($data['fortnite_dance_count'] ?? null) : 0),
             (is_scalar(($data['fortnite_glider_count'] ?? null)) ? (int) ($data['fortnite_glider_count'] ?? null) : 0),
-            isset($data['fortnitePastSeasons']) && is_array($data['fortnitePastSeasons']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), $data['fortnitePastSeasons']) : [],
+            isset($data['fortnitePastSeasons']) && is_array($data['fortnitePastSeasons']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortnitePastSeasons => CategoryFortniteResponseItemsFortnitePastSeasons::fromArray($item), array_filter($data['fortnitePastSeasons'], 'is_array'))) : [],
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
-            isset($data['fortniteTransactions']) && is_array($data['fortniteTransactions']) ? array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), $data['fortniteTransactions']) : [],
+            isset($data['fortniteTransactions']) && is_array($data['fortniteTransactions']) ? array_values(array_map(static fn(array $item): CategoryFortniteResponseItemsFortniteTransactions => CategoryFortniteResponseItemsFortniteTransactions::fromArray($item), array_filter($data['fortniteTransactions'], 'is_array'))) : [],
             (is_scalar(($data['domain'] ?? null)) ? (string) ($data['domain'] ?? null) : (is_array(($data['domain'] ?? null)) ? json_encode(($data['domain'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             isset($data['shopCounts']) && is_array($data['shopCounts']) ? CategoryFortniteResponseItemsShopCounts::fromArray($data['shopCounts']) : CategoryFortniteResponseItemsShopCounts::fromArray([]),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
@@ -2485,7 +2485,7 @@ final class CategoryMihoyoResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItems => CategoryMihoyoResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -2700,11 +2700,11 @@ final class CategoryMihoyoResponseItems
             (is_scalar(($data['mihoyoRegionPhrase'] ?? null)) ? (string) ($data['mihoyoRegionPhrase'] ?? null) : (is_array(($data['mihoyoRegionPhrase'] ?? null)) ? json_encode(($data['mihoyoRegionPhrase'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             isset($data['mihoyoLinkedAccounts']) && is_array($data['mihoyoLinkedAccounts']) ? CategoryMihoyoResponseItemsMihoyoLinkedAccounts::fromArray($data['mihoyoLinkedAccounts']) : CategoryMihoyoResponseItemsMihoyoLinkedAccounts::fromArray([]),
             (is_scalar(($data['mihoyoLinkedAccountsString'] ?? null)) ? (string) ($data['mihoyoLinkedAccountsString'] ?? null) : (is_array(($data['mihoyoLinkedAccountsString'] ?? null)) ? json_encode(($data['mihoyoLinkedAccountsString'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['honkaiCharacters']) && is_array($data['honkaiCharacters']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), $data['honkaiCharacters']) : [],
-            isset($data['genshinCharacters']) && is_array($data['genshinCharacters']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), $data['genshinCharacters']) : [],
-            isset($data['zenlessCharacters']) && is_array($data['zenlessCharacters']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), $data['zenlessCharacters']) : [],
+            isset($data['honkaiCharacters']) && is_array($data['honkaiCharacters']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharacters => CategoryMihoyoResponseItemsHonkaiCharacters::fromArray($item), array_filter($data['honkaiCharacters'], 'is_array'))) : [],
+            isset($data['genshinCharacters']) && is_array($data['genshinCharacters']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharacters => CategoryMihoyoResponseItemsGenshinCharacters::fromArray($item), array_filter($data['genshinCharacters'], 'is_array'))) : [],
+            isset($data['zenlessCharacters']) && is_array($data['zenlessCharacters']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharacters => CategoryMihoyoResponseItemsZenlessCharacters::fromArray($item), array_filter($data['zenlessCharacters'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsAccountLinks => CategoryMihoyoResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -2806,8 +2806,8 @@ final class CategoryMihoyoResponseItemsHonkaiCharacters
             (is_scalar(($data['rank'] ?? null)) ? (int) ($data['rank'] ?? null) : 0),
             (is_scalar(($data['image'] ?? null)) ? (string) ($data['image'] ?? null) : (is_array(($data['image'] ?? null)) ? json_encode(($data['image'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             isset($data['equip']) && is_array($data['equip']) ? CategoryMihoyoResponseItemsHonkaiCharactersEquip::fromArray($data['equip']) : CategoryMihoyoResponseItemsHonkaiCharactersEquip::fromArray([]),
-            isset($data['relics']) && is_array($data['relics']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), $data['relics']) : [],
-            isset($data['ornaments']) && is_array($data['ornaments']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), $data['ornaments']) : [],
+            isset($data['relics']) && is_array($data['relics']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelics => CategoryMihoyoResponseItemsHonkaiCharactersRelics::fromArray($item), array_filter($data['relics'], 'is_array'))) : [],
+            isset($data['ornaments']) && is_array($data['ornaments']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnaments => CategoryMihoyoResponseItemsHonkaiCharactersOrnaments::fromArray($item), array_filter($data['ornaments'], 'is_array'))) : [],
             (is_scalar(($data['base_type'] ?? null)) ? (int) ($data['base_type'] ?? null) : 0),
             (is_scalar(($data['figure_path'] ?? null)) ? (string) ($data['figure_path'] ?? null) : (is_array(($data['figure_path'] ?? null)) ? json_encode(($data['figure_path'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['elementImage'] ?? null)) ? (string) ($data['elementImage'] ?? null) : (is_array(($data['elementImage'] ?? null)) ? json_encode(($data['elementImage'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
@@ -2876,7 +2876,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersRelics
             (is_scalar(($data['icon'] ?? null)) ? (string) ($data['icon'] ?? null) : (is_array(($data['icon'] ?? null)) ? json_encode(($data['icon'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['rarity'] ?? null)) ? (int) ($data['rarity'] ?? null) : 0),
             isset($data['main_property']) && is_array($data['main_property']) ? CategoryMihoyoResponseItemsHonkaiCharactersRelicsMainProperty::fromArray($data['main_property']) : CategoryMihoyoResponseItemsHonkaiCharactersRelicsMainProperty::fromArray([]),
-            isset($data['properties']) && is_array($data['properties']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), $data['properties']) : [],
+            isset($data['properties']) && is_array($data['properties']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties => CategoryMihoyoResponseItemsHonkaiCharactersRelicsProperties::fromArray($item), array_filter($data['properties'], 'is_array'))) : [],
         );
     }
 }
@@ -2956,7 +2956,7 @@ final class CategoryMihoyoResponseItemsHonkaiCharactersOrnaments
             (is_scalar(($data['icon'] ?? null)) ? (string) ($data['icon'] ?? null) : (is_array(($data['icon'] ?? null)) ? json_encode(($data['icon'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['rarity'] ?? null)) ? (int) ($data['rarity'] ?? null) : 0),
             isset($data['main_property']) && is_array($data['main_property']) ? CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsMainProperty::fromArray($data['main_property']) : CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsMainProperty::fromArray([]),
-            isset($data['properties']) && is_array($data['properties']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), $data['properties']) : [],
+            isset($data['properties']) && is_array($data['properties']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties => CategoryMihoyoResponseItemsHonkaiCharactersOrnamentsProperties::fromArray($item), array_filter($data['properties'], 'is_array'))) : [],
         );
     }
 }
@@ -3042,7 +3042,7 @@ final class CategoryMihoyoResponseItemsGenshinCharacters
             (is_scalar(($data['level'] ?? null)) ? (int) ($data['level'] ?? null) : 0),
             (is_scalar(($data['rarity'] ?? null)) ? (int) ($data['rarity'] ?? null) : 0),
             isset($data['weapon']) && is_array($data['weapon']) ? CategoryMihoyoResponseItemsGenshinCharactersWeapon::fromArray($data['weapon']) : CategoryMihoyoResponseItemsGenshinCharactersWeapon::fromArray([]),
-            isset($data['reliquaries']) && is_array($data['reliquaries']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), $data['reliquaries']) : [],
+            isset($data['reliquaries']) && is_array($data['reliquaries']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsGenshinCharactersReliquaries => CategoryMihoyoResponseItemsGenshinCharactersReliquaries::fromArray($item), array_filter($data['reliquaries'], 'is_array'))) : [],
             (is_scalar(($data['actived_constellation_num'] ?? null)) ? (int) ($data['actived_constellation_num'] ?? null) : 0),
             $data['costumes'] ?? [],
             $data['external'] ?? null,
@@ -3195,8 +3195,8 @@ final class CategoryMihoyoResponseItemsZenlessCharactersWeapon
             (is_scalar(($data['star'] ?? null)) ? (int) ($data['star'] ?? null) : 0),
             (is_scalar(($data['icon'] ?? null)) ? (string) ($data['icon'] ?? null) : (is_array(($data['icon'] ?? null)) ? json_encode(($data['icon'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['rarity'] ?? null)) ? (int) ($data['rarity'] ?? null) : 0),
-            isset($data['properties']) && is_array($data['properties']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), $data['properties']) : [],
-            isset($data['main_properties']) && is_array($data['main_properties']) ? array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), $data['main_properties']) : [],
+            isset($data['properties']) && is_array($data['properties']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponProperties::fromArray($item), array_filter($data['properties'], 'is_array'))) : [],
+            isset($data['main_properties']) && is_array($data['main_properties']) ? array_values(array_map(static fn(array $item): CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties => CategoryMihoyoResponseItemsZenlessCharactersWeaponMainProperties::fromArray($item), array_filter($data['main_properties'], 'is_array'))) : [],
             (is_scalar(($data['talent_title'] ?? null)) ? (string) ($data['talent_title'] ?? null) : (is_array(($data['talent_title'] ?? null)) ? json_encode(($data['talent_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['talent_content'] ?? null)) ? (string) ($data['talent_content'] ?? null) : (is_array(($data['talent_content'] ?? null)) ? json_encode(($data['talent_content'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['profession'] ?? null)) ? (int) ($data['profession'] ?? null) : 0),
@@ -3333,7 +3333,7 @@ final class CategoryRiotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryRiotResponseItems => CategoryRiotResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -3556,7 +3556,7 @@ final class CategoryRiotResponseItems
             isset($data['valorantInventory']) && is_array($data['valorantInventory']) ? CategoryRiotResponseItemsValorantInventory::fromArray($data['valorantInventory']) : CategoryRiotResponseItemsValorantInventory::fromArray([]),
             isset($data['lolInventory']) && is_array($data['lolInventory']) ? CategoryRiotResponseItemsLolInventory::fromArray($data['lolInventory']) : CategoryRiotResponseItemsLolInventory::fromArray([]),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryRiotResponseItemsAccountLinks => CategoryRiotResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -3729,7 +3729,7 @@ final class CategoryTelegramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryTelegramResponseItems => CategoryTelegramResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -4020,7 +4020,7 @@ final class CategorySupercellResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategorySupercellResponseItems => CategorySupercellResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -4217,7 +4217,7 @@ final class CategorySupercellResponseItems
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             $data['supercellBrawlers'] ?? [],
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategorySupercellResponseItemsAccountLinks => CategorySupercellResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -4341,7 +4341,7 @@ final class CategoryEAResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryEAResponseItems => CategoryEAResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -4511,7 +4511,7 @@ final class CategoryEAResponseItems
             (is_scalar(($data['canValidateAccount'] ?? null)) ? (bool) ($data['canValidateAccount'] ?? null) : false),
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryEAResponseItemsAccountLinks => CategoryEAResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -4682,7 +4682,7 @@ final class CategoryWotResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryWotResponseItems => CategoryWotResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -4974,7 +4974,7 @@ final class CategoryWotBlitzResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryWotBlitzResponseItems => CategoryWotBlitzResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -5266,7 +5266,7 @@ final class CategoryGiftsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryGiftsResponseItems => CategoryGiftsResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -5508,7 +5508,7 @@ final class CategoryEpicGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryEpicGamesResponseItems => CategoryEpicGamesResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -5680,7 +5680,7 @@ final class CategoryEpicGamesResponseItems
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['egBalance'] ?? null)) ? (string) ($data['egBalance'] ?? null) : (is_array(($data['egBalance'] ?? null)) ? json_encode(($data['egBalance'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['egGameCount'] ?? null)) ? (int) ($data['egGameCount'] ?? null) : 0),
-            isset($data['egTransactions']) && is_array($data['egTransactions']) ? array_map(static fn(array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), $data['egTransactions']) : [],
+            isset($data['egTransactions']) && is_array($data['egTransactions']) ? array_values(array_map(static fn(array $item): CategoryEpicGamesResponseItemsEgTransactions => CategoryEpicGamesResponseItemsEgTransactions::fromArray($item), array_filter($data['egTransactions'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
             $data['accountLinks'] ?? [],
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
@@ -5809,7 +5809,7 @@ final class CategoryEscapeFromTarkovResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryEscapeFromTarkovResponseItems => CategoryEscapeFromTarkovResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -6095,7 +6095,7 @@ final class CategorySocialClubResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategorySocialClubResponseItems => CategorySocialClubResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -6220,7 +6220,7 @@ final class CategorySocialClubResponseItems
             (is_scalar(($data['socialclub_level'] ?? null)) ? (int) ($data['socialclub_level'] ?? null) : 0),
             (is_scalar(($data['socialclub_cash'] ?? null)) ? (int) ($data['socialclub_cash'] ?? null) : 0),
             (is_scalar(($data['socialclub_bank_cash'] ?? null)) ? (int) ($data['socialclub_bank_cash'] ?? null) : 0),
-            isset($data['socialclub_games']) && is_array($data['socialclub_games']) ? array_map(static fn(array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), $data['socialclub_games']) : [],
+            isset($data['socialclub_games']) && is_array($data['socialclub_games']) ? array_values(array_map(static fn(array $item): CategorySocialClubResponseItemsSocialclubGames => CategorySocialClubResponseItemsSocialclubGames::fromArray($item), array_filter($data['socialclub_games'], 'is_array'))) : [],
             (is_scalar(($data['socialclub_last_activity'] ?? null)) ? (int) ($data['socialclub_last_activity'] ?? null) : 0),
             (is_scalar(($data['socialclub_has_gtav'] ?? null)) ? (int) ($data['socialclub_has_gtav'] ?? null) : 0),
             (is_scalar(($data['socialclub_has_rdr2'] ?? null)) ? (int) ($data['socialclub_has_rdr2'] ?? null) : 0),
@@ -6392,7 +6392,7 @@ final class CategoryUplayResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryUplayResponseItems => CategoryUplayResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -6582,7 +6582,7 @@ final class CategoryUplayResponseItems
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
             $data['r6Skins'] ?? [],
-            isset($data['r6Operators']) && is_array($data['r6Operators']) ? array_map(static fn(array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), $data['r6Operators']) : [],
+            isset($data['r6Operators']) && is_array($data['r6Operators']) ? array_values(array_map(static fn(array $item): CategoryUplayResponseItemsR6Operators => CategoryUplayResponseItemsR6Operators::fromArray($item), array_filter($data['r6Operators'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -6755,7 +6755,7 @@ final class CategoryDiscordResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryDiscordResponseItems => CategoryDiscordResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -7021,7 +7021,7 @@ final class CategoryTikTokResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryTikTokResponseItems => CategoryTikTokResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -7195,7 +7195,7 @@ final class CategoryTikTokResponseItems
             (is_scalar(($data['canValidateAccount'] ?? null)) ? (bool) ($data['canValidateAccount'] ?? null) : false),
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryTikTokResponseItemsAccountLinks => CategoryTikTokResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
             (is_scalar(($data['itemOriginPhrase'] ?? null)) ? (string) ($data['itemOriginPhrase'] ?? null) : (is_array(($data['itemOriginPhrase'] ?? null)) ? json_encode(($data['itemOriginPhrase'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
@@ -7320,7 +7320,7 @@ final class CategoryInstagramResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryInstagramResponseItems => CategoryInstagramResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -7477,7 +7477,7 @@ final class CategoryInstagramResponseItems
             (is_scalar(($data['canValidateAccount'] ?? null)) ? (bool) ($data['canValidateAccount'] ?? null) : false),
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryInstagramResponseItemsAccountLinks => CategoryInstagramResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -7601,7 +7601,7 @@ final class CategoryBattleNetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryBattleNetResponseItems => CategoryBattleNetResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -7771,7 +7771,7 @@ final class CategoryBattleNetResponseItems
             (is_scalar(($data['battlenetBans'] ?? null)) ? (string) ($data['battlenetBans'] ?? null) : (is_array(($data['battlenetBans'] ?? null)) ? json_encode(($data['battlenetBans'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             $data['battlenetGames'] ?? [],
             (is_scalar(($data['hasOverwatch'] ?? null)) ? (bool) ($data['hasOverwatch'] ?? null) : false),
-            isset($data['battlenetTransactions']) && is_array($data['battlenetTransactions']) ? array_map(static fn(array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), $data['battlenetTransactions']) : [],
+            isset($data['battlenetTransactions']) && is_array($data['battlenetTransactions']) ? array_values(array_map(static fn(array $item): CategoryBattleNetResponseItemsBattlenetTransactions => CategoryBattleNetResponseItemsBattlenetTransactions::fromArray($item), array_filter($data['battlenetTransactions'], 'is_array'))) : [],
             (is_scalar(($data['displayConvertedBalance'] ?? null)) ? (bool) ($data['displayConvertedBalance'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
             $data['accountLinks'] ?? [],
@@ -7931,7 +7931,7 @@ final class CategoryChatGPTResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryChatGPTResponseItems => CategoryChatGPTResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -8210,7 +8210,7 @@ final class CategoryVpnResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryVpnResponseItems => CategoryVpnResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -8454,7 +8454,7 @@ final class CategoryRobloxResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryRobloxResponseItems => CategoryRobloxResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -8644,10 +8644,10 @@ final class CategoryRobloxResponseItems
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['robloxLinkedAccounts'] ?? null)) ? (string) ($data['robloxLinkedAccounts'] ?? null) : (is_array(($data['robloxLinkedAccounts'] ?? null)) ? json_encode(($data['robloxLinkedAccounts'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['creditBalance'] ?? null)) ? (string) ($data['creditBalance'] ?? null) : (is_array(($data['creditBalance'] ?? null)) ? json_encode(($data['creditBalance'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['robloxGameDonations']) && is_array($data['robloxGameDonations']) ? array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), $data['robloxGameDonations']) : [],
-            isset($data['robloxGameDonationsDetails']) && is_array($data['robloxGameDonationsDetails']) ? array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), $data['robloxGameDonationsDetails']) : [],
+            isset($data['robloxGameDonations']) && is_array($data['robloxGameDonations']) ? array_values(array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonations => CategoryRobloxResponseItemsRobloxGameDonations::fromArray($item), array_filter($data['robloxGameDonations'], 'is_array'))) : [],
+            isset($data['robloxGameDonationsDetails']) && is_array($data['robloxGameDonationsDetails']) ? array_values(array_map(static fn(array $item): CategoryRobloxResponseItemsRobloxGameDonationsDetails => CategoryRobloxResponseItemsRobloxGameDonationsDetails::fromArray($item), array_filter($data['robloxGameDonationsDetails'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryRobloxResponseItemsAccountLinks => CategoryRobloxResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -8817,7 +8817,7 @@ final class CategoryWarfaceResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryWarfaceResponseItems => CategoryWarfaceResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -8980,7 +8980,7 @@ final class CategoryWarfaceResponseItems
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
-            isset($data['wf_servers']) && is_array($data['wf_servers']) ? array_map(static fn(array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), $data['wf_servers']) : [],
+            isset($data['wf_servers']) && is_array($data['wf_servers']) ? array_values(array_map(static fn(array $item): CategoryWarfaceResponseItemsWfServers => CategoryWarfaceResponseItemsWfServers::fromArray($item), array_filter($data['wf_servers'], 'is_array'))) : [],
             (is_scalar(($data['domain'] ?? null)) ? (string) ($data['domain'] ?? null) : (is_array(($data['domain'] ?? null)) ? json_encode(($data['domain'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -9106,7 +9106,7 @@ final class CategoryMinecraftResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryMinecraftResponseItems => CategoryMinecraftResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -9293,7 +9293,7 @@ final class CategoryMinecraftResponseItems
             (is_scalar(($data['canResellItemAfterPurchase'] ?? null)) ? (bool) ($data['canResellItemAfterPurchase'] ?? null) : false),
             (is_scalar(($data['minecraftHasPaidLicense'] ?? null)) ? (bool) ($data['minecraftHasPaidLicense'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): CategoryMinecraftResponseItemsAccountLinks => CategoryMinecraftResponseItemsAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -9417,7 +9417,7 @@ final class CategoryHytaleResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['items']) && is_array($data['items']) ? array_map(static fn(array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), $data['items']) : [],
+            isset($data['items']) && is_array($data['items']) ? array_values(array_map(static fn(array $item): CategoryHytaleResponseItems => CategoryHytaleResponseItems::fromArray($item), array_filter($data['items'], 'is_array'))) : [],
             (is_scalar(($data['totalItems'] ?? null)) ? (int) ($data['totalItems'] ?? null) : 0),
             $data['totalItemsPrice'] ?? null,
             (is_scalar(($data['hasNextPage'] ?? null)) ? (bool) ($data['hasNextPage'] ?? null) : false),
@@ -9770,7 +9770,7 @@ final class CategoryParamsResponse
     {
         return new self(
             isset($data['category']) && is_array($data['category']) ? CategoryParamsResponseCategory::fromArray($data['category']) : null,
-            isset($data['params']) && is_array($data['params']) ? array_map(static fn(array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), $data['params']) : null,
+            isset($data['params']) && is_array($data['params']) ? array_values(array_map(static fn(array $item): CategoryParamsResponseParams => CategoryParamsResponseParams::fromArray($item), array_filter($data['params'], 'is_array'))) : null,
             isset($data['base_params']) && is_array($data['base_params']) ? $data['base_params'] : null,
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
@@ -9904,7 +9904,7 @@ final class CategoryGamesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['games']) && is_array($data['games']) ? array_map(static fn(array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), $data['games']) : null,
+            isset($data['games']) && is_array($data['games']) ? array_values(array_map(static fn(array $item): CategoryGamesResponseGames => CategoryGamesResponseGames::fromArray($item), array_filter($data['games'], 'is_array'))) : null,
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : null,
         );
     }
@@ -10520,7 +10520,7 @@ final class ManagingCreateClaimResponseThreadFirstPost
             (is_scalar(($data['signature_plain_text'] ?? null)) ? (string) ($data['signature_plain_text'] ?? null) : (is_array(($data['signature_plain_text'] ?? null)) ? json_encode(($data['signature_plain_text'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['post_like_count'] ?? null)) ? (int) ($data['post_like_count'] ?? null) : 0),
             (is_scalar(($data['post_attachment_count'] ?? null)) ? (int) ($data['post_attachment_count'] ?? null) : 0),
-            isset($data['like_users']) && is_array($data['like_users']) ? array_map(static fn(array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), $data['like_users']) : [],
+            isset($data['like_users']) && is_array($data['like_users']) ? array_values(array_map(static fn(array $item): ManagingCreateClaimResponseThreadFirstPostLikeUsers => ManagingCreateClaimResponseThreadFirstPostLikeUsers::fromArray($item), array_filter($data['like_users'], 'is_array'))) : [],
             (is_scalar(($data['user_is_ignored'] ?? null)) ? (bool) ($data['user_is_ignored'] ?? null) : false),
             (is_scalar(($data['post_is_published'] ?? null)) ? (bool) ($data['post_is_published'] ?? null) : false),
             (is_scalar(($data['post_is_deleted'] ?? null)) ? (bool) ($data['post_is_deleted'] ?? null) : false),
@@ -10715,7 +10715,7 @@ final class ManagingCreateClaimResponseThreadForum
             (is_scalar(($data['forum_description'] ?? null)) ? (string) ($data['forum_description'] ?? null) : (is_array(($data['forum_description'] ?? null)) ? json_encode(($data['forum_description'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['forum_thread_count'] ?? null)) ? (int) ($data['forum_thread_count'] ?? null) : 0),
             (is_scalar(($data['forum_post_count'] ?? null)) ? (int) ($data['forum_post_count'] ?? null) : 0),
-            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), $data['forum_prefixes']) : [],
+            isset($data['forum_prefixes']) && is_array($data['forum_prefixes']) ? array_values(array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixes::fromArray($item), array_filter($data['forum_prefixes'], 'is_array'))) : [],
             (is_scalar(($data['thread_default_prefix_id'] ?? null)) ? (int) ($data['thread_default_prefix_id'] ?? null) : 0),
             (is_scalar(($data['thread_prefix_is_required'] ?? null)) ? (bool) ($data['thread_prefix_is_required'] ?? null) : false),
             isset($data['links']) && is_array($data['links']) ? ManagingCreateClaimResponseThreadForumLinks::fromArray($data['links']) : ManagingCreateClaimResponseThreadForumLinks::fromArray([]),
@@ -10741,7 +10741,7 @@ final class ManagingCreateClaimResponseThreadForumForumPrefixes
     {
         return new self(
             (is_scalar(($data['group_title'] ?? null)) ? (string) ($data['group_title'] ?? null) : (is_array(($data['group_title'] ?? null)) ? json_encode(($data['group_title'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), $data['group_prefixes']) : [],
+            isset($data['group_prefixes']) && is_array($data['group_prefixes']) ? array_values(array_map(static fn(array $item): ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes => ManagingCreateClaimResponseThreadForumForumPrefixesGroupPrefixes::fromArray($item), array_filter($data['group_prefixes'], 'is_array'))) : [],
         );
     }
 }
@@ -11263,7 +11263,7 @@ final class ManagingGetLetters2Response
     {
         return new self(
             (is_scalar(($data['email'] ?? null)) ? (string) ($data['email'] ?? null) : (is_array(($data['email'] ?? null)) ? json_encode(($data['email'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['letters']) && is_array($data['letters']) ? array_map(static fn(array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), $data['letters']) : [],
+            isset($data['letters']) && is_array($data['letters']) ? array_values(array_map(static fn(array $item): ManagingGetLetters2ResponseLetters => ManagingGetLetters2ResponseLetters::fromArray($item), array_filter($data['letters'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -11999,7 +11999,7 @@ final class ProfileClaimsResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['claims']) && is_array($data['claims']) ? array_map(static fn(array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), $data['claims']) : [],
+            isset($data['claims']) && is_array($data['claims']) ? array_values(array_map(static fn(array $item): ProfileClaimsResponseClaims => ProfileClaimsResponseClaims::fromArray($item), array_filter($data['claims'], 'is_array'))) : [],
             isset($data['stats']) && is_array($data['stats']) ? ProfileClaimsResponseStats::fromArray($data['stats']) : ProfileClaimsResponseStats::fromArray([]),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -12095,7 +12095,7 @@ final class ProfileClaimsResponseClaimsAuthor
             (is_scalar(($data['user_is_visitor'] ?? null)) ? (bool) ($data['user_is_visitor'] ?? null) : false),
             (is_scalar(($data['user_group_id'] ?? null)) ? (int) ($data['user_group_id'] ?? null) : 0),
             (is_scalar(($data['ban_reason'] ?? null)) ? (string) ($data['ban_reason'] ?? null) : (is_array(($data['ban_reason'] ?? null)) ? json_encode(($data['ban_reason'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
-            isset($data['fields']) && is_array($data['fields']) ? array_map(static fn(array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), $data['fields']) : [],
+            isset($data['fields']) && is_array($data['fields']) ? array_values(array_map(static fn(array $item): ProfileClaimsResponseClaimsAuthorFields => ProfileClaimsResponseClaimsAuthorFields::fromArray($item), array_filter($data['fields'], 'is_array'))) : [],
         );
     }
 }
@@ -12513,7 +12513,7 @@ final class PurchasingFastBuyResponseItem
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
             (is_scalar(($data['displayConvertedBalance'] ?? null)) ? (bool) ($data['displayConvertedBalance'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): PurchasingFastBuyResponseItemAccountLinks => PurchasingFastBuyResponseItemAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -12527,7 +12527,7 @@ final class PurchasingFastBuyResponseItem
             (is_scalar(($data['isBirthdayToday'] ?? null)) ? (bool) ($data['isBirthdayToday'] ?? null) : false),
             (is_scalar(($data['isIgnored'] ?? null)) ? (bool) ($data['isIgnored'] ?? null) : false),
             (is_scalar(($data['deposit'] ?? null)) ? (int) ($data['deposit'] ?? null) : 0),
-            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_map(static fn(array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), $data['extraPrices']) : [],
+            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_values(array_map(static fn(array $item): PurchasingFastBuyResponseItemExtraPrices => PurchasingFastBuyResponseItemExtraPrices::fromArray($item), array_filter($data['extraPrices'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLoginAndTempEmail'] ?? null)) ? (bool) ($data['canViewAccountLoginAndTempEmail'] ?? null) : false),
             isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? PurchasingFastBuyResponseItemBumpSettings::fromArray($data['bumpSettings']) : PurchasingFastBuyResponseItemBumpSettings::fromArray([]),
             (is_scalar(($data['canCheckGuarantee'] ?? null)) ? (bool) ($data['canCheckGuarantee'] ?? null) : false),
@@ -12960,7 +12960,7 @@ final class PurchasingCheckResponseItem
             (is_scalar(($data['isSmallExf'] ?? null)) ? (bool) ($data['isSmallExf'] ?? null) : false),
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): PurchasingCheckResponseItemAccountLinks => PurchasingCheckResponseItemAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -12974,7 +12974,7 @@ final class PurchasingCheckResponseItem
             (is_scalar(($data['isBirthdayToday'] ?? null)) ? (bool) ($data['isBirthdayToday'] ?? null) : false),
             (is_scalar(($data['isIgnored'] ?? null)) ? (bool) ($data['isIgnored'] ?? null) : false),
             (is_scalar(($data['deposit'] ?? null)) ? (int) ($data['deposit'] ?? null) : 0),
-            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_map(static fn(array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']) : [],
+            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_values(array_map(static fn(array $item): PurchasingCheckResponseItemExtraPrices => PurchasingCheckResponseItemExtraPrices::fromArray($item), array_filter($data['extraPrices'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLoginAndTempEmail'] ?? null)) ? (bool) ($data['canViewAccountLoginAndTempEmail'] ?? null) : false),
             isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? PurchasingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']) : PurchasingCheckResponseItemBumpSettings::fromArray([]),
             (is_scalar(($data['canCheckGuarantee'] ?? null)) ? (bool) ($data['canCheckGuarantee'] ?? null) : false),
@@ -13260,7 +13260,7 @@ final class CustomDiscountsGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['discounts']) && is_array($data['discounts']) ? array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), $data['discounts']) : [],
+            isset($data['discounts']) && is_array($data['discounts']) ? array_values(array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), array_filter($data['discounts'], 'is_array'))) : [],
             (is_scalar(($data['total'] ?? null)) ? (int) ($data['total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -13308,7 +13308,7 @@ final class CustomDiscountsEditResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['discounts']) && is_array($data['discounts']) ? array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), $data['discounts']) : [],
+            isset($data['discounts']) && is_array($data['discounts']) ? array_values(array_map(static fn(array $item): DiscountModel => DiscountModel::fromArray($item), array_filter($data['discounts'], 'is_array'))) : [],
             (is_scalar(($data['total'] ?? null)) ? (int) ($data['total'] ?? null) : 0),
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
@@ -13560,7 +13560,7 @@ final class PublishingCheckResponseItem
             (is_scalar(($data['account_last_activity'] ?? null)) ? (int) ($data['account_last_activity'] ?? null) : 0),
             (is_scalar(($data['displayConvertedBalance'] ?? null)) ? (bool) ($data['displayConvertedBalance'] ?? null) : false),
             (is_scalar(($data['canViewAccountLink'] ?? null)) ? (bool) ($data['canViewAccountLink'] ?? null) : false),
-            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_map(static fn(array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), $data['accountLinks']) : [],
+            isset($data['accountLinks']) && is_array($data['accountLinks']) ? array_values(array_map(static fn(array $item): PublishingCheckResponseItemAccountLinks => PublishingCheckResponseItemAccountLinks::fromArray($item), array_filter($data['accountLinks'], 'is_array'))) : [],
             (is_scalar(($data['accountLink'] ?? null)) ? (string) ($data['accountLink'] ?? null) : (is_array(($data['accountLink'] ?? null)) ? json_encode(($data['accountLink'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['emailLoginUrl'] ?? null)) ? (string) ($data['emailLoginUrl'] ?? null) : (is_array(($data['emailLoginUrl'] ?? null)) ? json_encode(($data['emailLoginUrl'] ?? null), JSON_UNESCAPED_UNICODE) : '')),
             (is_scalar(($data['canChangePassword'] ?? null)) ? (bool) ($data['canChangePassword'] ?? null) : false),
@@ -13574,7 +13574,7 @@ final class PublishingCheckResponseItem
             (is_scalar(($data['isBirthdayToday'] ?? null)) ? (bool) ($data['isBirthdayToday'] ?? null) : false),
             (is_scalar(($data['isIgnored'] ?? null)) ? (bool) ($data['isIgnored'] ?? null) : false),
             (is_scalar(($data['deposit'] ?? null)) ? (int) ($data['deposit'] ?? null) : 0),
-            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_map(static fn(array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), $data['extraPrices']) : [],
+            isset($data['extraPrices']) && is_array($data['extraPrices']) ? array_values(array_map(static fn(array $item): PublishingCheckResponseItemExtraPrices => PublishingCheckResponseItemExtraPrices::fromArray($item), array_filter($data['extraPrices'], 'is_array'))) : [],
             (is_scalar(($data['canViewAccountLoginAndTempEmail'] ?? null)) ? (bool) ($data['canViewAccountLoginAndTempEmail'] ?? null) : false),
             isset($data['bumpSettings']) && is_array($data['bumpSettings']) ? PublishingCheckResponseItemBumpSettings::fromArray($data['bumpSettings']) : PublishingCheckResponseItemBumpSettings::fromArray([]),
             (is_scalar(($data['canCheckGuarantee'] ?? null)) ? (bool) ($data['canCheckGuarantee'] ?? null) : false),
@@ -13902,7 +13902,7 @@ final class PaymentsInvoiceListResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['invoices']) && is_array($data['invoices']) ? array_map(static fn(array $item): InvoiceModel => InvoiceModel::fromArray($item), $data['invoices']) : [],
+            isset($data['invoices']) && is_array($data['invoices']) ? array_values(array_map(static fn(array $item): InvoiceModel => InvoiceModel::fromArray($item), array_filter($data['invoices'], 'is_array'))) : [],
             (is_scalar(($data['count'] ?? null)) ? (int) ($data['count'] ?? null) : 0),
             (is_scalar(($data['page'] ?? null)) ? (int) ($data['page'] ?? null) : 0),
             (is_scalar(($data['perPage'] ?? null)) ? (int) ($data['perPage'] ?? null) : 0),
@@ -15984,7 +15984,7 @@ final class PaymentsPayoutServicesResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['systems']) && is_array($data['systems']) ? array_map(static fn(array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), $data['systems']) : [],
+            isset($data['systems']) && is_array($data['systems']) ? array_values(array_map(static fn(array $item): PaymentsPayoutServicesResponseSystems => PaymentsPayoutServicesResponseSystems::fromArray($item), array_filter($data['systems'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
@@ -16473,7 +16473,7 @@ final class ProxyGetResponse
     public static function fromArray(array $data): self
     {
         return new self(
-            isset($data['proxies']) && is_array($data['proxies']) ? array_map(static fn(array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), $data['proxies']) : [],
+            isset($data['proxies']) && is_array($data['proxies']) ? array_values(array_map(static fn(array $item): ProxyGetResponseProxies => ProxyGetResponseProxies::fromArray($item), array_filter($data['proxies'], 'is_array'))) : [],
             isset($data['system_info']) && is_array($data['system_info']) ? RespSystemInfo::fromArray($data['system_info']) : RespSystemInfo::fromArray([]),
         );
     }
