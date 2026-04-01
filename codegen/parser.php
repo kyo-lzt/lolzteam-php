@@ -548,6 +548,14 @@ function extractResponseType(array $operation, array $spec): string
 const HTTP_METHODS = ['get', 'post', 'put', 'delete', 'patch'];
 
 /**
+ * Known operationId typos in the OpenAPI schema.
+ * Keys are the typo, values are the correct operationId.
+ */
+const OPERATION_ID_FIXES = [
+    'Manging.Delete' => 'Managing.Delete',
+];
+
+/**
  * @param array<string, mixed> $rawSpec
  * @return array{groups: list<array{groupName: string, methods: list<array<string, mixed>>}>, baseUrl: string, componentSchemas: array<string, array<string, mixed>>}
  */
@@ -619,11 +627,10 @@ function parseSpec(array $rawSpec): array
                 continue;
             }
 
+            // Fix known operationId typos from the schema
+            $operationId = OPERATION_ID_FIXES[$operationId] ?? $operationId;
+
             $group = operationIdToGroup($operationId);
-            // Normalize known typos in group names
-            if ($group === 'manging') {
-                $group = 'managing';
-            }
             $methodName = sanitizeMethodName(operationIdToMethod($operationId));
 
             $params = extractParameters($operation, $specFull);

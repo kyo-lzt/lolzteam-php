@@ -10366,7 +10366,7 @@ final class ManagingGetResponse
     }
 }
 
-final class MangingDeleteResponse
+final class ManagingDeleteResponse
 {
     public function __construct(
         public readonly string $status,

@@ -1967,14 +1967,14 @@ final class ManagingApi
      *
      * @param int $item_id Item id.
      * @param array{reason: string} $body
-     * @return Models\MangingDeleteResponse
+     * @return Models\ManagingDeleteResponse
      */
-    public function delete(int $item_id, array $body): Models\MangingDeleteResponse
+    public function delete(int $item_id, array $body): Models\ManagingDeleteResponse
     {
         /** @var array<string, mixed> $data */
         $data = $this->http->request('DELETE', "/{$item_id}", [], $body, 'json');
 
-        return Models\MangingDeleteResponse::fromArray($data);
+        return Models\ManagingDeleteResponse::fromArray($data);
     }
 
     /**
